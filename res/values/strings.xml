@@ -16,7 +16,10 @@
     <string name="Feeds">Feeds</string>
     <string name="feed_list_empty">You do not have feeds</string>
     <string name="Title">Title</string>
+    <string name="try_later">Try again in few minutes</string>
     
+    <!-- Text -->
+    <string name="error_connection">Are not internet connection</string>
     <string name="error_unknown">Error: Unknown error (see log)</string>
     <string name="error_http_unauthorized">Error: 401 unauthorized</string>
     <string name="error_http_forbidden">Error: 403 forbidden</string>
@@ -41,4 +44,8 @@
     <string name="button_sync">button sync</string>
     <string name="feeds_downloaded">Feeds downloaded</string>
     
+    <!-- Login -->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign in</string>
 </resources>

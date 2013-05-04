@@ -3,29 +3,45 @@ package com.dpcat237.nps;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
+import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.task.DownloadDataTask;
+import com.dpcat237.nps.task.LoginTask;
 
 public class MainActivity extends Activity {
 	View mView;
 	private FeedRepository datasource;
+	Boolean logged;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mView = this.findViewById(android.R.id.content).getRootView();
+		logged = GenericHelper.checkLogged(this);
+
+		if (logged) {
+			showList();
+		} else {
+			showLogin();
+		}
+	}
+	
+	private void showLogin () {
+		setContentView(R.layout.login);
+	}
+	
+	private void showList () {
 		setContentView(R.layout.activity_main);
 		
 		ListView listView = (ListView) findViewById(R.id.mylist);
@@ -46,13 +62,17 @@ public class MainActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position, Toast.LENGTH_LONG).show();
 			}
 		});
-	}
+	}	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		if (logged) {
+			getMenuInflater().inflate(R.menu.main, menu);
+
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -65,18 +85,31 @@ public class MainActivity extends Activity {
 		return false;
 	}
 	
-	public void showFeeds(View view) {
-		Intent intent = new Intent(this, FeedsActivity.class);
-		startActivity(intent);
+	public void downloadData() {
+		if (GenericHelper.hasConnection(this)) {
+			DownloadDataTask task = new DownloadDataTask(this, mView);
+			task.execute();
+		} else {
+			Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+		}
 	}
 	
-	public void tryJson(View view) {
-		Intent intent = new Intent(this, JsonActivity.class);
-		startActivity(intent);
+	public void doLogin(View view) {
+		if (GenericHelper.hasConnection(this)) {
+			LoginTask task = new LoginTask(this, mView);
+			task.execute();
+		} else {
+			Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+		}
 	}
+	
+	/*public void showFeeds(View view) {
+	Intent intent = new Intent(this, FeedsActivity.class);
+	startActivity(intent);
+}
 
-	public void downloadData() {
-		DownloadDataTask task = new DownloadDataTask(this, mView);
-		task.execute();
-	}
+public void tryJson(View view) {
+	Intent intent = new Intent(this, JsonActivity.class);
+	startActivity(intent);
+}*/
 }
