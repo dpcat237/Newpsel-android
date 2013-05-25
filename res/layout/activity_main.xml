@@ -17,7 +17,6 @@
         android:layout_height="wrap_content" >
     </ListView>
     
-    
     <!-- <Button
         android:id="@+id/button_feeds"
         android:layout_width="wrap_content"

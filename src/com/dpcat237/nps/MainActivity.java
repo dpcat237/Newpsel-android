@@ -3,6 +3,7 @@ package com.dpcat237.nps;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ public class MainActivity extends Activity {
 	View mView;
 	private FeedRepository datasource;
 	Boolean logged;
+	ArrayAdapter<Feed> adapter;
+	public static String SELECTED_FEED_ID = "feedId";
+	public static String SELECTED_FEED_TITLE = "feedTitle";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +53,25 @@ public class MainActivity extends Activity {
 		datasource.open();
 		
 		List<Feed> values = datasource.getAllFeeds();
-		// First paramenter - Context
-		// Second parameter - Layout for the row
-		// Third parameter - ID of the View to which the data is written
-		// Forth - the Array of data
-		ArrayAdapter<Feed> adapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_list_item_1, values);
-		listView.setAdapter(adapter);
-		
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position, Toast.LENGTH_LONG).show();
-			}
-		});
-	}	
-
+		if (!values.isEmpty()) {
+			adapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_list_item_1, values);
+			listView.setAdapter(adapter);
+			
+			listView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					if (adapter.getCount() > 0) {
+						Feed feed = (Feed) adapter.getItem(position);
+						showItems(feed.api_id, feed.title);
+						//adapter.remove(feed);
+					}
+				}
+			});
+		} else {
+			Toast.makeText(this, "no feeds", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (logged) {
@@ -78,11 +86,21 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    case R.id.buttonSync:
-	    	downloadData();
-	        return true;
+		    case R.id.buttonSync:
+		    	downloadData();
+		        return true;
+		    case R.id.actionDropDb:
+		    	dropDb();
+		        return true;
 	    }
 		return false;
+	}
+	
+	public void dropDb(){
+		FeedRepository feedRepo = new FeedRepository(this);
+        feedRepo.open();
+        feedRepo.drop();
+        GenericHelper.setLastFeedsUpdate(this, 0);
 	}
 	
 	public void downloadData() {
@@ -103,13 +121,10 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	/*public void showFeeds(View view) {
-	Intent intent = new Intent(this, FeedsActivity.class);
-	startActivity(intent);
-}
-
-public void tryJson(View view) {
-	Intent intent = new Intent(this, JsonActivity.class);
-	startActivity(intent);
-}*/
+	public void showItems(Integer feedId, String feedTitle) {
+		Intent intent = new Intent(this, ItemsActivity.class);
+		intent.putExtra(SELECTED_FEED_ID, feedId);
+		intent.putExtra(SELECTED_FEED_TITLE, feedTitle);
+		startActivity(intent);
+	}
 }

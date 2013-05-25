@@ -32,14 +32,19 @@ public class FeedRepository {
 
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
+		dbHelper.onCreate(database);
 	}
 
 	public void close() {
 		dbHelper.close();
 	}
 	
-	public void cr(){
+	public void create(){
 		dbHelper.onCreate(database);
+	}
+	
+	public void drop(){
+		dbHelper.onDelete(database);
 	}
 	
 	public void addFeed(Feed feed){
@@ -106,8 +111,8 @@ public class FeedRepository {
 
 	private Feed cursorToFeed(Cursor cursor) {
 		Feed feed = new Feed();
-		feed.setId(cursor.getLong(0));
-		feed.setApiId(cursor.getLong(1));
+		feed.setId(cursor.getInt(0));
+		feed.setApiId(cursor.getInt(1));
 		feed.setTitle(cursor.getString(2));
 		feed.setWebsite(cursor.getString(3));
 		feed.setFavicon(cursor.getString(4));

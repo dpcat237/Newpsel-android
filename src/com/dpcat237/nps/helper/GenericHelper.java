@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.Timestamp;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -45,6 +46,28 @@ public class GenericHelper {
 	    }
 
 		return result;
+	}
+	
+	public static Integer getLastFeedsUpdate(Context context) {
+		Integer result = 0; 
+		
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+	    Integer feedsUpdate = userPref.getInt("feedsUpdate", 0);
+	    
+	    if (feedsUpdate != null) {
+	    	result = feedsUpdate;
+	    }
+		
+		return result;
+	}
+	
+	public static void setLastFeedsUpdate(Context context, Integer feedsUpdate) {
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = userPref.edit();
+	    editor.putInt("feedsUpdate", feedsUpdate);
+		editor.commit();
 	}
 	
 	public static boolean hasConnection(Context context) {
@@ -109,4 +132,17 @@ public class GenericHelper {
         }
         return buf.toString();
     }
+	
+	public static boolean isNumeric(String str)  
+	{  
+	  try  
+	  {  
+	    double d = Double.parseDouble(str);  
+	  }  
+	  catch(NumberFormatException nfe)  
+	  {  
+	    return false;  
+	  }  
+	  return true;  
+	}
 }

@@ -8,8 +8,11 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
+import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
+import com.dpcat237.nps.repository.ItemRepository;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
@@ -18,14 +21,18 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	private View mView;
 	ProgressBar progressBar;
 	//TextView txt_percentage;
-	FeedRepository db;
+	FeedRepository feedRepo;
+	ItemRepository itemRepo;
+	String msg = "not";
 	
 	public DownloadDataTask(Context context, View view) {
 		api = new ApiHelper();
         mContext = context;
         mView = view;
-        db = new FeedRepository(mContext);
-        db.open();
+        feedRepo = new FeedRepository(mContext);
+        feedRepo.open();
+        itemRepo = new ItemRepository(mContext);
+        itemRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
         //txt_percentage= (TextView) mView.findViewById(R.id.txt_percentage);
     } 
@@ -41,15 +48,9 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		Feed[] feeds = api.getFeeds();
-		progressBar.setMax(feeds.length);
-		
-		for (Feed feed : feeds) {
-			db.addFeed(feed);
-			progress_status++;
-			publishProgress(progress_status);
-	    }
-		
+		syncFeeds();
+		syncItems();
+		//Toast.makeText(mContext, "hhhmm", Toast.LENGTH_SHORT).show();
 		
 		/*while(progress_status<100){
 			progress_status += 2;
@@ -58,6 +59,41 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		}*/
 
 		return null;
+	}
+	
+	private void syncFeeds () {
+		Feed[] feeds = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		progressBar.setMax(feeds.length);
+		Integer lastUpdate = 0;
+		
+		for (Feed feed : feeds) {
+			feedRepo.addFeed(feed);
+			lastUpdate = (int) feed.getLastUpdate();
+			progress_status++;
+			publishProgress(progress_status);
+	    }
+		if (lastUpdate != 0) {
+			GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
+		}
+	}
+	
+	private void syncItems () {
+		Integer viewedFeeds = 0;
+		Item[] items = null;
+		Boolean isDownload = true;
+		
+		//items = api.getItems(GenericHelper.generateKey(mContext), items, isDownload);
+		items = api.getItems(GenericHelper.generateKey(mContext), viewedFeeds, isDownload);
+		
+		//Integer length = 0;
+		//String check = "";
+		for (Item item : items) {
+			itemRepo.addItem(item);
+			//length = (int) item.getFeedId();
+			//check = item.getTitle();
+	    }
+		
+		//msg = length.toString();
 	}
  
 	@Override
@@ -73,6 +109,11 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	  super.onPostExecute(result);
 	  progressBar.setVisibility(View.GONE);
 	  Toast.makeText(mContext, R.string.feeds_downloaded, Toast.LENGTH_SHORT).show();
+	  
+	  
+	  /*TextView resultTxt = (TextView) mView.findViewById(R.id.textTut);
+	  resultTxt.setText("tut: "+msg);*/
+	  //Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
 	  //txt_percentage.setText("download complete");
 	}
 }

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="17"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,6 +25,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.dpcat237.nps.ItemsActivity"
+            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.dpcat237.nps.ItemActivity"
+            android:parentActivityName="com.dpcat237.nps.ItemsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.ItemsActivity" />
+        </activity>
+        <activity
             android:name="com.dpcat237.nps.FeedsActivity"
             android:parentActivityName="com.dpcat237.nps.MainActivity" >
             <meta-data
@@ -38,13 +52,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.FeedsActivity" />
-        </activity>
-        <activity
-            android:name="com.dpcat237.nps.JsonActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         
         <service

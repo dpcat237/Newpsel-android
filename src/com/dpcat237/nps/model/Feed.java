@@ -1,17 +1,18 @@
 package com.dpcat237.nps.model;
 
 public class Feed {
-	public long id;
-	public long api_id;
+	public Integer id;
+	public Integer api_id;
 	public String title;
 	public String website;
 	public String favicon;
+	public Integer lastUpdate;
 
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -19,7 +20,7 @@ public class Feed {
 		return api_id;
 	}
 
-	public void setApiId(long api_id) {
+	public void setApiId(Integer api_id) {
 		this.api_id = api_id;
 	}
 
@@ -46,10 +47,18 @@ public class Feed {
 	public void setFavicon(String favicon) {
 		this.favicon = favicon;
 	}
+	
+	public long getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Integer lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 
 	// Will be used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return title +" "+ api_id;
+		return title;
 	}
 }

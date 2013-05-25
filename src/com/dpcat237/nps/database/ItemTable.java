@@ -3,24 +3,32 @@ package com.dpcat237.nps.database;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class FeedTable {
+public class ItemTable {
 
 	// Database table
-	public static final String TABLE_FEED = "feed";
+	public static final String TABLE_ITEM = "item";
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_API_ID = "api_id";
+	public static final String COLUMN_FEED_ID = "feed_id";
 	public static final String COLUMN_TITLE = "title";
-	public static final String COLUMN_WEBSITE = "website";
-	public static final String COLUMN_FAVICON = "favicon";
+	public static final String COLUMN_LINK = "link";
+	public static final String COLUMN_CONTENT = "content";
+	public static final String COLUMN_IS_STARED = "is_stared";
+	public static final String COLUMN_IS_UNREAD = "is_unread";
+	public static final String COLUMN_DATE_ADD = "date_add";
 
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " 
-			+ TABLE_FEED
+			+ TABLE_ITEM
 			+ "(" + COLUMN_ID + " integer primary key autoincrement, " 
 			+ COLUMN_API_ID + " integer not null ,"
+			+ COLUMN_FEED_ID + " integer not null ,"
 			+ COLUMN_TITLE + " text not null ,"
-			+ COLUMN_WEBSITE + " text not null,"
-			+ COLUMN_FAVICON + " text not null"
+			+ COLUMN_LINK + " text not null,"
+			+ COLUMN_CONTENT + " text not null,"
+			+ COLUMN_IS_STARED + " boolean not null,"
+			+ COLUMN_IS_UNREAD + " boolean not null,"
+			+ COLUMN_DATE_ADD + " integer not null"
 			+ ");";
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -28,14 +36,14 @@ public class FeedTable {
 	}
 	
 	public static void onDelete(SQLiteDatabase database) {
-		database.execSQL("DROP TABLE IF EXISTS " + TABLE_FEED);
+		database.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		Log.w(FeedTable.class.getName(), "Upgrading database from version "
+		Log.w(ItemTable.class.getName(), "Upgrading database from version "
 				+ oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
-		database.execSQL("DROP TABLE IF EXISTS " + TABLE_FEED);
+		database.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
 		onCreate(database);
 	}
 }

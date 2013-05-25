@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+		android:id="@+id/feedTitle"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textSize="13sp"
+		android:gravity="center_horizontal"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="" />
+    <View android:id="@+id/separator" 
+		 android:background="#d3d3d3" 
+		 android:layout_width = "fill_parent"
+		 android:layout_height="1dip" />
+    
+    
+    <ListView
+        android:id="@+id/itemsList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>
