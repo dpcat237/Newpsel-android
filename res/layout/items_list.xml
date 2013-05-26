@@ -13,7 +13,7 @@
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:text="" />
     <View android:id="@+id/separator" 
-		 android:background="#d3d3d3" 
+		 android:background="#d3d3d3"
 		 android:layout_width = "fill_parent"
 		 android:layout_height="1dip" />
     

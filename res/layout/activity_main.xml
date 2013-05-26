@@ -12,23 +12,8 @@
         android:visibility="invisible" />
     
     <ListView
-        android:id="@+id/mylist"
+        android:id="@+id/feedslist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>
-    
-    <!-- <Button
-        android:id="@+id/button_feeds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showFeeds"
-        android:text="@string/Feeds" />
-    
-    <Button
-        android:id="@+id/ButtonSync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="tryJson"
-        android:text="JSON" /> -->
-
 </LinearLayout>

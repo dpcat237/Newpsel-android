@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +16,6 @@ import android.util.Log;
 
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
-import com.google.gson.Gson;
 
 public class ApiHelper {
 	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/app_dev.php/api/sync_feeds/";
@@ -71,7 +71,7 @@ public class ApiHelper {
 		return feeds;
 	}
 	
-	public Item[] getItems (String appKey, Integer viewedFeeds, Boolean isDownload) {
+	public Item[] getItems(String appKey, JSONArray viewedItems, Boolean isDownload) {
 		Boolean checkProcess = true;
 		Item[] items = null;
 		HttpClient httpClient = new DefaultHttpClient();
@@ -82,7 +82,7 @@ public class ApiHelper {
 
 		try {
 			jsonData.put("appKey", appKey);
-			jsonData.put("viewedFeeds", viewedFeeds);
+			jsonData.put("viewedItems", viewedItems);
 			jsonData.put("isDownload", isDownload);
 		} catch (JSONException e) {
 			Log.e("ApiHelper - getItems","Error", e);

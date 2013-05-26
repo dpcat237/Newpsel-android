@@ -2,11 +2,16 @@ package com.dpcat237.nps.repository;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.dpcat237.nps.database.ItemTable;
 import com.dpcat237.nps.database.NPSDatabase;
@@ -71,12 +76,18 @@ public class ItemRepository {
 		return result;
 	}
 	
-	public ArrayList<Item> getUnreadItems(Integer feedId) {
+	public ArrayList<Item> getIsUnreadItems(Integer feedId, Boolean isUnread) {
 		ArrayList<Item> items = new ArrayList<Item>();
-		String where = ItemTable.COLUMN_FEED_ID+"=?";
-		String[] args = new String[] {""+feedId+""};
-		//String where = ItemTable.COLUMN_FEED_ID+"=? AND "+ItemTable.COLUMN_IS_UNREAD+"=?";
-		//String[] args = new String[] {""+feedId+"", ""+1+""};
+		String where = "";
+		String[] args = null;
+		if (!isUnread) {
+			Integer isUnr = 0;
+			where = ItemTable.COLUMN_FEED_ID+"=? AND "+ItemTable.COLUMN_IS_UNREAD+"=?";
+			 args = new String[] {""+feedId+"", ""+isUnr+""};
+		} else {
+			where = ItemTable.COLUMN_FEED_ID+"=?";
+			args = new String[] {""+feedId+""};
+		}
 		String orderBy = "api_id DESC";
 
 		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, where, args, null, null, orderBy);
@@ -90,6 +101,36 @@ public class ItemRepository {
 
 		cursor.close();
 		return items;
+	}
+	
+	public JSONArray getItemsToSync() {
+		JSONArray items = new JSONArray();
+		String where = ItemTable.COLUMN_IS_UNREAD+"=?";
+		String[] args = new String[] {""+0+""};
+
+		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, where, args, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			try {
+				JSONObject item = new JSONObject();
+				item.put("id", cursor.getLong(1));
+				item.put("is_stared", cursor.getInt(6));
+				item.put("is_unread", cursor.getInt(7));
+				items.put(item);
+			} catch (JSONException e) {
+				Log.e("ItemRepository - getItemsToSync","Error", e);
+			}
+			cursor.moveToNext();
+		}
+
+		cursor.close();
+		return items;
+	}
+	
+	public void removeReadItems() {
+		String where = ItemTable.COLUMN_IS_UNREAD+"=?";
+		String[] args = new String[] {""+0+""};
+		database.delete(ItemTable.TABLE_ITEM, where, args);
 	}
 	
 	private Item cursorToItem(Cursor cursor) {

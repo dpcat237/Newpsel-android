@@ -12,6 +12,7 @@ public class FeedTable {
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_WEBSITE = "website";
 	public static final String COLUMN_FAVICON = "favicon";
+	public static final String COLUMN_UNREAD_COUNT = "unread_count";
 
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " 
@@ -20,7 +21,8 @@ public class FeedTable {
 			+ COLUMN_API_ID + " integer not null ,"
 			+ COLUMN_TITLE + " text not null ,"
 			+ COLUMN_WEBSITE + " text not null,"
-			+ COLUMN_FAVICON + " text not null"
+			+ COLUMN_FAVICON + " text not null,"
+			+ COLUMN_UNREAD_COUNT + " integer not null "
 			+ ");";
 
 	public static void onCreate(SQLiteDatabase database) {

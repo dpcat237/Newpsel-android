@@ -51,7 +51,7 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 		((ViewGroup)v).setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 		TextView text = (TextView)v.findViewById(R.id.itemRowText);
 		LinearLayout line = (LinearLayout) text.getParent();
-		text.setText(Html.fromHtml(item.title));
+		text.setText(Html.fromHtml(item.getTitle()));
 		ImageView stared = (ImageView) line.getChildAt(0);
 		
 		if (!item.isUnread()) {

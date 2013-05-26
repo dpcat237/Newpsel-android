@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/itemStared"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/is_stared"
+        android:gravity="center"
+        android:src="@drawable/feed" />
+    
+    <TextView
+        android:id="@+id/feedRowText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dip"
+        android:text="@+id/itemRowText"
+        android:textIsSelectable="false"
+        android:textSize="14sp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/feedCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight = "true"
+        android:layout_gravity="right"
+        android:layout_marginRight="3dip"
+        android:text="@+id/feedCount"
+        android:textIsSelectable="false"
+        android:textSize="14sp" >
+
+    </TextView>
+    
+</RelativeLayout>

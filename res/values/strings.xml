@@ -10,6 +10,7 @@
     <string name="action_save">Save</string>
     <string name="action_settings">Settings</string>
     <string name="action_drop_db">Drop DB</string>
+    <string name="action_check">Check this</string>
 
     <!-- Text -->
     <string name="create_feed">Create feed</string>
@@ -43,8 +44,9 @@
     <!-- VIEWS -->
     <!-- Main -->
     <string name="button_sync">button sync</string>
-    <string name="feeds_downloaded">Feeds downloaded</string>
+    <string name="sync_finished">Items downloaded</string>
     <string name="button_share">Share</string>
+    <string name="no_feeds">No feeds</string>
     
     <!-- Login -->
     <string name="hint_username">Username</string>
@@ -53,7 +55,7 @@
     
     <!-- Feed's items -->
     <string name="color_read">#d3d3d3</string>
-    <string name="color_unread">#ffffff</string>
+    <string name="color_unread">#f9f9f9</string>
     <string name="feed_title">Feed</string>
     <string name="is_stared">is stared</string>
     <string name="is_unread">is unread</string>

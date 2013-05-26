@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,7 +65,7 @@ public class ItemsActivity extends Activity {
 		
 		itemRepo = new ItemRepository(this);
 	    itemRepo.open();
-	    ArrayList<Item> items = itemRepo.getUnreadItems(feedId);
+	    ArrayList<Item> items = itemRepo.getIsUnreadItems(feedId, true);
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this, R.layout.item_row, items);
 	    listView.setAdapter(mAdapter);
@@ -78,10 +77,9 @@ public class ItemsActivity extends Activity {
 				if (mAdapter.getCount() > 0) {
 					Item item = (Item) mAdapter.getItem(position);
 					showItem(item.getId());
-					LinearLayout line = (LinearLayout) listView.getChildAt(position);
 					
 					if (item.isUnread()) {
-						markReadItem(item.getId(), line);
+						markReadItem(item.getId(), view);
 						item.setIsUnread(false);
 					}
 				}
@@ -135,9 +133,9 @@ public class ItemsActivity extends Activity {
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem mItem) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) mItem.getMenuInfo();
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)mItem.getMenuInfo();
 		Item item = (Item) mAdapter.getItem(info.position);
-		LinearLayout line = (LinearLayout) listView.getChildAt(info.position);
+		View line = info.targetView;
 		
 	    if (mItem.getGroupId() == cmGourId) {
 	        switch(mItem.getItemId()) {
@@ -171,7 +169,6 @@ public class ItemsActivity extends Activity {
 		        default:
 		            return super.onContextItemSelected(mItem);
 	        }
-
 	    }
 
 	    return false;
@@ -188,29 +185,29 @@ public class ItemsActivity extends Activity {
 		}
 	}
 	
-	public void markReadItem(Long itemId, LinearLayout line) {
+	public void markReadItem(Long itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, false);
 		task.execute();
 		
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 	}
 	
-	public void markUnreadItem(Long itemId, LinearLayout line) {
+	public void markUnreadItem(Long itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, true);
 		task.execute();
 		
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_UNREAD));
 	}
 	
-	public void starItem(Long itemId, LinearLayout line) {
-		ImageView stared = (ImageView) line.getChildAt(0);
+	public void starItem(Long itemId, View line) {
+		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.is_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, true);
 		task.execute();
 	}
 	
-	public void unstarItem(Long itemId, LinearLayout line) {
-		ImageView stared = (ImageView) line.getChildAt(0);
+	public void unstarItem(Long itemId, View line) {
+		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.isnt_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, false);
 		task.execute();

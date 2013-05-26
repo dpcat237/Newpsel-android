@@ -7,6 +7,7 @@ public class Feed {
 	public String website;
 	public String favicon;
 	public Integer lastUpdate;
+	public Integer unreadCount;
 
 	public long getId() {
 		return id;
@@ -54,6 +55,14 @@ public class Feed {
 
 	public void setLastUpdate(Integer lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+	
+	public long getUnreadCount() {
+		return unreadCount;
+	}
+
+	public void setUnreadCount(Integer unreadCount) {
+		this.unreadCount = unreadCount;
 	}
 
 	// Will be used by the ArrayAdapter in the ListView

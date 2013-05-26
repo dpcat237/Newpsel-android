@@ -1,11 +1,15 @@
 package com.dpcat237.nps.task;
 
+import org.json.JSONArray;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.dpcat237.nps.MainActivity;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
@@ -19,16 +23,18 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	int progress_status;
 	private Context mContext;
 	private View mView;
+	ListView listView;
 	ProgressBar progressBar;
 	//TextView txt_percentage;
 	FeedRepository feedRepo;
 	ItemRepository itemRepo;
 	String msg = "not";
 	
-	public DownloadDataTask(Context context, View view) {
+	public DownloadDataTask(Context context, View view, ListView list) {
 		api = new ApiHelper();
         mContext = context;
         mView = view;
+        listView = list;
         feedRepo = new FeedRepository(mContext);
         feedRepo.open();
         itemRepo = new ItemRepository(mContext);
@@ -50,6 +56,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	protected Void doInBackground(Void... params) {
 		syncFeeds();
 		syncItems();
+		feedRepo.unreadCountUpdate();
 		//Toast.makeText(mContext, "hhhmm", Toast.LENGTH_SHORT).show();
 		
 		/*while(progress_status<100){
@@ -78,22 +85,21 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	}
 	
 	private void syncItems () {
-		Integer viewedFeeds = 0;
+		JSONArray viewedItems = itemRepo.getItemsToSync();
 		Item[] items = null;
 		Boolean isDownload = true;
 		
-		//items = api.getItems(GenericHelper.generateKey(mContext), items, isDownload);
-		items = api.getItems(GenericHelper.generateKey(mContext), viewedFeeds, isDownload);
+		items = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
 		
-		//Integer length = 0;
-		//String check = "";
-		for (Item item : items) {
-			itemRepo.addItem(item);
-			//length = (int) item.getFeedId();
-			//check = item.getTitle();
-	    }
+		if (items != null) {
+			for (Item item : items) {
+				itemRepo.addItem(item);
+		    }
+		}
 		
-		//msg = length.toString();
+		if (viewedItems.length() > 0) {
+			itemRepo.removeReadItems();
+		}
 	}
  
 	@Override
@@ -108,8 +114,8 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
  	protected void onPostExecute(Void result) {
 	  super.onPostExecute(result);
 	  progressBar.setVisibility(View.GONE);
-	  Toast.makeText(mContext, R.string.feeds_downloaded, Toast.LENGTH_SHORT).show();
-	  
+	  ((MainActivity) mContext).reloadList();
+	  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
 	  
 	  /*TextView resultTxt = (TextView) mView.findViewById(R.id.textTut);
 	  resultTxt.setText("tut: "+msg);*/
