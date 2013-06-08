@@ -9,6 +9,7 @@
     <string name="action_create_feed">Create Feed</string>
     <string name="action_save">Save</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
     <string name="action_drop_db">Drop DB</string>
     <string name="action_check">Check this</string>
 
@@ -19,6 +20,11 @@
     <string name="feed_list_empty">You do not have feeds</string>
     <string name="Title">Title</string>
     <string name="try_later">Try again in few minutes</string>
+    
+    <!-- Error -->
+    <string name="error_304">Username already exists</string>
+    <string name="error_305">Email already exists</string>
+    <string name="error_310">Try again later</string>
     
     <!-- Text -->
     <string name="error_connection">Are not internet connection</string>
@@ -44,14 +50,16 @@
     <!-- VIEWS -->
     <!-- Main -->
     <string name="button_sync">button sync</string>
-    <string name="sync_finished">Items downloaded</string>
+    <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_feeds">No feeds</string>
     
     <!-- Login -->
     <string name="hint_username">Username</string>
+    <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
     
     <!-- Feed's items -->
     <string name="color_read">#d3d3d3</string>

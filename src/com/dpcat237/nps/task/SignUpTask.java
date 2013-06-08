@@ -18,19 +18,19 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
 
-public class LoginTask extends AsyncTask<Void, Integer, Void>{
+public class SignUpTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
 	int progress_status;
 	private Context mContext;
 	private View mView;
 	String username;
+	String email;
 	String password;
 	String appKey;
-	Boolean checkLogin = false;
-	//TextView resultTxt;
+	String checkApi = "";
 	ProgressDialog dialog;
 	
-	public LoginTask(Context context, View view) {
+	public SignUpTask(Context context, View view) {
 		api = new ApiHelper();
         mContext = context;
         mView = view;
@@ -39,12 +39,13 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 	
 	private void getData() {
 		EditText usernameText = (EditText) mView.findViewById(R.id.txtUsername);
+		EditText emailText = (EditText) mView.findViewById(R.id.txtEmail);
 		EditText passwordText = (EditText) mView.findViewById(R.id.txtPassword);
-		//resultTxt = (TextView) mView.findViewById(R.id.textViewaa);
 		username = usernameText.getText().toString();
+		email = emailText.getText().toString();
 		String pwd = passwordText.getText().toString();
 		try {
-			password = GenericHelper.sha1LoginPassword(pwd);
+			password = GenericHelper.sha1SignUpPassword(pwd);
 		} catch (NoSuchAlgorithmException e) {
 			Log.e("LoginTask - getData","Error", e);
 			e.printStackTrace();
@@ -63,7 +64,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		checkLogin = ApiHelper.doLogin(username, password, appKey);
+		checkApi = ApiHelper.doSignUp(username, email, password, appKey);
 
 		return null;
 	}
@@ -77,15 +78,16 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
  	protected void onPostExecute(Void result) {
 		dialog.cancel();
 		
-		//Toast.makeText(mContext, "yeah "+check, Toast.LENGTH_SHORT).show();
-		//resultTxt.setText("tut: "+check);
-		//Toast.makeText(mContext, "yeah "+check, Toast.LENGTH_SHORT).show();
-		if (checkLogin) {
+		if (checkApi.equals("100")) {
 			GenericHelper.doLogin(mContext);
 			mContext.startActivity(new Intent(mContext, MainActivity.class));
-			((Activity) mContext).finish();			
-		} else {
-			Toast.makeText(mContext, R.string.try_later, Toast.LENGTH_SHORT).show();
+			((Activity) mContext).finish();	
+		} else if (checkApi.equals("304")) {
+			Toast.makeText(mContext, R.string.error_304, Toast.LENGTH_SHORT).show();
+		} else if (checkApi.equals("305")) {
+			Toast.makeText(mContext, R.string.error_305, Toast.LENGTH_SHORT).show();
+		} else if (checkApi.equals("99") || checkApi.equals("310")) {
+			Toast.makeText(mContext, R.string.error_310, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

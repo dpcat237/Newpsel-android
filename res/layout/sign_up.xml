@@ -12,6 +12,14 @@
         android:layout_marginBottom="10dip"
         android:inputType="text"
         android:hint="@string/hint_username" />
+    
+    <EditText
+        android:id="@+id/txtEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:inputType="textEmailAddress"
+        android:hint="@string/hint_email" />
      
     <EditText
         android:id="@+id/txtPassword"
@@ -25,6 +33,16 @@
     <Button android:id="@+id/btnLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_in"
-        android:onClick="doLogin"/>
+        android:text="@string/sign_up"
+        android:onClick="doSignUp"/>
+
+    <!-- <ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TextView
+	        android:id="@+id/textViewaa"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="" />
+    </ScrollView> -->
+   
+
 </LinearLayout>

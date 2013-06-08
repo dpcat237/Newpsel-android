@@ -19,7 +19,6 @@ import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.task.DownloadDataTask;
-import com.dpcat237.nps.task.LoginTask;
 
 public class MainActivity extends Activity {
 	View mView;
@@ -30,7 +29,7 @@ public class MainActivity extends Activity {
 	FeedsAdapter mAdapter;
 	public static String SELECTED_FEED_ID = "feedId";
 	public static String SELECTED_FEED_TITLE = "feedTitle";
-	public static Boolean UNREAD_FIRST = false;
+	public static Boolean UNREAD_NO_FIRST = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,26 +41,24 @@ public class MainActivity extends Activity {
 		if (logged) {
 			showList();
 		} else {
-			showLogin();
+			showWelcome();
 		}
 	}
 	
-	private void showLogin () {
-		setContentView(R.layout.login);
+	private void showWelcome () {
+		setContentView(R.layout.welcome);
 	}
 	
 	private void showList () {
 		setContentView(R.layout.activity_main);
-		
 		listView = (ListView) findViewById(R.id.feedslist);
 		feedRepo = new FeedRepository(this);
 		feedRepo.open();
 		
 		ArrayList<Feed> feeds = feedRepo.getAllFeedsUnread();
+		mAdapter = new FeedsAdapter(this, R.layout.feed_row, feeds);
+		listView.setAdapter(mAdapter);
 		if (!feeds.isEmpty()) {
-			mAdapter = new FeedsAdapter(this, R.layout.feed_row, feeds);
-			listView.setAdapter(mAdapter);
-			
 			listView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,8 +68,6 @@ public class MainActivity extends Activity {
 					}
 				}
 			});
-		} else {
-			Toast.makeText(this, R.string.no_feeds, Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -93,8 +88,10 @@ public class MainActivity extends Activity {
 		    case R.id.buttonSync:
 		    	downloadData();
 		        return true;
-		    case R.id.actionDropDb:
+		    case R.id.actionLogout:
 		    	dropDb();
+		    	GenericHelper.doLogout(this);
+		    	finish();
 		        return true;
 		    case R.id.actionCheck:
 		    	feedRepo.unreadCountUpdate();
@@ -103,6 +100,18 @@ public class MainActivity extends Activity {
 		        return true;
 	    }
 		return false;
+	}
+	
+	public void goSignIn(View view) {
+		Intent intent = new Intent(this, SignInActivity.class);
+		startActivity(intent);
+		finish();
+	}
+	
+	public void goSignUp(View view) {
+		Intent intent = new Intent(this, SignUpActivity.class);
+		startActivity(intent);
+		finish();
 	}
 	
 	public void dropDb(){
@@ -121,15 +130,6 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public void doLogin(View view) {
-		if (GenericHelper.hasConnection(this)) {
-			LoginTask task = new LoginTask(this, mView);
-			task.execute();
-		} else {
-			Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
-		}
-	}
-	
 	public void showItems(Integer feedId, String feedTitle) {
 		Intent intent = new Intent(this, ItemsActivity.class);
 		intent.putExtra(SELECTED_FEED_ID, feedId);
@@ -138,19 +138,31 @@ public class MainActivity extends Activity {
 	}
 	
 	public void reloadList() {
-		feedRepo.unreadCountUpdate();
-		showList();
+		if (logged) {
+			feedRepo.unreadCountUpdate();
+			if (mAdapter.getCount() > 0) {
+				mAdapter.clear();
+			}
+			showList();
+			
+			
+		}
 	}
 	
 	@Override
 	public void onResume() {
 	    super.onResume();
+	    logged = GenericHelper.checkLogged(this);
 	    
-	    if (!UNREAD_FIRST) {
-			UNREAD_FIRST = true;
+	    if (!UNREAD_NO_FIRST) {
+			UNREAD_NO_FIRST = true;
 	    } else {
 	    	reloadList();
 	    }
+	    
+	    if (logged && mAdapter.getCount() < 1) {
+			Toast.makeText(this, R.string.no_feeds, Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 }

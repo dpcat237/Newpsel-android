@@ -57,8 +57,9 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		syncFeeds();
 		syncItems();
 		feedRepo.unreadCountUpdate();
+
+
 		//Toast.makeText(mContext, "hhhmm", Toast.LENGTH_SHORT).show();
-		
 		/*while(progress_status<100){
 			progress_status += 2;
 			publishProgress(progress_status);
@@ -70,17 +71,21 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	
 	private void syncFeeds () {
 		Feed[] feeds = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
-		progressBar.setMax(feeds.length);
-		Integer lastUpdate = 0;
 		
-		for (Feed feed : feeds) {
-			feedRepo.addFeed(feed);
-			lastUpdate = (int) feed.getLastUpdate();
-			progress_status++;
-			publishProgress(progress_status);
-	    }
-		if (lastUpdate != 0) {
-			GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
+		if (feeds != null) {
+			progressBar.setMax(feeds.length);
+			Integer lastUpdate = 0;
+			
+			for (Feed feed : feeds) {
+				feedRepo.addFeed(feed);
+				lastUpdate = (int) feed.getLastUpdate();
+				progress_status++;
+				publishProgress(progress_status);
+		    }
+			if (lastUpdate != 0) {
+				GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
+			}
+		
 		}
 	}
 	

@@ -21,6 +21,7 @@ public class ApiHelper {
 	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/app_dev.php/api/sync_feeds/";
 	private static final String URL_SYNC_ITEMS_UNREAD = "http://www.newpsel.com/app_dev.php/api/sync_unread/";
 	private static final String URL_LOGIN = "http://www.newpsel.com/app_dev.php/api/login/";
+	private static final String URL_SIGN_UP = "http://www.newpsel.com/app_dev.php/api/sign_up/";
 	
 	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
 		Boolean checkProcess = true;
@@ -169,5 +170,50 @@ public class ApiHelper {
 		}
 		
 		return checkLogin;
+	}
+	
+	public static String doSignUp(String username, String email, String password, String appKey) {
+		String check = "";
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(URL_SIGN_UP);
+		StringEntity jsonEntity;
+		String jsonString;
+		JSONObject jsonData = new JSONObject();
+		
+		try {
+			jsonData.put("username", username);
+			jsonData.put("email", email);
+			jsonData.put("password", password);
+			jsonData.put("appKey", appKey);
+		} catch (JSONException e) {
+			Log.e("ApiHelper - doSignUp","Error", e);
+			check = "99";
+		}
+		
+		if (check != "99") {
+			try {
+				jsonString = jsonData.toString();
+				jsonEntity = new StringEntity(jsonString);
+				post.setEntity(jsonEntity);
+				post.setHeader("Accept", "application/json");
+				post.setHeader("Content-type", "application/json");
+			} catch (UnsupportedEncodingException e) {
+				Log.e("ApiHelper - doSignUp","Error", e);
+				check = "99";
+			}
+			
+			if (check != "99") {
+				try {
+					HttpResponse resp = httpClient.execute(post);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					check = respStr;
+		    	} catch(Exception e) {
+		    		Log.e("ApiHelper - doSignUp","Error", e);
+		    		check = "99";
+		    	}
+			}
+		}
+		
+		return check;
 	}
 }

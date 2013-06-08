@@ -2,7 +2,6 @@ package com.dpcat237.nps.task;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.dpcat237.nps.MainActivity;
@@ -31,8 +30,6 @@ public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{
 	
 	@Override
  	protected void onPostExecute(Void result) {
-		Intent intent = new Intent(mContext, main);
-		mContext.startActivity(intent);
 		((Activity) mContext).finish();
 	}
 }

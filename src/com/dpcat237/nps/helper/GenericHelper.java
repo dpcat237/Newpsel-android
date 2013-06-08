@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.Timestamp;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -106,10 +105,23 @@ public class GenericHelper {
 		editor.putBoolean("logged", true);
 		editor.commit();
 	}
+	
+	public static void doLogout(Context context) {
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = userPref.edit();
+		editor.clear();
+		editor.commit();
+	}
 	 
-	public static String sha1Password(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public static String sha1LoginPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		String pwd = sha1("sc_"+text);
 		String appPwd = sha1("checkPwd_"+pwd);
+		return appPwd;
+	}
+	
+	public static String sha1SignUpPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String appPwd = sha1("sc_"+text);
 		return appPwd;
 	}
 	
@@ -137,7 +149,7 @@ public class GenericHelper {
 	{  
 	  try  
 	  {  
-	    double d = Double.parseDouble(str);  
+	    Double.parseDouble(str);  
 	  }  
 	  catch(NumberFormatException nfe)  
 	  {  

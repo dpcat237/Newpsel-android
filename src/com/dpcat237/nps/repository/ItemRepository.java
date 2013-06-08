@@ -88,7 +88,7 @@ public class ItemRepository {
 			where = ItemTable.COLUMN_FEED_ID+"=?";
 			args = new String[] {""+feedId+""};
 		}
-		String orderBy = "api_id DESC";
+		String orderBy = ItemTable.COLUMN_DATE_ADD+" DESC";
 
 		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, where, args, null, null, orderBy);
 		
