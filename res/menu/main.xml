@@ -5,11 +5,16 @@
           android:title="@string/button_sync"
           android:showAsAction="ifRoom|withText"  />
     
-    <item
+    <item android:id="@+id/buttonAddFeed"
+          android:icon="@drawable/actionbar_add"
+          android:title="@string/button_sync"
+          android:showAsAction="ifRoom|withText"  />
+    
+    <!--<item
         android:id="@+id/actionCheck"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_check"/>
+        android:title="@string/action_check"/>-->
     
     <item
         android:id="@+id/action_settings"

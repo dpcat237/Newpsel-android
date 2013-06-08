@@ -88,16 +88,20 @@ public class MainActivity extends Activity {
 		    case R.id.buttonSync:
 		    	downloadData();
 		        return true;
+		    case R.id.buttonAddFeed:
+		    	Intent intent = new Intent(this, AddFeedActivity.class);
+				startActivity(intent);
+		        return true;
 		    case R.id.actionLogout:
 		    	dropDb();
 		    	GenericHelper.doLogout(this);
 		    	finish();
 		        return true;
-		    case R.id.actionCheck:
+		    /*case R.id.actionCheck:
 		    	feedRepo.unreadCountUpdate();
 		    	
 		    	Toast.makeText(this, "test: ok", Toast.LENGTH_SHORT).show();
-		        return true;
+		        return true;*/
 	    }
 		return false;
 	}

@@ -39,6 +39,13 @@
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
+            android:name="com.dpcat237.nps.AddFeedActivity"
+            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
             android:name="com.dpcat237.nps.ItemsActivity"
             android:parentActivityName="com.dpcat237.nps.MainActivity" >
             <meta-data

@@ -22,6 +22,7 @@ public class ApiHelper {
 	private static final String URL_SYNC_ITEMS_UNREAD = "http://www.newpsel.com/app_dev.php/api/sync_unread/";
 	private static final String URL_LOGIN = "http://www.newpsel.com/app_dev.php/api/login/";
 	private static final String URL_SIGN_UP = "http://www.newpsel.com/app_dev.php/api/sign_up/";
+	private static final String URL_ADD_FEED = "http://www.newpsel.com/app_dev.php/api/add_feed/";
 	
 	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
 		Boolean checkProcess = true;
@@ -215,5 +216,53 @@ public class ApiHelper {
 		}
 		
 		return check;
+	}
+	
+	public static Item[] addFeed(String appKey, String feedUrl) {
+		Item[] items = null;
+		String check = "";
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(URL_ADD_FEED);
+		StringEntity jsonEntity;
+		String jsonString;
+		JSONObject jsonData = new JSONObject();
+		
+		try {
+			jsonData.put("feed_url", feedUrl);
+			jsonData.put("appKey", appKey);
+		} catch (JSONException e) {
+			Log.e("ApiHelper - addFeed","Error", e);
+			check = "99";
+		}
+		
+		if (check != "99") {
+			try {
+				jsonString = jsonData.toString();
+				jsonEntity = new StringEntity(jsonString);
+				post.setEntity(jsonEntity);
+				post.setHeader("Accept", "application/json");
+				post.setHeader("Content-type", "application/json");
+			} catch (UnsupportedEncodingException e) {
+				Log.e("ApiHelper - addFeed","Error", e);
+				check = "99";
+			}
+			
+			if (check != "99") {
+				try {
+					HttpResponse resp = httpClient.execute(post);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					if (!GenericHelper.isNumeric(respStr)) {
+						items = JsonHelper.getItems(respStr);
+					} else {
+						check = "99";
+					}
+		    	} catch(Exception e) {
+		    		Log.e("ApiHelper - addFeed","Error", e);
+		    		check = "99";
+		    	}
+			}
+		}
+		
+		return items;
 	}
 }

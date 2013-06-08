@@ -1,5 +1,6 @@
 package com.dpcat237.nps;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ public class ItemActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setHomeButtonEnabled(false);
 	    setContentView(R.layout.item_view);
 	    itemRepo = new ItemRepository(this);
 	    itemRepo.open();

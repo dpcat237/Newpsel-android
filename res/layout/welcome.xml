@@ -8,12 +8,12 @@
     <Button android:id="@+id/btnSignin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_in"
+        android:text="@string/button_sign_in"
         android:onClick="goSignIn"/>
     
     <Button android:id="@+id/btnSignup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
+        android:text="@string/button_sign_up"
         android:onClick="goSignUp"/>
 </LinearLayout>

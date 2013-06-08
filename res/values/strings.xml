@@ -24,6 +24,7 @@
     <!-- Error -->
     <string name="error_304">Username already exists</string>
     <string name="error_305">Email already exists</string>
+    <string name="error_306">Wrong feed url</string>
     <string name="error_310">Try again later</string>
     
     <!-- Text -->
@@ -54,12 +55,14 @@
     <string name="button_share">Share</string>
     <string name="no_feeds">No feeds</string>
     
-    <!-- Login -->
+    <!-- Forms -->
     <string name="hint_username">Username</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="sign_in">Sign in</string>
-    <string name="sign_up">Sign up</string>
+    <string name="hint_url">Url</string>
+    <string name="button_sign_in">Sign in</string>
+    <string name="button_sign_up">Sign up</string>
+    <string name="button_add_feed">Add feed</string>
     
     <!-- Feed's items -->
     <string name="color_read">#d3d3d3</string>
