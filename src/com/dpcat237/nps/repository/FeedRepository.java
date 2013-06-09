@@ -123,7 +123,7 @@ public class FeedRepository {
 			feeds.add(feed);
 			cursor.moveToNext();
 		}
-		// 
+
 		cursor.close();
 		return feeds;
 	}

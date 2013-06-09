@@ -157,4 +157,20 @@ public class GenericHelper {
 	  }  
 	  return true;  
 	}
+	
+	public static Integer getFeedsList(Context context) {
+		 @SuppressWarnings("static-access")
+		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		 Integer list = userPref.getInt("feeds_list", 0);
+		 
+		 return list;
+	}
+	
+	public static void setFeedsList(Context context, Integer list) {
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = userPref.edit();
+	    editor.putInt("feeds_list", list);
+		editor.commit();
+	}
 }

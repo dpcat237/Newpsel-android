@@ -54,6 +54,15 @@
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_feeds">No feeds</string>
+    <!-- Drawer -->
+    <string-array name="feeds_list_array">
+        <item>Unread</item>
+        <item>All</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
     
     <!-- Forms -->
     <string name="hint_username">Username</string>

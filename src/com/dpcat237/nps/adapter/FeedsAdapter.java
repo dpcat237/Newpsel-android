@@ -38,7 +38,11 @@ public class FeedsAdapter extends ArrayAdapter<Feed> {
 		
 		TextView count = (TextView)v.findViewById(R.id.feedCount);
 		Long unread = feed.getUnreadCount();
-		count.setText(unread.toString());
+		if (unread > 0) {
+			count.setText(unread.toString());
+		} else {
+			count.setVisibility(View.GONE);
+		}
 		
 		return v;
 	}
