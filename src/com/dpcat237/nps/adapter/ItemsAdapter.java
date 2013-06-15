@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,9 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 	private ArrayList<Item> items;
 	Activity mActivity;
 	Context mContext;
+	Integer imgSize = 0;
+	Integer txtPadding = 0;
+	Integer txtSize = 0;
 	
 	public ItemsAdapter(Context context, int textViewResourceId, ArrayList<Item> items) {
 		super(context, textViewResourceId, items);
@@ -30,18 +35,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 		this.mActivity = (Activity) context;
 	}
 	
-	/*@Override
-	public int getItemViewType(int position) {
-		Item item = items.get(position);
-		
-		/*if (item.is_unread == true) {
-			return 1;
-		} else {
-			return 2;				
-		}*/
-		/*return 1;
-	}*/
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
@@ -82,40 +75,45 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
             }
          });
 		
-		//ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
-		/*List<Item> items = items[position];
-		textView.setText(items[position]);
-		
-		/*View v = convertView;
-		final Item article = items.get(position);
-		if (v == null) {
-			int layoutId = R.layout.item_row;
-			/*switch (getItemViewType(position)) {
-			case VIEW_LOADMORE:
-				layoutId = R.layout.headlines_row_loadmore;
-				break;
-			case VIEW_UNREAD:
-				layoutId = R.layout.headlines_row_unread;
-				break;
-			case VIEW_SELECTED:
-				layoutId = R.layout.headlines_row_selected;
-				break;
-			case VIEW_SELECTED_UNREAD:
-				layoutId = R.layout.headlines_row_selected_unread;
-				break;
-			}*/
-			
-			/*LayoutInflater vi = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = vi.inflate(layoutId, null);
-			((ViewGroup)v).setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-		}
-
-		TextView tt = (TextView)v.findViewById(R.id.itemRowText);
-		if (tt != null) {
-			tt.setText(Html.fromHtml(article.title));
-		}*/
-
+		setDimensions(stared, text);
 		
 		return v;
+	}
+	
+	private void setDimensions(ImageView img, TextView text) {
+		setSize();
+		
+		if (imgSize > 0) {
+			img.getLayoutParams().height = imgSize;
+			img.getLayoutParams().width = imgSize;			
+		}
+		
+		if (txtPadding > 0) {
+			text.setPadding(txtPadding, 0, 0, 0);
+		}
+		
+		if (txtSize > 0) {
+			text.setTextSize(txtSize);
+		}
+	}
+	
+	private void setSize() {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+		String textSize = pref.getString("pref_list_size", "2");
+		Integer size = Integer.parseInt(textSize);
+
+		if (size == 1) {
+			imgSize = 0;
+			txtPadding = 0;
+			txtSize = 0;
+		} else if (size == 2) {
+			imgSize = 47;
+			txtPadding = 5;
+			txtSize = 17;
+		} else if (size == 3) {
+			imgSize = 55;
+			txtPadding = 10;
+			txtSize = 20;
+		}
 	}
 }

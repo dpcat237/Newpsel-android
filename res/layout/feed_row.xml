@@ -6,7 +6,7 @@
     android:padding="5dp" >
 
     <ImageView
-        android:id="@+id/itemStared"
+        android:id="@+id/feedFavicon"
         android:layout_width="20dip"
         android:layout_height="20dip"
         android:layout_gravity="center_vertical"

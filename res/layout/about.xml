@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <TextView
+        android:id="@+id/textAbout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:padding="5dp"
+        android:text="@string/about_nps" />
+    
+    <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:padding="5dp" >
+    
+	    <TextView
+	        android:id="@+id/textVersionText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="12sp"
+	        android:text="@string/about_version" />
+	    
+	    <TextView
+	        android:id="@+id/textVersion"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="12sp"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+	    
+	    <TextView
+	        android:id="@+id/textStatus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="12sp"
+	        android:text="@string/about_status"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:padding="5dp" >
+    
+	    <TextView
+	        android:id="@+id/textWebText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="12sp"
+	        android:text="@string/about_web" />
+	    
+	    <TextView
+	        android:id="@+id/textWebUrl"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="12sp"
+	        android:linksClickable="true"
+	        android:autoLink="web"
+	        android:text="@string/app_web_url" />
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:padding="5dp" >
+    
+	    <TextView
+	        android:id="@+id/textWrite"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="12sp"
+	        android:text="@string/about_write" />
+	    
+	    <TextView
+	        android:id="@+id/textEmail"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="12sp"
+	        android:autoLink="email"
+	        android:text="@string/about_email" />
+	    
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginTop="20dp"
+	    android:padding="5dp" >
+    
+	    <TextView
+	        android:id="@+id/textAuthorText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="12sp"
+	        android:text="@string/about_author" />
+	    
+	    <TextView
+	        android:id="@+id/textAuthor"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="12sp"
+	        android:text="@string/about_author_name" />
+	    
+    </LinearLayout>
+
+</LinearLayout>

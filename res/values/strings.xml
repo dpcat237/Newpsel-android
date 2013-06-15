@@ -3,6 +3,15 @@
 
     <!-- Application -->
     <string name="app_name">NPS</string>
+
+    <!-- Sign up -->
+    <string name="label_signup">Sign up</string>
+    
+    <!-- Sign in -->
+    <string name="label_signin">Sign in</string>
+    
+    <!-- Add feed -->
+    <string name="label_add_feed">Add feed</string>
     
     <!-- Action -->
     <string name="action_about">About</string>
@@ -71,7 +80,7 @@
     <string name="hint_url">Url</string>
     <string name="button_sign_in">Sign in</string>
     <string name="button_sign_up">Sign up</string>
-    <string name="button_add_feed">Add feed</string>
+    <string name="button_submit">Submit</string>
     
     <!-- Feed's items -->
     <string name="color_read">#d3d3d3</string>
@@ -86,4 +95,48 @@
     <string name="cm_add_star">Add star</string>
     <string name="cm_remove_star">Remove star</string>
     <string name="cm_share">Share</string>
+    
+    <!-- About -->
+    <string name="about_label">About</string>
+    <string name="about_nps">Newpsel (NewsPersonalSelector) it\'s easy RSS reader with which you will spend less time selecting interesting news to read and to save. Actually Newpsel it\'s in alfa version and real future functionality will come in future versions.</string>
+    <string name="about_version">Current version: </string>
+    <string name="about_status">(alfa)</string>
+    <string name="about_web">Web soon:</string>
+    <string name="app_web_url">www.newpsel.com</string>
+    <string name="about_author">Author:</string>
+    <string name="about_author_name">Denys Pasishnyi (@dpcat237)</string>
+    <string name="about_write">For any feedback:</string>
+    <string name="about_email">newpsel@gmail.com</string>
+    
+    <!-- Settings -->
+    <string name="label_st">Settings</string>
+    <string name="st_design">Design</string>
+    <string name="st_text_size">Text size</string>
+    <string name="st_text_size_s">Adjust size of article text</string>
+    <string-array name="st_text_size_list_titles">
+        <item>Smallest</item>
+        <item>Smaller</item>
+        <item>Normal</item>
+        <item>Larger</item>
+        <item>Largest</item>
+    </string-array>
+    <string-array name="st_text_size_list_values">
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+        <item>150</item>
+        <item>200</item>
+    </string-array>
+    <string name="st_list_size">List size</string>
+    <string name="st_list_size_s">Adjust size of list text</string>
+    <string-array name="st_list_size_list_titles">
+        <item>Smaller</item>
+        <item>Normal</item>
+        <item>Larger</item>
+    </string-array>
+    <string-array name="st_list_size_list_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

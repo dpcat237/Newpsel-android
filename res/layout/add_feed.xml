@@ -16,14 +16,7 @@
     <Button android:id="@+id/btnLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_add_feed"
+        android:text="@string/button_submit"
         android:onClick="addFeed"/>
     
-    <ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent">
-        <TextView
-	        android:id="@+id/textTut"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="" />
-    </ScrollView>
 </LinearLayout>

@@ -128,10 +128,10 @@ public class FeedRepository {
 		return feeds;
 	}
 	
-	public Feed getFeed(Long feedId) {
+	public Feed getFeed(Integer feedApiId) {
 		Feed feed = null;
-		String where = FeedTable.COLUMN_ID+"=?";
-		String[] args = new String[] {""+feedId+""};
+		String where = FeedTable.COLUMN_API_ID+"=?";
+		String[] args = new String[] {""+feedApiId+""};
 		
 		Cursor cursor = database.query(FeedTable.TABLE_FEED, allColumns, where, args, null, null, null);
 		cursor.moveToFirst();

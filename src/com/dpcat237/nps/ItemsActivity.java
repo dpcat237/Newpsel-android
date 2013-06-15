@@ -20,7 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dpcat237.nps.adapter.ItemsAdapter;
+import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
 import com.dpcat237.nps.task.ReadFeedItemsTask;
 import com.dpcat237.nps.task.ReadItemTask;
@@ -28,6 +31,7 @@ import com.dpcat237.nps.task.StarItemTask;
 
 public class ItemsActivity extends Activity {
 	private ItemRepository itemRepo;
+	private FeedRepository feedRepo;
 	public static String ITEM_ID = "itemId";
 	public static String ITEM_COLOR_READ;
 	public static String ITEM_COLOR_UNREAD;
@@ -54,17 +58,16 @@ public class ItemsActivity extends Activity {
 		mContext = this;
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
-		
-		Intent intent = getIntent();
-	    if (feedId == 0) {
-		    feedId = intent.getIntExtra(MainActivity.SELECTED_FEED_ID, 0);
-		    feedTitle = intent.getStringExtra(MainActivity.SELECTED_FEED_TITLE);
-		    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
-		    txtFeedTitle.setText(feedTitle);
-	    }
-		
 		itemRepo = new ItemRepository(this);
 	    itemRepo.open();
+	    feedRepo = new FeedRepository(this);
+	    feedRepo.open();
+		
+	    feedId = GenericHelper.getSelectedFeed(mContext);
+	    Feed feed = feedRepo.getFeed(feedId);
+	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
+	    txtFeedTitle.setText(feed.getTitle());
+		
 	    ArrayList<Item> items = itemRepo.getIsUnreadItems(feedId, true);
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this, R.layout.item_row, items);

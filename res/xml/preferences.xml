@@ -1,0 +1,29 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/st_design">
+
+        <ListPreference
+	        android:defaultValue="100"
+	        android:entries="@array/st_text_size_list_titles"
+	        android:entryValues="@array/st_text_size_list_values"
+	        android:key="pref_text_size"
+	        android:negativeButtonText="@null"
+	        android:positiveButtonText="@null"
+	        android:title="@string/st_text_size"
+	        android:summary="@string/st_text_size_s" />
+        
+        <ListPreference
+	        android:defaultValue="2"
+	        android:entries="@array/st_list_size_list_titles"
+	        android:entryValues="@array/st_list_size_list_values"
+	        android:key="pref_list_size"
+	        android:negativeButtonText="@null"
+	        android:positiveButtonText="@null"
+	        android:title="@string/st_list_size"
+	        android:summary="@string/st_list_size_s" />
+
+    </PreferenceCategory>
+    
+</PreferenceScreen>

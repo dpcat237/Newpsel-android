@@ -2,6 +2,7 @@ package com.dpcat237.nps;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +33,6 @@ public class MainActivity extends Activity {
 	Boolean logged;
 	ListView listView;
 	FeedsAdapter mAdapter;
-	public static String SELECTED_FEED_ID = "feedId";
-	public static String SELECTED_FEED_TITLE = "feedTitle";
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
 	
@@ -61,6 +60,7 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	@SuppressLint("UseValueOf")
 	@Override
 	public void onResume() {
 	    super.onResume();
@@ -121,7 +121,8 @@ public class MainActivity extends Activity {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					if (mAdapter.getCount() > 0) {
 						Feed feed = (Feed) mAdapter.getItem(position);
-						showItems(feed.api_id, feed.title);
+						Integer feedId = (int) feed.getApiId();
+						showItems(feedId);
 					}
 				}
 			});
@@ -158,13 +159,24 @@ public class MainActivity extends Activity {
 		    	GenericHelper.doLogout(this);
 		    	finish();
 		        return true;
-		    /*case R.id.actionCheck:
-		    	feedRepo.unreadCountUpdate();
-		    	
-		    	Toast.makeText(this, "test: ok", Toast.LENGTH_SHORT).show();
-		        return true;*/
+		    case R.id.buttonActionSettings:
+		    	showSettings();
+		        return true;
+		    case R.id.buttonAbout:
+		    	showAbout();
+		        return true;
 	    }
 		return false;
+	}
+	
+	public void showSettings() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+	}
+	
+	public void showAbout() {
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
 	}
 	
 	public void goSignIn(View view) {
@@ -195,10 +207,9 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public void showItems(Integer feedId, String feedTitle) {
+	public void showItems(Integer feedId) {
+		GenericHelper.setSelectedFeed(this, feedId);
 		Intent intent = new Intent(this, ItemsActivity.class);
-		intent.putExtra(SELECTED_FEED_ID, feedId);
-		intent.putExtra(SELECTED_FEED_TITLE, feedTitle);
 		startActivity(intent);
 	}
 	
@@ -215,15 +226,21 @@ public class MainActivity extends Activity {
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        
+        if (logged) {
+        	// Sync the toggle state after onRestoreInstanceState has occurred.
+        	mDrawerToggle.syncState();
+        }
     }
 	
 	@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        
+        if (logged) {
+        	// Pass any configuration change to the drawer toggls
+        	mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 	
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

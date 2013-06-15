@@ -1,38 +1,86 @@
 package com.dpcat237.nps;
 
-import android.app.ActionBar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.widget.ShareActionProvider;
 
+import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
 
+@SuppressLint("SimpleDateFormat")
 public class ItemActivity extends Activity {
+	View mView;
+	Context mContext;
 	private ItemRepository itemRepo;
+	private FeedRepository feedRepo;
 	private Item item;
 	private ShareActionProvider mShareActionProvider;
+	SharedPreferences pref;
 	
+	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mView = this.findViewById(android.R.id.content).getRootView();
+		mContext = this;
+		pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		
-		ActionBar actionBar = getActionBar();
-		actionBar.setHomeButtonEnabled(false);
 	    setContentView(R.layout.item_view);
 	    itemRepo = new ItemRepository(this);
 	    itemRepo.open();
+	    feedRepo = new FeedRepository(this);
+	    feedRepo.open();
 
 	    Intent intent = getIntent();
 	    Long itemId = intent.getLongExtra(ItemsActivity.ITEM_ID, 0);
 	    item = itemRepo.getItem(itemId);
+	    Integer feedId = GenericHelper.getSelectedFeed(mContext);
+	    Feed feed = feedRepo.getFeed(feedId);
+	    
+	    //TextView resultTxt = (TextView) mView.findViewById(R.id.itemTitle);
+	    //resultTxt.setText(item.getTitle());
 	    
 	    WebView viewItemContent = (WebView) findViewById(R.id.itemContent);
-	    viewItemContent.loadData(item.getContent(), "text/html", "UTF-8");
+	    viewItemContent.setFocusable(false);
+	    viewItemContent.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+	    WebSettings ws = viewItemContent.getSettings();
+		ws.setSupportZoom(true);
+		ws.setBuiltInZoomControls(false);
+		String textSize = pref.getString("pref_text_size", "100");
+		ws.setTextZoom(Integer.parseInt(textSize));
+		
+		Date d = new Date(item.getDateAdd());
+		DateFormat df = new SimpleDateFormat("MMM dd, HH:mm");
+		String date = df.format(d);
+		String contentHeader = "<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
+			"<a style='text-decoration: none; color:#12c;' href='"+item.getLink()+"'>"+Html.escapeHtml(item.getTitle())+"</a>" +
+		"</div>" +
+		"<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+Html.escapeHtml(feed.getTitle())+"</font>" +
+				" <font style='color:#d3d3d3;'>on "+date+"</font></p>";
+		
+		
+		viewItemContent.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		String content = "<div style='padding:0px 3px 0px 2px;'>"+contentHeader+item.getContent()+"</div>";
+	    viewItemContent.loadData(content, "text/html", "UTF-8");
 	}
 	
 	@Override

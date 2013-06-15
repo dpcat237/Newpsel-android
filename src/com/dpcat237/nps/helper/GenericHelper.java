@@ -173,4 +173,20 @@ public class GenericHelper {
 	    editor.putInt("feeds_list", list);
 		editor.commit();
 	}
+	
+	public static Integer getSelectedFeed(Context context) {
+		 @SuppressWarnings("static-access")
+		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		 Integer feedId = userPref.getInt("selected_feed", 0);
+		 
+		 return feedId;
+	}
+	
+	public static void setSelectedFeed(Context context, Integer feedId) {
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = userPref.edit();
+	    editor.putInt("selected_feed", feedId);
+		editor.commit();
+	}
 }

@@ -25,6 +25,6 @@
     <Button android:id="@+id/btnLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_sign_in"
+        android:text="@string/button_submit"
         android:onClick="doLogin"/>
 </LinearLayout>

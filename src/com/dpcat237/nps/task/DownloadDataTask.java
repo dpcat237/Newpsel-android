@@ -2,6 +2,7 @@ package com.dpcat237.nps.task;
 
 import org.json.JSONArray;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -20,12 +21,11 @@ import com.dpcat237.nps.repository.ItemRepository;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
-	int progress_status;
+	int progressStatus;
 	private Context mContext;
 	private View mView;
 	ListView listView;
 	ProgressBar progressBar;
-	//TextView txt_percentage;
 	FeedRepository feedRepo;
 	ItemRepository itemRepo;
 	String msg = "not";
@@ -40,16 +40,14 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
         itemRepo = new ItemRepository(mContext);
         itemRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
-        //txt_percentage= (TextView) mView.findViewById(R.id.txt_percentage);
     } 
     
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		progress_status = 0;
+		progressStatus = 0;
 		progressBar.setVisibility(View.VISIBLE);
-		//Toast.makeText(mContext, "Invoke onPreExecute()", Toast.LENGTH_SHORT).show();
-		//txt_percentage.setText("downloading 0%");
+		progressBar.setMax(100);
 	}
      
 	@Override
@@ -58,14 +56,6 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		syncItems();
 		feedRepo.unreadCountUpdate();
 
-
-		//Toast.makeText(mContext, "hhhmm", Toast.LENGTH_SHORT).show();
-		/*while(progress_status<100){
-			progress_status += 2;
-			publishProgress(progress_status);
-			SystemClock.sleep(100);
-		}*/
-
 		return null;
 	}
 	
@@ -73,19 +63,25 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		Feed[] feeds = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
 		
 		if (feeds != null) {
-			progressBar.setMax(feeds.length);
+			updateProgress(10); //TODO: count download progress
 			Integer lastUpdate = 0;
+			Integer count = 0;
+			Integer total = feeds.length;
 			
 			for (Feed feed : feeds) {
 				feedRepo.addFeed(feed);
 				lastUpdate = (int) feed.getLastUpdate();
-				progress_status++;
-				publishProgress(progress_status);
+				
+				count++;
+				updateProgressIteration(10, 10, total, count);
 		    }
 			if (lastUpdate != 0) {
 				GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
 			}
+		}
 		
+		if (progressStatus < 20) {
+			updateProgress(20);
 		}
 	}
 	
@@ -97,20 +93,31 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		items = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
 		
 		if (items != null) {
+			updateProgress(50); //TODO: count download progress
+			Integer count = 0;
+			Integer total = items.length;
+			
+			
 			for (Item item : items) {
 				itemRepo.addItem(item);
+				
+				updateProgressIteration(50, 40, total, count);
 		    }
+		}
+		
+		if (progressStatus < 90) {
+			updateProgress(90);
 		}
 		
 		if (viewedItems.length() > 0) {
 			itemRepo.removeReadItems();
 		}
+		updateProgress(100);
 	}
  
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 	  super.onProgressUpdate(values);
-	  //txt_percentage.setText("downloading " +values[0]+"%");
 	  progressBar.setProgress(values[0]);
    
 	}
@@ -119,12 +126,21 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
  	protected void onPostExecute(Void result) {
 	  super.onPostExecute(result);
 	  progressBar.setVisibility(View.GONE);
+	  publishProgress(0);
+	  
 	  ((MainActivity) mContext).reloadList();
 	  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
-	  
-	  /*TextView resultTxt = (TextView) mView.findViewById(R.id.textTut);
-	  resultTxt.setText("tut: "+msg);*/
-	  //Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-	  //txt_percentage.setText("download complete");
+	}
+	
+	private void updateProgress(Integer progress) {
+		progressStatus = progress;
+		publishProgress(progressStatus);
+	}
+	
+	@SuppressLint("UseValueOf")
+	private void updateProgressIteration(Integer previous, Integer stepTotal, Integer total, Integer count) {
+		Float result = new Float(new Float(new Float(count*100) / new Float(total)) * stepTotal) / 100;
+		Integer progress = (int) Math.round(result)+previous;
+		publishProgress(progress);
 	}
 }
