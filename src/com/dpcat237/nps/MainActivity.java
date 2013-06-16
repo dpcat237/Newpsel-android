@@ -58,12 +58,14 @@ public class MainActivity extends Activity {
 		} else {
 			showWelcome();
 		}
+		
 	}
 	
 	@SuppressLint("UseValueOf")
 	@Override
 	public void onResume() {
 	    super.onResume();
+	    
 	    logged = GenericHelper.checkLogged(this);
 	    
 	    if (!UNREAD_NO_FIRST) {

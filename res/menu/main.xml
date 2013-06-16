@@ -7,7 +7,7 @@
     
     <item android:id="@+id/buttonAddFeed"
           android:icon="@drawable/actionbar_add"
-          android:title="@string/button_sync"
+          android:title="@string/button_add_feed"
           android:showAsAction="ifRoom|withText"  />
     
     <item

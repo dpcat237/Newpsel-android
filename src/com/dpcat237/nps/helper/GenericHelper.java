@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Date;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -188,5 +189,27 @@ public class GenericHelper {
 		SharedPreferences.Editor editor = userPref.edit();
 	    editor.putInt("selected_feed", feedId);
 		editor.commit();
+	}
+	
+	public static Boolean checkLastClearCache(Context context) {
+		 Boolean check = false;
+		 @SuppressWarnings("static-access")
+		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		 Long lastClearDate = userPref.getLong("last_clear_cache", 0);
+		 Date current = new Date();
+		 
+		 if (lastClearDate != 0) {
+			 Long week = (long) (7 * 24 * 60 * 60 * 1000);
+			 
+			 if (current.getTime() > (lastClearDate + week)) {
+				 check = true;
+			 }
+		 } else {
+			 SharedPreferences.Editor editor = userPref.edit();
+			 editor.putLong("last_clear_cache", current.getTime());
+			 editor.commit();
+		 }
+		 
+		 return check;
 	}
 }

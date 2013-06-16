@@ -59,7 +59,8 @@
 
     <!-- VIEWS -->
     <!-- Main -->
-    <string name="button_sync">button sync</string>
+    <string name="button_sync">sync</string>
+    <string name="button_add_feed">add feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_feeds">No feeds</string>

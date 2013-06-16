@@ -6,25 +6,27 @@
     android:padding="5dp"
     android:background="#f9f9f9" >
 
-    <ImageView
+        
+	<ImageView
         android:id="@+id/itemStared"
         android:layout_width="20dip"
         android:layout_height="20dip"
-        android:layout_gravity="center_vertical"
         android:layout_marginRight="3dip"
-        android:layout_weight="0"
         android:contentDescription="@string/is_stared"
-        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_weight="0"
         android:src="@drawable/isnt_stared" />
-    
+
     <TextView
         android:id="@+id/itemRowText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:text="@+id/itemRowText"
         android:textIsSelectable="false"
-        android:textSize="14sp"
-        android:layout_weight="0" >
-    </TextView>
+        android:layout_weight="1"
+        android:textSize="14sp" />
 
 </LinearLayout>

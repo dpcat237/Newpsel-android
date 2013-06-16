@@ -25,16 +25,19 @@ import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
+import com.dpcat237.nps.task.ClearCacheTask;
 
 @SuppressLint("SimpleDateFormat")
 public class ItemActivity extends Activity {
 	View mView;
 	Context mContext;
+	WebView mWebView;
 	private ItemRepository itemRepo;
 	private FeedRepository feedRepo;
 	private Item item;
 	private ShareActionProvider mShareActionProvider;
 	SharedPreferences pref;
+	private Integer CACHE_MAX_SIZE = 5000;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -56,17 +59,19 @@ public class ItemActivity extends Activity {
 	    Integer feedId = GenericHelper.getSelectedFeed(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
 	    
-	    //TextView resultTxt = (TextView) mView.findViewById(R.id.itemTitle);
-	    //resultTxt.setText(item.getTitle());
-	    
-	    WebView viewItemContent = (WebView) findViewById(R.id.itemContent);
-	    viewItemContent.setFocusable(false);
-	    viewItemContent.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-	    WebSettings ws = viewItemContent.getSettings();
+	    mWebView = (WebView) findViewById(R.id.itemContent);
+	    mWebView.setFocusable(false);
+	    mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+	    WebSettings ws = mWebView.getSettings();
 		ws.setSupportZoom(true);
 		ws.setBuiltInZoomControls(false);
 		String textSize = pref.getString("pref_text_size", "100");
 		ws.setTextZoom(Integer.parseInt(textSize));
+		clearCache();
+		
+		ws.setCacheMode(WebSettings.LOAD_DEFAULT);
+		ws.setAppCacheMaxSize(CACHE_MAX_SIZE);
+		ws.setAppCacheEnabled(true);
 		
 		Date d = new Date(item.getDateAdd());
 		DateFormat df = new SimpleDateFormat("MMM dd, HH:mm");
@@ -78,9 +83,9 @@ public class ItemActivity extends Activity {
 				" <font style='color:#d3d3d3;'>on "+date+"</font></p>";
 		
 		
-		viewItemContent.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 		String content = "<div style='padding:0px 3px 0px 2px;'>"+contentHeader+item.getContent()+"</div>";
-	    viewItemContent.loadData(content, "text/html", "UTF-8");
+		mWebView.loadData(content, "text/html", "UTF-8");
 	}
 	
 	@Override
@@ -119,6 +124,11 @@ public class ItemActivity extends Activity {
 		        return true;
 	    }
 		return false;
+	}
+	
+	public void clearCache() {
+		ClearCacheTask task = new ClearCacheTask(mContext, mWebView);
+		task.execute();
 	}
 	
 }

@@ -25,7 +25,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 	Activity mActivity;
 	Context mContext;
 	Integer imgSize = 0;
-	Integer txtPadding = 0;
 	Integer txtSize = 0;
 	
 	public ItemsAdapter(Context context, int textViewResourceId, ArrayList<Item> items) {
@@ -88,10 +87,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 			img.getLayoutParams().width = imgSize;			
 		}
 		
-		if (txtPadding > 0) {
-			text.setPadding(txtPadding, 0, 0, 0);
-		}
-		
 		if (txtSize > 0) {
 			text.setTextSize(txtSize);
 		}
@@ -104,15 +99,12 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 
 		if (size == 1) {
 			imgSize = 0;
-			txtPadding = 0;
 			txtSize = 0;
 		} else if (size == 2) {
 			imgSize = 47;
-			txtPadding = 5;
 			txtSize = 17;
 		} else if (size == 3) {
 			imgSize = 55;
-			txtPadding = 10;
 			txtSize = 20;
 		}
 	}
