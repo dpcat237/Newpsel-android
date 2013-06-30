@@ -1,6 +1,5 @@
 package com.dpcat237.nps;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +41,9 @@ public class ItemActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+			
+		
+		
 		mView = this.findViewById(android.R.id.content).getRootView();
 		mContext = this;
 		pref = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -74,18 +75,20 @@ public class ItemActivity extends Activity {
 		ws.setAppCacheEnabled(true);
 		
 		Date d = new Date(item.getDateAdd());
-		DateFormat df = new SimpleDateFormat("MMM dd, HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat("MMM dd, HH:mm");
 		String date = df.format(d);
-		String contentHeader = "<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
-			"<a style='text-decoration: none; color:#12c;' href='"+item.getLink()+"'>"+Html.escapeHtml(item.getTitle())+"</a>" +
-		"</div>" +
-		"<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+Html.escapeHtml(feed.getTitle())+"</font>" +
-				" <font style='color:#d3d3d3;'>on "+date+"</font></p>";
+		String itemLink = item.getLink();
 		
+		String contentHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+				"<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
+			"<a style='text-decoration: none; color:#12c;' href='"+itemLink+"'>"+item.getTitle()+"</a>" +
+		"</div>" +
+		"<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+feed.getTitle()+"</font>" +
+				" <font style='color:#d3d3d3;'>on "+date+"</font></p>";
 		
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 		String content = "<div style='padding:0px 3px 0px 2px;'>"+contentHeader+item.getContent()+"</div>";
-		mWebView.loadData(content, "text/html", "UTF-8");
+		mWebView.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
 	}
 	
 	@Override

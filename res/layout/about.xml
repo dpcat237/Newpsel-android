@@ -9,7 +9,7 @@
         android:id="@+id/textAbout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:padding="5dp"
         android:text="@string/about_nps" />
     
@@ -23,7 +23,7 @@
 	        android:id="@+id/textVersionText"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_version" />
 	    
 	    <TextView
@@ -31,7 +31,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:textAppearance="?android:attr/textAppearanceSmall" />
 	    
 	    <TextView
@@ -39,7 +39,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_status"
 	        android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
@@ -54,7 +54,7 @@
 	        android:id="@+id/textWebText"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_web" />
 	    
 	    <TextView
@@ -62,7 +62,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:linksClickable="true"
 	        android:autoLink="web"
 	        android:text="@string/app_web_url" />
@@ -78,7 +78,7 @@
 	        android:id="@+id/textWrite"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_write" />
 	    
 	    <TextView
@@ -86,7 +86,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:autoLink="email"
 	        android:text="@string/about_email" />
 	    
@@ -103,7 +103,7 @@
 	        android:id="@+id/textAuthorText"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_author" />
 	    
 	    <TextView
@@ -111,7 +111,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="5dp"
-	        android:textSize="12sp"
+	        android:textSize="14sp"
 	        android:text="@string/about_author_name" />
 	    
     </LinearLayout>

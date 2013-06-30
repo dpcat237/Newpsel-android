@@ -18,11 +18,11 @@ import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 
 public class ApiHelper {
-	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/app_dev.php/api/sync_feeds/";
-	private static final String URL_SYNC_ITEMS_UNREAD = "http://www.newpsel.com/app_dev.php/api/sync_unread/";
-	private static final String URL_LOGIN = "http://www.newpsel.com/app_dev.php/api/login/";
-	private static final String URL_SIGN_UP = "http://www.newpsel.com/app_dev.php/api/sign_up/";
-	private static final String URL_ADD_FEED = "http://www.newpsel.com/app_dev.php/api/add_feed/";
+	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/api/sync_feeds/";
+	private static final String URL_SYNC_ITEMS_UNREAD = "http://www.newpsel.com/api/sync_unread/";
+	private static final String URL_LOGIN = "http://www.newpsel.com/api/login/";
+	private static final String URL_SIGN_UP = "http://www.newpsel.com/api/sign_up/";
+	private static final String URL_ADD_FEED = "http://www.newpsel.com/api/add_feed/";
 	
 	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
 		Boolean checkProcess = true;

@@ -54,7 +54,7 @@ public class ItemsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.items_list);
+		setContentView(R.layout.item_list);
 		mContext = this;
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
@@ -68,7 +68,14 @@ public class ItemsActivity extends Activity {
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
 		
-	    ArrayList<Item> items = itemRepo.getIsUnreadItems(feedId, true);
+	    Integer feedList = GenericHelper.getFeedsList(this);
+	    ArrayList<Item> items = null;
+	    if (feedList == 0) {
+	    	items = itemRepo.getIsUnreadItems(feedId, true);
+		} else if (feedList == 1) {
+			items = itemRepo.getIsUnreadItems(feedId, false);
+		}
+	    
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this, R.layout.item_row, items);
 	    listView.setAdapter(mAdapter);
@@ -92,7 +99,7 @@ public class ItemsActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.feeds, menu);
+		getMenuInflater().inflate(R.menu.item_list, menu);
 
 		return true;
 	}

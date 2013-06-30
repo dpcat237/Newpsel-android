@@ -97,7 +97,8 @@ public class FeedRepository {
 
 	public ArrayList<Feed> getAllFeeds() {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
-		Cursor cursor = database.query(FeedTable.TABLE_FEED, allColumns, null, null, null, null, null);
+		String orderBy = FeedTable.COLUMN_TITLE+" ASC";
+		Cursor cursor = database.query(FeedTable.TABLE_FEED, allColumns, null, null, null, null, orderBy);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

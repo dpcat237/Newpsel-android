@@ -40,7 +40,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
         itemRepo = new ItemRepository(mContext);
         itemRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
-    } 
+    }
     
 	@Override
 	protected void onPreExecute() {
@@ -75,7 +75,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 				count++;
 				updateProgressIteration(10, 10, total, count);
 		    }
-			if (lastUpdate != 0) {
+			if (lastUpdate != 0 && total > 0) {
 				GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
 			}
 		}

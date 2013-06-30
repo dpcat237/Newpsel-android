@@ -21,7 +21,7 @@ public class FeedTable {
 			+ COLUMN_API_ID + " integer not null ,"
 			+ COLUMN_TITLE + " text not null ,"
 			+ COLUMN_WEBSITE + " text not null,"
-			+ COLUMN_FAVICON + " text not null,"
+			+ COLUMN_FAVICON + " text,"
 			+ COLUMN_UNREAD_COUNT + " integer not null "
 			+ ");";
 

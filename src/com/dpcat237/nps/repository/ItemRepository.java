@@ -80,8 +80,8 @@ public class ItemRepository {
 		ArrayList<Item> items = new ArrayList<Item>();
 		String where = "";
 		String[] args = null;
-		if (!isUnread) {
-			Integer isUnr = 0;
+		if (isUnread) {
+			Integer isUnr = 1;
 			where = ItemTable.COLUMN_FEED_ID+"=? AND "+ItemTable.COLUMN_IS_UNREAD+"=?";
 			 args = new String[] {""+feedId+"", ""+isUnr+""};
 		} else {

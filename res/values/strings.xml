@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Application -->
-    <string name="app_name">NPS</string>
+    <string name="app_name">Newpsel</string>
 
     <!-- Sign up -->
     <string name="label_signup">Sign up</string>
@@ -37,7 +37,7 @@
     <string name="error_310">Try again later</string>
     
     <!-- Text -->
-    <string name="error_connection">Are not internet connection</string>
+    <string name="error_connection">No connection to Internet</string>
     <string name="error_unknown">Error: Unknown error (see log)</string>
     <string name="error_http_unauthorized">Error: 401 unauthorized</string>
     <string name="error_http_forbidden">Error: 403 forbidden</string>
@@ -60,6 +60,7 @@
     <!-- VIEWS -->
     <!-- Main -->
     <string name="button_sync">sync</string>
+    <string name="button_mark_all">all as read</string>
     <string name="button_add_feed">add feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
@@ -99,14 +100,14 @@
     
     <!-- About -->
     <string name="about_label">About</string>
-    <string name="about_nps">Newpsel (NewsPersonalSelector) it\'s easy RSS reader with which you will spend less time selecting interesting news to read and to save. Actually Newpsel it\'s in alfa version and real future functionality will come in future versions.</string>
+    <string name="about_nps">Newpsle is under development and currently it\'s in alpha version. It will have different futures with which you will spend less time selecting preferred news and save/share them. So for now Newpsel is simple RSS feeds reader but soon will come future functionality.</string>
     <string name="about_version">Current version: </string>
-    <string name="about_status">(alfa)</string>
-    <string name="about_web">Web soon:</string>
+    <string name="about_status">(alpha)</string>
+    <string name="about_web">Web:</string>
     <string name="app_web_url">www.newpsel.com</string>
     <string name="about_author">Author:</string>
     <string name="about_author_name">Denys Pasishnyi (@dpcat237)</string>
-    <string name="about_write">For any feedback:</string>
+    <string name="about_write">Email:</string>
     <string name="about_email">newpsel@gmail.com</string>
     
     <!-- Settings -->
