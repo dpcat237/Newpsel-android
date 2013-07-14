@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +37,7 @@ public class ItemsActivity extends Activity {
 	Integer feedId = 0;
 	String feedTitle;
 	Context mContext;
+	View mView;
 	ListView listView;
 	ItemsAdapter mAdapter;
 	ContextMenu cMenu;
@@ -56,12 +56,13 @@ public class ItemsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.item_list);
 		mContext = this;
+		mView = this.findViewById(android.R.id.content).getRootView();
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
-		itemRepo = new ItemRepository(this);
-	    itemRepo.open();
 	    feedRepo = new FeedRepository(this);
 	    feedRepo.open();
+	    itemRepo = new ItemRepository(this);
+	    itemRepo.open();
 		
 	    feedId = GenericHelper.getSelectedFeed(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
@@ -96,6 +97,22 @@ public class ItemsActivity extends Activity {
 			}
 		});
 	}
+	
+	@Override
+	public void onResume() {
+	    super.onResume();
+	    
+	    feedRepo.open();
+	    itemRepo.open();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		feedRepo.close();
+		itemRepo.close();
+	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,13 +202,17 @@ public class ItemsActivity extends Activity {
 	}
 	
 	public void markPrevoiusRead (Integer position) {
+		for (int i = listView.getFirstVisiblePosition(); i <= position; i++) {
+			View line = (View) listView.getChildAt(i - listView.getFirstVisiblePosition());
+			line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
+		}
+		
 		for (int i = 0; i <= position; i++) {
 			Item item = (Item) mAdapter.getItem(i);
-			if (item.isUnread()) {
-				LinearLayout line = (LinearLayout) listView.getChildAt(i);
-				markReadItem(item.getId(), line);
-	        	item.setIsUnread(false);
-			}
+        	item.setIsUnread(false);
+        	
+        	ReadItemTask task = new ReadItemTask(this, item.getId(), false);
+    		task.execute();
 		}
 	}
 	

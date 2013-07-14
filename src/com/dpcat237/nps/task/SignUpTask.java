@@ -23,6 +23,9 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void>{
 	int progress_status;
 	private Context mContext;
 	private View mView;
+	EditText usernameText;
+	EditText emailText;
+	EditText passwordText;
 	String username;
 	String email;
 	String password;
@@ -38,9 +41,9 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void>{
     }
 	
 	private void getData() {
-		EditText usernameText = (EditText) mView.findViewById(R.id.txtUsername);
-		EditText emailText = (EditText) mView.findViewById(R.id.txtEmail);
-		EditText passwordText = (EditText) mView.findViewById(R.id.txtPassword);
+		usernameText = (EditText) mView.findViewById(R.id.txtUsername);
+		emailText = (EditText) mView.findViewById(R.id.txtEmail);
+		passwordText = (EditText) mView.findViewById(R.id.txtPassword);
 		username = usernameText.getText().toString();
 		email = emailText.getText().toString();
 		String pwd = passwordText.getText().toString();
@@ -83,8 +86,10 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void>{
 			mContext.startActivity(new Intent(mContext, MainActivity.class));
 			((Activity) mContext).finish();	
 		} else if (checkApi.equals("304")) {
+			usernameText.setError(mContext.getString(R.string.error_304));
 			Toast.makeText(mContext, R.string.error_304, Toast.LENGTH_SHORT).show();
 		} else if (checkApi.equals("305")) {
+			emailText.setError(mContext.getString(R.string.error_305));
 			Toast.makeText(mContext, R.string.error_305, Toast.LENGTH_SHORT).show();
 		} else if (checkApi.equals("99") || checkApi.equals("310")) {
 			Toast.makeText(mContext, R.string.error_310, Toast.LENGTH_SHORT).show();

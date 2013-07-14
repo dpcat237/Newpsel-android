@@ -1,5 +1,8 @@
 package com.dpcat237.nps.task;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.json.JSONArray;
 
 import android.annotation.SuppressLint;
@@ -16,8 +19,10 @@ import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
+import com.dpcat237.nps.repository.LabelRepository;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
@@ -28,7 +33,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ProgressBar progressBar;
 	FeedRepository feedRepo;
 	ItemRepository itemRepo;
-	String msg = "not";
+	LabelRepository labelRepo;
 	
 	public DownloadDataTask(Context context, View view, ListView list) {
 		api = new ApiHelper();
@@ -39,6 +44,8 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
         feedRepo.open();
         itemRepo = new ItemRepository(mContext);
         itemRepo.open();
+        labelRepo = new LabelRepository(mContext);
+        labelRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
     }
     
@@ -52,9 +59,11 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		syncFeeds();
-		syncItems();
+		syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
+		syncItems();          //progressStatus = 20 -> 50; 50 -> 70
 		feedRepo.unreadCountUpdate();
+		syncLabels();         //progressStatus = 70 -> 80; 80 -> 90
+		syncSelectedLabels(); //progressStatus = 90 -> 100
 
 		return null;
 	}
@@ -87,39 +96,96 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	
 	private void syncItems () {
 		JSONArray viewedItems = itemRepo.getItemsToSync();
-		Item[] items = null;
+		Map<String, Object> result = null;
 		Boolean isDownload = true;
+		Boolean error = false;
 		
-		items = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
+		result = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
+		Item[] items = (Item[]) result.get("items");
+		error = (Boolean) result.get("error");
 		
 		if (items != null) {
 			updateProgress(50); //TODO: count download progress
 			Integer count = 0;
 			Integer total = items.length;
 			
-			
 			for (Item item : items) {
 				itemRepo.addItem(item);
-				
-				updateProgressIteration(50, 40, total, count);
+				updateProgressIteration(50, 20, total, count);
 		    }
 		}
 		
-		if (progressStatus < 90) {
-			updateProgress(90);
+		if (progressStatus < 70) {
+			updateProgress(70);
 		}
 		
-		if (viewedItems.length() > 0) {
+		if (viewedItems.length() > 0 && !error) {
 			itemRepo.removeReadItems();
 		}
-		updateProgress(100);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void syncLabels() {
+		Map<String, Object> resultChanged = (Map<String, Object>) labelRepo.getLabelsToSync();
+		JSONArray changedLabels = (JSONArray) resultChanged.get("labelsJson");
+		ArrayList<Label> changedLabelsArray = (ArrayList<Label>) resultChanged.get("labelsArray");
+		Map<String, Object> result = null;
+		Boolean error = false;
+		
+		result = api.syncLabels(GenericHelper.generateKey(mContext), changedLabels, GenericHelper.getLastLabelsUpdate(mContext));
+		Label[] labels = (Label[]) result.get("labels");
+		error = (Boolean) result.get("error");
+		updateProgress(80); //TODO: count download progress
+		
+		if (!error) {
+			Integer lastUpdate = 0; 
+			
+			if (labels != null) {
+				for (Label label : labels) {
+					if (label.getId() > 0) {
+						labelRepo.setApiId(label.getId(), label.getApiId());
+						labelRepo.setApiId(label.getId(), label.getApiId());
+					} else {
+						labelRepo.addLabel(label, false);
+					}
+					lastUpdate = (int) label.getLastUpdate();
+			    }
+			}
+			
+			if (changedLabelsArray.size() > 0) {
+				for (Label changedLabel : changedLabelsArray) {
+					labelRepo.setChanged(changedLabel.getId(), false);
+			    }
+			}
+			
+			if (lastUpdate != 0) {
+				GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
+			}
+		}
+		updateProgress(90);
+	}
+	
+	private void syncSelectedLabels() {
+		JSONArray selectedItems = labelRepo.getSelectedItemsToSync();
+		Map<String, Object> result = null;
+		Boolean error = false;
+		
+		if (selectedItems.length() > 0) {
+			result = api.syncLaterItems(GenericHelper.generateKey(mContext), selectedItems);
+			error = (Boolean) result.get("error");
+			
+			if (!error) {
+				labelRepo.removeLaterItems();
+			}
+		}
+		
+		updateProgress(90);
 	}
  
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 	  super.onProgressUpdate(values);
 	  progressBar.setProgress(values[0]);
-   
 	}
   
 	@Override
@@ -127,6 +193,9 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	  super.onPostExecute(result);
 	  progressBar.setVisibility(View.GONE);
 	  publishProgress(0);
+	  feedRepo.close();
+	  itemRepo.close();
+	  labelRepo.close();
 	  
 	  ((MainActivity) mContext).reloadList();
 	  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();

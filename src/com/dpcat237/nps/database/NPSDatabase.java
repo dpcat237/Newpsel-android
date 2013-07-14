@@ -17,17 +17,23 @@ public class NPSDatabase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		FeedTable.onCreate(db);
 		ItemTable.onCreate(db);
+		LabelTable.onCreate(db);
+		LabelItemTable.onCreate(db);
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
 		FeedTable.onDelete(db);
 		ItemTable.onDelete(db);
+		LabelTable.onDelete(db);
+		LabelItemTable.onDelete(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		FeedTable.onUpgrade(db, oldVersion, newVersion);
 		ItemTable.onUpgrade(db, oldVersion, newVersion);
+		LabelTable.onUpgrade(db, oldVersion, newVersion);
+		LabelItemTable.onUpgrade(db, oldVersion, newVersion);
 	}
 
 }

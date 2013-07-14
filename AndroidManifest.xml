@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dpcat237.nps"
-    android:versionCode="01"
-    android:versionName="0.1.12" >
+    android:versionCode="0114"
+    android:versionName="0.1.14" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -55,6 +55,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
+            android:label="@string/label_labels_list"
+            android:name="com.dpcat237.nps.LabelsActivity"
+            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
+            android:label="@string/label_labels_create"
+            android:name="com.dpcat237.nps.CreateLabelActivity"
+            android:parentActivityName="com.dpcat237.nps.LabelsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.LabelsActivity" />
         </activity>
         <activity
             android:name="com.dpcat237.nps.ItemsActivity"

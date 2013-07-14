@@ -46,7 +46,7 @@ public class ItemRepository {
 		dbHelper.close();
 	}
 	
-	public void addItem(Item item){
+	public void addItem(Item item) {
 		if (!checkItemExists(item.getApiId())) {
 			ContentValues values = new ContentValues();
 			values.put(ItemTable.COLUMN_API_ID, item.getApiId());
@@ -83,7 +83,7 @@ public class ItemRepository {
 		if (isUnread) {
 			Integer isUnr = 1;
 			where = ItemTable.COLUMN_FEED_ID+"=? AND "+ItemTable.COLUMN_IS_UNREAD+"=?";
-			 args = new String[] {""+feedId+"", ""+isUnr+""};
+			args = new String[] {""+feedId+"", ""+isUnr+""};
 		} else {
 			where = ItemTable.COLUMN_FEED_ID+"=?";
 			args = new String[] {""+feedId+""};

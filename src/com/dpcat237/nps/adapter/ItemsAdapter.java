@@ -3,6 +3,7 @@ package com.dpcat237.nps.adapter;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dpcat237.nps.LabelsDialog;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.task.StarItemTask;
@@ -45,6 +47,7 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 		LinearLayout line = (LinearLayout) text.getParent();
 		text.setText(Html.fromHtml(item.getTitle()));
 		ImageView stared = (ImageView) line.getChildAt(0);
+		ImageView label = (ImageView) line.getChildAt(1);
 		
 		if (!item.isUnread()) {
 			String color = mContext.getString(R.string.color_read);
@@ -71,6 +74,15 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 				
 				StarItemTask task = new StarItemTask(mContext, item.getId(), isStared);
 				task.execute();
+            }
+         });
+		
+		//set label to item
+		label.setOnClickListener(new ImageView.OnClickListener() {
+			@Override
+			public void onClick(View view)
+            {
+				showLabels(item);	
             }
          });
 		
@@ -107,5 +119,12 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 			imgSize = 55;
 			txtSize = 20;
 		}
+	}
+	
+	public void showLabels(Item item) {
+		FragmentManager fm = ((Activity) mContext).getFragmentManager();
+		LabelsDialog editNameDialog = new LabelsDialog(mContext, item);
+		editNameDialog.setRetainInstance(true);
+		editNameDialog.show(fm, "fragment_select_label");
 	}
 }

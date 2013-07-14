@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/buttonCreateLabel"
+          android:icon="@drawable/collections_new_label"
+          android:title="@string/button_create_label"
+          android:showAsAction="ifRoom|withText"  />
+    
+</menu>

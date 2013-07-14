@@ -42,8 +42,8 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String[] mListsTitles;
     Bundle instanceState;
+
     
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +51,8 @@ public class MainActivity extends Activity {
 		mContext = this;
 	    mView = this.findViewById(android.R.id.content).getRootView();
 		logged = GenericHelper.checkLogged(this);
+		feedRepo = new FeedRepository(this);
+		feedRepo.open();
 		
 		if (logged) {
 			ON_CREATE = true;
@@ -58,7 +60,6 @@ public class MainActivity extends Activity {
 		} else {
 			showWelcome();
 		}
-		
 	}
 	
 	@SuppressLint("UseValueOf")
@@ -71,12 +72,19 @@ public class MainActivity extends Activity {
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
 	    } else {
+	    	feedRepo.open();
 	    	reloadList();
 	    }
 	    
 	    if (logged && mAdapter.getCount() < 1) {
 			Toast.makeText(this, R.string.no_feeds, Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		feedRepo.close();
 	}
 	
 	private void showWelcome () {
@@ -86,8 +94,6 @@ public class MainActivity extends Activity {
 	private void showList () {
 		Integer feedList = GenericHelper.getFeedsList(this);
 		if (ON_CREATE) {
-			feedRepo = new FeedRepository(this);
-			feedRepo.open();
 			setContentView(R.layout.activity_main);
 			
 			mListsTitles = getResources().getStringArray(R.array.feeds_list_array);
@@ -160,6 +166,10 @@ public class MainActivity extends Activity {
 		    	dropDb();
 		    	GenericHelper.doLogout(this);
 		    	finish();
+		        return true;
+		    case R.id.buttonActionLabels:
+		    	Intent labelIntent = new Intent(this, LabelsActivity.class);
+				startActivity(labelIntent);
 		        return true;
 		    case R.id.buttonActionSettings:
 		    	showSettings();

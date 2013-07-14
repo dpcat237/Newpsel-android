@@ -70,6 +70,28 @@ public class GenericHelper {
 		editor.commit();
 	}
 	
+	public static Integer getLastLabelsUpdate(Context context) {
+		Integer result = 0; 
+		
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+	    Integer labelsUpdate = userPref.getInt("labelsUpdate", 0);
+	    
+	    if (labelsUpdate != null) {
+	    	result = labelsUpdate;
+	    }
+		
+		return result;
+	}
+	
+	public static void setLastLabelsUpdate(Context context, Integer labelsUpdate) {
+		@SuppressWarnings("static-access")
+		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = userPref.edit();
+	    editor.putInt("labelsUpdate", labelsUpdate);
+		editor.commit();
+	}
+	
 	public static boolean hasConnection(Context context) {
 	    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

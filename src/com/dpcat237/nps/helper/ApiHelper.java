@@ -1,6 +1,8 @@
 package com.dpcat237.nps.helper;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,6 +18,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.Label;
 
 public class ApiHelper {
 	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/api/sync_feeds/";
@@ -23,6 +26,8 @@ public class ApiHelper {
 	private static final String URL_LOGIN = "http://www.newpsel.com/api/login/";
 	private static final String URL_SIGN_UP = "http://www.newpsel.com/api/sign_up/";
 	private static final String URL_ADD_FEED = "http://www.newpsel.com/api/add_feed/";
+	private static final String URL_SYNC_LABELS = "http://www.newpsel.com/api/sync_labels/";
+	private static final String URL_SYNC_LATER_ITEMS = "http://www.newpsel.com/api/sync_later/";
 	
 	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
 		Boolean checkProcess = true;
@@ -73,8 +78,9 @@ public class ApiHelper {
 		return feeds;
 	}
 	
-	public Item[] getItems(String appKey, JSONArray viewedItems, Boolean isDownload) {
-		Boolean checkProcess = true;
+	public Map<String, Object>  getItems(String appKey, JSONArray viewedItems, Boolean isDownload) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
 		Item[] items = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_ITEMS_UNREAD);
@@ -88,10 +94,10 @@ public class ApiHelper {
 			jsonData.put("isDownload", isDownload);
 		} catch (JSONException e) {
 			Log.e("ApiHelper - getItems","Error", e);
-			checkProcess = false;
+			error = true;
 		}
 		
-		if (checkProcess) {
+		if (!error) {
 			try {
 				jsonString = jsonData.toString();
 				jsonEntity = new StringEntity(jsonString);
@@ -100,28 +106,30 @@ public class ApiHelper {
 				post.setHeader("Content-type", "application/json");
 			} catch (UnsupportedEncodingException e) {
 				Log.e("ApiHelper - getItems","Error", e);
-				checkProcess = false;
+				error = true;
 			}
 			
-			if (checkProcess) {
+			if (!error) {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 					
-					if (!GenericHelper.isNumeric(respStr)) {
+					if (resp.getStatusLine().getStatusCode() == 200 && !GenericHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
-						checkProcess = true;
+						error = false;
 					} else {
-						checkProcess = false;
+						error = true;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - getItems","Error", e);
-		    		checkProcess = false;
+		    		error = true;
 		    	}
 			}
 		}
+		result.put("items", items);
+		result.put("error", error);
     	
-		return items;
+		return result;
 	}
 	
 	public static Boolean doLogin(String username, String password, String appKey) {
@@ -264,5 +272,109 @@ public class ApiHelper {
 		}
 		
 		return items;
+	}
+	
+	public Map<String, Object> syncLabels(String appKey, JSONArray changedLabels, Integer lastUpdate) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
+		Label[] labels = null;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(URL_SYNC_LABELS);
+		StringEntity jsonEntity;
+		String jsonString;
+		JSONObject jsonData = new JSONObject();
+
+		try {
+			jsonData.put("appKey", appKey);
+			jsonData.put("changedLabels", changedLabels);
+			jsonData.put("lastUpdate", lastUpdate);
+		} catch (JSONException e) {
+			Log.e("ApiHelper - syncLabels","Error", e);
+			error = true;
+		}
+		
+		if (!error) {
+			try {
+				jsonString = jsonData.toString();
+				jsonEntity = new StringEntity(jsonString);
+				post.setEntity(jsonEntity);
+				post.setHeader("Accept", "application/json");
+				post.setHeader("Content-type", "application/json");
+			} catch (UnsupportedEncodingException e) {
+				Log.e("ApiHelper - syncLabels","Error", e);
+				error = true;
+			}
+			
+			if (!error) {
+				try {
+					HttpResponse resp = httpClient.execute(post);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					
+					if (resp.getStatusLine().getStatusCode() == 200 && !GenericHelper.isNumeric(respStr)) {
+						labels = JsonHelper.getLabels(respStr);
+						error = false;
+					} else {
+						error = true;
+					}
+		    	} catch(Exception e) {
+		    		Log.e("ApiHelper - syncLabels","Error", e);
+		    		error = true;
+		    	}
+			}
+		}
+		result.put("labels", labels);
+		result.put("error", error);
+    	
+		return result;
+	}
+	
+	public Map<String, Object> syncLaterItems(String appKey, JSONArray laterItems) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(URL_SYNC_LATER_ITEMS);
+		StringEntity jsonEntity;
+		String jsonString;
+		JSONObject jsonData = new JSONObject();
+
+		try {
+			jsonData.put("appKey", appKey);
+			jsonData.put("laterItems", laterItems);
+		} catch (JSONException e) {
+			Log.e("ApiHelper - syncLaterItems","Error", e);
+			error = true;
+		}
+		
+		if (!error) {
+			try {
+				jsonString = jsonData.toString();
+				jsonEntity = new StringEntity(jsonString);
+				post.setEntity(jsonEntity);
+				post.setHeader("Accept", "application/json");
+				post.setHeader("Content-type", "application/json");
+			} catch (UnsupportedEncodingException e) {
+				Log.e("ApiHelper - syncLaterItems","Error", e);
+				error = true;
+			}
+			
+			if (!error) {
+				try {
+					HttpResponse resp = httpClient.execute(post);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					
+					if (resp.getStatusLine().getStatusCode() == 200 && respStr.equals("100")) {
+						error = false;
+					} else {
+						error = true;
+					}
+		    	} catch(Exception e) {
+		    		Log.e("ApiHelper - syncLaterItems","Error", e);
+		    		error = true;
+		    	}
+			}
+		}
+		result.put("error", error);
+    	
+		return result;
 	}
 }
