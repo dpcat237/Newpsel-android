@@ -27,7 +27,6 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 	String password;
 	String appKey;
 	Boolean checkLogin = false;
-	//TextView resultTxt;
 	ProgressDialog dialog;
 	
 	public LoginTask(Context context, View view) {
@@ -40,7 +39,6 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 	private void getData() {
 		EditText usernameText = (EditText) mView.findViewById(R.id.txtUsername);
 		EditText passwordText = (EditText) mView.findViewById(R.id.txtPassword);
-		//resultTxt = (TextView) mView.findViewById(R.id.textViewaa);
 		username = usernameText.getText().toString();
 		String pwd = passwordText.getText().toString();
 		try {
@@ -77,9 +75,6 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
  	protected void onPostExecute(Void result) {
 		dialog.cancel();
 		
-		//Toast.makeText(mContext, "yeah "+check, Toast.LENGTH_SHORT).show();
-		//resultTxt.setText("tut: "+check);
-		//Toast.makeText(mContext, "yeah "+check, Toast.LENGTH_SHORT).show();
 		if (checkLogin) {
 			GenericHelper.doLogin(mContext);
 			mContext.startActivity(new Intent(mContext, MainActivity.class));
