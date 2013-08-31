@@ -46,8 +46,10 @@ public class LabelsDialog extends DialogFragment{
 				task.execute();
 		    }
 		});
+		AlertDialog dialog = builder.create();
+		dialog.setCanceledOnTouchOutside(true);
 
-	    return builder.create();
+	    return dialog;
 
 	}
 }
