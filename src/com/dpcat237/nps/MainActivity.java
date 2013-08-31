@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 	FeedsAdapter mAdapter;
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
+	public boolean isInFront;
 	
 	//DrawerList
 	private DrawerLayout mDrawerLayout;
@@ -66,6 +67,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume() {
 	    super.onResume();
+	    isInFront = true;
 	    
 	    logged = GenericHelper.checkLogged(this);
 	    
@@ -84,6 +86,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		isInFront = false;
 		feedRepo.close();
 	}
 	

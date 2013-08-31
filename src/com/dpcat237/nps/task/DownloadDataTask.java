@@ -197,8 +197,11 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	  itemRepo.close();
 	  labelRepo.close();
 	  
-	  ((MainActivity) mContext).reloadList();
-	  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
+	  if (((MainActivity) mContext).isInFront) {
+		  ((MainActivity) mContext).reloadList();
+		  
+		  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
+	  }
 	}
 	
 	private void updateProgress(Integer progress) {
