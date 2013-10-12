@@ -28,6 +28,7 @@ public class ApiHelper {
 	private static final String URL_ADD_FEED = "http://www.newpsel.com/api/add_feed/";
 	private static final String URL_SYNC_LABELS = "http://www.newpsel.com/api/sync_labels/";
 	private static final String URL_SYNC_LATER_ITEMS = "http://www.newpsel.com/api/sync_later/";
+	private static final String URL_SYNC_SHARED_ITEMS = "http://www.newpsel.com/api/sync_shared/";
 	
 	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
 		Boolean checkProcess = true;
@@ -369,6 +370,56 @@ public class ApiHelper {
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - syncLaterItems","Error", e);
+		    		error = true;
+		    	}
+			}
+		}
+		result.put("error", error);
+    	
+		return result;
+	}
+	
+	public Map<String, Object> syncSharedItems(String appKey, JSONArray sharedItems) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(URL_SYNC_SHARED_ITEMS);
+		StringEntity jsonEntity;
+		String jsonString;
+		JSONObject jsonData = new JSONObject();
+
+		try {
+			jsonData.put("appKey", appKey);
+			jsonData.put("sharedItems", sharedItems);
+		} catch (JSONException e) {
+			Log.e("ApiHelper - syncSharedItems","Error", e);
+			error = true;
+		}
+		
+		if (!error) {
+			try {
+				jsonString = jsonData.toString();
+				jsonEntity = new StringEntity(jsonString);
+				post.setEntity(jsonEntity);
+				post.setHeader("Accept", "application/json");
+				post.setHeader("Content-type", "application/json");
+			} catch (UnsupportedEncodingException e) {
+				Log.e("ApiHelper - syncLaterItems","Error", e);
+				error = true;
+			}
+			
+			if (!error) {
+				try {
+					HttpResponse resp = httpClient.execute(post);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					
+					if (resp.getStatusLine().getStatusCode() == 200 && respStr.equals("100")) {
+						error = false;
+					} else {
+						error = true;
+					}
+		    	} catch(Exception e) {
+		    		Log.e("ApiHelper - syncSharedItems","Error", e);
 		    		error = true;
 		    	}
 			}

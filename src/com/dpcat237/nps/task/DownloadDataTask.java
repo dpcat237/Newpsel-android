@@ -23,6 +23,7 @@ import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
 import com.dpcat237.nps.repository.LabelRepository;
+import com.dpcat237.nps.repository.SharedRepository;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
@@ -34,6 +35,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	FeedRepository feedRepo;
 	ItemRepository itemRepo;
 	LabelRepository labelRepo;
+	SharedRepository sharedRepo;
 	
 	public DownloadDataTask(Context context, View view, ListView list) {
 		api = new ApiHelper();
@@ -46,6 +48,8 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
         itemRepo.open();
         labelRepo = new LabelRepository(mContext);
         labelRepo.open();
+        sharedRepo = new SharedRepository(mContext);
+        sharedRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
     }
     
@@ -62,8 +66,9 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
 		syncItems();          //progressStatus = 20 -> 50; 50 -> 70
 		feedRepo.unreadCountUpdate();
-		syncLabels();         //progressStatus = 70 -> 80; 80 -> 90
-		syncSelectedLabels(); //progressStatus = 90 -> 100
+		syncLabels();         //progressStatus = 70 -> 75; 75 -> 80
+		syncLaterItems();     //progressStatus = 80 -> 90; 90 -> 95
+		syncSharedItems();    //progressStatus = 95 -> 100
 
 		return null;
 	}
@@ -135,10 +140,10 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		result = api.syncLabels(GenericHelper.generateKey(mContext), changedLabels, GenericHelper.getLastLabelsUpdate(mContext));
 		Label[] labels = (Label[]) result.get("labels");
 		error = (Boolean) result.get("error");
-		updateProgress(80); //TODO: count download progress
+		updateProgress(75); //TODO: count download progress
 		
 		if (!error) {
-			Integer lastUpdate = 0; 
+			Integer lastUpdate = 0;
 			
 			if (labels != null) {
 				for (Label label : labels) {
@@ -162,11 +167,12 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 				GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
 			}
 		}
-		updateProgress(90);
+		updateProgress(80);
 	}
 	
-	private void syncSelectedLabels() {
+	private void syncLaterItems() {
 		JSONArray selectedItems = labelRepo.getSelectedItemsToSync();
+		updateProgress(90);
 		Map<String, Object> result = null;
 		Boolean error = false;
 		
@@ -179,7 +185,24 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 			}
 		}
 		
-		updateProgress(90);
+		updateProgress(95);
+	}
+	
+	private void syncSharedItems() {
+		JSONArray sharedItems = sharedRepo.getSharedToSync();
+		Map<String, Object> result = null;
+		Boolean error = false;
+		
+		if (sharedItems.length() > 0) {
+			result = api.syncSharedItems(GenericHelper.generateKey(mContext), sharedItems);
+			error = (Boolean) result.get("error");
+			
+			if (!error) {
+				sharedRepo.removeSharedItems();
+			}
+		}
+		
+		updateProgress(100);
 	}
  
 	@Override

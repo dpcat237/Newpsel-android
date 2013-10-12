@@ -31,6 +31,7 @@ public class Label {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public long getLastUpdate() {
 		return lastUpdate;
 	}

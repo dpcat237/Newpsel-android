@@ -19,6 +19,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		ItemTable.onCreate(db);
 		LabelTable.onCreate(db);
 		LabelItemTable.onCreate(db);
+		SharedTable.onCreate(db);
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
@@ -26,6 +27,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		ItemTable.onDelete(db);
 		LabelTable.onDelete(db);
 		LabelItemTable.onDelete(db);
+		SharedTable.onDelete(db);
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		ItemTable.onUpgrade(db, oldVersion, newVersion);
 		LabelTable.onUpgrade(db, oldVersion, newVersion);
 		LabelItemTable.onUpgrade(db, oldVersion, newVersion);
+		SharedTable.onUpgrade(db, oldVersion, newVersion);
 	}
 
 }
