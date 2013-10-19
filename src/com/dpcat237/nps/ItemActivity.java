@@ -23,7 +23,6 @@ import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
-import com.dpcat237.nps.task.ClearCacheTask;
 
 @SuppressLint("SimpleDateFormat")
 public class ItemActivity extends Activity {
@@ -68,7 +67,6 @@ public class ItemActivity extends Activity {
 		ws.setBuiltInZoomControls(false);
 		String textSize = pref.getString("pref_text_size", "100");
 		ws.setTextZoom(Integer.parseInt(textSize));
-		clearCache();
 		
 		ws.setCacheMode(WebSettings.LOAD_DEFAULT);
 		ws.setAppCacheMaxSize(CACHE_MAX_SIZE);
@@ -128,10 +126,4 @@ public class ItemActivity extends Activity {
 	    }
 		return false;
 	}
-	
-	public void clearCache() {
-		ClearCacheTask task = new ClearCacheTask(mContext, mWebView);
-		task.execute();
-	}
-	
 }
