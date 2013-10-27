@@ -1,5 +1,7 @@
 package com.dpcat237.nps.task;
 
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -71,9 +73,13 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 	}
 	
 	private void syncFeeds () {
-		Feed[] feeds = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		Map<String, Object> result = null;
+		Boolean error = false;
+		result = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		Feed[] feeds = (Feed[]) result.get("feeds");
+		error = (Boolean) result.get("error");
 		
-		if (feeds != null) {
+		if (feeds != null && !error) {
 			Integer lastUpdate = 0;
 			
 			for (Feed feed : feeds) {

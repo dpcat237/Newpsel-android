@@ -74,9 +74,13 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	}
 	
 	private void syncFeeds () {
-		Feed[] feeds = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		Map<String, Object> result = null;
+		Boolean error = false;
+		result = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		Feed[] feeds = (Feed[]) result.get("feeds");
+		error = (Boolean) result.get("error");
 		
-		if (feeds != null) {
+		if (feeds != null && !error) {
 			updateProgress(10); //TODO: count download progress
 			Integer lastUpdate = 0;
 			Integer count = 0;

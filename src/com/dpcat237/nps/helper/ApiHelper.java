@@ -21,17 +21,20 @@ import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
 
 public class ApiHelper {
-	private static final String URL_SYNC_FEEDS = "http://www.newpsel.com/api/sync_feeds/";
-	private static final String URL_SYNC_ITEMS_UNREAD = "http://www.newpsel.com/api/sync_unread/";
-	private static final String URL_LOGIN = "http://www.newpsel.com/api/login/";
-	private static final String URL_SIGN_UP = "http://www.newpsel.com/api/sign_up/";
-	private static final String URL_ADD_FEED = "http://www.newpsel.com/api/add_feed/";
-	private static final String URL_SYNC_LABELS = "http://www.newpsel.com/api/sync_labels/";
-	private static final String URL_SYNC_LATER_ITEMS = "http://www.newpsel.com/api/sync_later/";
-	private static final String URL_SYNC_SHARED_ITEMS = "http://www.newpsel.com/api/sync_shared/";
+	private static final String API_URL = "http://www.newpsel.com/api/";
+	private static final String URL_SYNC_FEEDS = API_URL+"sync_feeds/";
+	private static final String URL_SYNC_ITEMS_UNREAD = API_URL+"sync_unread/";
+	private static final String URL_LOGIN = API_URL+"login/";
+	private static final String URL_SIGN_UP = API_URL+"sign_up/";
+	private static final String URL_ADD_FEED = API_URL+"add_feed/";
+	private static final String URL_SYNC_LABELS = API_URL+"sync_labels/";
+	private static final String URL_SYNC_LATER_ITEMS = API_URL+"sync_later/";
+	private static final String URL_SYNC_SHARED_ITEMS = API_URL+"sync_shared/";
 	
-	public Feed[] getFeeds (String appKey, Integer lastUpdate) {
-		Boolean checkProcess = true;
+	public Map<String, Object> getFeeds (String appKey, Integer lastUpdate) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
+		String errorMessage = "";
 		Feed[] feeds = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_FEEDS);
@@ -44,10 +47,10 @@ public class ApiHelper {
 			jsonData.put("lastUpdate", lastUpdate);
 		} catch (JSONException e) {
 			Log.e("ApiHelper - getFeeds","Error", e);
-			checkProcess = false;
+			error = true;
 		}
 		
-		if (checkProcess) {
+		if (!error) {
 			try {
 				jsonString = jsonData.toString();
 				jsonEntity = new StringEntity(jsonString);
@@ -56,10 +59,10 @@ public class ApiHelper {
 				post.setHeader("Content-type", "application/json");
 			} catch (UnsupportedEncodingException e) {
 				Log.e("ApiHelper - getFeeds","Error", e);
-				checkProcess = false;
+				error = true;
 			}
 			
-			if (checkProcess) {
+			if (!error) {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
@@ -67,21 +70,26 @@ public class ApiHelper {
 					if (!GenericHelper.isNumeric(respStr)) {
 						feeds = JsonHelper.getFeeds(respStr);
 					} else {
-						checkProcess = false;
+						error = true;
+						errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
-		    		Log.e("ApiHelper - getFeeds","Error", e);
-		    		checkProcess = false;
+		    		Log.e("ApiHelper - getFeeds", "Error", e);
+		    		error = true;
 		    	}
 			}
 		}
+		result.put("feeds", feeds);
+		result.put("error", error);
+		result.put("errorMessage", errorMessage);
     	
-		return feeds;
+		return result;
 	}
 	
 	public Map<String, Object>  getItems(String appKey, JSONArray viewedItems, Boolean isDownload) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Boolean error = false;
+		String errorMessage = "";
 		Item[] items = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_ITEMS_UNREAD);
@@ -129,12 +137,15 @@ public class ApiHelper {
 		}
 		result.put("items", items);
 		result.put("error", error);
+		result.put("errorMessage", errorMessage);
     	
 		return result;
 	}
 	
-	public static Boolean doLogin(String username, String password, String appKey) {
-		Boolean checkLogin = true;
+	public static Map<String, Object> doLogin(String username, String password, String appKey) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Boolean error = false;
+		String errorMessage = "";
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_LOGIN);
 		StringEntity jsonEntity;
@@ -147,10 +158,10 @@ public class ApiHelper {
 			jsonData.put("appKey", appKey);
 		} catch (JSONException e) {
 			Log.e("ApiHelper - doLogin","Error", e);
-			checkLogin = false;
+			error = true;
 		}
 		
-		if (checkLogin) {
+		if (!error) {
 			try {
 				jsonString = jsonData.toString();
 				jsonEntity = new StringEntity(jsonString);
@@ -159,27 +170,28 @@ public class ApiHelper {
 				post.setHeader("Content-type", "application/json");
 			} catch (UnsupportedEncodingException e) {
 				Log.e("ApiHelper - doLogin","Error", e);
-				checkLogin = false;
+				error = true;
 			}
 			
-			if (checkLogin) {
+			if (!error) {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
-					//GenericHelper.isNumeric(respStr);
-					if(respStr.equals("100")) {
-						checkLogin = true;
-					} else {
-						checkLogin = false;
+
+					if(!respStr.equals("100")) {
+						error = true;
+						errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - doLogin","Error", e);
-		    		checkLogin = false;
+		    		error = true;
 		    	}
 			}
 		}
+		result.put("error", error);
+		result.put("errorMessage", errorMessage);
 		
-		return checkLogin;
+		return result;
 	}
 	
 	public static String doSignUp(String username, String email, String password, String appKey) {
@@ -278,6 +290,7 @@ public class ApiHelper {
 	public Map<String, Object> syncLabels(String appKey, JSONArray changedLabels, Integer lastUpdate) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Boolean error = false;
+		String errorMessage = "";
 		Label[] labels = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_LABELS);
@@ -316,6 +329,7 @@ public class ApiHelper {
 						error = false;
 					} else {
 						error = true;
+						errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - syncLabels","Error", e);
@@ -325,6 +339,7 @@ public class ApiHelper {
 		}
 		result.put("labels", labels);
 		result.put("error", error);
+		result.put("errorMessage", errorMessage);
     	
 		return result;
 	}
@@ -332,6 +347,7 @@ public class ApiHelper {
 	public Map<String, Object> syncLaterItems(String appKey, JSONArray laterItems) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Boolean error = false;
+		String errorMessage = "";
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_LATER_ITEMS);
 		StringEntity jsonEntity;
@@ -367,6 +383,7 @@ public class ApiHelper {
 						error = false;
 					} else {
 						error = true;
+						errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - syncLaterItems","Error", e);
@@ -375,6 +392,7 @@ public class ApiHelper {
 			}
 		}
 		result.put("error", error);
+		result.put("errorMessage", errorMessage);
     	
 		return result;
 	}
@@ -382,6 +400,7 @@ public class ApiHelper {
 	public Map<String, Object> syncSharedItems(String appKey, JSONArray sharedItems) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Boolean error = false;
+		String errorMessage = "";
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(URL_SYNC_SHARED_ITEMS);
 		StringEntity jsonEntity;
@@ -417,6 +436,7 @@ public class ApiHelper {
 						error = false;
 					} else {
 						error = true;
+						errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - syncSharedItems","Error", e);
@@ -425,6 +445,7 @@ public class ApiHelper {
 			}
 		}
 		result.put("error", error);
+		result.put("errorMessage", errorMessage);
     	
 		return result;
 	}

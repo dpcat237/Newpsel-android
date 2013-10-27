@@ -2,6 +2,7 @@ package com.dpcat237.nps.task;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -61,7 +62,14 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		checkLogin = ApiHelper.doLogin(username, password, appKey);
+		Map<String, Object> result = null;
+		Boolean error = false;
+		result = ApiHelper.doLogin(username, password, appKey);
+		error = (Boolean) result.get("error");
+		
+		if (!error) {
+			checkLogin = true;
+		}
 
 		return null;
 	}
