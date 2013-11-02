@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainMenu" >
 
     <item android:id="@+id/buttonSync"
           android:icon="@drawable/actionbar_refresh"

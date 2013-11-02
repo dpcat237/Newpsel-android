@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String[] mListsTitles;
     Bundle instanceState;
+    private Menu mainMenu;
 
     
 	@Override
@@ -143,6 +144,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (logged) {
+			mainMenu = menu;
 			getMenuInflater().inflate(R.menu.main, menu);
 
 			return true;
@@ -160,6 +162,7 @@ public class MainActivity extends Activity {
 	    switch (item.getItemId()) {
 		    case R.id.buttonSync:
 		    	downloadData();
+		    	item.setEnabled(false);
 		        return true;
 		    case R.id.buttonAddFeed:
 		    	Intent intent = new Intent(this, AddFeedActivity.class);
@@ -234,7 +237,9 @@ public class MainActivity extends Activity {
 			if (mAdapter.getCount() > 0) {
 				mAdapter.clear();
 			}
+			
 			showList();
+			mainMenu.findItem(R.id.buttonSync).setEnabled(true);
 		}
 	}
 	
