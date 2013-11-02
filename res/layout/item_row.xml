@@ -6,27 +6,23 @@
     android:padding="5dp"
     android:background="#f9f9f9" >
 
-	<ImageView
+	<Button
         android:id="@+id/itemStared"
         android:layout_width="20dip"
         android:layout_height="20dip"
         android:layout_marginRight="3dip"
-        android:contentDescription="@string/is_stared"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_weight="0"
-        android:src="@drawable/isnt_stared" />
+        android:background="@drawable/isnt_stared"
+        android:gravity="center"  />
 	
-	<ImageView
+	<Button
         android:id="@+id/itemLabel"
         android:layout_width="20dip"
         android:layout_height="20dip"
         android:layout_marginRight="3dip"
-        android:contentDescription="@string/has_label"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_weight="0"
-        android:src="@drawable/collections_labels" />
+        android:background="@drawable/collections_labels"
+        android:gravity="center"  />
 
     <TextView
         android:id="@+id/itemRowText"

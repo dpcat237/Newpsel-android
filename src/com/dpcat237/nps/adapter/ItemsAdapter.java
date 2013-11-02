@@ -7,12 +7,15 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 	Context mContext;
 	Integer imgSize = 0;
 	Integer txtSize = 0;
+	private Button label;
 	
 	public ItemsAdapter(Context context, int textViewResourceId, ArrayList<Item> items) {
 		super(context, textViewResourceId, items);
@@ -46,8 +50,8 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 		TextView text = (TextView)v.findViewById(R.id.itemRowText);
 		LinearLayout line = (LinearLayout) text.getParent();
 		text.setText(Html.fromHtml(item.getTitle()));
-		ImageView stared = (ImageView) line.getChildAt(0);
-		ImageView label = (ImageView) line.getChildAt(1);
+		Button stared = (Button) line.getChildAt(0);
+		label = (Button) line.getChildAt(1);
 		
 		if (!item.isUnread()) {
 			String color = mContext.getString(R.string.color_read);
@@ -88,10 +92,34 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 		
 		setDimensions(stared, text);
 		
+		line.post(new Runnable() {
+			public void run() {
+				// Post in the parent's message queue to make sure the parent
+				// lays out its children before we call getHitRect()
+				Rect delegateArea = new Rect();
+				Button delegate = label;
+				delegate.getHitRect(delegateArea);
+				delegateArea.top -= 20;
+				delegateArea.bottom += 20;
+				delegateArea.left -= 10;
+				delegateArea.right += 10;
+				TouchDelegate expandedArea = new TouchDelegate(delegateArea,
+						delegate);
+				// give the delegate to an ancestor of the view we're
+				// delegating the
+				// area to
+				if (View.class.isInstance(delegate.getParent())) {
+					((View) delegate.getParent())
+							.setTouchDelegate(expandedArea);
+				}
+			};
+		});
+		
+		
 		return v;
 	}
 	
-	private void setDimensions(ImageView img, TextView text) {
+	private void setDimensions(Button img, TextView text) {
 		setSize();
 		
 		if (imgSize > 0) {
