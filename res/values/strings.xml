@@ -119,7 +119,8 @@
     
     <!-- Labels -->
     <string name="button_create_label">create feed</string>
-    <string name="txt_already_has_label">This item already has label</string>
+    <string name="txt_label">Label</string>
+    <string name="txt_removed">removed</string>
     <string name="txt_successful_set_label">Set label</string>
     
     <!-- Settings -->

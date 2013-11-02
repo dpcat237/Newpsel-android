@@ -378,7 +378,7 @@ public class ApiHelper {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
-					
+
 					if (resp.getStatusLine().getStatusCode() == 200 && respStr.equals("100")) {
 						error = false;
 					} else {

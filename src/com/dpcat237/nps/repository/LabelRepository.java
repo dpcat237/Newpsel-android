@@ -346,6 +346,13 @@ public class LabelRepository {
 		String[] args = new String[] {""+labelId+""};
 		database.update(LabelTable.TABLE_LABEL, values, where, args);
 	}
+
+	public void removeLaterItem(long labelId, long itemApiId)
+	{
+		String where = LabelItemTable.COLUMN_LABEL_ID+"=? AND "+LabelItemTable.COLUMN_ITEM_API_ID+"=?";
+		String[] args = new String[] {""+labelId+"", ""+itemApiId+""};
+		database.delete(LabelItemTable.TABLE_LABEL_ITEM, where, args);
+	}
 	
 	public void removeLaterItems() {
 		String where = LabelItemTable.COLUMN_ID+"!=?";

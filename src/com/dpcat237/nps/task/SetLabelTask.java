@@ -33,6 +33,7 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		if (labelRepo.checkLabelSet(label.getId(), item.getApiId())) {
+			labelRepo.removeLaterItem(label.getId(), item.getApiId());
 			set = true;
 		} else {
 			LabelItem labelItem = new LabelItem();
@@ -52,9 +53,9 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void>{
 		labelRepo.close();
 		
 		if (set) {
-			Toast.makeText(mContext, mContext.getString(R.string.txt_already_has_label)+" "+label, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, mContext.getString(R.string.txt_label)+" "+label + " " + mContext.getString(R.string.txt_removed) + ".", Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(mContext, mContext.getString(R.string.txt_successful_set_label)+" "+label, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, mContext.getString(R.string.txt_successful_set_label)+" "+label + ".", Toast.LENGTH_SHORT).show();
 		}
 	}
 }
