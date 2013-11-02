@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String[] mListsTitles;
     Bundle instanceState;
-    private Menu mainMenu;
+    private Menu mainMenu = null;
 
     
 	@Override
@@ -239,7 +239,9 @@ public class MainActivity extends Activity {
 			}
 			
 			showList();
-			mainMenu.findItem(R.id.buttonSync).setEnabled(true);
+			if (mainMenu != null) {
+				mainMenu.findItem(R.id.buttonSync).setEnabled(true);
+			}
 		}
 	}
 	
