@@ -87,8 +87,15 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 			Integer total = feeds.length;
 			
 			for (Feed feed : feeds) {
-				feedRepo.addFeed(feed);
-				lastUpdate = (int) feed.getLastUpdate();
+				if (feedRepo.checkFeedExists(feed.getApiId())) {
+					feedRepo.updateFeed(feed);
+				} else {
+					feedRepo.addFeed(feed);
+				}
+				
+				if (feed.getLastUpdate() > lastUpdate) {
+					lastUpdate = (int) feed.getLastUpdate();					
+				}
 				
 				count++;
 				updateProgressIteration(10, 10, total, count);

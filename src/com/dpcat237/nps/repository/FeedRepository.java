@@ -60,6 +60,16 @@ public class FeedRepository {
 		}
 	}
 	
+	public void updateFeed(Feed feed) {
+		ContentValues values = new ContentValues();
+		values.put(FeedTable.COLUMN_TITLE, feed.getTitle());
+		values.put(FeedTable.COLUMN_WEBSITE, feed.getWebsite());
+		values.put(FeedTable.COLUMN_FAVICON, feed.getFavicon());
+		String where = FeedTable.COLUMN_API_ID+"=?";
+		String[] args = new String[] {""+feed.getApiId()+""};
+		database.update(FeedTable.TABLE_FEED, values, where, args);
+	}
+	
 	public Boolean checkFeedExists(long feedId){
 		Boolean result = false;
 		String[] columns = new String[] {"api_id"};
