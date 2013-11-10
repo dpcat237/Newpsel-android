@@ -1,7 +1,5 @@
 package com.dpcat237.nps.repository;
 
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +10,8 @@ import com.dpcat237.nps.database.FeedTable;
 import com.dpcat237.nps.database.ItemTable;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.model.Feed;
+
+import java.util.ArrayList;
 
 public class FeedRepository {
 

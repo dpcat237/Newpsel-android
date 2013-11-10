@@ -1,7 +1,5 @@
 package com.dpcat237.nps;
 
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +13,8 @@ import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;
 import com.dpcat237.nps.task.SetLabelTask;
+
+import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 public class LabelsDialog extends DialogFragment{

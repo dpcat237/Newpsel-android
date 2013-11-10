@@ -1,9 +1,5 @@
 package com.dpcat237.nps.repository;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +10,10 @@ import android.util.Log;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.SharedTable;
 import com.dpcat237.nps.model.Shared;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SharedRepository {
 

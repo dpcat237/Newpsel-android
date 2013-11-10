@@ -1,5 +1,11 @@
 package com.dpcat237.nps.helper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,12 +14,6 @@ import java.util.Date;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
 
 public class GenericHelper {
 	public static String generateKey(Context context) {

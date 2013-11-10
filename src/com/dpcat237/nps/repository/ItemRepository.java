@@ -1,11 +1,5 @@
 package com.dpcat237.nps.repository;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,6 +10,12 @@ import android.util.Log;
 import com.dpcat237.nps.database.ItemTable;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.model.Item;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ItemRepository {
 
@@ -102,7 +102,7 @@ public class ItemRepository {
 		cursor.close();
 		return items;
 	}
-	
+
 	public JSONArray getItemsToSync() {
 		JSONArray items = new JSONArray();
 		String where = ItemTable.COLUMN_IS_UNREAD+"=?";

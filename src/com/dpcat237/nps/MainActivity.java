@@ -1,7 +1,5 @@
 package com.dpcat237.nps;
 
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -25,6 +23,9 @@ import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.task.DownloadDataTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 	View mView;
@@ -117,15 +118,16 @@ public class MainActivity extends Activity {
 			ON_CREATE = false;
         }
 		listView = (ListView) findViewById(R.id.feedslist);
-		
-		ArrayList<Feed> feeds = null;
+
+        List<Feed> feeds = new ArrayList<Feed>();
 		if (feedList == 0) {
 			feeds = feedRepo.getAllFeedsUnread();
 		} else if (feedList == 1) {
 			feeds = feedRepo.getAllFeeds();
 		}
-		
-		mAdapter = new FeedsAdapter(this, R.layout.feed_row, feeds);
+
+        mAdapter = new FeedsAdapter(this);
+        mAdapter.addToDataset(feeds);
 		listView.setAdapter(mAdapter);
 		if (!feeds.isEmpty()) {
 			listView.setOnItemClickListener(new OnItemClickListener() {
@@ -235,7 +237,7 @@ public class MainActivity extends Activity {
 		if (logged) {
 			feedRepo.unreadCountUpdate();
 			if (mAdapter.getCount() > 0) {
-				mAdapter.clear();
+				listView.setAdapter(null);
 			}
 			
 			showList();

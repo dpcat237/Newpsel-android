@@ -1,8 +1,5 @@
 package com.dpcat237.nps.task;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +14,9 @@ import com.dpcat237.nps.MainActivity;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 public class SignUpTask extends AsyncTask<Void, Integer, Void>{
         ApiHelper api;

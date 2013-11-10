@@ -1,7 +1,5 @@
 package com.dpcat237.nps;
 
-import java.util.ArrayList;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +11,8 @@ import android.widget.ArrayAdapter;
 import com.dpcat237.nps.adapter.ItemsAdapter;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;
+
+import java.util.ArrayList;
 
 public class LabelsActivity extends ListActivity {
 	private LabelRepository labelRepo;

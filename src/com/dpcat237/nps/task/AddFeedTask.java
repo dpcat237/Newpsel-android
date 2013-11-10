@@ -1,7 +1,5 @@
 package com.dpcat237.nps.task;
 
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +15,8 @@ import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
+
+import java.util.Map;
 
 public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;

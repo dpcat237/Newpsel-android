@@ -1,13 +1,5 @@
 package com.dpcat237.nps.repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +12,14 @@ import com.dpcat237.nps.database.LabelTable;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.model.LabelItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LabelRepository {
 

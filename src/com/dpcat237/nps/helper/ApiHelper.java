@@ -1,8 +1,10 @@
 package com.dpcat237.nps.helper;
 
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import android.util.Log;
+
+import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.Label;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -14,11 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.Item;
-import com.dpcat237.nps.model.Label;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApiHelper {
 	private static final String API_URL = "http://www.newpsel.com/api/";
@@ -122,12 +122,13 @@ public class ApiHelper {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
-					
+
 					if (resp.getStatusLine().getStatusCode() == 200 && !GenericHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
 						error = false;
 					} else {
 						error = true;
+                        errorMessage = respStr;
 					}
 		    	} catch(Exception e) {
 		    		Log.e("ApiHelper - getItems","Error", e);

@@ -1,7 +1,5 @@
 package com.dpcat237.nps;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +26,8 @@ import com.dpcat237.nps.task.ReadFeedItemsTask;
 import com.dpcat237.nps.task.ReadItemTask;
 import com.dpcat237.nps.task.StarItemTask;
 
+import java.util.ArrayList;
+
 public class ItemsActivity extends Activity {
 	private ItemRepository itemRepo;
 	private FeedRepository feedRepo;
@@ -35,7 +35,6 @@ public class ItemsActivity extends Activity {
 	public static String ITEM_COLOR_READ;
 	public static String ITEM_COLOR_UNREAD;
 	Integer feedId = 0;
-	String feedTitle;
 	Context mContext;
 	View mView;
 	ListView listView;
@@ -78,7 +77,8 @@ public class ItemsActivity extends Activity {
 		}
 	    
 	    listView = (ListView) findViewById(R.id.itemsList);
-	    mAdapter = new ItemsAdapter(this, R.layout.item_row, items);
+	    mAdapter = new ItemsAdapter(this);
+        mAdapter.addToDataset(items);
 	    listView.setAdapter(mAdapter);
 	    registerForContextMenu(listView);
 		
@@ -86,7 +86,7 @@ public class ItemsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (mAdapter.getCount() > 0) {
-					Item item = (Item) mAdapter.getItem(position);
+					Item item = mAdapter.getItem(position);
 					showItem(item.getId());
 					
 					if (item.isUnread()) {

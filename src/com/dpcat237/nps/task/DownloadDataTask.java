@@ -1,16 +1,12 @@
 package com.dpcat237.nps.task;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.json.JSONArray;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.MainActivity;
@@ -25,6 +21,11 @@ import com.dpcat237.nps.repository.ItemRepository;
 import com.dpcat237.nps.repository.LabelRepository;
 import com.dpcat237.nps.repository.SharedRepository;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Map;
+
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ApiHelper api;
 	int progressStatus;
@@ -36,7 +37,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	ItemRepository itemRepo;
 	LabelRepository labelRepo;
 	SharedRepository sharedRepo;
-	
+
 	public DownloadDataTask(Context context, View view, ListView list) {
 		api = new ApiHelper();
         mContext = context;
@@ -76,7 +77,13 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	private void syncFeeds () {
 		Map<String, Object> result = null;
 		Boolean error = false;
-		result = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+        ArrayList<Feed> feedsNow = feedRepo.getAllFeeds();
+        Integer feedsUpdate = 0;
+        if (feedsNow.size() > 0) {
+             feedsUpdate = GenericHelper.getLastFeedsUpdate(mContext);
+        }
+
+		result = api.getFeeds(GenericHelper.generateKey(mContext), feedsUpdate);
 		Feed[] feeds = (Feed[]) result.get("feeds");
 		error = (Boolean) result.get("error");
 		
@@ -119,7 +126,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		result = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
 		Item[] items = (Item[]) result.get("items");
 		error = (Boolean) result.get("error");
-		
+
 		if (items != null) {
 			updateProgress(50); //TODO: count download progress
 			Integer count = 0;
@@ -230,7 +237,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 	  feedRepo.close();
 	  itemRepo.close();
 	  labelRepo.close();
-	  
+
 	  if (((MainActivity) mContext).isInFront) {
 		  ((MainActivity) mContext).reloadList();
 		  

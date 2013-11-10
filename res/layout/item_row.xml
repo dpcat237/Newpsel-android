@@ -3,26 +3,31 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp"
     android:background="#f9f9f9" >
 
-	<Button
+	<ImageView
         android:id="@+id/itemStared"
-        android:layout_width="20dip"
-        android:layout_height="20dip"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_marginRight="3dip"
+        android:contentDescription="@string/is_stared"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/isnt_stared"
-        android:gravity="center"  />
+        android:gravity="center_vertical"
+        android:layout_weight="0"
+        android:scaleType="fitCenter"
+        android:src="@drawable/isnt_stared" />
 	
-	<Button
-        android:id="@+id/itemLabel"
-        android:layout_width="20dip"
-        android:layout_height="20dip"
-        android:layout_marginRight="3dip"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/collections_labels"
-        android:gravity="center"  />
+	<ImageView
+	    android:id="@+id/itemLabel"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:layout_gravity="center_vertical"
+	    android:layout_marginRight="3dip"
+	    android:layout_weight="0"
+	    android:contentDescription="@string/has_label"
+	    android:gravity="center_vertical"
+	    android:scaleType="fitCenter"
+	    android:src="@drawable/collections_labels" />
 
     <TextView
         android:id="@+id/itemRowText"
@@ -33,6 +38,7 @@
         android:text="@+id/itemRowText"
         android:textIsSelectable="false"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:textSize="14sp" />
 
 </LinearLayout>
