@@ -3,6 +3,7 @@ package com.dpcat237.nps.model;
 public class Item {
 	public long id;
 	public long api_id;
+    public long ui_id;
 	public long feed_id;
 	public String title;
 	public String link;
@@ -26,6 +27,14 @@ public class Item {
 	public void setApiId(long api_id) {
 		this.api_id = api_id;
 	}
+
+    public long getUiId() {
+        return ui_id;
+    }
+
+    public void setUiId(long api_id) {
+        this.ui_id = api_id;
+    }
 	
 	public long getFeedId() {
 		return feed_id;

@@ -25,6 +25,7 @@ public class ItemRepository {
 	private String[] allColumns = {
 			ItemTable.COLUMN_ID,
 			ItemTable.COLUMN_API_ID,
+            ItemTable.COLUMN_UI_ID,
 			ItemTable.COLUMN_FEED_ID,
 			ItemTable.COLUMN_TITLE,
 			ItemTable.COLUMN_LINK,
@@ -50,6 +51,7 @@ public class ItemRepository {
 		if (!checkItemExists(item.getApiId())) {
 			ContentValues values = new ContentValues();
 			values.put(ItemTable.COLUMN_API_ID, item.getApiId());
+            values.put(ItemTable.COLUMN_UI_ID, item.getUiId());
 			values.put(ItemTable.COLUMN_FEED_ID, item.getFeedId());
 			values.put(ItemTable.COLUMN_TITLE, item.getTitle());
 			values.put(ItemTable.COLUMN_LINK, item.getLink());
@@ -114,8 +116,9 @@ public class ItemRepository {
 			try {
 				JSONObject item = new JSONObject();
 				item.put("id", cursor.getLong(1));
-				item.put("is_stared", cursor.getInt(6));
-				item.put("is_unread", cursor.getInt(7));
+                item.put("ui_id", cursor.getLong(2));
+				item.put("is_stared", cursor.getInt(7));
+				item.put("is_unread", cursor.getInt(8));
 				items.put(item);
 			} catch (JSONException e) {
 				Log.e("ItemRepository - getItemsToSync","Error", e);
@@ -137,13 +140,14 @@ public class ItemRepository {
 		Item item = new Item();
 		item.setId(cursor.getLong(0));
 		item.setApiId(cursor.getLong(1));
-		item.setFeedId(cursor.getLong(2));
-		item.setTitle(cursor.getString(3));
-		item.setLink(cursor.getString(4));
-		item.setContent(cursor.getString(5));
-		item.setIsStared(cursor.getInt(6)>0);
-		item.setIsUnread(cursor.getInt(7)>0);
-		item.setDateAdd(cursor.getInt(8));
+		item.setUiId(cursor.getLong(2));
+        item.setFeedId(cursor.getLong(3));
+		item.setTitle(cursor.getString(4));
+		item.setLink(cursor.getString(5));
+		item.setContent(cursor.getString(6));
+		item.setIsStared(cursor.getInt(7)>0);
+		item.setIsUnread(cursor.getInt(8)>0);
+		item.setDateAdd(cursor.getInt(9));
 		return item;
 	}
 	

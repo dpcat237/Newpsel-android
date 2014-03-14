@@ -299,7 +299,7 @@ public class LabelRepository {
 				item.put("item_id", cursor.getInt(4));
 				items.put(item);
 			} catch (JSONException e) {
-				Log.e("LabelRepository -  getLabelsToSync","Error", e);
+				Log.e("LabelRepository - getLabelsToSync","Error", e);
 			}
 			cursor.moveToNext();
 		}
