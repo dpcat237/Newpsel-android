@@ -10,7 +10,7 @@ public class Item {
 	public String content;
 	public Boolean is_stared;
 	public Boolean is_unread;
-	public Integer date_add;
+	public long date_add;
 	
 	public long getId() {
 		return id;
@@ -84,11 +84,11 @@ public class Item {
 		this.is_unread = is_unread;
 	}
 	
-	public Integer getDateAdd() {
+	public long getDateAdd() {
 		return date_add;
 	}
 
-	public void setDateAdd(Integer date_add) {
+	public void setDateAdd(long date_add) {
 		this.date_add = date_add;
 	}
 	

@@ -147,7 +147,8 @@ public class ItemRepository {
 		item.setContent(cursor.getString(6));
 		item.setIsStared(cursor.getInt(7)>0);
 		item.setIsUnread(cursor.getInt(8)>0);
-		item.setDateAdd(cursor.getInt(9));
+		item.setDateAdd(cursor.getLong(9));
+
 		return item;
 	}
 	

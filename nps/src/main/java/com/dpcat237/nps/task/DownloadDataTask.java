@@ -123,7 +123,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		Map<String, Object> result = null;
 		Boolean isDownload = true;
 		Boolean error = false;
-		
+
 		result = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
 		Item[] items = (Item[]) result.get("items");
 		error = (Boolean) result.get("error");
@@ -198,7 +198,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		if (selectedItems.length() > 0) {
 			result = api.syncLaterItems(GenericHelper.generateKey(mContext), selectedItems);
 			error = (Boolean) result.get("error");
-			
+
 			if (!error) {
 				labelRepo.removeLaterItems();
 			}

@@ -21,6 +21,7 @@ import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -72,9 +73,8 @@ public class ItemActivity extends Activity {
 		ws.setAppCacheMaxSize(CACHE_MAX_SIZE);
 		ws.setAppCacheEnabled(true);
 		
-		Date d = new Date(item.getDateAdd());
-		SimpleDateFormat df = new SimpleDateFormat("MMM dd, HH:mm");
-		String date = df.format(d);
+        long timestamp = item.getDateAdd() * 1000;
+        String date = getDate(timestamp);
 		String itemLink = item.getLink();
 		
 		String contentHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
@@ -88,6 +88,17 @@ public class ItemActivity extends Activity {
 		String content = "<div style='padding:0px 3px 0px 2px;'>"+contentHeader+item.getContent()+"</div>";
 		mWebView.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
 	}
+
+    private String getDate(long timeStamp){
+        try{
+            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-MM kk:mm:ss");
+            Date netDate = (new Date(timeStamp));
+            return sdf.format(netDate);
+        }
+        catch(Exception ex){
+            return "xx";
+        }
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

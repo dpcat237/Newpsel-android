@@ -15,14 +15,14 @@
 	        android:layout_height="4dip"
 	        android:visibility="invisible" />
     </LinearLayout>
-    
+
     <ListView
         android:id="@+id/feedslist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip" >
     </ListView>
-    
+
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"

@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 			showWelcome();
 		}
 	}
-	
+
 	@SuppressLint("UseValueOf")
 	@Override
 	public void onResume() {
