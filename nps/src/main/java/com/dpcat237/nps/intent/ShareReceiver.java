@@ -20,6 +20,8 @@ import com.dpcat237.nps.task.SaveSharedTask;
 import com.dpcat237.nps.task.SendSharedTask;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ShareReceiver extends Activity {
 
@@ -62,7 +64,9 @@ public class ShareReceiver extends Activity {
 
     public void savedShared(Label label) {
         Toast.makeText(mContext, "Page successfully saved to "+label.getName()+" label.", Toast.LENGTH_LONG).show();
-        SaveSharedTask taskSave = new SaveSharedTask(mContext, label.getApiId(), extras.getString(Intent.EXTRA_SUBJECT), extras.getString(Intent.EXTRA_TEXT));
+
+        String link = pullLink(extras.getString(Intent.EXTRA_TEXT));
+        SaveSharedTask taskSave = new SaveSharedTask(mContext, label.getApiId(), extras.getString(Intent.EXTRA_SUBJECT), link);
         taskSave.execute();
 
         if (GenericHelper.hasConnection(this)) {
@@ -73,5 +77,25 @@ public class ShareReceiver extends Activity {
         ((Activity) mContext).finish();
     }
 
+    //Pull all links from the body for easy retrieval
+    private String pullLink(String text) {
+        ArrayList links = new ArrayList();
+        String link = "";
 
+        String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(text);
+        while(m.find()) {
+            String urlStr = m.group();
+            if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+            {
+                urlStr = urlStr.substring(1, urlStr.length() - 1);
+            }
+            //links.add(urlStr);
+            link = urlStr;
+            break;
+        }
+
+        return link;
+    }
 }
