@@ -175,8 +175,8 @@ public class ItemsActivity extends Activity {
 		        	item.setIsUnread(true);
 		        	return true;
 		        case 3:
-		        	if (info.position > 0) { 
-		        		markPrevoiusRead(info.position);
+		        	if (info.position > 0) {
+                        markPreviousRead(info.position);
 		        	} else {
 		        		markReadItem(item.getId(), line);
 			        	item.setIsUnread(false);
@@ -201,7 +201,7 @@ public class ItemsActivity extends Activity {
 	    return false;
 	}
 	
-	public void markPrevoiusRead (Integer position) {
+	public void markPreviousRead (Integer position) {
 		for (int i = listView.getFirstVisiblePosition(); i <= position; i++) {
 			View line = (View) listView.getChildAt(i - listView.getFirstVisiblePosition());
 			line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
