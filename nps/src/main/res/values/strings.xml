@@ -70,6 +70,7 @@
     <string name="button_add_feed">add feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
+    <string name="button_read_label">Label</string>
     <string name="no_feeds">No feeds</string>
     <!-- Drawer -->
     <string-array name="feeds_list_array">

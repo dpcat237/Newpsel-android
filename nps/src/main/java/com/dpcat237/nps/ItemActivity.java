@@ -2,6 +2,7 @@ package com.dpcat237.nps;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -78,10 +79,10 @@ public class ItemActivity extends Activity {
 		String itemLink = item.getLink();
 		
 		String contentHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-				"<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
-			"<a style='text-decoration: none; color:#12c;' href='"+itemLink+"'>"+item.getTitle()+"</a>" +
-		"</div>" +
-		"<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+feed.getTitle()+"</font>" +
+            "<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
+			    "<a style='text-decoration: none; color:#12c;' href='"+itemLink+"'>"+item.getTitle()+"</a>" +
+		    "</div>" +
+		    "<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+feed.getTitle()+"</font>" +
 				" <font style='color:#d3d3d3;'>on "+date+"</font></p>";
 		
 		mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
@@ -127,6 +128,14 @@ public class ItemActivity extends Activity {
 			mShareActionProvider.setShareIntent(shareIntent);	
 		}	
 	}
+
+    private void setLabel()
+    {
+        FragmentManager fm = ((Activity) mContext).getFragmentManager();
+        LabelsDialog editNameDialog = new LabelsDialog(mContext, item);
+        editNameDialog.setRetainInstance(true);
+        editNameDialog.show(fm, "fragment_select_label");
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -134,6 +143,9 @@ public class ItemActivity extends Activity {
 		    case R.id.buttonShare:
 		    	setShareIntent(createShareIntent());
 		        return true;
+            case R.id.buttonLabel:
+                setLabel();
+                return true;
 	    }
 		return false;
 	}
