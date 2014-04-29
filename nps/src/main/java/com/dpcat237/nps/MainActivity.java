@@ -120,6 +120,7 @@ public class MainActivity extends Activity {
 		listView = (ListView) findViewById(R.id.feedslist);
 
         List<Feed> feeds = new ArrayList<Feed>();
+        //get all feeds with items or only with unread items
 		if (feedList == 0) {
 			feeds = feedRepo.getAllFeedsUnread();
 		} else if (feedList == 1) {
