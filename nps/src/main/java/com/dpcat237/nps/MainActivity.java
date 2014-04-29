@@ -163,8 +163,7 @@ public class MainActivity extends Activity {
 		
 	    switch (item.getItemId()) {
 		    case R.id.buttonSync:
-		    	downloadData();
-		    	item.setEnabled(false);
+		    	downloadData(item);
 		        return true;
 		    case R.id.buttonAddFeed:
 		    	Intent intent = new Intent(this, AddFeedActivity.class);
@@ -218,8 +217,9 @@ public class MainActivity extends Activity {
         GenericHelper.setLastFeedsUpdate(this, 0);
 	}
 	
-	public void downloadData() {
+	public void downloadData(MenuItem item) {
 		if (GenericHelper.hasConnection(this)) {
+            item.setEnabled(false);
 			DownloadDataTask task = new DownloadDataTask(this, mView, listView);
 			task.execute();
 		} else {
