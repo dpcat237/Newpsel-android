@@ -7,10 +7,10 @@
     android:background="#ffffff"
     android:padding="0dip" >
     
-    <WebView 
+    <WebView
 	    android:id="@+id/itemContent"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" >
     </WebView>
-	
+
 </LinearLayout>

@@ -17,6 +17,7 @@ public class ItemTable {
 	public static final String COLUMN_IS_STARED = "is_stared";
 	public static final String COLUMN_IS_UNREAD = "is_unread";
 	public static final String COLUMN_DATE_ADD = "date_add";
+    public static final String COLUMN_LANGUAGE = "language";
 
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " 
@@ -30,7 +31,8 @@ public class ItemTable {
 			+ COLUMN_CONTENT + " text not null,"
 			+ COLUMN_IS_STARED + " boolean not null,"
 			+ COLUMN_IS_UNREAD + " boolean not null,"
-			+ COLUMN_DATE_ADD + " integer not null"
+			+ COLUMN_DATE_ADD + " integer not null,"
+            + COLUMN_LANGUAGE + " character(2)"
 			+ ");";
 
 	public static void onCreate(SQLiteDatabase database) {

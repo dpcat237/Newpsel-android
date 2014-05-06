@@ -11,6 +11,7 @@ public class Item {
 	public Boolean is_stared;
 	public Boolean is_unread;
 	public long date_add;
+    public String language;
 	
 	public long getId() {
 		return id;
@@ -96,4 +97,12 @@ public class Item {
 	public String toString() {
 		return title;
 	}
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 }

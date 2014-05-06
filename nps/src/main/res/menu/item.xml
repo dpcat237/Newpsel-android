@@ -1,5 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item android:id="@+id/buttonDictate"
+        android:icon="@drawable/av_play"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_read_dictate"
+        android:visible="false" />
+
+    <item android:id="@+id/buttonStop"
+        android:icon="@drawable/av_stop"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_read_stop"
+        android:visible="false" />
+
     <item android:id="@+id/buttonLabel"
         android:icon="@drawable/collections_labels"
         android:showAsAction="ifRoom"

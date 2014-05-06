@@ -42,4 +42,6 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:+'
     compile files('build/libs/gson-2.2.2.jar')
+
+    compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 }

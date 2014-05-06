@@ -32,7 +32,8 @@ public class ItemRepository {
 			ItemTable.COLUMN_CONTENT,
 			ItemTable.COLUMN_IS_STARED,
 			ItemTable.COLUMN_IS_UNREAD,
-			ItemTable.COLUMN_DATE_ADD
+			ItemTable.COLUMN_DATE_ADD,
+            ItemTable.COLUMN_LANGUAGE
 			};
 
 	public ItemRepository(Context context) {
@@ -59,6 +60,7 @@ public class ItemRepository {
 			values.put(ItemTable.COLUMN_IS_STARED, item.isStared());
 			values.put(ItemTable.COLUMN_IS_UNREAD, item.isUnread());
 			values.put(ItemTable.COLUMN_DATE_ADD, item.getDateAdd());
+            values.put(ItemTable.COLUMN_LANGUAGE, item.getLanguage());
 			database.insert(ItemTable.TABLE_ITEM, null, values);
 		}
 	}
@@ -148,6 +150,7 @@ public class ItemRepository {
 		item.setIsStared(cursor.getInt(7)>0);
 		item.setIsUnread(cursor.getInt(8)>0);
 		item.setDateAdd(cursor.getLong(9));
+        item.setLanguage(cursor.getString(10));
 
 		return item;
 	}

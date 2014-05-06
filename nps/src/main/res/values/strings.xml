@@ -24,6 +24,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_drop_db">Drop DB</string>
     <string name="action_check">Check this</string>
+    <string name="action_speech">Speech</string>
 
     <!-- Text -->
     <string name="create_feed">Create feed</string>
@@ -62,6 +63,7 @@
     <string name="error_ssl_hostname_rejected">Error: SSL hostname not verified</string>
     <string name="error_api_unknown_method">Error: unknown API method</string>
     <string name="error_network_unavailable">Error: network unavailable</string>
+    <string name="error_language_tts">Sorry! Your device doesn\'t have %1$s language installed.</string>
 
     <!-- VIEWS -->
     <!-- Main -->
@@ -70,8 +72,14 @@
     <string name="button_add_feed">add feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
-    <string name="button_read_label">Label</string>
     <string name="no_feeds">No feeds</string>
+
+    <!-- Item -->
+    <string name="button_dictate">Dictate</string>
+    <string name="button_read_label">Label</string>
+    <string name="button_read_dictate">Dictate</string>
+    <string name="button_read_stop">Stop</string>
+
     <!-- Drawer -->
     <string-array name="feeds_list_array">
         <item>Unread</item>

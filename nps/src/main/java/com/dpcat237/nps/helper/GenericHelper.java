@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.Html;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
@@ -234,4 +235,8 @@ public class GenericHelper {
 		 
 		 return check;
 	}
+
+    public static String stripHtml(String html) {
+        return Html.fromHtml(html).toString();
+    }
 }
