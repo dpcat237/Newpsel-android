@@ -127,7 +127,7 @@
     <string name="about_email">newpsel@gmail.com</string>
     
     <!-- Labels -->
-    <string name="button_create_label">create feed</string>
+    <string name="button_create_label">create label</string>
     <string name="txt_label">Label</string>
     <string name="txt_removed">removed</string>
     <string name="txt_successful_set_label">Set label</string>
