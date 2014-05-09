@@ -171,7 +171,7 @@ public class ItemRepository {
 		database.update(ItemTable.TABLE_ITEM, values, where, args);
 	}
 	
-	public void startedChange(Long itemId, Boolean isStared) {
+	public void staredChange(Long itemId, Boolean isStared) {
 		ContentValues values = new ContentValues();
 		values.put(ItemTable.COLUMN_IS_STARED, isStared);
 		String where = ItemTable.COLUMN_ID+"=?";

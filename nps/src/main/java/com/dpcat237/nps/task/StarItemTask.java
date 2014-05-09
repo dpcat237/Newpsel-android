@@ -21,7 +21,7 @@ public class StarItemTask extends AsyncTask<Void, Integer, Void>{
     
 	@Override
 	protected Void doInBackground(Void... params) {
-		itemRepo.startedChange(itemId, staredStatus);
+		itemRepo.staredChange(itemId, staredStatus);
 		
 		return null;
 	}
