@@ -42,6 +42,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 	private ShareActionProvider mShareActionProvider;
     private TextToSpeech mTTS;
     private MenuItem dictateButton;
+    private MenuItem startDictateButton;
     private MenuItem stopButton;
     private static final String TAG = "ItemActivity";
     private Boolean dictateActive = false;
@@ -58,14 +59,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
 	    setContentView(R.layout.item_view);
         getNecessaryData();
-
-        if (item.getLanguage() != null) {
-            //Intent for TTS
-            Intent checkTTSIntent = new Intent();
-            checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-            startActivityForResult(checkTTSIntent, CHECK_TTS_INSTALLED);
-            dictateActive = true;
-        }
 
         prepareWebView();
 	}
@@ -104,8 +97,13 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
         //get menu items
         MenuItem shareItem = menu.findItem(R.id.buttonShare);
+        startDictateButton = menu.findItem(R.id.buttonStartDictate);
         dictateButton = menu.findItem(R.id.buttonDictate);
         stopButton = menu.findItem(R.id.buttonStop);
+
+        if (item.getLanguage() != null) {
+            startDictateButton.setVisible(true);
+        }
 
         //prepare share button
 		mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -151,6 +149,10 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 		    case R.id.buttonShare:
 		    	setShareIntent(createShareIntent());
 		        return true;
+            case R.id.buttonStartDictate:
+                startDictateButton.setEnabled(false);
+                startDictate();
+                return true;
             case R.id.buttonStop:
                 stopDictate();
                 return true;
@@ -200,12 +202,23 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         }
     }
 
+    public void onDone()
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                stopDictation();
+            }
+        });
+    }
+
     @Override
     @TargetApi(15)
     public void onInit(int initStatus) {
         if (dictateActive) {
             Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(item.getLanguage(), mTTS);
             if (localeTTs != null && mTTS.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
+                startDictateButton.setVisible(false);
                 dictateButton.setVisible(true);
                 mTTS.setLanguage(localeTTs);
             }
@@ -248,14 +261,11 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         }
     }
 
-    public void onDone()
-    {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopDictation();
-            }
-        });
+    private void startDictate() {
+        Intent checkTTSIntent = new Intent();
+        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTTSIntent, CHECK_TTS_INSTALLED);
+        dictateActive = true;
     }
 
     public void stopDictation() {

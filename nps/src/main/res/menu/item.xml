@@ -1,5 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item android:id="@+id/buttonStartDictate"
+        android:icon="@drawable/volume_on"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_start_dictate"
+        android:visible="false" />
+
     <item android:id="@+id/buttonDictate"
         android:icon="@drawable/av_play"
         android:showAsAction="ifRoom"
