@@ -1,10 +1,11 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.repository.LabelRepository;
 
 public class CreateLabelActivity extends Activity {

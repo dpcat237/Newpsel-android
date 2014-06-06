@@ -75,7 +75,7 @@ public class FeedsAdapter extends BaseAdapter {
         Feed feed =getItem(position);
 
         holder.title.setText(feed.getTitle());
-        Long unread = feed.getUnreadCount();
+        Integer unread = feed.getUnreadCount();
         if (unread > 0) {
             holder.count.setText(unread.toString());
         } else {

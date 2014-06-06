@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.dpcat237.nps.R;
 
 public class AboutActivity extends Activity {
 	Context mContext;

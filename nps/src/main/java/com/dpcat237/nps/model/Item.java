@@ -1,26 +1,16 @@
 package com.dpcat237.nps.model;
 
-public class Item {
-	public long id;
+public class Item extends ListItem {
+    public Integer feed_id;
 	public long api_id;
     public long ui_id;
-	public long feed_id;
-	public String title;
 	public String link;
 	public String content;
 	public Boolean is_stared;
 	public Boolean is_unread;
 	public long date_add;
-    public String language;
-	
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
+
 	public long getApiId() {
 		return api_id;
 	}
@@ -29,6 +19,14 @@ public class Item {
 		this.api_id = api_id;
 	}
 
+    public Integer getFeedId() {
+        return feed_id;
+    }
+
+    public void setFeedId(Integer feed_id) {
+        this.feed_id = feed_id;
+    }
+
     public long getUiId() {
         return ui_id;
     }
@@ -36,22 +34,6 @@ public class Item {
     public void setUiId(long api_id) {
         this.ui_id = api_id;
     }
-	
-	public long getFeedId() {
-		return feed_id;
-	}
-
-	public void setFeedId(long feed_id) {
-		this.feed_id = feed_id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	
 	public String getLink() {
 		return link;
@@ -97,12 +79,4 @@ public class Item {
 	public String toString() {
 		return title;
 	}
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
 }

@@ -6,11 +6,10 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dpcat237.nps.MainActivity;
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.activity.MainActivity;
 import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
@@ -26,7 +25,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
+public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	ApiHelper api;
 	int progressStatus;
 	private Context mContext;
@@ -70,7 +69,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		feedRepo.unreadCountUpdate();
 		syncLabels();         //progressStatus = 70 -> 75; 75 -> 80
 		syncLaterItems();     //progressStatus = 80 -> 90; 90 -> 95
-		syncSharedItems();    //progressStatus = 95 -> 100
+		syncSharedItems();    //progressStatus = 95 -> 100*/
 
 		return null;
 	}
@@ -87,7 +86,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 		result = api.getFeeds(GenericHelper.generateKey(mContext), feedsUpdate);
 		Feed[] feeds = (Feed[]) result.get("feeds");
 		error = (Boolean) result.get("error");
-		
+
 		if (feeds != null && !error) {
 			updateProgress(10); //TODO: count download progress
 			Integer lastUpdate = 0;
@@ -102,9 +101,9 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void>{
 				}
 				
 				if (feed.getLastUpdate() > lastUpdate) {
-					lastUpdate = (int) feed.getLastUpdate();					
+					lastUpdate = (int) feed.getLastUpdate();
 				}
-				
+
 				count++;
 				updateProgressIteration(10, 10, total, count);
 		    }

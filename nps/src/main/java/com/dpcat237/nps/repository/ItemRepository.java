@@ -10,6 +10,7 @@ import android.util.Log;
 import com.dpcat237.nps.database.ItemTable;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.ListItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,13 @@ public class ItemRepository {
 			ItemTable.COLUMN_DATE_ADD,
             ItemTable.COLUMN_LANGUAGE
 			};
+
+    private String[] dictateTitleColumns = {
+            ItemTable.COLUMN_ID,
+            ItemTable.COLUMN_FEED_ID,
+            ItemTable.COLUMN_TITLE,
+            ItemTable.COLUMN_LANGUAGE
+    };
 
 	public ItemRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
@@ -67,7 +75,7 @@ public class ItemRepository {
 	
 	public Boolean checkItemExists(long apiId){
 		Boolean result = false;
-		String[] columns = new String[] {"api_id"};
+		String[] columns = new String[] {ItemTable.COLUMN_API_ID};
 		String where = ItemTable.COLUMN_API_ID+"=?";
 		String[] args = new String[] {""+apiId+""};
 		
@@ -107,6 +115,8 @@ public class ItemRepository {
 		return items;
 	}
 
+
+
 	public JSONArray getItemsToSync() {
 		JSONArray items = new JSONArray();
 		String where = ItemTable.COLUMN_IS_UNREAD+"=?";
@@ -131,6 +141,28 @@ public class ItemRepository {
 		cursor.close();
 		return items;
 	}
+
+    public ArrayList<ListItem> getUnreadItemsTitles(long feedId) {
+        ArrayList<ListItem> items = new ArrayList<ListItem>();
+        String where = "";
+        String[] args = null;
+        Integer isUnr = 1;
+        where = ItemTable.COLUMN_FEED_ID+"=? AND "+ItemTable.COLUMN_IS_UNREAD+"=?";
+        args = new String[] {""+feedId+"", ""+isUnr+""};
+        String orderBy = ItemTable.COLUMN_DATE_ADD+" DESC";
+
+        Cursor cursor = database.query(ItemTable.TABLE_ITEM, dictateTitleColumns, where, args, null, null, orderBy);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Item item = cursorToItemTitle(cursor);
+            items.add(item);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return items;
+    }
 	
 	public void removeReadItems() {
 		String where = ItemTable.COLUMN_IS_UNREAD+"=?";
@@ -140,10 +172,10 @@ public class ItemRepository {
 	
 	private Item cursorToItem(Cursor cursor) {
 		Item item = new Item();
-		item.setId(cursor.getLong(0));
+		item.setId(cursor.getInt(0));
 		item.setApiId(cursor.getLong(1));
 		item.setUiId(cursor.getLong(2));
-        item.setFeedId(cursor.getLong(3));
+        item.setFeedId(cursor.getInt(3));
 		item.setTitle(cursor.getString(4));
 		item.setLink(cursor.getString(5));
 		item.setContent(cursor.getString(6));
@@ -154,8 +186,18 @@ public class ItemRepository {
 
 		return item;
 	}
+
+    private Item cursorToItemTitle(Cursor cursor) {
+        Item item = new Item();
+        item.setId(cursor.getInt(0));
+        item.setFeedId(cursor.getInt(1));
+        item.setTitle(cursor.getString(2));
+        item.setLanguage(cursor.getString(3));
+
+        return item;
+    }
 	
-	public void readItem(Long itemId, Boolean isUnread) {
+	public void readItem(Integer itemId, Boolean isUnread) {
 		ContentValues values = new ContentValues();
 		values.put(ItemTable.COLUMN_IS_UNREAD, isUnread);
 		String where = ItemTable.COLUMN_ID+"=?";
@@ -171,7 +213,7 @@ public class ItemRepository {
 		database.update(ItemTable.TABLE_ITEM, values, where, args);
 	}
 	
-	public void staredChange(Long itemId, Boolean isStared) {
+	public void staredChange(Integer itemId, Boolean isStared) {
 		ContentValues values = new ContentValues();
 		values.put(ItemTable.COLUMN_IS_STARED, isStared);
 		String where = ItemTable.COLUMN_ID+"=?";

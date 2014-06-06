@@ -6,19 +6,22 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:debuggable="false"
         android:screenOrientation="fullUser"
         >
         <activity
-            android:name="com.dpcat237.nps.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,87 +30,117 @@
         </activity>
         <activity
             android:label="@string/label_st"
-            android:name="com.dpcat237.nps.SettingsActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.SettingsActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
             android:label="@string/label_signup"
-            android:name="com.dpcat237.nps.SignUpActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.SignUpActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
             android:label="@string/label_signin"
-            android:name="com.dpcat237.nps.SignInActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.SignInActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
             android:label="@string/label_add_feed"
-            android:name="com.dpcat237.nps.AddFeedActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.AddFeedActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
             android:label="@string/label_labels_list"
-            android:name="com.dpcat237.nps.LabelsActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.LabelsActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
             android:label="@string/label_labels_create"
-            android:name="com.dpcat237.nps.CreateLabelActivity"
-            android:parentActivityName="com.dpcat237.nps.LabelsActivity" >
+            android:name=".activity.CreateLabelActivity"
+            android:parentActivityName=".activity.LabelsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.LabelsActivity" />
         </activity>
         <activity
-            android:name="com.dpcat237.nps.ItemsActivity"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:name=".activity.ItemsActivity"
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
-            android:name="com.dpcat237.nps.ItemActivity"
-            android:parentActivityName="com.dpcat237.nps.ItemsActivity" >
+            android:name=".activity.ItemActivity"
+            android:parentActivityName=".activity.ItemsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.ItemsActivity" />
         </activity>
         <activity
-            android:name="com.dpcat237.nps.AboutActivity"
+            android:name=".activity.AboutActivity"
             android:label="@string/about_label"
-            android:parentActivityName="com.dpcat237.nps.MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
-            android:name="com.dpcat237.nps.intent.ShareReceiver"
-            android:theme="@style/DialogShared">
+            android:name=".activity.SpeechActivity"
+            android:label="@string/about_label"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PlayerActivity"
+            android:label="@string/about_label"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
+            android:name=".receiver.SharedReceiver"
+            android:theme="@style/Theme.FloatingWindow.Popup" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".dialog.PlayerLabelsDialog"
+            android:theme="@style/Theme.FloatingWindow.Popup" >
+        </activity>
 
-        <service
-            android:name=".service.FeedService"
-            android:enabled="true" />
+        <receiver
+            android:name="com.dpcat237.nps.receiver.LockscreenReceiver"
+            android:exported="false" >
+        </receiver>
+        <receiver android:name="com.dpcat237.nps.receiver.AlarmReceiver"></receiver>
+        <receiver android:name="com.dpcat237.nps.receiver.BootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.dpcat237.nps.service.DownloadSongsService" />
+        <service android:name="com.dpcat237.nps.service.PlayerService" />
     </application>
-
 </manifest>

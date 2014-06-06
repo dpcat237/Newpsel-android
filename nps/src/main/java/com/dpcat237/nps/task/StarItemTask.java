@@ -7,11 +7,11 @@ import com.dpcat237.nps.repository.ItemRepository;
 
 public class StarItemTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
-	private Long itemId;
+	private Integer itemId;
 	ItemRepository itemRepo;
 	Boolean staredStatus;
 	
-	public StarItemTask(Context context, Long itemIntentId, Boolean stared) {
+	public StarItemTask(Context context, Integer itemIntentId, Boolean stared) {
         mContext = context;
         itemId = itemIntentId;
         staredStatus = stared;

@@ -1,4 +1,4 @@
-package com.dpcat237.nps.intent;
+package com.dpcat237.nps.receiver;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ShareReceiver extends Activity {
+public class SharedReceiver extends Activity {
 
 	Context mContext;
     private LabelRepository labelRepo;
@@ -40,14 +40,15 @@ public class ShareReceiver extends Activity {
 		extras = intent.getExtras();
 		SharedRepository sharedRepo = new SharedRepository(this);
 		sharedRepo.open();
+
 		setContentView(R.layout.shared_labels);
-		
+
 		labelRepo = new LabelRepository(this);
 		labelRepo.open();
 
 		listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
-        mAdapter = new ArrayAdapter<Label>(this, android.R.layout.simple_list_item_1, values);
+        mAdapter = new ArrayAdapter<Label>(this, R.layout.simple_list_item, values);
 		listView.setAdapter(mAdapter);
 
 		listView.setOnItemClickListener(new OnItemClickListener() {

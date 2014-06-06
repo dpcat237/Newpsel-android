@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -20,6 +20,9 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.widget.ShareActionProvider;
 
+import com.dpcat237.nps.R;
+import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.dialog.LabelsDialog;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.model.Feed;
@@ -74,7 +77,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
         //Get passed item Id and them his and feed data
         Intent intent = getIntent();
-        Long itemId = intent.getLongExtra(ItemsActivity.ITEM_ID, 0);
+        Long itemId = intent.getLongExtra(ItemConstants.ITEM_ID, 0);
         item = itemRepo.getItem(itemId);
         Integer feedId = GenericHelper.getSelectedFeed(mContext);
         feed = feedRepo.getFeed(feedId);

@@ -1,7 +1,6 @@
 package com.dpcat237.nps.model;
 
-public class LabelItem {
-	public long id;
+public class LabelItem extends Generic {
 	public long api_id;
 	public long label_id;
 	public long label_api_id;
@@ -9,14 +8,7 @@ public class LabelItem {
 	public Boolean is_unread;
 	public Integer date_add;
 	
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
 	public long getApiId() {
 		return api_id;
 	}

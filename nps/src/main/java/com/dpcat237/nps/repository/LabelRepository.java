@@ -213,7 +213,7 @@ public class LabelRepository {
 		return labels;
 	}
 	
-	public void updateLabelUnreads(Long labelApiId, Long count) {
+	public void updateLabelUnreads(Integer labelApiId, Integer count) {
 		ContentValues values = new ContentValues();
 		values.put(LabelTable.COLUMN_UNREAD_COUNT, count);
 		String where = LabelTable.COLUMN_API_ID+"=?";
@@ -308,12 +308,12 @@ public class LabelRepository {
 		return items;
 	}
 	
-	public void setApiId(Long labelId, Long labelApiId) {
+	public void setApiId(Integer labelId, Integer labelApiId) {
 		setFeedApiId(labelId, labelApiId);
 		setItemsFeedApiId(labelId, labelApiId);
 	}
 	
-	public void setFeedApiId(Long labelId, Long labelApiId) {
+	public void setFeedApiId(Integer labelId, Integer labelApiId) {
 		ContentValues values = new ContentValues();
 		values.put(LabelTable.COLUMN_API_ID, labelApiId);
 		values.put(LabelTable.COLUMN_IS_CHANGED, false);
@@ -322,7 +322,7 @@ public class LabelRepository {
 		database.update(LabelTable.TABLE_LABEL, values, where, args);
 	}
 	
-	public void setItemsFeedApiId(Long labelId, Long labelApiId) {
+	public void setItemsFeedApiId(Integer labelId, Integer labelApiId) {
 		ContentValues values = new ContentValues();
 		values.put(LabelItemTable.COLUMN_LABEL_API_ID, labelApiId);
 		String where = LabelItemTable.COLUMN_LABEL_ID+"=?";
@@ -330,7 +330,7 @@ public class LabelRepository {
 		database.update(LabelItemTable.TABLE_LABEL_ITEM, values, where, args);
 	}
 	
-	public void updateLabelName(Long labelApiId, String name, Boolean defaultChanged) {
+	public void updateLabelName(Integer labelApiId, String name, Boolean defaultChanged) {
 		ContentValues values = new ContentValues();
 		values.put(LabelTable.COLUMN_NAME, name);
 		values.put(LabelTable.COLUMN_IS_CHANGED, defaultChanged);
@@ -339,7 +339,7 @@ public class LabelRepository {
 		database.update(LabelTable.TABLE_LABEL, values, where, args);
 	}
 	
-	public void setChanged(Long labelId, Boolean changed) {
+	public void setChanged(Integer labelId, Boolean changed) {
 		ContentValues values = new ContentValues();
 		values.put(LabelTable.COLUMN_IS_CHANGED, changed);
 		String where = LabelTable.COLUMN_ID+"=?";

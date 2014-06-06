@@ -10,7 +10,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,6 +24,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelTable.onCreate(db);
 		LabelItemTable.onCreate(db);
 		SharedTable.onCreate(db);
+        SongTable.onCreate(db);
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
@@ -32,6 +33,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelTable.onDelete(db);
 		LabelItemTable.onDelete(db);
 		SharedTable.onDelete(db);
+        SongTable.onDelete(db);
 	}
 
 	@Override
@@ -42,6 +44,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelTable.onUpgrade(db, oldVersion, newVersion);
 		LabelItemTable.onUpgrade(db, oldVersion, newVersion);
 		SharedTable.onUpgrade(db, oldVersion, newVersion);
+        SongTable.onUpgrade(db, oldVersion, newVersion);
         GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
         GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
 	}

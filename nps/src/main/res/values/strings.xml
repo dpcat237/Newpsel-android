@@ -132,6 +132,15 @@
     <string name="txt_label">Label</string>
     <string name="txt_removed">removed</string>
     <string name="txt_successful_set_label">Set label</string>
+
+    <!-- Player -->
+    <string name="button_details">Show details</string>
+    <string name="button_add_label">Add label</string>
+    <string name="button_backward">Backward</string>
+    <string name="button_stop">Stop</string>
+    <string name="button_forward">Forward</string>
+    <string name="button_pause_play">Play / Pause</string>
+    <string name="notification_last_track">Player stopped because was last track</string>
     
     <!-- Settings -->
     <string name="label_st">Settings</string>
@@ -164,4 +173,8 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+
+    <string name="hello_world">Now Playing:</string>
+    <string name="inital_Time">0 min, 0 sec</string>
 </resources>

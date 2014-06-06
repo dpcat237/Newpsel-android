@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dpcat237.nps.LabelsDialog;
+import com.dpcat237.nps.dialog.LabelsDialog;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.task.StarItemTask;

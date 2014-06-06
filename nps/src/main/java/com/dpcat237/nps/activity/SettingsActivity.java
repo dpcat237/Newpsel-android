@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

@@ -9,11 +9,11 @@ import com.dpcat237.nps.repository.SharedRepository;
 public class SaveSharedTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
 	private SharedRepository sharedRepo;
-	Long labelApiId;
+    Integer labelApiId;
 	String title;
     String url;
 
-	public SaveSharedTask(Context context, Long labelApiIdData, String titleData, String urlData) {
+	public SaveSharedTask(Context context, Integer labelApiIdData, String titleData, String urlData) {
         mContext = context;
         labelApiId = labelApiIdData;
         title = titleData;

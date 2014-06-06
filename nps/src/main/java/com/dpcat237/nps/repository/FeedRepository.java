@@ -5,16 +5,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.dpcat237.nps.database.FeedTable;
 import com.dpcat237.nps.database.ItemTable;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.List;
 
 import java.util.ArrayList;
 
 public class FeedRepository {
-
+    private static final String TAG = "NPS:FeedRepository";
 	// Database fields
 	private SQLiteDatabase database;
 	private NPSDatabase dbHelper;
@@ -26,6 +28,11 @@ public class FeedRepository {
 				FeedTable.COLUMN_FAVICON,
 				FeedTable.COLUMN_UNREAD_COUNT
 			};
+    private String[] listColumns = {
+            FeedTable.COLUMN_ID,
+            FeedTable.COLUMN_API_ID,
+            FeedTable.COLUMN_TITLE,
+    };
 
 	public FeedRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
@@ -49,7 +56,9 @@ public class FeedRepository {
 	}
 	
 	public void addFeed(Feed feed){
+        Log.d(TAG, "tut: addFeed");
 		if (!checkFeedExists(feed.getApiId())) {
+            Log.d(TAG, "tut: checkFeedExists");
 			ContentValues values = new ContentValues();
 			values.put(FeedTable.COLUMN_API_ID, feed.getApiId());
 			values.put(FeedTable.COLUMN_TITLE, feed.getTitle());
@@ -138,6 +147,25 @@ public class FeedRepository {
 		cursor.close();
 		return feeds;
 	}
+
+    public ArrayList<List> getLists() {
+        ArrayList<List> feeds = new ArrayList<List>();
+        String where = FeedTable.COLUMN_UNREAD_COUNT+">?";
+        String[] args = new String[] {""+0+""};
+        String orderBy = FeedTable.COLUMN_TITLE+" ASC";
+        Cursor cursor = database.query(FeedTable.TABLE_FEED, listColumns, where, args, null, null, orderBy);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Feed feed = cursorToList(cursor);
+            feeds.add(feed);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return feeds;
+    }
 	
 	public Feed getFeed(Integer feedApiId) {
 		Feed feed = null;
@@ -165,6 +193,14 @@ public class FeedRepository {
 		feed.setUnreadCount(cursor.getInt(5));
 		return feed;
 	}
+
+    private Feed cursorToList(Cursor cursor) {
+        Feed feed = new Feed();
+        feed.setId(cursor.getInt(0));
+        feed.setApiId(cursor.getInt(1));
+        feed.setTitle(cursor.getString(2));
+        return feed;
+    }
 	
 	private ArrayList<Feed> getUnreadCount () {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
@@ -186,7 +222,7 @@ public class FeedRepository {
 		return feeds;
 	}
 	
-	public void updateFeedUnreads(Long feedApiId, Long count) {
+	public void updateFeedUnreads(Integer feedApiId, Integer count) {
 		ContentValues values = new ContentValues();
 		values.put(FeedTable.COLUMN_UNREAD_COUNT, count);
 		String where = FeedTable.COLUMN_API_ID+"=?";

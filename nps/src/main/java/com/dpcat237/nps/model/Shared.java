@@ -1,18 +1,10 @@
 package com.dpcat237.nps.model;
 
-public class Shared {
-	public Integer id;
+public class Shared extends Generic {
 	public String title;
 	public String text;
     public long label_api_id;
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;

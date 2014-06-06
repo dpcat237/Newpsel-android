@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -27,7 +27,7 @@ public class LabelsDialog extends DialogFragment{
 		mContext = context;
 		item = selectedItem;
 	}
-	
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		labelRepo = new LabelRepository(mContext);
@@ -35,7 +35,7 @@ public class LabelsDialog extends DialogFragment{
 		
 		ArrayList<Label> values = labelRepo.getAllLabels();
 		adapter = new ArrayAdapter<Label>(mContext, android.R.layout.simple_list_item_1, values);
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setTitle("Labels");
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {

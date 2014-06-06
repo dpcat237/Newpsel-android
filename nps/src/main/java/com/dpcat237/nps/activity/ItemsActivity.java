@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.ItemsAdapter;
+import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
@@ -31,7 +33,6 @@ import java.util.ArrayList;
 public class ItemsActivity extends Activity {
 	private ItemRepository itemRepo;
 	private FeedRepository feedRepo;
-	public static String ITEM_ID = "itemId";
 	public static String ITEM_COLOR_READ;
 	public static String ITEM_COLOR_UNREAD;
 	Integer feedId = 0;
@@ -216,28 +217,28 @@ public class ItemsActivity extends Activity {
 		}
 	}
 	
-	public void markReadItem(Long itemId, View line) {
+	public void markReadItem(Integer itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, false);
 		task.execute();
 		
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 	}
 	
-	public void markUnreadItem(Long itemId, View line) {
+	public void markUnreadItem(Integer itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, true);
 		task.execute();
 		
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_UNREAD));
 	}
 	
-	public void starItem(Long itemId, View line) {
+	public void starItem(Integer itemId, View line) {
 		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.is_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, true);
 		task.execute();
 	}
 	
-	public void unstarItem(Long itemId, View line) {
+	public void unstarItem(Integer itemId, View line) {
 		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.isnt_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, false);
@@ -252,9 +253,9 @@ public class ItemsActivity extends Activity {
 		startActivity(Intent.createChooser(intent, "Share:"));
 	}
 	
-	public void showItem(Long itemId) {
+	public void showItem(Integer itemId) {
 		Intent intent = new Intent(this, ItemActivity.class);
-		intent.putExtra(ITEM_ID, itemId);
+		intent.putExtra(ItemConstants.ITEM_ID, itemId);
 		startActivity(intent);
 	}
 	

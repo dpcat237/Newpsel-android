@@ -9,7 +9,7 @@ public class JsonHelper {
 	public static Feed[] getFeeds(String content) {
 		Feed[] feeds = null;
 		Gson gson = new Gson();
-		
+
 		if (content.length() > 0) {
 			feeds = gson.fromJson(content, Feed[].class);
 		}

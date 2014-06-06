@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.dpcat237.nps.MainActivity;
+import com.dpcat237.nps.activity.MainActivity;
 import com.dpcat237.nps.repository.ItemRepository;
 
 public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{

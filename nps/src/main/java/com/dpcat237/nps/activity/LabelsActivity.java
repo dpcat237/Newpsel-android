@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.ItemsAdapter;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;

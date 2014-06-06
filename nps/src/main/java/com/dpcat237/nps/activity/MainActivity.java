@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.FeedsAdapter;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
+    private static final String TAG = "NPS:MainActivity";
 	View mView;
 	Context mContext;
 	private FeedRepository feedRepo;
@@ -185,10 +188,26 @@ public class MainActivity extends Activity {
 		    case R.id.buttonAbout:
 		    	showAbout();
 		        return true;
+            case R.id.buttonSpeech:
+                showSpeech();
+                return true;
+            case R.id.buttonPlayer:
+                showPlayer();
+                return true;
 	    }
 		return false;
 	}
-	
+
+    public void showSpeech() {
+        Intent intent = new Intent(this, SpeechActivity.class);
+        startActivity(intent);
+    }
+
+    public void showPlayer() {
+        Intent intent = new Intent(this, PlayerActivity.class);
+        startActivity(intent);
+    }
+
 	public void showSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);

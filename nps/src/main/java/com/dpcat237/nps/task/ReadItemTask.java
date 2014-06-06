@@ -7,11 +7,11 @@ import com.dpcat237.nps.repository.ItemRepository;
 
 public class ReadItemTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
-	private Long itemId;
+	private Integer itemId;
 	ItemRepository itemRepo;
 	Boolean isUnread;
 	
-	public ReadItemTask(Context context, Long itemIntentId, Boolean unread) {
+	public ReadItemTask(Context context, Integer itemIntentId, Boolean unread) {
         mContext = context;
         itemId = itemIntentId;
         isUnread = unread;

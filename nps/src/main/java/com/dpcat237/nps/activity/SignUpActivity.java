@@ -1,4 +1,4 @@
-package com.dpcat237.nps;
+package com.dpcat237.nps.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.task.SignUpTask;
 

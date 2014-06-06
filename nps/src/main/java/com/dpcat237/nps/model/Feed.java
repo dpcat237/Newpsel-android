@@ -1,38 +1,11 @@
 package com.dpcat237.nps.model;
 
-public class Feed {
-	public Integer id;
-	public Integer api_id;
-	public String title;
-	public String website;
-	public String favicon;
-	public Integer lastUpdate;
-	public Integer unreadCount;
+public class Feed extends List {
+    private String website;
+    private String favicon;
+    private Integer unreadCount;
 
-	public long getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public long getApiId() {
-		return api_id;
-	}
-
-	public void setApiId(Integer api_id) {
-		this.api_id = api_id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
 	public String getWebsite() {
 		return website;
 	}
@@ -40,7 +13,7 @@ public class Feed {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-	
+
 	public String getFavicon() {
 		return favicon;
 	}
@@ -48,16 +21,8 @@ public class Feed {
 	public void setFavicon(String favicon) {
 		this.favicon = favicon;
 	}
-	
-	public long getLastUpdate() {
-		return lastUpdate;
-	}
 
-	public void setLastUpdate(Integer lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-	
-	public long getUnreadCount() {
+	public Integer getUnreadCount() {
 		return unreadCount;
 	}
 
