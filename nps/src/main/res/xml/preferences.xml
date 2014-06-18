@@ -1,9 +1,7 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
-
     <PreferenceCategory
             android:title="@string/st_design">
-
         <ListPreference
 	        android:defaultValue="100"
 	        android:entries="@array/st_text_size_list_titles"
@@ -13,7 +11,6 @@
 	        android:positiveButtonText="@null"
 	        android:title="@string/st_text_size"
 	        android:summary="@string/st_text_size_s" />
-        
         <ListPreference
 	        android:defaultValue="2"
 	        android:entries="@array/st_list_size_list_titles"
@@ -23,7 +20,42 @@
 	        android:positiveButtonText="@null"
 	        android:title="@string/st_list_size"
 	        android:summary="@string/st_list_size_s" />
-
     </PreferenceCategory>
-    
+
+    <PreferenceCategory android:title="@string/st_other">
+        <PreferenceScreen android:title="@string/st_dictation_preference">
+            <PreferenceCategory android:title="@string/st_dictation_titles">
+                <CheckBoxPreference
+                    android:title="@string/st_dictation_enable"
+                    android:key="pref_dictation_title_enable"
+                    android:summary="@string/st_dictation_enable_titles" />
+                <CheckBoxPreference
+                    android:title="@string/st_download_wifi_enable"
+                    android:key="pref_dictation_title_wifi_enable"
+                    android:dependency="pref_dictation_title_enable"
+                    android:summary="@string/st_download_wifi_enable_text" />
+                <CheckBoxPreference
+                    android:title="@string/st_download_mobile_enable"
+                    android:key="pref_dictation_title_mobile_enable"
+                    android:dependency="pref_dictation_title_enable"
+                    android:summary="@string/st_download_mobile_enable_text" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/st_dictation_later">
+                <CheckBoxPreference
+                    android:title="@string/st_dictation_enable"
+                    android:key="pref_dictation_later_enable"
+                    android:summary="@string/st_dictation_enable_later" />
+                <CheckBoxPreference
+                    android:title="@string/st_download_wifi_enable"
+                    android:key="pref_dictation_later_wifi_enable"
+                    android:dependency="pref_dictation_later_enable"
+                    android:summary="@string/st_download_wifi_enable_text" />
+                <CheckBoxPreference
+                    android:title="@string/st_download_mobile_enable"
+                    android:key="pref_dictation_later_mobile_enable"
+                    android:dependency="pref_dictation_later_enable"
+                    android:summary="@string/st_download_mobile_enable_text" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
 </PreferenceScreen>
