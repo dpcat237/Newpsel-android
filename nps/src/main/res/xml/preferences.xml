@@ -40,7 +40,7 @@
                     android:dependency="pref_dictation_title_enable"
                     android:summary="@string/st_download_mobile_enable_text" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/st_dictation_later">
+            <!--<PreferenceCategory android:title="@string/st_dictation_later">
                 <CheckBoxPreference
                     android:title="@string/st_dictation_enable"
                     android:key="pref_dictation_later_enable"
@@ -55,7 +55,7 @@
                     android:key="pref_dictation_later_mobile_enable"
                     android:dependency="pref_dictation_later_enable"
                     android:summary="@string/st_download_mobile_enable_text" />
-            </PreferenceCategory>
+            </PreferenceCategory>-->
         </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

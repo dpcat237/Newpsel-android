@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/denys/C.A.T./Programs/Projects/nps/nps/build/intermediates/pre-dexed/debug/gson-2.2.4-6d4754eedadfec218ae81caeb4f7e2017ca69d94.jar"
+        jar="/home/denys/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/a60a5e993c98c864010053cb901b7eab25306568/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568"/>
+    <item
+        dex="/home/denys/C.A.T./Programs/Projects/nps/nps/build/intermediates/pre-dexed/debug/support-v4-19.1.0-b7f100ba6c5c56db736bb010a22b29532dace6db.jar"
+        jar="/home/denys/C.A.T./Programs/Programming/Eclipse/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+
+</pre-dex-items>
