@@ -5,7 +5,6 @@ public class Item extends ListItem {
 	public long api_id;
     public long ui_id;
 	public String link;
-	public String content;
 	public Boolean is_stared;
 	public Boolean is_unread;
 	public long date_add;
@@ -41,14 +40,6 @@ public class Item extends ListItem {
 
 	public void setLink(String link) {
 		this.link = link;
-	}
-	
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 	
 	public Boolean isStared() {

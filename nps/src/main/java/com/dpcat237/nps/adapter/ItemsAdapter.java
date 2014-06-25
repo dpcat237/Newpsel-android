@@ -67,7 +67,7 @@ public class ItemsAdapter extends BaseAdapter {
         vHolder = holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.item_row, null);
+            convertView = mInflater.inflate(R.layout.fragment_item_row, null);
 
             holder.stared = (ImageView)convertView.findViewById(R.id.itemStared);
             holder.label = (ImageView)convertView.findViewById(R.id.itemLabel);

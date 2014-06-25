@@ -19,6 +19,7 @@ public class PlayerConstants {
     public static final int PLAYER_COMMAND_PLAY_SPECIFIC_SONG = 9;
     public static final int PLAYER_COMMAND_STOP = 10;
     public static final int PLAYER_COMMAND_PLAYSTOP = 11;
+    public static final int PLAYER_COMMAND_PLAYPAUSE_LIST = 12;
 
     //status
     public static final int PLAYER_STATUS_QUEUEEMPTY = 0;
@@ -31,6 +32,7 @@ public class PlayerConstants {
     public static final int PAUSE_MEDIABUTTON = 1;
     public static final int PAUSE_NOTIFICATION = 2;
     public static final int PAUSE_COUNT = 3;
+    public static final int PAUSE_ACTIONBUTTON = 4;
 
     //temporary variables
     public static final String EXTRA_PLAYER_COMMAND = "com.dpcat237.nps.player_command";

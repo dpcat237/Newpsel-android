@@ -41,14 +41,14 @@ public class SharedReceiver extends Activity {
 		SharedRepository sharedRepo = new SharedRepository(this);
 		sharedRepo.open();
 
-		setContentView(R.layout.shared_labels);
+		setContentView(R.layout.dialog_shared_labels);
 
 		labelRepo = new LabelRepository(this);
 		labelRepo.open();
 
 		listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
-        mAdapter = new ArrayAdapter<Label>(this, R.layout.simple_list_item, values);
+        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list, values);
 		listView.setAdapter(mAdapter);
 
 		listView.setOnItemClickListener(new OnItemClickListener() {

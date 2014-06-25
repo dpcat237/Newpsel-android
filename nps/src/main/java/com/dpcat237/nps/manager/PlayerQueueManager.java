@@ -36,15 +36,11 @@ public class PlayerQueueManager {
 
     public Boolean setCurrentList(String playType, long listId)
     {
-        if (cursor == null) {
-            cursor = songRepo.getSongsCursor(playType, listId);
-            cursor.moveToNext();
-            currentPosition = cursor.getPosition();
+        cursor = songRepo.getSongsCursor(playType, listId);
+        cursor.moveToNext();
+        currentPosition = cursor.getPosition();
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     public void setCurrentStatus(Integer status) {
@@ -124,5 +120,13 @@ public class PlayerQueueManager {
         //song.getItemId()
 
         return new Long(10);
+    }
+
+    public Boolean hasSongs() {
+        if (cursor != null && cursor.getCount() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -58,9 +58,9 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-	    setContentView(R.layout.item_view);
+	    setContentView(R.layout.activity_item_view);
         getNecessaryData();
 
         prepareWebView();

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.FeedsAdapter;
 import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.task.DownloadDataTask;
@@ -56,9 +56,10 @@ public class MainActivity extends Activity {
 		instanceState = savedInstanceState;
 		mContext = this;
 	    mView = this.findViewById(android.R.id.content).getRootView();
-		logged = GenericHelper.checkLogged(this);
+		logged = LoginHelper.checkLogged(this);
 		feedRepo = new FeedRepository(this);
 		feedRepo.open();
+        GenericHelper.setPlayerActive(mContext, false);
 		
 		if (logged) {
 			ON_CREATE = true;
@@ -74,7 +75,7 @@ public class MainActivity extends Activity {
 	    super.onResume();
 	    isInFront = true;
 	    
-	    logged = GenericHelper.checkLogged(this);
+	    logged = LoginHelper.checkLogged(this);
 	    
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
@@ -96,7 +97,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void showWelcome () {
-		setContentView(R.layout.welcome);
+		setContentView(R.layout.activity_welcome);
 	}
 	
 	private void showList () {
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 	        
 	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-	        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_item_list, mListsTitles));
+	        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.fragment_item_list, mListsTitles));
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	        getActionBar().setDisplayHomeAsUpEnabled(true);
 	        getActionBar().setHomeButtonEnabled(true);
@@ -174,8 +175,7 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 		        return true;
 		    case R.id.actionLogout:
-		    	dropDb();
-		    	GenericHelper.doLogout(this);
+		    	LoginHelper.doLogout(this);
 		    	finish();
 		        return true;
 		    case R.id.buttonActionLabels:
@@ -188,25 +188,9 @@ public class MainActivity extends Activity {
 		    case R.id.buttonAbout:
 		    	showAbout();
 		        return true;
-            case R.id.buttonSpeech:
-                showSpeech();
-                return true;
-            case R.id.buttonPlayer:
-                showPlayer();
-                return true;
 	    }
 		return false;
 	}
-
-    public void showSpeech() {
-        Intent intent = new Intent(this, SpeechActivity.class);
-        startActivity(intent);
-    }
-
-    public void showPlayer() {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-    }
 
 	public void showSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);
@@ -228,13 +212,6 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, SignUpActivity.class);
 		startActivity(intent);
 		finish();
-	}
-	
-	public void dropDb(){
-		FeedRepository feedRepo = new FeedRepository(this);
-        feedRepo.open();
-        feedRepo.drop();
-        GenericHelper.setLastFeedsUpdate(this, 0);
 	}
 	
 	public void downloadData(MenuItem item) {

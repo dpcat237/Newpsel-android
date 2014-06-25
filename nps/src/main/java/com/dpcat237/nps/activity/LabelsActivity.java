@@ -23,7 +23,7 @@ public class LabelsActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.label_list);
+		setContentView(R.layout.activity_label_list);
 		mContext = this;
 		labelRepo = new LabelRepository(this);
 		labelRepo.open();

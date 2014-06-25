@@ -15,6 +15,7 @@ public class SongTable {
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_FILE = "file";
     public static final String COLUMN_IS_GRABBED = "is_grabbed";
+    public static final String COLUMN_IS_PLAYED = "is_played";
 	public static final String COLUMN_TYPE = "type";
 
 	// Database creation SQL statement
@@ -27,6 +28,7 @@ public class SongTable {
 			+ COLUMN_TITLE + " varchar(255) not null ,"
 			+ COLUMN_FILE + " varchar(255) not null ,"
             + COLUMN_IS_GRABBED + " boolean not null,"
+            + COLUMN_IS_PLAYED + " boolean not null,"
 			+ COLUMN_TYPE + " varchar(50) not null"
 			+ ");";
 

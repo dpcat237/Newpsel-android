@@ -17,7 +17,7 @@ public class AddFeedActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
-		setContentView(R.layout.feed_add);
+		setContentView(R.layout.activity_feed_add);
 	}
 	
 	public void addFeed(View view) {

@@ -1,15 +1,17 @@
 package com.dpcat237.nps.model;
 
 public class Song extends Generic {
-    private Integer list_id;
-    private Integer item_id;
-    private String list_title;
-    private String title;
-    public String content;
-    private String file;
-    private Boolean is_grabbed = false;
-    private String type;
-    private Integer duration;
+    protected Integer list_id;
+    protected Integer item_id;
+    protected String list_title;
+    protected String title;
+    protected String content;
+    protected String language;
+    protected String file;
+    protected Boolean is_grabbed = false;
+    protected Boolean is_played = false;
+    protected String type;
+    protected Integer duration;
 
 
     public Integer getListId() {
@@ -52,6 +54,14 @@ public class Song extends Generic {
         this.content = content;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public String getFilename() {
         return file;
     }
@@ -66,6 +76,14 @@ public class Song extends Generic {
 
     public void setGrabbed(Boolean is_grabbed) {
         this.is_grabbed = is_grabbed;
+    }
+
+    public Boolean isPlayed() {
+        return is_played;
+    }
+
+    public void setPlayed(Boolean is_played) {
+        this.is_played = is_played;
     }
 
     public String getType() {

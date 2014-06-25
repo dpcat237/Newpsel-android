@@ -60,7 +60,7 @@ public class FeedsAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.feed_row, null);
+            convertView = mInflater.inflate(R.layout.fragment_feed_row, null);
 
             holder.image = (ImageView)convertView.findViewById(R.id.feedFavicon);
             holder.title = (TextView)convertView.findViewById(R.id.feedRowText);

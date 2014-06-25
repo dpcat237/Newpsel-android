@@ -18,7 +18,7 @@ public class SignUpActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
-		setContentView(R.layout.sign_up);
+		setContentView(R.layout.activity_sign_up);
 	}
 	
 	public void doSignUp(View view) {

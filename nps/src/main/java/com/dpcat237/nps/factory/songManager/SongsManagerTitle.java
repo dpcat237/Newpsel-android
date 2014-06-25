@@ -1,17 +1,14 @@
-package com.dpcat237.nps.factory.grabber;
+package com.dpcat237.nps.factory.songManager;
 
-
-import android.util.Log;
 
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.repository.ItemRepository;
 
-public class GrabberTitle extends Grabber {
+public class SongsManagerTitle extends SongsManager {
     protected ItemRepository itemRepo;
-    private static final String TAG = "NPS:GrabberTitle";
-
+    private static final String TAG = "NPS:SongsManagerTitle";
 
     public void getListItems(Integer listId) {
         listItems = itemRepo.getUnreadItemsTitles(listId);
@@ -34,11 +31,19 @@ public class GrabberTitle extends Grabber {
         itemRepo.open();
     }
 
-    public void setGrabberType() {
+    public void setCreatorType() {
         grabberType = SongConstants.GRABBER_TYPE_TITLE;
     }
 
     public void setSongContent(Song song, ListItem listItem) {
         song.setContent(listItem.getTitle());
+    }
+
+    public void getListItem(Integer itemId){
+        songListItem =  itemRepo.getListItem(itemId);
+    }
+
+    public void markAsDictated(Integer itemId) {
+        itemRepo.readItem(itemId, false);
     }
 }

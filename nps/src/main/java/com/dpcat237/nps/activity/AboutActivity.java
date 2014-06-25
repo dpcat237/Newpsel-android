@@ -21,7 +21,7 @@ public class AboutActivity extends Activity {
 		mContext = this;
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
-		setContentView(R.layout.about);
+		setContentView(R.layout.activity_about);
 		
 		PackageManager manager = mContext.getPackageManager();
 		PackageInfo info;

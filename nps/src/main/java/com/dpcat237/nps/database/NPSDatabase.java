@@ -47,6 +47,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
         SongTable.onUpgrade(db, oldVersion, newVersion);
         GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
         GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
+
 	}
 
 }

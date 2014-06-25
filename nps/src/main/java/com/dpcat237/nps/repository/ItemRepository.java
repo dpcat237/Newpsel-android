@@ -37,10 +37,17 @@ public class ItemRepository {
             ItemTable.COLUMN_LANGUAGE
 			};
 
-    private String[] dictateTitleColumns = {
+    private String[] listItemColumns = {
             ItemTable.COLUMN_ID,
             ItemTable.COLUMN_FEED_ID,
             ItemTable.COLUMN_TITLE,
+            ItemTable.COLUMN_LANGUAGE
+    };
+
+    private String[] listItemContentColumns = {
+            ItemTable.COLUMN_ID,
+            ItemTable.COLUMN_TITLE,
+            ItemTable.COLUMN_CONTENT,
             ItemTable.COLUMN_LANGUAGE
     };
 
@@ -151,7 +158,7 @@ public class ItemRepository {
         args = new String[] {""+feedId+"", ""+isUnr+""};
         String orderBy = ItemTable.COLUMN_DATE_ADD+" DESC";
 
-        Cursor cursor = database.query(ItemTable.TABLE_ITEM, dictateTitleColumns, where, args, null, null, orderBy);
+        Cursor cursor = database.query(ItemTable.TABLE_ITEM, listItemColumns, where, args, null, null, orderBy);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -162,6 +169,19 @@ public class ItemRepository {
         cursor.close();
 
         return items;
+    }
+
+    public ListItem getListItem(Integer itemId) {
+        ListItem listItem = null;
+        String where = ItemTable.COLUMN_ID+"=?";
+        String[] args = new String[] {""+itemId+""};
+        Cursor cursor = database.query(ItemTable.TABLE_ITEM, listItemContentColumns, where, args, null, null, null);
+
+        cursor.moveToFirst();
+        listItem = cursorToListenItem(cursor);
+        cursor.close();
+
+        return listItem;
     }
 	
 	public void removeReadItems() {
@@ -195,6 +215,16 @@ public class ItemRepository {
         item.setLanguage(cursor.getString(3));
 
         return item;
+    }
+
+    private ListItem cursorToListenItem(Cursor cursor) {
+        ListItem listenItem = new ListItem();
+        listenItem.setId(cursor.getInt(0));
+        listenItem.setTitle(cursor.getString(1));
+        listenItem.setContent(cursor.getString(2));
+        listenItem.setLanguage(cursor.getString(3));
+
+        return listenItem;
     }
 	
 	public void readItem(Integer itemId, Boolean isUnread) {

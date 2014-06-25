@@ -2,6 +2,7 @@ package com.dpcat237.nps.task;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ListView;
@@ -19,6 +20,7 @@ import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
 import com.dpcat237.nps.repository.LabelRepository;
 import com.dpcat237.nps.repository.SharedRepository;
+import com.dpcat237.nps.service.DownloadSongsService;
 
 import org.json.JSONArray;
 
@@ -231,18 +233,21 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
   
 	@Override
  	protected void onPostExecute(Void result) {
-	  super.onPostExecute(result);
-	  progressBar.setVisibility(View.GONE);
-	  publishProgress(0);
-	  feedRepo.close();
-	  itemRepo.close();
-	  labelRepo.close();
+        super.onPostExecute(result);
+        progressBar.setVisibility(View.GONE);
+        publishProgress(0);
+        feedRepo.close();
+        itemRepo.close();
+        labelRepo.close();
 
-	  if (((MainActivity) mContext).isInFront) {
-		  ((MainActivity) mContext).reloadList();
-		  
-		  Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
-	  }
+        if (((MainActivity) mContext).isInFront) {
+          ((MainActivity) mContext).reloadList();
+
+          Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
+        }
+
+        Intent mServiceIntent = new Intent((mContext), DownloadSongsService.class);
+        (mContext).startService(mServiceIntent);
 	}
 	
 	private void updateProgress(Integer progress) {

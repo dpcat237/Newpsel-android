@@ -28,7 +28,8 @@
                 <CheckBoxPreference
                     android:title="@string/st_dictation_enable"
                     android:key="pref_dictation_title_enable"
-                    android:summary="@string/st_dictation_enable_titles" />
+                    android:summary="@string/st_dictation_enable_titles"
+                    android:defaultValue="false"/>
                 <CheckBoxPreference
                     android:title="@string/st_download_wifi_enable"
                     android:key="pref_dictation_title_wifi_enable"
@@ -57,5 +58,13 @@
                     android:summary="@string/st_download_mobile_enable_text" />
             </PreferenceCategory>-->
         </PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/st_notifications">
+        <CheckBoxPreference
+            android:title="@string/st_notifications_enable"
+            android:key="pref_notifications_enable"
+            android:summary="@string/st_notifications_enable_check"
+            android:defaultValue="true" />
     </PreferenceCategory>
 </PreferenceScreen>

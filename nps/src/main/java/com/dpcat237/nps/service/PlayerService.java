@@ -2,7 +2,6 @@ package com.dpcat237.nps.service;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,21 +19,40 @@ import android.widget.Toast;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
+import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.dialog.PlayerLabelsDialog;
+import com.dpcat237.nps.factory.SongsFactory;
+import com.dpcat237.nps.factory.songManager.SongsManager;
 import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.receiver.LockscreenReceiver;
+import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.manager.LockscreenManager;
 import com.dpcat237.nps.manager.PlayerQueueManager;
 import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.receiver.LockscreenReceiver;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerService extends Service {
+public class PlayerService extends PlayerServiceCommands {
 
+    protected MediaPlayer player;
+    private LockscreenManager lockscreenManager = null;
+    private PlayerQueueManager queryManager = null;
+    private Context mContext;
+    private RemoteViews notificationView = null;
+    private NotificationCompat.Builder bld = null;
+    private NotificationManager notificationManager = null;
+    private boolean isPlayerPrepared;
+    protected boolean onPhone;
+    protected Timer updateTimer;
+    private boolean pausingFor[] = new boolean[] {false, false, false, false, false};
+    private Integer currentListId;
+    private Integer justStarted = 1;
     private static final String TAG = "NPS:PlayerService";
+    private SongsManager songGrabManager;
+    private String playType;
     private class UpdatePositionTimerTask extends TimerTask {
         protected int lastPosition = 0;
         public void run() {
@@ -49,53 +67,39 @@ public class PlayerService extends Service {
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            Log.d(TAG, "tut: OnAudioFocusChangeListener");
-            /*PodaxLog.log(PlayerService.this, "audio focus change event");
-
             if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
-                PodaxLog.log(PlayerService.this, "got a transient audio focus gain event somehow");
+                    focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK) {
+                Log.d(TAG, "tut: got a transient audio focus gain event somehow");
+            }
 
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 PlayerService.stop(PlayerService.this);
+            }
 
-            if (PlayerStatus.getCurrentState(PlayerService.this).isPaused() &&
-                    focusChange == AudioManager.AUDIOFOCUS_GAIN)
-                PlayerService.resume(PlayerService.this, Constants.PAUSE_AUDIOFOCUS);
-            else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-                PlayerService.pause(PlayerService.this, Constants.PAUSE_AUDIOFOCUS);*/
+            if (queryManager.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                PlayerService.play(PlayerService.this);
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                PlayerService.pause(PlayerService.this, PlayerConstants.PAUSE_AUDIOFOCUS);
+            }
         }
     };
-
-    protected MediaPlayer player;
-    private LockscreenManager lockscreenManager = null;
-    private PlayerQueueManager queryManager = null;
-    private Context mContext;
-    private RemoteViews notificationView = null;
-    private NotificationCompat.Builder bld = null;
-    private NotificationManager notificationManager = null;
-    private boolean isPlayerPrepared;
-    protected boolean onPhone;
-    protected Timer updateTimer;
-    private boolean pausingFor[] = new boolean[] {false, false, false};
 
     private BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "tut: BroadcastReceiver onReceive");
-            /*if (PlayerStatus.getCurrentState(context).isPlaying()) {
+            if (player.isPlaying()) {
                 PlayerService.stop(context);
-            }*/
+            }
         }
     };
+
 
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
     private void createUpdateTimer() {
         if (updateTimer != null)
@@ -215,7 +219,6 @@ public class PlayerService extends Service {
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPTOEND:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPTOEND");
-                //PodaxLog.log(this, "PlayerService got a command: skip to end");
                 playNextPodcast();
                 break;
             case PlayerConstants.PLAYER_COMMAND_RESTART:
@@ -224,9 +227,11 @@ public class PlayerService extends Service {
                 restart();
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPBACK:
+                Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPBACK");
                 playPreviousPodcast();
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPFORWARD:
+                Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPFORWARD");
                 if (queryManager.isLast()) {
                     Toast.makeText(this, R.string.notification_last_track, Toast.LENGTH_SHORT).show();
                 }
@@ -252,12 +257,9 @@ public class PlayerService extends Service {
                 }
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY:
-                Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY");
-                //grabAudioFocusAndResume();
+                grabAudioFocusAndResume();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PAUSE:
-                Log.d(TAG, "tut:  PLAYER_COMMAND_PAUSE");
-                //PodaxLog.log(this, "PlayerService got a command: pause");
                 pause(pauseReason);
                 break;
             case PlayerConstants.PLAYER_COMMAND_STOP:
@@ -267,17 +269,30 @@ public class PlayerService extends Service {
                 Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY_SPECIFIC_SONG");
                 //PodaxLog.log(this, "PlayerService got a command: play specific podcast");
                 //long songId = intent.getLongExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
-                //play(songId);
+                //play(songId);   PLAYER_COMMAND_PLAYPAUSE_LIST
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY_LIST:
-                Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY_LIST");
-                String playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
-                long listId = intent.getLongExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
-                play(playType, listId);
-                Log.d(TAG, "tut: PLAYER_COMMAND_PLAY_LIST "+playType+" - "+listId);
-
+                play(intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE), intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1));
+                break;
+            case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_LIST:
+                Integer listId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
+                if (listId.equals(currentListId) && player.isPlaying()) {
+                    pause(PlayerConstants.PAUSE_ACTIONBUTTON);
+                } else {
+                    playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
+                    play(playType, listId);
+                }
+                if (justStarted > 1) {
+                    changeNotificationPlayButton();
+                }
                 break;
         }
+
+        if (justStarted == 1) {
+            GenericHelper.setPlayerActive(mContext, true);
+        }
+
+        justStarted ++;
     }
 
     private void pause(int reason) {
@@ -307,7 +322,11 @@ public class PlayerService extends Service {
         }
 
         queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_STOPPED);
+        songGrabManager.finish();
+        songGrabManager = null;
         player = null;
+        justStarted = 1;
+        GenericHelper.setPlayerActive(mContext, false);
         stopSelf();
     }
 
@@ -357,7 +376,24 @@ public class PlayerService extends Service {
         queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PLAYING);
 
         showNotification();
-        //createUpdateTimer();
+        createUpdateTimer();
+    }
+
+    private void playFirstSong() {
+        if (!grabAudioFocus() || this == null) {
+            return;
+        }
+
+        Song song = queryManager.getCurrentSong();
+        prepareMediaPlayer(song);
+
+        lockscreenManager = new LockscreenManager();
+        lockscreenManager.setupLockscreenControls(this, song);
+
+        queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PLAYING);
+
+        showNotification();
+        createUpdateTimer();
     }
 
     private boolean prepareMediaPlayer(Song song) {
@@ -381,11 +417,16 @@ public class PlayerService extends Service {
         }
     }
 
-    private void play(String playType, long listId) {
-        Log.d(TAG, "tut: PLAYER_COMMAND_PLAY");
+    private void play(String playType, Integer listId) {
+        if (currentListId == listId) {
+            grabAudioFocusAndResume();
+
+            return;
+        }
 
         queryManager.setCurrentList(playType, listId);
-        grabAudioFocusAndResume();
+        playFirstSong();
+        currentListId = listId;
     }
 
     private void skip(int secs) {
@@ -418,6 +459,7 @@ public class PlayerService extends Service {
         }
     }
 
+    //TODO:
     private void playNextPodcast() {
         if (player != null) {
             // stop the player and the updating while we do some administrative stuff
@@ -426,12 +468,33 @@ public class PlayerService extends Service {
             updateActivePodcastPosition(player.getCurrentPosition());
         }
 
+        if (songGrabManager == null) {
+            songGrabManager = SongsFactory.createManager(playType);
+            songGrabManager.setup(mContext);
+        }
+
+        songGrabManager.markAsPlayed(queryManager.getCurrentSong());
         if (queryManager.isLast()) {
+            Toast.makeText(mContext, getNotificationMessage(), Toast.LENGTH_SHORT).show();
             stop();
+
+            /* http://stackoverflow.com/questions/3873659/android-how-can-i-get-the-current-foreground-activity-from-a-service
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(mainIntent);*/
         } else {
             queryManager.setNextSong();
             grabAudioFocusAndResume();
         }
+    }
+
+    private String getNotificationMessage() {
+        String message = "";
+        if (playType.equals(SongConstants.GRABBER_TYPE_TITLE)) {
+            message = mContext.getString(R.string.player_nt_finish_titles);
+        }
+
+        return message;
     }
 
     private void playPreviousPodcast() {
@@ -450,10 +513,9 @@ public class PlayerService extends Service {
 
     private void showNotification() {
         Song song = queryManager.getCurrentSong();
-        notificationView = new RemoteViews(getPackageName(), R.layout.player_notification);
+        notificationView = new RemoteViews(getPackageName(), R.layout.notification_player);
         notificationView.setTextViewText(R.id.songListTitle, song.getListTitle());
         notificationView.setTextViewText(R.id.songTitle, song.getTitle());
-        //notificationView.setOnClickPendingIntent(R.id.show_btn, showPendingIntent);
 
         // set up pause intent
         Intent pauseIntent = new Intent(this, PlayerService.class);
@@ -487,12 +549,12 @@ public class PlayerService extends Service {
     }
 
     private void changeNotificationPlayButton() {
-        if (notificationView == null) {
+        if (notificationView == null || player == null) {
             return;
         }
 
         if (player.isPlaying()) {
-            notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.ic_media_pause);
+            notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.ic_activity_pause);
         } else {
             notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.av_play_white);
         }
@@ -523,75 +585,4 @@ public class PlayerService extends Service {
     private void updateActivePodcastPosition(int position) {
         queryManager.setLastPosition(position);
     }
-
-    // static functions for easier controls
-    public static void play(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY);
-    }
-
-    public static void pause(Context context, int pause_reason) {
-        Log.d(TAG, "pausing received");
-        //PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PAUSE, pause_reason);
-    }
-
-    public static void stop(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_STOP);
-    }
-
-    public static void playpause(Context context, int pause_reason) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE, pause_reason);
-    }
-
-    public static void playstop(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYSTOP);
-    }
-
-    public static void skipForward(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_SKIPFORWARD);
-    }
-
-    public static void skipBack(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_SKIPBACK);
-    }
-
-    public static void restart(Context context) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_RESTART);
-    }
-
-    public static void skipTo(Context context, int secs) {
-        //PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_SKIPTO, secs);
-    }
-
-    public static void play(Context context, String type, long listId) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY_LIST, type, listId);
-    }
-
-    public static void play(Context context, Song song) {
-        if (song == null) {
-            return;
-        }
-        //PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY_SPECIFIC_SONG, song.getId());
-    }
-
-    private static void sendCommand(Context context, int command) {
-        Intent intent = new Intent(context, PlayerService.class);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, command);
-        context.startService(intent);
-    }
-
-    private static void sendCommand(Context context, int command, int arg) {
-        Intent intent = new Intent(context, PlayerService.class);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, command);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, arg);
-        context.startService(intent);
-    }
-
-    private static void sendCommand(Context context, int command, String type, long listId) {
-        Intent intent = new Intent(context, PlayerService.class);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, command);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_TYPE, type);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, listId);
-        context.startService(intent);
-    }
-
 }

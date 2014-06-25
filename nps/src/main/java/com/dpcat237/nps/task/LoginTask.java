@@ -14,6 +14,7 @@ import com.dpcat237.nps.activity.MainActivity;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
 import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.LoginHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -43,7 +44,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 		username = usernameText.getText().toString();
 		String pwd = passwordText.getText().toString();
 		try {
-			password = GenericHelper.sha1LoginPassword(pwd);
+			password = LoginHelper.sha1LoginPassword(pwd);
 		} catch (NoSuchAlgorithmException e) {
 			Log.e("LoginTask - getData","Error", e);
 			e.printStackTrace();
@@ -84,9 +85,12 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 		dialog.cancel();
 		
 		if (checkLogin) {
-			GenericHelper.doLogin(mContext);
+			LoginHelper.doLogin(mContext);
 			mContext.startActivity(new Intent(mContext, MainActivity.class));
-			((Activity) mContext).finish();			
+
+
+
+			((Activity) mContext).finish();
 		} else {
 			Toast.makeText(mContext, R.string.try_later, Toast.LENGTH_SHORT).show();
 		}

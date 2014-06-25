@@ -99,14 +99,6 @@
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.SpeechActivity"
-            android:label="@string/about_label"
-            android:parentActivityName=".activity.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dpcat237.nps.MainActivity" />
-        </activity>
-        <activity
             android:name=".activity.PlayerActivity"
             android:label="@string/about_label"
             android:parentActivityName=".activity.MainActivity" >

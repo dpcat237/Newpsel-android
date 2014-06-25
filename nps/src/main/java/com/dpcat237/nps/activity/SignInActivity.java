@@ -17,7 +17,7 @@ public class SignInActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
-		setContentView(R.layout.sign_in);
+		setContentView(R.layout.activity_sign_in);
 	}
 	
 	public void doLogin(View view) {

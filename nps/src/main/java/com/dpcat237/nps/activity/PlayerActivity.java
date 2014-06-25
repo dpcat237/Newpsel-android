@@ -42,7 +42,7 @@ public class PlayerActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player);
+        setContentView(R.layout.activity_player);
         songName = (TextView)findViewById(R.id.textView4);
         startTimeField =(TextView)findViewById(R.id.textView1);
         endTimeField =(TextView)findViewById(R.id.textView2);
@@ -65,8 +65,8 @@ public class PlayerActivity extends Activity{
         //AlarmReceiver alarm = new AlarmReceiver();
         //alarm.setAlarm(this);
 
-        Intent service = new Intent(this, DownloadSongsService.class);
-        startService(service);
+        /*Intent service = new Intent(this, DownloadSongsService.class);
+        startService(service);*/
     }
 
     public void play(View view){
@@ -123,12 +123,13 @@ public class PlayerActivity extends Activity{
 
         Log.d(TAG, "tut: songs added");*/
 
-        ArrayList<Song> songs = songRepo.getSongs(SongConstants.GRABBER_TYPE_TITLE, 1);
-        Integer quant = songs.size();
+        //ArrayList<Song> songs = songRepo.getSongs(SongConstants.GRABBER_TYPE_TITLE, 6);
+        //Integer quant = songs.size();
 
-        Log.d(TAG, "tut: count "+quant.toString());
+        //Log.d(TAG, "tut: count to play "+quant.toString());
 
-        PlayerService.play(this, SongConstants.GRABBER_TYPE_TITLE, 1);
+        Log.d(TAG, "tut: PlayerService.play");
+        PlayerService.play(this, SongConstants.GRABBER_TYPE_TITLE, 6);
 
         /*File voicesFolder = fileService.getVoicesFolder();
         String fileName = voicesFolder.getAbsolutePath()+"/test.wav";

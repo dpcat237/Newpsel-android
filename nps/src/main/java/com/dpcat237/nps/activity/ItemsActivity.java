@@ -19,11 +19,14 @@ import android.widget.TextView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.ItemsAdapter;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.GenericHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
 import com.dpcat237.nps.repository.ItemRepository;
+import com.dpcat237.nps.repository.SongRepository;
+import com.dpcat237.nps.service.PlayerService;
 import com.dpcat237.nps.task.ReadFeedItemsTask;
 import com.dpcat237.nps.task.ReadItemTask;
 import com.dpcat237.nps.task.StarItemTask;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 public class ItemsActivity extends Activity {
 	private ItemRepository itemRepo;
 	private FeedRepository feedRepo;
+    private SongRepository songRepo;
 	public static String ITEM_COLOR_READ;
 	public static String ITEM_COLOR_UNREAD;
 	Integer feedId = 0;
@@ -42,19 +46,19 @@ public class ItemsActivity extends Activity {
 	ItemsAdapter mAdapter;
 	ContextMenu cMenu;
 	//Context Menu
-	private final Integer cmGourId = 1; //Menu.NONE
+	private final Integer cmGourId = 1;
 	private final Integer CM_OPTION_1 = 1;
 	private final Integer CM_OPTION_2 = 2;
 	private final Integer CM_OPTION_3 = 3;
 	private final Integer CM_OPTION_4 = 4;
 	private final Integer CM_OPTION_5 = 5;
 	private final Integer CM_OPTION_6 = 6;
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.item_list);
+		setContentView(R.layout.activity_item_list);
 		mContext = this;
 		mView = this.findViewById(android.R.id.content).getRootView();
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
@@ -63,12 +67,14 @@ public class ItemsActivity extends Activity {
 	    feedRepo.open();
 	    itemRepo = new ItemRepository(this);
 	    itemRepo.open();
-		
+        songRepo = new SongRepository(mContext);
+        songRepo.open();
+
 	    feedId = GenericHelper.getSelectedFeed(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
-		
+
 	    Integer feedList = GenericHelper.getFeedsList(this);
 	    ArrayList<Item> items = null;
 	    if (feedList == 0) {
@@ -76,20 +82,20 @@ public class ItemsActivity extends Activity {
 		} else if (feedList == 1) {
 			items = itemRepo.getIsUnreadItems(feedId, false);
 		}
-	    
+
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this);
         mAdapter.addToDataset(items);
 	    listView.setAdapter(mAdapter);
 	    registerForContextMenu(listView);
-		
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (mAdapter.getCount() > 0) {
 					Item item = mAdapter.getItem(position);
 					showItem(item.getId());
-					
+
 					if (item.isUnread()) {
 						markReadItem(item.getId(), view);
 						item.setIsUnread(false);
@@ -98,76 +104,84 @@ public class ItemsActivity extends Activity {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    
+
 	    feedRepo.open();
 	    itemRepo.open();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		feedRepo.close();
 		itemRepo.close();
 	}
-	
-	
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.item_list, menu);
 
+        if (songRepo.checkListHasGrabbedSongs(feedId, SongConstants.GRABBER_TYPE_TITLE)) {
+            MenuItem dictateItem = menu.findItem(R.id.buttonDictate);
+            dictateItem.setVisible(true);
+        }
+
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.buttonAccept:
 		    	markAllRead();
 		        return true;
+            case R.id.buttonDictate:
+                PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_TITLE, feedId);
+                return true;
 	    }
 		return false;
 	}
-	
+
 	@Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
     	if (view.getId() == R.id.itemsList) {
     		cMenu = menu;
     		cMenu.clearHeader();
     		cMenu.clear();
-    		
+
     	    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-    	    Item item = (Item) mAdapter.getItem(info.position);
-    	    
+    	    Item item = mAdapter.getItem(info.position);
+
     	    if (item.isUnread()) {
-    	    	cMenu.add(cmGourId, CM_OPTION_1, 1, R.string.cm_mark_read);    	    	
+    	    	cMenu.add(cmGourId, CM_OPTION_1, 1, R.string.cm_mark_read);
     	    } else {
     	    	cMenu.add(cmGourId, CM_OPTION_2, 1, R.string.cm_mark_unread);
     	    }
     	    cMenu.add(cmGourId, CM_OPTION_3, 2, R.string.cm_mark_previous);
     		if (!item.isStared()) {
-    			cMenu.add(cmGourId, CM_OPTION_4, 3, R.string.cm_add_star);  	    	
+    			cMenu.add(cmGourId, CM_OPTION_4, 3, R.string.cm_add_star);
     	    } else {
     	    	cMenu.add(cmGourId, CM_OPTION_5, 3, R.string.cm_remove_star);
     	    }
     		cMenu.add(cmGourId, CM_OPTION_6, 4, R.string.cm_share);
-    		
+
     		super.onCreateContextMenu(cMenu, view, menuInfo);
     	}
     }
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem mItem) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)mItem.getMenuInfo();
-		Item item = (Item) mAdapter.getItem(info.position);
+		Item item = mAdapter.getItem(info.position);
 		View line = info.targetView;
-		
+
 	    if (mItem.getGroupId() == cmGourId) {
 	        switch(mItem.getItemId()) {
-		        case 1: 
+		        case 1:
 		        	markReadItem(item.getId(), line);
 		        	item.setIsUnread(false);
 		        	return true;
@@ -191,7 +205,7 @@ public class ItemsActivity extends Activity {
 		        	unstarItem(item.getId(), line);
 		        	item.setIsStared(false);
 		        	return true;
-		        case 6: 
+		        case 6:
 		        	shareItem(item.getLink());
 		        	return true;
 		        default:
@@ -201,50 +215,50 @@ public class ItemsActivity extends Activity {
 
 	    return false;
 	}
-	
+
 	public void markPreviousRead (Integer position) {
 		for (int i = listView.getFirstVisiblePosition(); i <= position; i++) {
 			View line = (View) listView.getChildAt(i - listView.getFirstVisiblePosition());
 			line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 		}
-		
+
 		for (int i = 0; i <= position; i++) {
 			Item item = (Item) mAdapter.getItem(i);
         	item.setIsUnread(false);
-        	
+
         	ReadItemTask task = new ReadItemTask(this, item.getId(), false);
     		task.execute();
 		}
 	}
-	
+
 	public void markReadItem(Integer itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, false);
 		task.execute();
-		
+
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 	}
-	
+
 	public void markUnreadItem(Integer itemId, View line) {
 		ReadItemTask task = new ReadItemTask(this, itemId, true);
 		task.execute();
-		
+
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_UNREAD));
 	}
-	
+
 	public void starItem(Integer itemId, View line) {
 		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.is_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, true);
 		task.execute();
 	}
-	
+
 	public void unstarItem(Integer itemId, View line) {
 		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
 		stared.setBackgroundResource(R.drawable.isnt_stared);
 		StarItemTask task = new StarItemTask(mContext, itemId, false);
 		task.execute();
 	}
-	
+
 	public void shareItem(String link) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
@@ -252,13 +266,13 @@ public class ItemsActivity extends Activity {
 
 		startActivity(Intent.createChooser(intent, "Share:"));
 	}
-	
+
 	public void showItem(Integer itemId) {
 		Intent intent = new Intent(this, ItemActivity.class);
 		intent.putExtra(ItemConstants.ITEM_ID, itemId);
 		startActivity(intent);
 	}
-	
+
 	public void markAllRead() {
 		ReadFeedItemsTask task = new ReadFeedItemsTask(this, MainActivity.class, feedId);
 		task.execute();

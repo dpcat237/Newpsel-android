@@ -1,5 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item android:id="@+id/buttonDictate"
+        android:icon="@drawable/ic_actionbar_dictate"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_read_dictate"
+        android:visible="false" />
+
     <item android:id="@+id/buttonAccept"
           android:icon="@drawable/navigation_accept"
           android:title="@string/button_mark_all"

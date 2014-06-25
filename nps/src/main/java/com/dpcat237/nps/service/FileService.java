@@ -7,6 +7,7 @@ import android.util.Log;
 import com.dpcat237.nps.constant.FileConstants;
 
 import java.io.File;
+import java.lang.reflect.Array;
 
 public class FileService {
     private String MAIN_FOLDER;
@@ -53,10 +54,6 @@ public class FileService {
         }
     }
 
-    public void testy() {
-        Log.d(TAG, "tut: testy");
-    }
-
     public File getVoicesFolder() {
         String folderLocation = MAIN_FOLDER+ FileConstants.FOLDER_VOICES;
         voicesFolder = new File(folderLocation);
@@ -74,5 +71,23 @@ public class FileService {
         String filePath = voicesFolder.getAbsolutePath()+"/"+fileName;
 
         return Uri.parse("file://" + filePath);
+    }
+
+    public void deleteFolders() {
+        //delete voice folder
+        File voiceFolder = getVoicesFolder();
+        File[] songs = voiceFolder.listFiles();
+        deleteFiles(songs);
+        if (voiceFolder.exists()) {
+            voiceFolder.delete();
+        }
+    }
+
+    public void deleteFiles(File[] files) {
+        for (File file : files) {
+            if (file.exists()) {
+                file.delete();
+            }
+        }
     }
 }

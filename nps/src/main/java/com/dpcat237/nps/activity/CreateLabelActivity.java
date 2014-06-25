@@ -16,7 +16,7 @@ public class CreateLabelActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
-		setContentView(R.layout.label_create);
+		setContentView(R.layout.activity_label_create);
 	}
 	
 	public void createLabel(View view) {

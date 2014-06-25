@@ -2,6 +2,7 @@ package com.dpcat237.nps.model;
 
 public class ListItem extends Generic {
     protected String title;
+    public String content;
     protected String language;
 
     public String getTitle() {
@@ -10,6 +11,14 @@ public class ListItem extends Generic {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getLanguage() {

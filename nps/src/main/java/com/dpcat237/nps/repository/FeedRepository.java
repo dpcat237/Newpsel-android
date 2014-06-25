@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.dpcat237.nps.database.FeedTable;
 import com.dpcat237.nps.database.ItemTable;
@@ -56,9 +55,7 @@ public class FeedRepository {
 	}
 	
 	public void addFeed(Feed feed){
-        Log.d(TAG, "tut: addFeed");
 		if (!checkFeedExists(feed.getApiId())) {
-            Log.d(TAG, "tut: checkFeedExists");
 			ContentValues values = new ContentValues();
 			values.put(FeedTable.COLUMN_API_ID, feed.getApiId());
 			values.put(FeedTable.COLUMN_TITLE, feed.getTitle());

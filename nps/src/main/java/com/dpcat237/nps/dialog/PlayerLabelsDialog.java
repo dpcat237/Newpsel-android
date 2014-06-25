@@ -12,10 +12,12 @@ import android.widget.ListView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.ItemRepository;
 import com.dpcat237.nps.repository.LabelRepository;
+import com.dpcat237.nps.service.PlayerService;
 import com.dpcat237.nps.task.SetLabelTask;
 
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class PlayerLabelsDialog extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-        setContentView(R.layout.shared_labels);
+        PlayerService.pause(mContext, PlayerConstants.PAUSE_NOTIFICATION);
+        setContentView(R.layout.dialog_shared_labels);
 		Intent intent = getIntent();
         ItemRepository itemRepo = new ItemRepository(this);
         itemRepo.open();
@@ -44,7 +47,7 @@ public class PlayerLabelsDialog extends Activity {
 
         ListView listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
-        mAdapter = new ArrayAdapter<Label>(this, R.layout.simple_list_item, values);
+        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list, values);
 		listView.setAdapter(mAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -60,6 +63,7 @@ public class PlayerLabelsDialog extends Activity {
 
     public void setLabel(Item item, Label label) {
         SetLabelTask task = new SetLabelTask(mContext, item, label);
+        PlayerService.play(mContext);
         task.execute();
         finish();
     }
