@@ -18,12 +18,12 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 126
-        versionName '0.1.26'
+        versionCode 127
+        versionName '0.1.27'
     }
     buildTypes {
         debug {
-            debuggable true
+            debuggable false
             //packageNameSuffix '.debug'
             runProguard false
         }
