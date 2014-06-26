@@ -42,7 +42,7 @@ public class PlayerLabelsDialog extends Activity {
         LabelRepository labelRepo = new LabelRepository(this);
         labelRepo.open();
 
-        Long itemId = intent.getLongExtra(ItemConstants.ITEM_ID, 0);
+        Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
         item = itemRepo.getItem(itemId);
 
         ListView listView = (ListView) findViewById(R.id.labelsList);

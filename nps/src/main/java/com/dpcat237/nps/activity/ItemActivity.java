@@ -66,155 +66,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         prepareWebView();
 	}
 
-    /**
-     * Get item and feed data
-     */
-    private void getNecessaryData() {
-        ItemRepository itemRepo = new ItemRepository(this);
-        itemRepo.open();
-        FeedRepository feedRepo = new FeedRepository(this);
-        feedRepo.open();
-
-        //Get passed item Id and them his and feed data
-        Intent intent = getIntent();
-        Long itemId = intent.getLongExtra(ItemConstants.ITEM_ID, 0);
-        item = itemRepo.getItem(itemId);
-        Integer feedId = GenericHelper.getSelectedFeed(mContext);
-        feed = feedRepo.getFeed(feedId);
-    }
-
-    private String getDate(long timeStamp){
-        try{
-            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-MM kk:mm:ss");
-            Date netDate = (new Date(timeStamp));
-
-            return sdf.format(netDate);
-        } catch(Exception ex) {
-            return null;
-        }
-    }
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.item, menu);
-
-        //get menu items
-        MenuItem shareItem = menu.findItem(R.id.buttonShare);
-        startDictateButton = menu.findItem(R.id.buttonStartDictate);
-        dictateButton = menu.findItem(R.id.buttonDictate);
-        stopButton = menu.findItem(R.id.buttonStop);
-
-        if (item.getLanguage() != null) {
-            startDictateButton.setVisible(true);
-        }
-
-        //prepare share button
-		mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
-		mShareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-		mShareActionProvider.setShareIntent(createShareIntent());
-
-		return true;
-	}
-
-	private Intent createShareIntent() {
-		Intent shareIntent = new Intent(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_SUBJECT, item.getTitle());
-		shareIntent.putExtra(Intent.EXTRA_TEXT, item.getLink());
-		shareIntent.setType("text/plain");
-
-    	return shareIntent;
-    }
-
-
-	private void setShareIntent(Intent shareIntent) {
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setShareIntent(shareIntent);
-		}
-	}
-
-    private void setLabel()
-    {
-        FragmentManager fm = ((Activity) mContext).getFragmentManager();
-        LabelsDialog editNameDialog = new LabelsDialog(mContext, item);
-        editNameDialog.setRetainInstance(true);
-        editNameDialog.show(fm, "fragment_select_label");
-    }
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-            case R.id.buttonDictate:
-                dictate();
-                return true;
-            case R.id.buttonLabel:
-                setLabel();
-                return true;
-		    case R.id.buttonShare:
-		    	setShareIntent(createShareIntent());
-		        return true;
-            case R.id.buttonStartDictate:
-                startDictateButton.setEnabled(false);
-                startDictate();
-                return true;
-            case R.id.buttonStop:
-                stopDictate();
-                return true;
-	    }
-
-		return false;
-	}
-
-    @Override
-    public void onDestroy() {
-        if (mTTS != null) {
-            mTTS.stop();
-            mTTS.shutdown();
-        }
-        super.onDestroy();
-    }
-
-
-    /** Dictate methods **/
-    private void dictate() {
-        String speech = GenericHelper.stripHtml(item.getContent());
-
-        HashMap<String, String> myHashRender = new HashMap();
-        String utteranceID = "item_dictate_"+item.getId();
-        myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
-        mTTS.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashRender);
-
-        dictateButton.setVisible(false);
-        stopButton.setVisible(true);
-    }
-
-    private void stopDictate() {
-        mTTS.stop();
-        stopButton.setVisible(false);
-        dictateButton.setVisible(true);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CHECK_TTS_INSTALLED) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                mTTS = new TextToSpeech(mContext, this);
-            } else {
-                Intent installTTSIntent = new Intent();
-                installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installTTSIntent);
-            }
-        }
-    }
-
-    public void onDone()
-    {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopDictation();
-            }
-        });
-    }
-
     @Override
     @TargetApi(15)
     public void onInit(int initStatus) {
@@ -264,6 +115,154 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         }
     }
 
+    public void onDone()
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                stopDictation();
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CHECK_TTS_INSTALLED) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                mTTS = new TextToSpeech(mContext, this);
+            } else {
+                Intent installTTSIntent = new Intent();
+                installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installTTSIntent);
+            }
+        }
+    }
+
+    /**
+     * Get item and feed data
+     */
+    private void getNecessaryData() {
+        ItemRepository itemRepo = new ItemRepository(this);
+        itemRepo.open();
+        FeedRepository feedRepo = new FeedRepository(this);
+        feedRepo.open();
+
+        //Get passed item Id and them his and feed data
+        Intent intent = getIntent();
+        Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
+        item = itemRepo.getItem(itemId);
+        Integer feedId = GenericHelper.getSelectedFeed(mContext);
+        feed = feedRepo.getFeed(feedId);
+    }
+
+    private String getDate(long timeStamp){
+        try{
+            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-MM kk:mm:ss");
+            Date netDate = (new Date(timeStamp));
+
+            return sdf.format(netDate);
+        } catch(Exception ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item, menu);
+
+        //get menu items
+        MenuItem shareItem = menu.findItem(R.id.buttonShare);
+        startDictateButton = menu.findItem(R.id.buttonStartDictate);
+        dictateButton = menu.findItem(R.id.buttonDictate);
+        stopButton = menu.findItem(R.id.buttonStop);
+
+        if (item.getLanguage() != null) {
+            startDictateButton.setVisible(true);
+        }
+
+        //prepare share button
+        mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
+        mShareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        mShareActionProvider.setShareIntent(createShareIntent());
+
+        return true;
+    }
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, item.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, item.getLink());
+        shareIntent.setType("text/plain");
+
+        return shareIntent;
+    }
+
+
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    private void setLabel()
+    {
+        FragmentManager fm = ((Activity) mContext).getFragmentManager();
+        LabelsDialog editNameDialog = new LabelsDialog(mContext, item);
+        editNameDialog.setRetainInstance(true);
+        editNameDialog.show(fm, "fragment_select_label");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.buttonDictate:
+                dictate();
+                return true;
+            case R.id.buttonLabel:
+                setLabel();
+                return true;
+            case R.id.buttonShare:
+                setShareIntent(createShareIntent());
+                return true;
+            case R.id.buttonStartDictate:
+                startDictateButton.setEnabled(false);
+                startDictate();
+                return true;
+            case R.id.buttonStop:
+                stopDictate();
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mTTS != null) {
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+        super.onDestroy();
+    }
+
+    /** Dictate methods **/
+    private void dictate() {
+        String speech = GenericHelper.stripHtml(item.getContent());
+
+        HashMap<String, String> myHashRender = new HashMap();
+        String utteranceID = "item_dictate_"+item.getId();
+        myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
+        mTTS.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashRender);
+
+        dictateButton.setVisible(false);
+        stopButton.setVisible(true);
+    }
+
+    private void stopDictate() {
+        mTTS.stop();
+        stopButton.setVisible(false);
+        dictateButton.setVisible(true);
+    }
+
     private void startDictate() {
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -275,7 +274,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         stopButton.setVisible(false);
         dictateButton.setVisible(true);
     }
-
 
     /** Web view **/
     private void prepareWebView() {

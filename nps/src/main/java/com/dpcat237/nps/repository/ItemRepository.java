@@ -251,7 +251,7 @@ public class ItemRepository {
 		database.update(ItemTable.TABLE_ITEM, values, where, args);
 	}
 	
-	public Item getItem(Long itemId) {
+	public Item getItem(Integer itemId) {
 		Item item = null;
 		String where = ItemTable.COLUMN_ID+"=?";
 		String[] args = new String[] {""+itemId+""};

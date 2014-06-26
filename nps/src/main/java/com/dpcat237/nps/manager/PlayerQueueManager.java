@@ -105,21 +105,19 @@ public class PlayerQueueManager {
         itemRepo.open();
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
-        //song.getItemId()
-        Item item = itemRepo.getItem(new Long(10));
+        Item item = itemRepo.getItem(song.getItemId());
         itemRepo.close();
 
         return item;
     }
 
-    public Long getItemId() {
+    public Integer getItemId() {
         ItemRepository itemRepo = new ItemRepository(mContext);
         itemRepo.open();
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
-        //song.getItemId()
 
-        return new Long(10);
+        return song.getItemId();
     }
 
     public Boolean hasSongs() {
