@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;
@@ -34,7 +35,7 @@ public class LabelsDialog extends DialogFragment{
 		labelRepo.open();
 		
 		ArrayList<Label> values = labelRepo.getAllLabels();
-		adapter = new ArrayAdapter<Label>(mContext, android.R.layout.simple_list_item_1, values);
+		adapter = new ArrayAdapter<Label>(mContext, R.layout.fragment_simple_row, values);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setTitle("Labels");
