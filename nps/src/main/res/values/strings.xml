@@ -192,6 +192,8 @@
     <string name="st_notifications">Notifications</string>
     <string name="st_notifications_enable">Enable notifications</string>
     <string name="st_notifications_enable_check">Check to enable notifications</string>
+    <string name="st_dictation_label">Dictation label</string>
+    <string name="st_dictation_label_select">Select label which article you want listen</string>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>

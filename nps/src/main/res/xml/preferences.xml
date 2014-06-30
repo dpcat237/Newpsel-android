@@ -41,11 +41,18 @@
                     android:dependency="pref_dictation_title_enable"
                     android:summary="@string/st_download_mobile_enable_text" />
             </PreferenceCategory>
-            <!--<PreferenceCategory android:title="@string/st_dictation_later">
+            <PreferenceCategory android:title="@string/st_dictation_later">
                 <CheckBoxPreference
                     android:title="@string/st_dictation_enable"
                     android:key="pref_dictation_later_enable"
                     android:summary="@string/st_dictation_enable_later" />
+                <ListPreference
+                    android:dependency="pref_dictation_later_enable"
+                    android:key="dictation_label_id"
+                    android:title="@string/st_dictation_label"
+                    android:dialogTitle="@string/st_dictation_label"
+                    android:summary="@string/st_dictation_label_select"
+                    />
                 <CheckBoxPreference
                     android:title="@string/st_download_wifi_enable"
                     android:key="pref_dictation_later_wifi_enable"
@@ -56,7 +63,7 @@
                     android:key="pref_dictation_later_mobile_enable"
                     android:dependency="pref_dictation_later_enable"
                     android:summary="@string/st_download_mobile_enable_text" />
-            </PreferenceCategory>-->
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
 
