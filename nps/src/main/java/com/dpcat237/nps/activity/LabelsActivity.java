@@ -18,8 +18,7 @@ import java.util.ArrayList;
 public class LabelsActivity extends ListActivity {
 	private LabelRepository labelRepo;
 	Context mContext;
-	ItemsAdapter mAdapter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
