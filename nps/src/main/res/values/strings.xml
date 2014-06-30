@@ -135,7 +135,7 @@
 
     <!-- Notifications -->
     <string name="nt_download">Download notification</string>
-    <string name="nt_download_items_title_finished">Downloaded new dictations of articles holders</string>
+    <string name="nt_download_items_title_finished">Downloaded new dictations of headlines</string>
 
     <!-- Player -->
     <string name="button_details">Show details</string>
@@ -145,7 +145,7 @@
     <string name="button_forward">Forward</string>
     <string name="button_pause_play">Play / Pause</string>
     <string name="notification_last_track">Player stopped because was last track</string>
-    <string name="player_nt_finish_titles">Finished dictation of titles</string>
+    <string name="player_nt_finish_titles">Finished dictation of headlines</string>
     
     <!-- Settings -->
     <string name="label_st">Settings</string>
