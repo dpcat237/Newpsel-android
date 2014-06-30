@@ -34,7 +34,6 @@ public class LabelsActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		labelRepo.open();
-		
 		showList();
 	}
 
