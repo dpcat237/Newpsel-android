@@ -40,6 +40,7 @@ public class SettingsActivity extends PreferenceActivity {
             LabelRepository labelRepo = new LabelRepository(mContext);
             labelRepo.open();
             ArrayList<Label> labels = labelRepo.getAllLabels();
+            labelRepo.close();
 
             CharSequence[] entryValues = new CharSequence[labels.size()];
             CharSequence[] entries = new CharSequence[labels.size()];
