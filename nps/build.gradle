@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 apply plugin: 'android'
@@ -13,17 +13,19 @@ repositories {
 }
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 19
+        applicationId "com.dpcat237.nps"
+        minSdkVersion 15
+        targetSdkVersion 20
         versionCode 127
         versionName '0.1.27'
     }
     buildTypes {
         debug {
-            debuggable false
+            debuggable true
             //packageNameSuffix '.debug'
             runProguard false
         }
@@ -46,6 +48,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:support-v4:20.0.0'
     compile 'com.google.code.gson:gson:2.2.+'
 }
