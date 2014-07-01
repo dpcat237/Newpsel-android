@@ -29,7 +29,6 @@ public class DownloadSongsService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "tut: onHandleIntent");
         this.mIntent = intent;
         this.mContext = getApplicationContext();
         if (songsFactoryManager == null) {

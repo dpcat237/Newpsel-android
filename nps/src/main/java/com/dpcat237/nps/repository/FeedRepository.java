@@ -102,6 +102,7 @@ public class FeedRepository {
 		cursor.moveToFirst();
 		Feed newFeed = cursorToFeed(cursor);
 		cursor.close();
+
 		return newFeed;
 	}
 
@@ -122,8 +123,8 @@ public class FeedRepository {
 			feeds.add(feed);
 			cursor.moveToNext();
 		}
-		// Make sure to close the cursor
 		cursor.close();
+
 		return feeds;
 	}
 	
@@ -140,10 +141,28 @@ public class FeedRepository {
 			feeds.add(feed);
 			cursor.moveToNext();
 		}
-
 		cursor.close();
+
 		return feeds;
 	}
+
+    public ArrayList<Feed> getAllFeedsWithItems() {
+        ArrayList<Feed> feeds = new ArrayList<Feed>();
+        String where = FeedTable.COLUMN_ITEMS_COUNT+">?";
+        String[] args = new String[] {""+0+""};
+        String orderBy = FeedTable.COLUMN_TITLE+" ASC";
+        Cursor cursor = database.query(FeedTable.TABLE_FEED, allColumns, where, args, null, null, orderBy);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Feed feed = cursorToFeed(cursor);
+            feeds.add(feed);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return feeds;
+    }
 
     public ArrayList<List> getLists() {
         ArrayList<List> feeds = new ArrayList<List>();
@@ -175,8 +194,8 @@ public class FeedRepository {
 			feed = cursorToFeed(cursor);
 			cursor.moveToNext();
 		}
-
 		cursor.close();
+
 		return feed;
 	}
 
@@ -188,6 +207,7 @@ public class FeedRepository {
 		feed.setWebsite(cursor.getString(3));
 		feed.setFavicon(cursor.getString(4));
 		feed.setUnreadCount(cursor.getInt(5));
+
 		return feed;
 	}
 
@@ -196,6 +216,7 @@ public class FeedRepository {
         feed.setId(cursor.getInt(0));
         feed.setApiId(cursor.getInt(1));
         feed.setTitle(cursor.getString(2));
+
         return feed;
     }
 	
@@ -203,7 +224,9 @@ public class FeedRepository {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
 		String sql = "SELECT tb1."+ItemTable.COLUMN_FEED_ID + ", " +
 				"(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
-						"WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS count " +
+						"WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread, " +
+                "(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
+                    "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+") AS countItems " +
 				" FROM "+ItemTable.TABLE_ITEM+" AS tb1 GROUP BY tb1."+ItemTable.COLUMN_FEED_ID;
 		Cursor cursor = database.rawQuery(sql, null);
 		
@@ -212,16 +235,19 @@ public class FeedRepository {
 			Feed feed = new Feed();
 			feed.setApiId(cursor.getInt(0));
 			feed.setUnreadCount(cursor.getInt(1));
+            feed.setItemsCount(cursor.getInt(2));
 			feeds.add(feed);
 			cursor.moveToNext();
 		}
+        cursor.close();
 		
 		return feeds;
 	}
 	
-	public void updateFeedUnreads(Integer feedApiId, Integer count) {
+	public void updateFeedCountss(Integer feedApiId, Integer countUnreadItems, Integer countItems) {
 		ContentValues values = new ContentValues();
-		values.put(FeedTable.COLUMN_UNREAD_COUNT, count);
+		values.put(FeedTable.COLUMN_UNREAD_COUNT, countUnreadItems);
+        values.put(FeedTable.COLUMN_ITEMS_COUNT, countItems);
 		String where = FeedTable.COLUMN_API_ID+"=?";
 		String[] args = new String[] {""+feedApiId+""};
 		database.update(FeedTable.TABLE_FEED, values, where, args);
@@ -231,7 +257,7 @@ public class FeedRepository {
 		ArrayList<Feed> feeds = getUnreadCount();
 		if (feeds.size() > 0) {
 			for (Feed feed : feeds) {
-				updateFeedUnreads(feed.getApiId(), feed.getUnreadCount());
+                updateFeedCountss(feed.getApiId(), feed.getUnreadCount(), feed.getItemsCount());
 	    	}
 		}
 	}

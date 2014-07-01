@@ -10,7 +10,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

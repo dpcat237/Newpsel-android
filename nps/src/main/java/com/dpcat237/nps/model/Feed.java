@@ -3,6 +3,7 @@ package com.dpcat237.nps.model;
 public class Feed extends List {
     private String website;
     private String favicon;
+    private Integer itemsCount;
     private Integer unreadCount;
 
 
@@ -22,13 +23,21 @@ public class Feed extends List {
 		this.favicon = favicon;
 	}
 
-	public Integer getUnreadCount() {
-		return unreadCount;
+	public Integer getItemsCount() {
+		return itemsCount;
 	}
 
-	public void setUnreadCount(Integer unreadCount) {
-		this.unreadCount = unreadCount;
+	public void setItemsCount(Integer itemsCount) {
+		this.itemsCount = itemsCount;
 	}
+
+    public Integer getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(Integer unreadCount) {
+        this.unreadCount = unreadCount;
+    }
 
 	// Will be used by the ArrayAdapter in the ListView
 	@Override

@@ -126,9 +126,10 @@ public class MainActivity extends Activity {
         List<Feed> feeds = new ArrayList<Feed>();
         //get all feeds with items or only with unread items
 		if (feedList == 0) {
-			feeds = feedRepo.getAllFeedsUnread();
+			feeds = feedRepo.
+                    getAllFeedsUnread();
 		} else if (feedList == 1) {
-			feeds = feedRepo.getAllFeeds();
+			feeds = feedRepo.getAllFeedsWithItems();
 		}
 
         mAdapter = new FeedsAdapter(this);
