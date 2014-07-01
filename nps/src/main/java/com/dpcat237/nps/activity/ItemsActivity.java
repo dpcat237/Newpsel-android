@@ -99,6 +99,7 @@ public class ItemsActivity extends Activity {
 					if (item.isUnread()) {
 						markReadItem(item.getId(), view);
 						item.setIsUnread(false);
+                        songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 					}
 				}
 			}
@@ -111,6 +112,7 @@ public class ItemsActivity extends Activity {
 
 	    feedRepo.open();
 	    itemRepo.open();
+        songRepo.open();
 	}
 
 	@Override
@@ -118,6 +120,7 @@ public class ItemsActivity extends Activity {
 		super.onPause();
 		feedRepo.close();
 		itemRepo.close();
+        songRepo.close();
 	}
 
 
@@ -188,12 +191,14 @@ public class ItemsActivity extends Activity {
 		        case 2:
 		        	markUnreadItem(item.getId(), line);
 		        	item.setIsUnread(true);
+                    songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 		        	return true;
 		        case 3:
 		        	if (info.position > 0) {
                         markPreviousRead(info.position);
 		        	} else {
 		        		markReadItem(item.getId(), line);
+                        songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 			        	item.setIsUnread(false);
 		        	}
 		        	return true;
@@ -218,13 +223,14 @@ public class ItemsActivity extends Activity {
 
 	public void markPreviousRead (Integer position) {
 		for (int i = listView.getFirstVisiblePosition(); i <= position; i++) {
-			View line = (View) listView.getChildAt(i - listView.getFirstVisiblePosition());
+			View line = listView.getChildAt(i - listView.getFirstVisiblePosition());
 			line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 		}
 
 		for (int i = 0; i <= position; i++) {
-			Item item = (Item) mAdapter.getItem(i);
+			Item item = mAdapter.getItem(i);
         	item.setIsUnread(false);
+            songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 
         	ReadItemTask task = new ReadItemTask(this, item.getId(), false);
     		task.execute();

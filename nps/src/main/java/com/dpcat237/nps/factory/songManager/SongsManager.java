@@ -35,7 +35,7 @@ public abstract class SongsManager {
     protected Song  createSong(List list, ListItem listItem) {
         Song song = new Song();
         song.setListId(list.getApiId());
-        song.setItemId(listItem.getId());
+        song.setItemId(listItem.getApiId());
         song.setListTitle(list.getTitle());
         song.setTitle(listItem.getTitle());
         song.setType(grabberType);

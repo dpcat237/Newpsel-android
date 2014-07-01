@@ -1,22 +1,13 @@
 package com.dpcat237.nps.model;
 
 public class Item extends ListItem {
-    public Integer feed_id;
-	public long api_id;
-    public long ui_id;
-	public String link;
-	public Boolean is_stared;
-	public Boolean is_unread;
-	public long date_add;
+    private Integer feed_id;
+    private long ui_id;
+    private String link;
+    private Boolean is_stared;
+    private Boolean is_unread;
+    private long date_add;
 
-
-	public long getApiId() {
-		return api_id;
-	}
-
-	public void setApiId(long api_id) {
-		this.api_id = api_id;
-	}
 
     public Integer getFeedId() {
         return feed_id;

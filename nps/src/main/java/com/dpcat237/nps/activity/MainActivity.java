@@ -139,8 +139,8 @@ public class MainActivity extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					if (mAdapter.getCount() > 0) {
-						Feed feed = (Feed) mAdapter.getItem(position);
-						Integer feedId = (int) feed.getApiId();
+						Feed feed = mAdapter.getItem(position);
+						Integer feedId = feed.getApiId();
 						showItems(feedId);
 					}
 				}

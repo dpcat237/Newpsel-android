@@ -193,7 +193,7 @@ public class ItemRepository {
 	private Item cursorToItem(Cursor cursor) {
 		Item item = new Item();
 		item.setId(cursor.getInt(0));
-		item.setApiId(cursor.getLong(1));
+		item.setApiId(cursor.getInt(1));
 		item.setUiId(cursor.getLong(2));
         item.setFeedId(cursor.getInt(3));
 		item.setTitle(cursor.getString(4));

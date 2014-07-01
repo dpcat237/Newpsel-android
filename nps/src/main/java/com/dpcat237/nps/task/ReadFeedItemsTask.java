@@ -5,31 +5,38 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.dpcat237.nps.activity.MainActivity;
+import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.repository.ItemRepository;
+import com.dpcat237.nps.repository.SongRepository;
 
 public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
 	private Integer feedId;
-	ItemRepository itemRepo;
-	Class<MainActivity> main;
-	
+    private ItemRepository itemRepo;
+    private SongRepository songRepo;
+
 	public ReadFeedItemsTask(Context context, Class<MainActivity> mainActivity, Integer feedInternId) {
         mContext = context;
-        main = mainActivity;
         feedId = feedInternId;
         itemRepo = new ItemRepository(mContext);
         itemRepo.open();
+        songRepo = new SongRepository(mContext);
+        songRepo.open();
     }
     
 	@Override
 	protected Void doInBackground(Void... params) {
 		itemRepo.readFeedItems(feedId);
+        songRepo.markAsPlayedSongs(feedId, SongConstants.GRABBER_TYPE_TITLE);
 		
 		return null;
 	}
 	
 	@Override
  	protected void onPostExecute(Void result) {
+        itemRepo.close();
+        songRepo.close();
+
 		((Activity) mContext).finish();
 	}
 }

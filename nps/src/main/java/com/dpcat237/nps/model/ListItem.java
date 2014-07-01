@@ -1,9 +1,18 @@
 package com.dpcat237.nps.model;
 
 public class ListItem extends Generic {
+    protected Integer api_id;
     protected String title;
-    public String content;
+    protected String content;
     protected String language;
+
+    public Integer getApiId() {
+        return api_id;
+    }
+
+    public void setApiId(Integer api_id) {
+        this.api_id = api_id;
+    }
 
     public String getTitle() {
         return title;

@@ -189,6 +189,22 @@ public class SongRepository {
         database.update(SongTable.TABLE_SONG, values, where, args);
     }
 
+    public void markAsPlayed(Integer listId, Integer itemId, String type) {
+        ContentValues values = new ContentValues();
+        values.put(SongTable.COLUMN_IS_PLAYED, true);
+        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
+        String[] args = new String[] {""+itemId+"", ""+listId+"", ""+type+""};
+        database.update(SongTable.TABLE_SONG, values, where, args);
+    }
+
+    public void markAsPlayedSongs(Integer listId, String type) {
+        ContentValues values = new ContentValues();
+        values.put(SongTable.COLUMN_IS_PLAYED, true);
+        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
+        String[] args = new String[] {""+listId+"", ""+type+""};
+        database.update(SongTable.TABLE_SONG, values, where, args);
+    }
+
     public ArrayList<Song> getPlayedSongs() {
         ArrayList<Song> songs = new ArrayList<Song>();
         String where = SongTable.COLUMN_IS_PLAYED+"=?";
