@@ -53,7 +53,7 @@ public class PlayerLabelsDialog extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Label label = mAdapter.getItem(position);
-                setLabel(item, label);
+                setLabel(item.getApiId(), label);
 			}
 		});
 
@@ -61,8 +61,8 @@ public class PlayerLabelsDialog extends Activity {
 		setResult(Activity.RESULT_OK, result);
 	}
 
-    public void setLabel(Item item, Label label) {
-        SetLabelTask task = new SetLabelTask(mContext, item, label);
+    public void setLabel(Integer itemApiId, Label label) {
+        SetLabelTask task = new SetLabelTask(mContext, itemApiId, label);
         PlayerService.play(mContext);
         task.execute();
         finish();

@@ -43,7 +43,7 @@ public class LabelsDialog extends DialogFragment{
 		    public void onClick(DialogInterface dialog, int position) {
 		    	Label label = adapter.getItem(position);
 		    	
-		    	SetLabelTask task = new SetLabelTask(mContext, item, label);
+		    	SetLabelTask task = new SetLabelTask(mContext, item.getApiId(), label);
 				task.execute();
 		    }
 		});

@@ -5,21 +5,20 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.model.LabelItem;
 import com.dpcat237.nps.repository.LabelRepository;
 
-public class SetLabelTask extends AsyncTask<Void, Integer, Void>{
+public class SetLabelTask extends AsyncTask<Void, Integer, Void> {
 	private Context mContext;
 	private LabelRepository labelRepo;
-	Item item;
-	Label label;
-	Boolean set = false;
+    private Integer itemApiId;
+    private Label label;
+    private Boolean set = false;
 	
-	public SetLabelTask(Context context, Item selectedItem, Label selectedLabel) {
+	public SetLabelTask(Context context, Integer itemApiId, Label selectedLabel) {
         mContext = context;
-        item = selectedItem;
+        this.itemApiId = itemApiId;
         label = selectedLabel;
     }
      
@@ -32,14 +31,14 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void>{
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		if (labelRepo.checkLabelSet(label.getId(), item.getApiId())) {
-			labelRepo.removeLaterItem(label.getId(), item.getApiId());
+		if (labelRepo.checkLabelSet(label.getId(), itemApiId)) {
+			labelRepo.removeLaterItem(label.getId(), itemApiId);
 			set = true;
 		} else {
 			LabelItem labelItem = new LabelItem();
 			labelItem.setLabelId(label.getId());
 			labelItem.setLabelApiId(label.getApiId());
-			labelItem.setItemApiId(item.getApiId());
+			labelItem.setItemApiId(itemApiId);
 			labelItem.setIsUnread(true);
 			
 			labelRepo.setLabel(labelItem);
