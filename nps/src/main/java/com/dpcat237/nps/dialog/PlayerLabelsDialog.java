@@ -47,7 +47,7 @@ public class PlayerLabelsDialog extends Activity {
 
         ListView listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
-        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list, values);
+        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list_row, values);
 		listView.setAdapter(mAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
