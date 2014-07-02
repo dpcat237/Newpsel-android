@@ -43,7 +43,8 @@ public class MainActivity extends Activity {
 	Boolean ON_CREATE = false;
 	public boolean isInFront;
     private SharedPreferences pref;
-	
+    private MenuItem buttonAddFeed;
+
 	//DrawerList
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -84,6 +85,12 @@ public class MainActivity extends Activity {
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
 	    } else {
+            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            if (itemsActivated) {
+                buttonAddFeed.setVisible(true);
+            } else {
+                buttonAddFeed.setVisible(false);
+            }
 	    	feedRepo.open();
 	    	reloadList();
 	    }
@@ -130,8 +137,7 @@ public class MainActivity extends Activity {
         List<Feed> feeds = new ArrayList<Feed>();
         //get all feeds with items or only with unread items
 		if (feedList == 0) {
-			feeds = feedRepo.
-                    getAllFeedsUnread();
+			feeds = feedRepo.getAllFeedsUnread();
 		} else if (feedList == 1) {
 			feeds = feedRepo.getAllFeedsWithItems();
 		}
@@ -158,9 +164,9 @@ public class MainActivity extends Activity {
 		if (logged) {
 			mainMenu = menu;
 			getMenuInflater().inflate(R.menu.main, menu);
+            buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
             Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
             if (!itemsActivated) {
-                MenuItem buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
                 buttonAddFeed.setVisible(false);
             }
 
