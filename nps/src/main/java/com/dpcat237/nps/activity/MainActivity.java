@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity {
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
 	public boolean isInFront;
+    private SharedPreferences pref;
 	
 	//DrawerList
 	private DrawerLayout mDrawerLayout;
@@ -60,6 +63,7 @@ public class MainActivity extends Activity {
 		feedRepo = new FeedRepository(this);
 		feedRepo.open();
         GenericHelper.setPlayerActive(mContext, false);
+        pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		
 		if (logged) {
 			ON_CREATE = true;
@@ -154,6 +158,11 @@ public class MainActivity extends Activity {
 		if (logged) {
 			mainMenu = menu;
 			getMenuInflater().inflate(R.menu.main, menu);
+            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            if (!itemsActivated) {
+                MenuItem buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
+                buttonAddFeed.setVisible(false);
+            }
 
 			return true;
 		}

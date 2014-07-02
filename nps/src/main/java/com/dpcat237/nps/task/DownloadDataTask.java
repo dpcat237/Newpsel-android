@@ -70,10 +70,11 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
      
 	@Override
 	protected Void doInBackground(Void... params) {
-        Boolean activated = pref.getBoolean("pref_items_download_enable", false);
-        if (activated) {
-            syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
-            syncItems();          //progressStatus = 20 -> 50; 50 -> 70
+        syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
+
+        Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+        if (itemsActivated) {
+            syncItems();      //progressStatus = 20 -> 50; 50 -> 70
             feedRepo.unreadCountUpdate();
         }
 
