@@ -3,7 +3,9 @@ package com.dpcat237.nps.task;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -28,16 +30,17 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
-	ApiHelper api;
-	int progressStatus;
+    private ApiHelper api;
+    private int progressStatus;
 	private Context mContext;
 	private View mView;
-	ListView listView;
-	ProgressBar progressBar;
-	FeedRepository feedRepo;
-	ItemRepository itemRepo;
-	LabelRepository labelRepo;
-	SharedRepository sharedRepo;
+    private ListView listView;
+    private ProgressBar progressBar;
+    private FeedRepository feedRepo;
+    private ItemRepository itemRepo;
+    private LabelRepository labelRepo;
+    private SharedRepository sharedRepo;
+    private SharedPreferences pref;
 
 	public DownloadDataTask(Context context, View view, ListView list) {
         mContext = context;
@@ -52,6 +55,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         sharedRepo = new SharedRepository(mContext);
         sharedRepo.open();
         progressBar = (ProgressBar) mView.findViewById(R.id.progress);
+        pref = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
     
 	@Override
@@ -66,9 +70,13 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
-		syncItems();          //progressStatus = 20 -> 50; 50 -> 70
-		feedRepo.unreadCountUpdate();
+        Boolean activated = pref.getBoolean("pref_items_download_enable", false);
+        if (activated) {
+            syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
+            syncItems();          //progressStatus = 20 -> 50; 50 -> 70
+            feedRepo.unreadCountUpdate();
+        }
+
 		syncLabels();         //progressStatus = 70 -> 75; 75 -> 80
 		syncLaterItems();     //progressStatus = 80 -> 90; 90 -> 95
 		syncSharedItems();    //progressStatus = 95 -> 100*/

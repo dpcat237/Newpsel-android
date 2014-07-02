@@ -22,6 +22,22 @@
 	        android:summary="@string/st_list_size_s" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/st_notifications">
+        <CheckBoxPreference
+            android:title="@string/st_notifications_enable"
+            android:key="pref_notifications_enable"
+            android:summary="@string/st_notifications_enable_check"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/st_services">
+        <CheckBoxPreference
+            android:title="@string/st_items_download"
+            android:key="pref_items_download_enable"
+            android:summary="@string/st_items_download_check"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/st_other">
         <PreferenceScreen android:title="@string/st_dictation_preference">
             <PreferenceCategory android:title="@string/st_dictation_titles">
@@ -65,13 +81,5 @@
                     android:summary="@string/st_download_mobile_enable_text" />
             </PreferenceCategory>
         </PreferenceScreen>
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/st_notifications">
-        <CheckBoxPreference
-            android:title="@string/st_notifications_enable"
-            android:key="pref_notifications_enable"
-            android:summary="@string/st_notifications_enable_check"
-            android:defaultValue="true" />
     </PreferenceCategory>
 </PreferenceScreen>
