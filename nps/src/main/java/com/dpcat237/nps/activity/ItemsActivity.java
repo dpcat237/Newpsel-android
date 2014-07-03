@@ -20,7 +20,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.ItemsAdapter;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
@@ -70,12 +70,12 @@ public class ItemsActivity extends Activity {
         songRepo = new SongRepository(mContext);
         songRepo.open();
 
-	    feedId = GenericHelper.getSelectedFeed(mContext);
+	    feedId = PreferencesHelper.getSelectedFeed(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
 
-	    Integer feedList = GenericHelper.getFeedsList(this);
+	    Integer feedList = PreferencesHelper.getFeedsList(this);
 	    ArrayList<Item> items = null;
 	    if (feedList == 0) {
 	    	items = itemRepo.getIsUnreadItems(feedId, true);

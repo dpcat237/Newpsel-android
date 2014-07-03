@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.dpcat237.nps.activity.MainActivity;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 
 import java.io.UnsupportedEncodingException;
@@ -52,7 +52,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 			Log.e("LoginTask - getData","Error", e);
 			e.printStackTrace();
 		}
-		appKey = GenericHelper.generateKey(mContext);
+		appKey = PreferencesHelper.generateKey(mContext);
 	}
     
 	@Override

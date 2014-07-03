@@ -24,7 +24,7 @@ import com.dpcat237.nps.dialog.PlayerLabelsDialog;
 import com.dpcat237.nps.factory.SongsFactory;
 import com.dpcat237.nps.factory.songManager.SongsManager;
 import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.manager.LockscreenManager;
 import com.dpcat237.nps.manager.PlayerQueueManager;
 import com.dpcat237.nps.model.Song;
@@ -289,7 +289,7 @@ public class PlayerService extends PlayerServiceCommands {
         }
 
         if (justStarted == 1) {
-            GenericHelper.setPlayerActive(mContext, true);
+            PreferencesHelper.setPlayerActive(mContext, true);
         }
 
         justStarted ++;
@@ -326,7 +326,7 @@ public class PlayerService extends PlayerServiceCommands {
         songGrabManager = null;
         player = null;
         justStarted = 1;
-        GenericHelper.setPlayerActive(mContext, false);
+        PreferencesHelper.setPlayerActive(mContext, false);
         stopSelf();
     }
 

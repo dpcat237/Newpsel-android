@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.repository.FeedRepository;
@@ -44,7 +44,7 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 	private void getData() {
 		EditText urlText = (EditText) mView.findViewById(R.id.txtUrl);
 		url = urlText.getText().toString();
-		appKey = GenericHelper.generateKey(mContext);
+		appKey = PreferencesHelper.generateKey(mContext);
 	}
     
 	@Override
@@ -75,7 +75,7 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 	private void syncFeeds () {
 		Map<String, Object> result = null;
 		Boolean error = false;
-		result = api.getFeeds(GenericHelper.generateKey(mContext), GenericHelper.getLastFeedsUpdate(mContext));
+		result = api.getFeeds(PreferencesHelper.generateKey(mContext), PreferencesHelper.getLastFeedsUpdate(mContext));
 		Feed[] feeds = (Feed[]) result.get("feeds");
 		error = (Boolean) result.get("error");
 		
@@ -87,7 +87,7 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 				lastUpdate = (int) feed.getLastUpdate();
 		    }
 			if (lastUpdate != 0) {
-				GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
+				PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
 			}
 		
 		}

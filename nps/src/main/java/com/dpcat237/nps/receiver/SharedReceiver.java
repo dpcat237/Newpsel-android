@@ -12,7 +12,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;
 import com.dpcat237.nps.repository.SharedRepository;
@@ -48,7 +49,7 @@ public class SharedReceiver extends Activity {
 
 		listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
-        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list, values);
+        mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list_row, values);
 		listView.setAdapter(mAdapter);
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -70,7 +71,7 @@ public class SharedReceiver extends Activity {
         SaveSharedTask taskSave = new SaveSharedTask(mContext, label.getApiId(), extras.getString(Intent.EXTRA_SUBJECT), link);
         taskSave.execute();
 
-        if (GenericHelper.hasConnection(this)) {
+        if (ConnectionHelper.hasConnection(this)) {
             SendSharedTask taskSend = new SendSharedTask(this);
             taskSend.execute();
         }

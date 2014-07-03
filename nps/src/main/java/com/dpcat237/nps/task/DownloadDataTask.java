@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.activity.MainActivity;
 import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
@@ -26,6 +26,7 @@ import com.dpcat237.nps.service.DownloadSongsService;
 
 import org.json.JSONArray;
 
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -91,10 +92,10 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         ArrayList<Feed> feedsNow = feedRepo.getAllFeeds();
         Integer feedsUpdate = 0;
         if (feedsNow.size() > 0) {
-             feedsUpdate = GenericHelper.getLastFeedsUpdate(mContext);
+             feedsUpdate = PreferencesHelper.getLastFeedsUpdate(mContext);
         }
 
-		result = api.getFeeds(GenericHelper.generateKey(mContext), feedsUpdate);
+		result = api.getFeeds(PreferencesHelper.generateKey(mContext), feedsUpdate);
 		Feed[] feeds = (Feed[]) result.get("feeds");
 		error = (Boolean) result.get("error");
 
@@ -119,7 +120,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 				updateProgressIteration(10, 10, total, count);
 		    }
 			if (lastUpdate != 0 && total > 0) {
-				GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
+				PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
 			}
 		}
 		
@@ -134,7 +135,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		Boolean isDownload = true;
 		Boolean error = false;
 
-		result = api.getItems(GenericHelper.generateKey(mContext), viewedItems, isDownload);
+		result = api.getItems(PreferencesHelper.generateKey(mContext), viewedItems, isDownload);
 		Item[] items = (Item[]) result.get("items");
 		error = (Boolean) result.get("error");
 
@@ -147,6 +148,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 				itemRepo.addItem(item);
 				updateProgressIteration(50, 20, total, count);
 		    }
+            PreferencesHelper.setNewItems(mContext, true);
 		}
 		
 		if (progressStatus < 70) {
@@ -166,7 +168,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		Map<String, Object> result = null;
 		Boolean error = false;
 		
-		result = api.syncLabels(GenericHelper.generateKey(mContext), changedLabels, GenericHelper.getLastLabelsUpdate(mContext));
+		result = api.syncLabels(PreferencesHelper.generateKey(mContext), changedLabels, PreferencesHelper.getLastLabelsUpdate(mContext));
 		Label[] labels = (Label[]) result.get("labels");
 		error = (Boolean) result.get("error");
 		updateProgress(75); //TODO: count download progress
@@ -193,7 +195,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 			}
 			
 			if (lastUpdate != 0) {
-				GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
+				PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
 			}
 		}
 		updateProgress(80);
@@ -206,7 +208,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		Boolean error = false;
 		
 		if (selectedItems.length() > 0) {
-			result = api.syncLaterItems(GenericHelper.generateKey(mContext), selectedItems);
+			result = api.syncLaterItems(PreferencesHelper.generateKey(mContext), selectedItems);
 			error = (Boolean) result.get("error");
 
 			if (!error) {
@@ -223,7 +225,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		Boolean error = false;
 		
 		if (sharedItems.length() > 0) {
-			result = api.syncSharedItems(GenericHelper.generateKey(mContext), sharedItems);
+			result = api.syncSharedItems(PreferencesHelper.generateKey(mContext), sharedItems);
 			error = (Boolean) result.get("error");
 			
 			if (!error) {

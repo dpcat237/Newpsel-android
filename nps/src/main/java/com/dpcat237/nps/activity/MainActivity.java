@@ -22,7 +22,8 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.adapter.FeedsAdapter;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.repository.FeedRepository;
@@ -63,7 +64,7 @@ public class MainActivity extends Activity {
 		logged = LoginHelper.checkLogged(this);
 		feedRepo = new FeedRepository(this);
 		feedRepo.open();
-        GenericHelper.setPlayerActive(mContext, false);
+        PreferencesHelper.setPlayerActive(mContext, false);
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		
 		if (logged) {
@@ -79,18 +80,11 @@ public class MainActivity extends Activity {
 	public void onResume() {
 	    super.onResume();
 	    isInFront = true;
-	    
 	    logged = LoginHelper.checkLogged(this);
 	    
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
 	    } else {
-            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
-            if (itemsActivated) {
-                buttonAddFeed.setVisible(true);
-            } else {
-                buttonAddFeed.setVisible(false);
-            }
 	    	feedRepo.open();
 	    	reloadList();
 	    }
@@ -98,6 +92,15 @@ public class MainActivity extends Activity {
 	    if (logged && mAdapter.getCount() < 1) {
 			Toast.makeText(this, R.string.no_feeds, Toast.LENGTH_SHORT).show();
 		}
+
+        if (logged && buttonAddFeed != null) {
+            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            if (itemsActivated) {
+                buttonAddFeed.setVisible(true);
+            } else {
+                buttonAddFeed.setVisible(false);
+            }
+        }
 	}
 	
 	@Override
@@ -112,7 +115,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void showList () {
-		Integer feedList = GenericHelper.getFeedsList(this);
+		Integer feedList = PreferencesHelper.getFeedsList(this);
 		if (ON_CREATE) {
 			setContentView(R.layout.activity_main);
 			
@@ -231,7 +234,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void downloadData(MenuItem item) {
-		if (GenericHelper.hasConnection(this)) {
+		if (ConnectionHelper.hasConnection(this)) {
             item.setEnabled(false);
 			DownloadDataTask task = new DownloadDataTask(this, mView, listView);
 			task.execute();
@@ -241,7 +244,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void showItems(Integer feedId) {
-		GenericHelper.setSelectedFeed(this, feedId);
+		PreferencesHelper.setSelectedFeed(this, feedId);
 		Intent intent = new Intent(this, ItemsActivity.class);
 		startActivity(intent);
 	}
@@ -292,7 +295,7 @@ public class MainActivity extends Activity {
     	mDrawerLayout.closeDrawer(mDrawerList);
     	
     	if (UNREAD_NO_FIRST && !ON_CREATE) {
-    		GenericHelper.setFeedsList(this, position);
+    		PreferencesHelper.setFeedsList(this, position);
             reloadList();
         }
     }

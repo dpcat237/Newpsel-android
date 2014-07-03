@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.task.AddFeedTask;
 
 public class AddFeedActivity extends Activity {
@@ -21,7 +22,7 @@ public class AddFeedActivity extends Activity {
 	}
 	
 	public void addFeed(View view) {
-		if (GenericHelper.hasConnection(this)) {
+		if (ConnectionHelper.hasConnection(this)) {
 			AddFeedTask task = new AddFeedTask(this, mView);
 			task.execute();
 		} else {

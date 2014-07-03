@@ -12,7 +12,7 @@ import android.util.Log;
 import com.dpcat237.nps.receiver.LockscreenReceiver;
 import com.dpcat237.nps.model.Song;
 
-public class LockscreenManager{
+public class LockscreenManager {
     private static final String TAG = "NPS:LockscreenManager";
     private RemoteControlClient remoteControlClient;
 

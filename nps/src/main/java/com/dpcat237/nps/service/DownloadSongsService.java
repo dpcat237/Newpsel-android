@@ -7,33 +7,29 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.factory.SongsFactoryManager;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.manager.FilesManager;
+import com.dpcat237.nps.manager.GrabDictationManager;
 import com.dpcat237.nps.receiver.AlarmReceiver;
 
 public class DownloadSongsService extends IntentService {
+    private static final String TAG = "NPS:DownloadSongsService";
+    private volatile static Boolean running = false;
+    private GrabDictationManager grabDictation = null;
+    private Intent mIntent;
+    private Context mContext;
+    private FilesManager filesManager;
+
+
     public DownloadSongsService() {
         super("SchedulingService");
     }
-    
-    private static final String TAG = "NPS:DownloadSongsService";
-    private volatile static Boolean running = false;
-    private GrabDictationService grabDictation = null;
-    private Intent mIntent;
-    private Context mContext;
-    private SongsFactoryManager songsFactoryManager;
-    private FilesManager filesManager;
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
         this.mIntent = intent;
         this.mContext = getApplicationContext();
-        if (songsFactoryManager == null) {
-            songsFactoryManager = new SongsFactoryManager();
-        }
         if (filesManager == null) {
             filesManager = new FilesManager();
         }
@@ -59,19 +55,24 @@ public class DownloadSongsService extends IntentService {
         Log.d(TAG, "tut: check startProcess");
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        Boolean dictationEnabled = pref.getBoolean("pref_dictation_title_enable", false);
+        Boolean dictationTitleEnabled = pref.getBoolean("pref_dictation_title_enable", false);
+        Boolean dictationLaterEnabled = pref.getBoolean("pref_dictation_later_enable", false);
 
-        if (!dictationEnabled || !GenericHelper.hasConnection(mContext)) {
+        if (!dictationTitleEnabled && !dictationLaterEnabled) {
+            return false;
+        }
+
+        if (!ConnectionHelper.hasConnection(mContext)) {
             return false;
         }
 
         Boolean wifiEnabled = pref.getBoolean("pref_dictation_title_wifi_enable", false);
-        if (wifiEnabled && GenericHelper.hasWifiConnection(mContext)) {
+        if (wifiEnabled && ConnectionHelper.hasWifiConnection(mContext)) {
             return true;
         }
 
         Boolean mobileEnabled = pref.getBoolean("pref_dictation_title_mobile_enable", false);
-        if (mobileEnabled && GenericHelper.hasMobileConnection(mContext)) {
+        if (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext)) {
             return true;
         }
 
@@ -80,9 +81,8 @@ public class DownloadSongsService extends IntentService {
 
     private void startProcess() {
         Log.d(TAG, "tut: startProcess");
-        songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
         if (grabDictation == null) {
-            grabDictation = GrabDictationService.getInstance(mContext);
+            grabDictation = GrabDictationManager.getInstance(mContext);
         }
         if (!grabDictation.isRunning()) {
             grabDictation.startProcess();

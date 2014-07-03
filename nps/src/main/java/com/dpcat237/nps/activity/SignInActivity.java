@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.task.LoginTask;
 
 public class SignInActivity extends Activity {
@@ -21,7 +22,7 @@ public class SignInActivity extends Activity {
 	}
 	
 	public void doLogin(View view) {
-		if (GenericHelper.hasConnection(this)) {
+		if (ConnectionHelper.hasConnection(this)) {
 			LoginTask task = new LoginTask(this, mView);
 			task.execute();
 		} else {

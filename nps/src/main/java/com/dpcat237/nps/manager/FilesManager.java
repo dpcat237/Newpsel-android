@@ -3,7 +3,7 @@ package com.dpcat237.nps.manager;
 import android.content.Context;
 
 import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.repository.SongRepository;
 
@@ -15,7 +15,7 @@ public class FilesManager {
     SongRepository songRepository;
 
     public void deletePlayedSongs(Context context) {
-        if (!GenericHelper.isPlayerActive(context)) {
+        if (!PreferencesHelper.isPlayerActive(context)) {
             songRepository = new SongRepository(context);
             songRepository.open();
 

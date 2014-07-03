@@ -2,11 +2,9 @@ package com.dpcat237.nps.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.GenericHelper;
-import com.dpcat237.nps.model.Shared;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.repository.SharedRepository;
 
 import org.json.JSONArray;
@@ -44,7 +42,7 @@ public class SendSharedTask extends AsyncTask<Void, Integer, Void>{
         Boolean error = false;
 
         if (sharedItems.length() > 0) {
-            result = api.syncSharedItems(GenericHelper.generateKey(mContext), sharedItems);
+            result = api.syncSharedItems(PreferencesHelper.generateKey(mContext), sharedItems);
             error = (Boolean) result.get("error");
 
             if (!error) {

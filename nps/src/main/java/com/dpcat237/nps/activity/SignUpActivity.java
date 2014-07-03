@@ -7,7 +7,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.task.SignUpTask;
 
 public class SignUpActivity extends Activity {
@@ -23,7 +24,7 @@ public class SignUpActivity extends Activity {
 	
 	public void doSignUp(View view) {
 		if (checkInputs(view)) {
-			if (GenericHelper.hasConnection(this)) {
+			if (ConnectionHelper.hasConnection(this)) {
 				SignUpTask task = new SignUpTask(this, mView);
 				task.execute();
 			} else {

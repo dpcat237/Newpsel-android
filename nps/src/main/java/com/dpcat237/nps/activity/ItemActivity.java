@@ -23,7 +23,7 @@ import android.widget.ShareActionProvider;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.dialog.LabelsDialog;
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
@@ -150,7 +150,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         Intent intent = getIntent();
         Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
         item = itemRepo.getItem(itemId);
-        Integer feedId = GenericHelper.getSelectedFeed(mContext);
+        Integer feedId = PreferencesHelper.getSelectedFeed(mContext);
         feed = feedRepo.getFeed(feedId);
     }
 
@@ -246,7 +246,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
     /** Dictate methods **/
     private void dictate() {
-        String speech = GenericHelper.stripHtml(item.getContent());
+        String speech = PreferencesHelper.stripHtml(item.getContent());
 
         HashMap<String, String> myHashRender = new HashMap();
         String utteranceID = "item_dictate_"+item.getId();
