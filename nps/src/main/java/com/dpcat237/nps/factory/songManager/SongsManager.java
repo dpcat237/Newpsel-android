@@ -24,6 +24,9 @@ public abstract class SongsManager {
     protected Boolean error = false;
 
     protected void createListSongs(List list) {
+        if (listItems.size() < 1) {
+            return;
+        }
         for (ListItem listItem : listItems) {
             if (!isSongExists(list.getApiId(), listItem.getId())) {
                 Song song = createSong(list, listItem);

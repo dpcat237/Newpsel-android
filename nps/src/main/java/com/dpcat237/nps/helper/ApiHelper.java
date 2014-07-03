@@ -2,6 +2,7 @@ package com.dpcat237.nps.helper;
 
 import android.util.Log;
 
+import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
@@ -30,6 +31,7 @@ public class ApiHelper {
 	private static final String URL_SYNC_LABELS = API_URL+"sync_labels/";
 	private static final String URL_SYNC_LATER_ITEMS = API_URL+"sync_later/";
 	private static final String URL_SYNC_SHARED_ITEMS = API_URL+"sync_shared/";
+    private static final String URL_SYNC_DICTATE_ITEMS = API_URL+"sync_later_items/";
 	
 	public Map<String, Object> getFeeds (String appKey, Integer lastUpdate) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -67,7 +69,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 					
-					if (!GenericHelper.isNumeric(respStr)) {
+					if (!PreferencesHelper.isNumeric(respStr)) {
 						feeds = JsonHelper.getFeeds(respStr);
 					} else {
 						error = true;
@@ -123,7 +125,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 
-					if (resp.getStatusLine().getStatusCode() == 200 && !GenericHelper.isNumeric(respStr)) {
+					if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
 						error = false;
 					} else {
@@ -273,7 +275,7 @@ public class ApiHelper {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
-					if (!GenericHelper.isNumeric(respStr)) {
+					if (!PreferencesHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
 					} else {
 						check = "99";
@@ -325,7 +327,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 					
-					if (resp.getStatusLine().getStatusCode() == 200 && !GenericHelper.isNumeric(respStr)) {
+					if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
 						labels = JsonHelper.getLabels(respStr);
 						error = false;
 					} else {
@@ -450,4 +452,61 @@ public class ApiHelper {
     	
 		return result;
 	}
+
+    public Map<String, Object> syncDictateItems(String appKey, JSONArray items, Integer labelId) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        Boolean error = false;
+        String errorMessage = "";
+        DictateItem[] dictateItems = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost post = new HttpPost(URL_SYNC_DICTATE_ITEMS);
+        StringEntity jsonEntity;
+        String jsonString;
+        JSONObject jsonData = new JSONObject();
+
+        try {
+            jsonData.put("appKey", appKey);
+            jsonData.put("items", items);
+            jsonData.put("laterId", labelId);
+        } catch (JSONException e) {
+            Log.e("ApiHelper - syncLabels","Error", e);
+            error = true;
+        }
+
+        if (!error) {
+            try {
+                jsonString = jsonData.toString();
+                jsonEntity = new StringEntity(jsonString);
+                post.setEntity(jsonEntity);
+                post.setHeader("Accept", "application/json");
+                post.setHeader("Content-type", "application/json");
+            } catch (UnsupportedEncodingException e) {
+                Log.e("ApiHelper - syncLabels","Error", e);
+                error = true;
+            }
+
+            if (!error) {
+                try {
+                    HttpResponse resp = httpClient.execute(post);
+                    String respStr = EntityUtils.toString(resp.getEntity());
+
+                    if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
+                        dictateItems = JsonHelper.getDictateItems(respStr);
+                        error = false;
+                    } else {
+                        error = true;
+                        errorMessage = respStr;
+                    }
+                } catch(Exception e) {
+                    Log.e("ApiHelper - syncLabels","Error", e);
+                    error = true;
+                }
+            }
+        }
+        result.put("labels", dictateItems);
+        result.put("error", error);
+        result.put("errorMessage", errorMessage);
+
+        return result;
+    }
 }

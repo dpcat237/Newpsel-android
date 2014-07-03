@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dpcat237.nps.helper.GenericHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -19,7 +19,8 @@ public class NPSDatabase extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		FeedTable.onCreate(db);
+        DictateItemTable.onCreate(db);
+        FeedTable.onCreate(db);
 		ItemTable.onCreate(db);
 		LabelTable.onCreate(db);
 		LabelItemTable.onCreate(db);
@@ -28,7 +29,8 @@ public class NPSDatabase extends SQLiteOpenHelper {
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
-		FeedTable.onDelete(db);
+        DictateItemTable.onDelete(db);
+        FeedTable.onDelete(db);
 		ItemTable.onDelete(db);
 		LabelTable.onDelete(db);
 		LabelItemTable.onDelete(db);
@@ -39,14 +41,15 @@ public class NPSDatabase extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Integer lastUpdate = 0;
+        DictateItemTable.onUpgrade(db, oldVersion, newVersion);
 		FeedTable.onUpgrade(db, oldVersion, newVersion);
 		ItemTable.onUpgrade(db, oldVersion, newVersion);
 		LabelTable.onUpgrade(db, oldVersion, newVersion);
 		LabelItemTable.onUpgrade(db, oldVersion, newVersion);
 		SharedTable.onUpgrade(db, oldVersion, newVersion);
         SongTable.onUpgrade(db, oldVersion, newVersion);
-        GenericHelper.setLastFeedsUpdate(mContext, lastUpdate);
-        GenericHelper.setLastLabelsUpdate(mContext, lastUpdate);
+        PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
+        PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
 
 	}
 

@@ -10,9 +10,9 @@ import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.dpcat237.nps.service.CreateSongsService;
 import com.dpcat237.nps.service.DownloadSongsService;
-
-import java.util.Calendar;
+import com.dpcat237.nps.service.SyncDictationItemsService;
 
 /**
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
@@ -26,8 +26,15 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "tut: onReceive");
-        Intent service = new Intent(context, DownloadSongsService.class);
-        startWakefulService(context, service);
+
+        Intent createSongsService = new Intent(context, CreateSongsService.class);
+        startWakefulService(context, createSongsService);
+
+        Intent syncDictationItemsService = new Intent(context, SyncDictationItemsService.class);
+        startWakefulService(context, syncDictationItemsService);
+
+        Intent downloadSongsService = new Intent(context, DownloadSongsService.class);
+        startWakefulService(context, downloadSongsService);
     }
 
     /**

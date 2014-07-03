@@ -166,10 +166,8 @@ public class FeedRepository {
 
     public ArrayList<List> getLists() {
         ArrayList<List> feeds = new ArrayList<List>();
-        String where = FeedTable.COLUMN_UNREAD_COUNT+">?";
-        String[] args = new String[] {""+0+""};
         String orderBy = FeedTable.COLUMN_TITLE+" ASC";
-        Cursor cursor = database.query(FeedTable.TABLE_FEED, listColumns, where, args, null, null, orderBy);
+        Cursor cursor = database.query(FeedTable.TABLE_FEED, listColumns, null, null, null, null, orderBy);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

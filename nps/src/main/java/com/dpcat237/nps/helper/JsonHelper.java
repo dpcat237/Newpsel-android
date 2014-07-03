@@ -1,5 +1,6 @@
 package com.dpcat237.nps.helper;
 
+import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
@@ -38,4 +39,15 @@ public class JsonHelper {
 
 		return labels;
 	}
+
+    public static DictateItem[] getDictateItems(String content) {
+        DictateItem[] items = null;
+        Gson gson = new Gson();
+
+        if (content.length() > 0) {
+            items = gson.fromJson(content, DictateItem[].class);
+        }
+
+        return items;
+    }
 }

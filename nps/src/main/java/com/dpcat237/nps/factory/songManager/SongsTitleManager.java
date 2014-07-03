@@ -6,7 +6,7 @@ import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.repository.ItemRepository;
 
-public class SongsManagerTitle extends SongsManager {
+public class SongsTitleManager extends SongsManager {
     protected ItemRepository itemRepo;
     private static final String TAG = "NPS:SongsManagerTitle";
 

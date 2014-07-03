@@ -2,21 +2,16 @@ package com.dpcat237.nps.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.Html;
 import android.util.Log;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-public class GenericHelper {
+public class PreferencesHelper {
 	public static String generateKey(Context context) {
 	    final int outputKeyLength = 256;
 	    String result = ""; 
@@ -93,50 +88,7 @@ public class GenericHelper {
 		editor.commit();
 	}
 	
-	public static boolean hasConnection(Context context) {
-	    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-	    NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-	    if (wifiNetwork != null && wifiNetwork.isConnected()) {
-	      return true;
-	    }
-
-	    NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-	    if (mobileNetwork != null && mobileNetwork.isConnected()) {
-	      return true;
-	    }
-
-	    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-	    if (activeNetwork != null && activeNetwork.isConnected()) {
-	      return true;
-	    }
-
-	    return false;
-	}
-
-    public static Boolean hasMobileConnection(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (mobileNetwork != null && mobileNetwork.isConnected()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static Boolean hasWifiConnection(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiNetwork != null && wifiNetwork.isConnected()) {
-            return true;
-        }
-
-        return false;
-    }
-
-	public static boolean isNumeric(String str)  
+	public static boolean isNumeric(String str)
 	{  
 	  try  
 	  {  
@@ -221,5 +173,37 @@ public class GenericHelper {
 
     public static String stripHtml(String html) {
         return Html.fromHtml(html).toString();
+    }
+
+    public static void setNewDictationItems(Context context, Boolean areNew) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putBoolean("sync_are_new_dictate_items", areNew);
+        editor.commit();
+    }
+
+    public static Boolean areNewDictationItems(Context context) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        Boolean areNew = userPref.getBoolean("sync_are_new_dictate_items", false);
+
+        return areNew;
+    }
+
+    public static void setNewItems(Context context, Boolean areNew) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putBoolean("sync_are_new_items", areNew);
+        editor.commit();
+    }
+
+    public static Boolean areNewItems(Context context) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        Boolean areNew = userPref.getBoolean("sync_are_new_items", false);
+
+        return areNew;
     }
 }

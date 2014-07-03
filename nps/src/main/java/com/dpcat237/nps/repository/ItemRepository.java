@@ -39,6 +39,7 @@ public class ItemRepository {
 
     private String[] listItemColumns = {
             ItemTable.COLUMN_ID,
+            ItemTable.COLUMN_API_ID,
             ItemTable.COLUMN_FEED_ID,
             ItemTable.COLUMN_TITLE,
             ItemTable.COLUMN_LANGUAGE
@@ -46,6 +47,7 @@ public class ItemRepository {
 
     private String[] listItemContentColumns = {
             ItemTable.COLUMN_ID,
+            ItemTable.COLUMN_API_ID,
             ItemTable.COLUMN_TITLE,
             ItemTable.COLUMN_CONTENT,
             ItemTable.COLUMN_LANGUAGE
@@ -210,9 +212,10 @@ public class ItemRepository {
     private Item cursorToItemTitle(Cursor cursor) {
         Item item = new Item();
         item.setId(cursor.getInt(0));
-        item.setFeedId(cursor.getInt(1));
-        item.setTitle(cursor.getString(2));
-        item.setLanguage(cursor.getString(3));
+        item.setApiId(cursor.getInt(1));
+        item.setFeedId(cursor.getInt(2));
+        item.setTitle(cursor.getString(3));
+        item.setLanguage(cursor.getString(4));
 
         return item;
     }
@@ -220,9 +223,10 @@ public class ItemRepository {
     private ListItem cursorToListenItem(Cursor cursor) {
         ListItem listenItem = new ListItem();
         listenItem.setId(cursor.getInt(0));
-        listenItem.setTitle(cursor.getString(1));
-        listenItem.setContent(cursor.getString(2));
-        listenItem.setLanguage(cursor.getString(3));
+        listenItem.setApiId(cursor.getInt(1));
+        listenItem.setTitle(cursor.getString(2));
+        listenItem.setContent(cursor.getString(3));
+        listenItem.setLanguage(cursor.getString(4));
 
         return listenItem;
     }

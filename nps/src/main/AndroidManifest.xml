@@ -127,6 +127,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.dpcat237.nps.service.CreateSongsService" />
+        <service android:name="com.dpcat237.nps.service.SyncDictationItemsService" />
         <service android:name="com.dpcat237.nps.service.DownloadSongsService" />
         <service android:name="com.dpcat237.nps.service.PlayerService" />
     </application>

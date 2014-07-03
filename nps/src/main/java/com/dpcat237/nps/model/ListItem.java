@@ -3,6 +3,7 @@ package com.dpcat237.nps.model;
 public class ListItem extends Generic {
     protected Integer api_id;
     protected String title;
+    protected String text;
     protected String content;
     protected String language;
 
@@ -20,6 +21,14 @@ public class ListItem extends Generic {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getContent() {
