@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.activity.MainActivity;
+import com.dpcat237.nps.ui.activity.MainActivity;
 
 public class NotificationHelper {
     public static final int NOTIFICATION_ID = 1;

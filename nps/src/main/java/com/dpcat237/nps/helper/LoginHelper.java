@@ -2,23 +2,13 @@ package com.dpcat237.nps.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.text.Html;
-import android.util.Log;
 
-import com.dpcat237.nps.database.NPSDatabase;
-import com.dpcat237.nps.repository.FeedRepository;
-import com.dpcat237.nps.service.FileService;
+import com.dpcat237.nps.database.repository.FeedRepository;
+import com.dpcat237.nps.behavior.service.FileService;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Date;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 public class LoginHelper {
 	public static Boolean checkLogged(Context context) {

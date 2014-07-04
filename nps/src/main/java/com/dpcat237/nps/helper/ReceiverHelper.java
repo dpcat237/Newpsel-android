@@ -3,13 +3,10 @@ package com.dpcat237.nps.helper;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import com.dpcat237.nps.receiver.AlarmReceiver;
-import com.dpcat237.nps.receiver.BootReceiver;
-
-import java.util.Locale;
+import com.dpcat237.nps.behavior.receiver.AlarmReceiver;
+import com.dpcat237.nps.behavior.receiver.BootReceiver;
 
 public class ReceiverHelper {
     private static final String TAG = "NPS:ReceiverHelper";
