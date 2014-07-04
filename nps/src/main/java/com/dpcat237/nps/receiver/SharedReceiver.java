@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.helper.ConnectionHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.repository.LabelRepository;
-import com.dpcat237.nps.repository.SharedRepository;
 import com.dpcat237.nps.task.SaveSharedTask;
 import com.dpcat237.nps.task.SendSharedTask;
 
@@ -25,9 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SharedReceiver extends Activity {
-
 	Context mContext;
-    private LabelRepository labelRepo;
     ListView listView;
     private Bundle extras;
     ArrayAdapter<Label> mAdapter;
@@ -39,12 +35,8 @@ public class SharedReceiver extends Activity {
 		mContext = this;
 		Intent intent = getIntent();
 		extras = intent.getExtras();
-		SharedRepository sharedRepo = new SharedRepository(this);
-		sharedRepo.open();
-
 		setContentView(R.layout.dialog_shared_labels);
-
-		labelRepo = new LabelRepository(this);
+        LabelRepository labelRepo = new LabelRepository(this);
 		labelRepo.open();
 
 		listView = (ListView) findViewById(R.id.labelsList);
@@ -62,13 +54,15 @@ public class SharedReceiver extends Activity {
 
 		Intent result = new Intent("com.example.RESULT_ACTION");
 		setResult(Activity.RESULT_OK, result);
+        labelRepo.close();
 	}
 
     public void savedShared(Label label) {
-        Toast.makeText(mContext, "Page successfully saved to "+label.getName()+" label.", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, R.string.ts_successfully_saved+label.getName()+" "+R.string.label_s+".", Toast.LENGTH_LONG).show();
 
+        String subject = extras.getString(Intent.EXTRA_SUBJECT);
         String link = pullLink(extras.getString(Intent.EXTRA_TEXT));
-        SaveSharedTask taskSave = new SaveSharedTask(mContext, label.getApiId(), extras.getString(Intent.EXTRA_SUBJECT), link);
+        SaveSharedTask taskSave = new SaveSharedTask(mContext, label.getApiId(), subject, link);
         taskSave.execute();
 
         if (ConnectionHelper.hasConnection(this)) {
