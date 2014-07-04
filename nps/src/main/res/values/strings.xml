@@ -138,6 +138,7 @@
     <!-- Notifications -->
     <string name="nt_download">Download notification</string>
     <string name="nt_download_items_title_finished">Downloaded new dictations of headlines</string>
+    <string name="nt_download_dictation_items_finished">Downloaded new dictations of saved articles</string>
 
     <!-- Player -->
     <string name="button_details">Show details</string>
@@ -183,6 +184,7 @@
     <string name="st_other">Other</string>
     <string name="st_dictation_preference">Dictation preference</string>
     <string name="st_dictation_titles">Titles dictation</string>
+    <string name="st_download_preferences">Download preferences</string>
     <string name="st_dictation_enable">Enable dictation</string>
     <string name="st_dictation_enable_titles">Check to enable dictation of titles</string>
     <string name="st_dictation_later">Later articles dictation</string>

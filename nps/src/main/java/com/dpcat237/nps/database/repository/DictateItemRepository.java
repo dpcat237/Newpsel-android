@@ -176,9 +176,9 @@ public class DictateItemRepository {
         return item;
     }
 
-    public ListItem getListItem(Integer itemId) {
-        String where = DictateItemTable.COLUMN_ID+"=?";
-        String[] args = new String[] {""+itemId+""};
+    public ListItem getListItem(Integer itemApiId) {
+        String where = DictateItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+itemApiId+""};
         Cursor cursor = database.query(DictateItemTable.TABLE_NAME, listItemColumns, where, args, null, null, null);
 
         cursor.moveToFirst();

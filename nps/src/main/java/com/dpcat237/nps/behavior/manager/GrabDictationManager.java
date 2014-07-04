@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class GrabDictationManager implements TextToSpeech.OnInitListener {
-    private static final String TAG = "NPS:GrabDictationService";
+    private static final String TAG = "NPS:GrabDictationManager";
     private TextToSpeech mTts;
     private FileService fileService;
     private volatile static GrabDictationManager uniqueInstance;
@@ -33,6 +33,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     private String songFilename;
     private Boolean running = false;
     private Boolean grabbedSongs = false;
+    private String dictationTypes[] = new String[] {SongConstants.GRABBER_TYPE_TITLE, SongConstants.GRABBER_TYPE_DICTATE_ITEM};
+    private Integer dictationTypesCount;
 
     private GrabDictationManager(Context context) {
         mContext = context;
@@ -52,38 +54,69 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     public void startProcess() {
         running = true;
+        dictationTypesCount = 0;
         mTts = new TextToSpeech(mContext, this);
         fileService = FileService.getInstance();
-        setSongsType();
+        Log.d(TAG, "tut: startProcess ");
     }
 
     private void process() {
+        Log.d(TAG, "tut: process ");
+        if (fileService.getError()) {
+            finishProcess();
+            Log.d(TAG, "tut: process finishProcess ");
+            return;
+        }
+        setSongsCursor();
+        startGrabDictationTypeSongs();
+    }
+
+    private void setSongsType() {
+        songsType = dictationTypes[dictationTypesCount];
+    }
+
+    private void setSongsCursor() {
+        setSongsType();
         songGrabManager = SongsFactory.createManager(songsType);
         songGrabManager.setup(mContext);
         songGrabManager.setCursorNotGrabbedSongs();
-        if (songGrabManager.areError() || fileService.getError()) {
-            endListProcess();
-            return;
-        }
+        Log.d(TAG, "tut: setSongsCursor ");
+    }
 
-        grabbedSongs = false;
-        voicesFolder = fileService.getVoicesFolder();
-        currentSong = songGrabManager.getCurrentSong();
-        setDictationLanguage();
-        createSongFile();
-        grabSong();
+    private void startGrabDictationTypeSongs()
+    {
+        if (songGrabManager.areError()) {
+            Log.d(TAG, "tut: songGrabManager.areError - nextDictationType");
+            nextDictationType();
+        } else {
+            Log.d(TAG, "tut: startGrabDictationTypeSongs ");
+            grabbedSongs = false;
+            voicesFolder = fileService.getVoicesFolder();
+            currentSong = songGrabManager.getCurrentSong();
+            setDictationLanguage();
+            createSongFile();
+            grabSong();
+        }
+    }
+
+    private void nextDictationType() {
+        dictationTypesCount++;
+        if (areMoreTypes()) {
+            songGrabManager.finish();
+            setSongsCursor();
+            startGrabDictationTypeSongs();
+        } else {
+            songGrabManager.finish();
+            finishProcess();
+        }
     }
 
     private void setDictationLanguage() {
         Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(currentSong.getLanguage(), mTts);
+        Log.d(TAG, "tut: setDictationLanguage "+currentSong.getLanguage());
         if (localeTTs != null && mTts.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
+            Log.d(TAG, "tut: setDictationLanguage Ok");
             mTts.setLanguage(localeTTs);
-        }
-    }
-
-    private void setSongsType() {
-        if (songsType.equals("")) {
-            songsType = SongConstants.GRABBER_TYPE_TITLE;
         }
     }
 
@@ -104,10 +137,15 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
                         public void onDone(String utteranceId) { callWithResult.onDone(); }
 
                         @Override
-                        public void onError(String utteranceId) { }
+                        public void onError(String utteranceId) {
+                            callWithResult.grabNextSong();
+                            Log.d(TAG, "tut: onError "+utteranceId);
+                        }
 
                         @Override
-                        public void onStart(String utteranceId) { }
+                        public void onStart(String utteranceId) {
+                            Log.d(TAG, "tut: onStart "+utteranceId);
+                        }
                     });
             if (listenerResult != TextToSpeech.SUCCESS) {
                 Log.e(TAG, "failed to add utterance progress listener");
@@ -128,13 +166,15 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     private void endListProcess() {
-        songGrabManager.finish();
-        running = false;
-
         if (grabbedSongs) {
             NotificationHelper.showSimpleNotification(mContext, getNotificationMessage());
         }
+        nextDictationType();
     }
+
+   private Boolean areMoreTypes() {
+       return (dictationTypesCount <= (dictationTypes.length-1));
+   }
 
     private void grabNextSong() {
         currentSong = songGrabManager.getNextSong();
@@ -150,6 +190,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     public void onDone()
     {
         grabbedSongs = true;
+        Log.d(TAG, "tut: onDone "+currentSong.getId());
         songGrabManager.setAsGrabbedSong(currentSong.getId());
         grabNextSong();
     }
@@ -167,6 +208,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         String utteranceID = "wpta";
         myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
         mTts.synthesizeToFile(currentSong.getContent(), myHashRender, songFilename);
+        Log.d(TAG, "tut: grabSong "+currentSong.getId());
+        //Log.d(TAG, "tut: grabSong getContent"+currentSong.getContent());
     }
 
     public Boolean isRunning() {
@@ -178,7 +221,15 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         if (songsType.equals(SongConstants.GRABBER_TYPE_TITLE)) {
             message = mContext.getString(R.string.nt_download_items_title_finished);
         }
+        if (songsType.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+            message = mContext.getString(R.string.nt_download_dictation_items_finished);
+        }
 
         return message;
+    }
+
+    private void finishProcess() {
+        running = false;
+        dictationTypesCount=0;
     }
 }

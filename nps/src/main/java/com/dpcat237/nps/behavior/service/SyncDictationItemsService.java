@@ -81,6 +81,7 @@ public class SyncDictationItemsService extends IntentService {
         Log.d(TAG, "tut: startProcess");
         syncManager.syncDictations();
         if (PreferencesHelper.areNewDictationItems(mContext)) {
+            //TODO: create songs without feed too!
             songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_DICTATE_ITEM, mContext);
             PreferencesHelper.setNewDictationItems(mContext, false);
             Log.d(TAG, "tut: createSongs done");

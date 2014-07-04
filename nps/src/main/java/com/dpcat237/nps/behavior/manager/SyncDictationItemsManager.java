@@ -62,12 +62,14 @@ public class SyncDictationItemsManager {
         for (DictateItem item : items) {
             if (item.isUnread()) {
                 dictateRepo.addItem(item);
+                //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText());
                 newCount++;
             } else {
                 removeItem(item.getApiId());
             }
         }
 
+        Log.d(TAG, "tut: newCount "+newCount);
         if (newCount > 0) {
             setLastSyncCount(newCount);
         }

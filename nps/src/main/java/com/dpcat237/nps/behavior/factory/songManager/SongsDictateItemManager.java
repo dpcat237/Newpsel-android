@@ -36,7 +36,8 @@ public class SongsDictateItemManager extends SongsManager {
     }
 
     public void setSongContent(Song song, ListItem listItem) {
-        song.setContent(listItem.getText());
+        String content = song.getListTitle()+" "+song.getTitle()+" "+listItem.getText();
+        song.setContent(content);
     }
 
     public void getListItem(Integer itemId){

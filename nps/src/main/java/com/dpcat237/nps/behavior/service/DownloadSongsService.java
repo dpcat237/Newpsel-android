@@ -52,7 +52,6 @@ public class DownloadSongsService extends IntentService {
 
     private Boolean checkCanRun() {
         Log.d(TAG, "tut: check startProcess");
-
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         Boolean dictationTitleEnabled = pref.getBoolean("pref_dictation_title_enable", false);
         Boolean dictationLaterEnabled = pref.getBoolean("pref_dictation_later_enable", false);
@@ -65,13 +64,15 @@ public class DownloadSongsService extends IntentService {
             return false;
         }
 
-        Boolean wifiEnabled = pref.getBoolean("pref_dictation_title_wifi_enable", false);
-        if (wifiEnabled && ConnectionHelper.hasWifiConnection(mContext)) {
+        Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
+        Boolean wifiConnection = ConnectionHelper.hasWifiConnection(mContext);
+        if (wifiEnabled && wifiConnection) {
             return true;
         }
 
-        Boolean mobileEnabled = pref.getBoolean("pref_dictation_title_mobile_enable", false);
-        if (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext)) {
+        Boolean mobileEnabled = pref.getBoolean("pref_dictation__mobile_enable", false);
+        Boolean mobileConnection = ConnectionHelper.hasMobileConnection(mContext);
+        if (mobileEnabled && mobileConnection) {
             return true;
         }
 

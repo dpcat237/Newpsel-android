@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.songManager;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.dpcat237.nps.model.List;
 import com.dpcat237.nps.model.ListItem;
@@ -82,6 +83,7 @@ public abstract class SongsManager {
 
     public void setCursorNotGrabbedSongs() {
         songsCursor = songRepo.getCursorNotGrabbedSongs(grabberType);
+        Log.d(TAG, "tut: setCursorNotGrabbedSongs  "+songsCursor.getCount());
         if (songsCursor.getCount() > 0) {
             songsCursor.moveToFirst();
         } else {
