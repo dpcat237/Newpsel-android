@@ -73,7 +73,9 @@
     <string name="button_add_feed">add feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
-    <string name="no_feeds">No feeds</string>
+    <string name="no_new_articles">Aren\'t new articles</string>
+    <string name="drawer_item_unread">Unread articles</string>
+    <string name="drawer_item_all">All articles</string>
 
     <!-- Item -->
     <string name="button_dictate">Dictate</string>

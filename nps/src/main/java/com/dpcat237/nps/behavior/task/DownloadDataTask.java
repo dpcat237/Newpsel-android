@@ -1,6 +1,7 @@
 package com.dpcat237.nps.behavior.task;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -251,7 +252,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         labelRepo.close();
 
         if (((MainActivity) mContext).isInFront) {
-          ((MainActivity) mContext).reloadList();
+          ((MainActivity) mContext).updateFragment();
 
           Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
         }
@@ -268,7 +269,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	@SuppressLint("UseValueOf")
 	private void updateProgressIteration(Integer previous, Integer stepTotal, Integer total, Integer count) {
 		Float result = new Float(new Float(new Float(count*100) / new Float(total)) * stepTotal) / 100;
-		Integer progress = (int) Math.round(result)+previous;
+		Integer progress = Math.round(result)+previous;
 		publishProgress(progress);
 	}
 }
