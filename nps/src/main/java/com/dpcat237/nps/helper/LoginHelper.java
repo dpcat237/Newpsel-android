@@ -2,6 +2,7 @@ package com.dpcat237.nps.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.behavior.service.FileService;
@@ -32,10 +33,16 @@ public class LoginHelper {
 	public static void doLogout(Context context) {
 		@SuppressWarnings("static-access")
 		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = userPref.edit();
-        //clear preferences
-		editor.clear();
-		editor.commit();
+		SharedPreferences.Editor userEditor = userPref.edit();
+        //clear user preferences
+        userEditor.clear();
+        userEditor.commit();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefEditor = pref.edit();
+        //clear generic preferences
+        prefEditor.clear();
+        prefEditor.commit();
 
         //drop data base
         FeedRepository feedRepository = new FeedRepository(context);
