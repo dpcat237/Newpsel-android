@@ -70,7 +70,7 @@ public class DownloadSongsService extends IntentService {
             return true;
         }
 
-        Boolean mobileEnabled = pref.getBoolean("pref_dictation__mobile_enable", false);
+        Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
         Boolean mobileConnection = ConnectionHelper.hasMobileConnection(mContext);
         if (mobileEnabled && mobileConnection) {
             return true;
@@ -80,7 +80,6 @@ public class DownloadSongsService extends IntentService {
     }
 
     private void startProcess() {
-        Log.d(TAG, "tut: startProcess");
         if (grabDictation == null) {
             grabDictation = GrabDictationManager.getInstance(mContext);
         }

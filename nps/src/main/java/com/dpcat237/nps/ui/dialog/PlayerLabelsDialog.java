@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class PlayerLabelsDialog extends Activity {
 
 	private Context mContext;
-    private Item item;
+    private Integer itemApiId;
     private ArrayAdapter<Label> mAdapter;
     private static final String TAG = "NPS:PlayerLabelsDialog";
 
@@ -41,9 +42,7 @@ public class PlayerLabelsDialog extends Activity {
         itemRepo.open();
         LabelRepository labelRepo = new LabelRepository(this);
         labelRepo.open();
-
-        Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
-        item = itemRepo.getItem(itemId);
+        itemApiId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
 
         ListView listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
@@ -53,7 +52,7 @@ public class PlayerLabelsDialog extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Label label = mAdapter.getItem(position);
-                setLabel(item.getApiId(), label);
+                setLabel(itemApiId, label);
 			}
 		});
 

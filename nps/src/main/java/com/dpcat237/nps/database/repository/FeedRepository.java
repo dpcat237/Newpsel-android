@@ -3,22 +3,17 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 
+import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;
-import com.dpcat237.nps.database.table.NPSDatabase;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.List;
 
 import java.util.ArrayList;
 
-public class FeedRepository {
+public class FeedRepository extends BaseRepository {
     private static final String TAG = "NPS:FeedRepository";
-	// Database fields
-	private SQLiteDatabase database;
-	private NPSDatabase dbHelper;
 	private String[] allColumns = {
 				FeedTable.COLUMN_ID,
 				FeedTable.COLUMN_API_ID,
@@ -37,23 +32,6 @@ public class FeedRepository {
 		dbHelper = new NPSDatabase(context);
 	}
 
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
-		dbHelper.onCreate(database);
-	}
-
-	public void close() {
-		dbHelper.close();
-	}
-	
-	public void create(){
-		dbHelper.onCreate(database);
-	}
-	
-	public void drop(){
-		dbHelper.onDelete(database);
-	}
-	
 	public void addFeed(Feed feed){
 		if (!checkFeedExists(feed.getApiId())) {
 			ContentValues values = new ContentValues();

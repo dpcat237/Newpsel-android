@@ -12,7 +12,7 @@ public class LanguageHelper {
     public static Locale getLocaleFromLanguageTTS(String articleLanguage, TextToSpeech mTTS) {
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale locale : locales) {
-            if (locale.getLanguage().equals(articleLanguage) && !PreferencesHelper.isNumeric(locale.getCountry()) && mTTS.isLanguageAvailable(locale) == TextToSpeech.LANG_AVAILABLE) {
+            if (locale.getLanguage().equals(articleLanguage) && !NumbersHelper.isNumeric(locale.getCountry()) && mTTS.isLanguageAvailable(locale) == TextToSpeech.LANG_AVAILABLE) {
                 return locale;
             }
         }

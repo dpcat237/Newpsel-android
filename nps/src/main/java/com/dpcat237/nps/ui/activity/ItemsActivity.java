@@ -61,6 +61,7 @@ public class ItemsActivity extends Activity {
 		setContentView(R.layout.activity_item_list);
 		mContext = this;
 		mView = this.findViewById(android.R.id.content).getRootView();
+        setTitle(mContext.getString(R.string.activity_articles));
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
 	    feedRepo = new FeedRepository(this);
@@ -97,9 +98,9 @@ public class ItemsActivity extends Activity {
 					showItem(item.getId());
 
 					if (item.isUnread()) {
-						markReadItem(item.getId(), view);
+						markReadItem(item.getApiId(), view);
 						item.setIsUnread(false);
-                        songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 					}
 				}
 			}
@@ -185,20 +186,20 @@ public class ItemsActivity extends Activity {
 	    if (mItem.getGroupId() == cmGourId) {
 	        switch(mItem.getItemId()) {
 		        case 1:
-		        	markReadItem(item.getId(), line);
+		        	markReadItem(item.getApiId(), line);
 		        	item.setIsUnread(false);
 		        	return true;
 		        case 2:
-		        	markUnreadItem(item.getId(), line);
+		        	markUnreadItem(item.getApiId(), line);
 		        	item.setIsUnread(true);
-                    songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+                    songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 		        	return true;
 		        case 3:
 		        	if (info.position > 0) {
                         markPreviousRead(info.position);
 		        	} else {
-		        		markReadItem(item.getId(), line);
-                        songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+		        		markReadItem(item.getApiId(), line);
+                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 			        	item.setIsUnread(false);
 		        	}
 		        	return true;
@@ -230,22 +231,22 @@ public class ItemsActivity extends Activity {
 		for (int i = 0; i <= position; i++) {
 			Item item = mAdapter.getItem(i);
         	item.setIsUnread(false);
-            songRepo.markAsPlayed(item.getFeedId(), item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+            songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
 
-        	ReadItemTask task = new ReadItemTask(this, item.getId(), false);
+        	ReadItemTask task = new ReadItemTask(this, item.getApiId(), false);
     		task.execute();
 		}
 	}
 
-	public void markReadItem(Integer itemId, View line) {
-		ReadItemTask task = new ReadItemTask(this, itemId, false);
+	public void markReadItem(Integer itemApiId, View line) {
+		ReadItemTask task = new ReadItemTask(this, itemApiId, false);
 		task.execute();
 
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_READ));
 	}
 
-	public void markUnreadItem(Integer itemId, View line) {
-		ReadItemTask task = new ReadItemTask(this, itemId, true);
+	public void markUnreadItem(Integer itemApiId, View line) {
+		ReadItemTask task = new ReadItemTask(this, itemApiId, true);
 		task.execute();
 
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_UNREAD));

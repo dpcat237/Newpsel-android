@@ -20,6 +20,7 @@ public class PlayerConstants {
     public static final int PLAYER_COMMAND_STOP = 10;
     public static final int PLAYER_COMMAND_PLAYSTOP = 11;
     public static final int PLAYER_COMMAND_PLAYPAUSE_LIST = 12;
+    public static final int PLAYER_COMMAND_PLAYPAUSE_DICTATION = 13;
 
     //status
     public static final int PLAYER_STATUS_QUEUEEMPTY = 0;

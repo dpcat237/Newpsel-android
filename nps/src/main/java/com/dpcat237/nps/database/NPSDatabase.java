@@ -1,9 +1,16 @@
-package com.dpcat237.nps.database.table;
+package com.dpcat237.nps.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dpcat237.nps.database.table.DictateItemTable;
+import com.dpcat237.nps.database.table.FeedTable;
+import com.dpcat237.nps.database.table.ItemTable;
+import com.dpcat237.nps.database.table.LabelItemTable;
+import com.dpcat237.nps.database.table.LabelTable;
+import com.dpcat237.nps.database.table.SharedTable;
+import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {

@@ -69,7 +69,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 					
-					if (!PreferencesHelper.isNumeric(respStr)) {
+					if (!NumbersHelper.isNumeric(respStr)) {
 						feeds = JsonHelper.getFeeds(respStr);
 					} else {
 						error = true;
@@ -125,7 +125,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 
-					if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
+					if (resp.getStatusLine().getStatusCode() == 200 && !NumbersHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
 						error = false;
 					} else {
@@ -275,7 +275,7 @@ public class ApiHelper {
 				try {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
-					if (!PreferencesHelper.isNumeric(respStr)) {
+					if (!NumbersHelper.isNumeric(respStr)) {
 						items = JsonHelper.getItems(respStr);
 					} else {
 						check = "99";
@@ -327,7 +327,7 @@ public class ApiHelper {
 					HttpResponse resp = httpClient.execute(post);
 					String respStr = EntityUtils.toString(resp.getEntity());
 					
-					if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
+					if (resp.getStatusLine().getStatusCode() == 200 && !NumbersHelper.isNumeric(respStr)) {
 						labels = JsonHelper.getLabels(respStr);
 						error = false;
 					} else {
@@ -490,7 +490,7 @@ public class ApiHelper {
                     HttpResponse resp = httpClient.execute(post);
                     String respStr = EntityUtils.toString(resp.getEntity());
 
-                    if (resp.getStatusLine().getStatusCode() == 200 && !PreferencesHelper.isNumeric(respStr)) {
+                    if (resp.getStatusLine().getStatusCode() == 200 && !NumbersHelper.isNumeric(respStr)) {
                         dictateItems = JsonHelper.getDictateItems(respStr);
                         error = false;
                     } else {

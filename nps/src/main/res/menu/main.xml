@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainMenu" >
 
+    <item android:id="@+id/buttonDictate"
+        android:icon="@drawable/ic_actionbar_dictate"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_read_dictate"
+        android:visible="false" />
+
     <item android:id="@+id/buttonSync"
           android:icon="@drawable/actionbar_refresh"
           android:title="@string/button_sync"

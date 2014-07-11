@@ -74,6 +74,7 @@ public class SyncDictationItemsManager {
             setLastSyncCount(newCount);
         }
         dictateRepo.deleteReadItems();
+        dictateRepo.deleteItemsTtsError();
         dictateRepo.close();
         Log.d(TAG, "tut: finish syncDictations");
     }
@@ -150,6 +151,6 @@ public class SyncDictationItemsManager {
 
     private void removeItem(Integer itemApiId) {
         dictateRepo.deleteItem(itemApiId);
-        songRepo.markAsPlayed(labelId, itemApiId, SongConstants.GRABBER_TYPE_DICTATE_ITEM);
+        songRepo.markAsPlayed(itemApiId, SongConstants.GRABBER_TYPE_DICTATE_ITEM);
     }
 }

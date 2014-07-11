@@ -3,20 +3,14 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.dpcat237.nps.database.table.NPSDatabase;
+import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.model.Song;
 
 import java.util.ArrayList;
 
-public class SongRepository {
-
-	// Database fields
-	private SQLiteDatabase database;
-	private NPSDatabase dbHelper;
+public class SongRepository extends  BaseRepository {
 	private String[] allColumns = {
 			SongTable.COLUMN_ID,
             SongTable.COLUMN_LIST_ID,
@@ -33,22 +27,15 @@ public class SongRepository {
             SongTable.COLUMN_FILE,
     };
 
+
     public SongRepository(Context context) {
         dbHelper = new NPSDatabase(context);
     }
 
-    public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
-    }
-
-	public void close() {
-		dbHelper.close();
-	}
-
 	public void addSong(Song song) {
         ContentValues values = new ContentValues();
         values.put(SongTable.COLUMN_LIST_ID, song.getListId());
-        values.put(SongTable.COLUMN_ITEM_ID, song.getItemId());
+        values.put(SongTable.COLUMN_ITEM_ID, song.getItemApiId());
         values.put(SongTable.COLUMN_LIST_TITLE, song.getListTitle());
         values.put(SongTable.COLUMN_TITLE, song.getTitle());
         values.put(SongTable.COLUMN_FILE, song.getFilename());
@@ -58,23 +45,16 @@ public class SongRepository {
         database.insert(SongTable.TABLE_SONG, null, values);
 	}
 
-	public ArrayList<Song> getSongs(String type, long listId) {
-		ArrayList<Song> songs = new ArrayList<Song>();
-        Cursor cursor = getSongsCursor(type, listId);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Song song = cursorToSong(cursor);
-            songs.add(song);
-			cursor.moveToNext();
-		}
-		cursor.close();
-
-		return songs;
-	}
-
-    public Cursor getSongsCursor(String type, long listId) {
-        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_TYPE+"=? AND "+SongTable.COLUMN_IS_GRABBED+"=? AND "+SongTable.COLUMN_IS_PLAYED+"=?";
-        String[] args = new String[] {""+listId+"", ""+type+"", ""+1+"", ""+0+""};
+    public Cursor getSongsCursor(String type, Integer listId) {
+        String where = "";
+        String[] args = null;
+        if (listId == 0) {
+            where = SongTable.COLUMN_TYPE+"=? AND "+SongTable.COLUMN_IS_GRABBED+"=? AND "+SongTable.COLUMN_IS_PLAYED+"=?";
+            args = new String[] {""+type+"", ""+1+"", ""+0+""};
+        } else {
+            where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_TYPE+"=? AND "+SongTable.COLUMN_IS_GRABBED+"=? AND "+SongTable.COLUMN_IS_PLAYED+"=?";
+            args = new String[] {""+listId+"", ""+type+"", ""+1+"", ""+0+""};
+        }
         String orderBy = SongTable.COLUMN_ID+" ASC";
         Cursor cursor = database.query(SongTable.TABLE_SONG, allColumns, where, args, null, null, orderBy);
 
@@ -85,7 +65,7 @@ public class SongRepository {
         Song song = new Song();
         song.setId(cursor.getInt(0));
         song.setListId(cursor.getInt(1));
-        song.setItemId(cursor.getInt(2));
+        song.setItemApiId(cursor.getInt(2));
         song.setListTitle(cursor.getString(3));
         song.setTitle(cursor.getString(4));
         song.setFilename(cursor.getString(5));
@@ -104,34 +84,12 @@ public class SongRepository {
         return song;
     }
 
-	public Song getSong(Long songId) {
-        Song song = null;
-		String where = SongTable.COLUMN_ID+"=?";
-		String[] args = new String[] {""+songId+""};
-		Cursor cursor = database.query(SongTable.TABLE_SONG, allColumns, where, args, null, null, null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-            song = cursorToSong(cursor);
-			cursor.moveToNext();
-		}
-
-		cursor.close();
-		return song;
-	}
-
-    public Song getListSong(Integer listId, Integer itemId, String type) {
-        Song song = null;
-        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
-        String[] args = new String[] {""+listId+"", ""+itemId+"", ""+type+""};
+    public Cursor getSongCursor(String type, Integer itemApiId) {
+        String where = SongTable.COLUMN_TYPE+"=? AND "+SongTable.COLUMN_ITEM_ID+"=?";
+        String[] args = new String[] {""+type+"", ""+itemApiId+""};
         Cursor cursor = database.query(SongTable.TABLE_SONG, allColumns, where, args, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            song = cursorToSong(cursor);
-            cursor.moveToNext();
-        }
-        cursor.close();
 
-        return song;
+        return cursor;
     }
 
     public Cursor getCursorNotGrabbedSongs(String type) {
@@ -142,14 +100,27 @@ public class SongRepository {
         return cursor;
     }
 
-    public Boolean checkListSongExists(Integer listId, Integer itemId, String type){
+    public Boolean checkListSongExists(Integer listApiId, Integer itemApiId, String type){
         Boolean result = false;
         String[] columns = new String[] {SongTable.COLUMN_ID};
         String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
-        String[] args = new String[] {""+listId+"", ""+itemId+"", ""+type+""};
+        String[] args = new String[] {""+listApiId+"", ""+itemApiId+"", ""+type+""};
 
         Cursor cursor = database.query(SongTable.TABLE_SONG, columns, where, args, null, null, null);
+        if (cursor.getCount() > 0) {
+            result = true;
+        }
 
+        return result;
+    }
+
+    public Boolean checkSongGrabbed(Integer itemApiId, String type){
+        Boolean result = false;
+        String[] columns = new String[] {SongTable.COLUMN_ID};
+        String where = SongTable.COLUMN_IS_GRABBED+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
+        String[] args = new String[] {""+1+"", ""+itemApiId+"", ""+type+""};
+
+        Cursor cursor = database.query(SongTable.TABLE_SONG, columns, where, args, null, null, null);
         if (cursor.getCount() > 0) {
             result = true;
         }
@@ -164,7 +135,6 @@ public class SongRepository {
         String[] args = new String[] {""+listId+"", ""+type+"", ""+1+"", ""+0+""};
 
         Cursor cursor = database.query(SongTable.TABLE_SONG, columns, where, args, null, null, null);
-
         if (cursor.getCount() > 0) {
             result = true;
         }
@@ -188,11 +158,11 @@ public class SongRepository {
         database.update(SongTable.TABLE_SONG, values, where, args);
     }
 
-    public void markAsPlayed(Integer listId, Integer itemId, String type) {
+    public void markAsPlayed(Integer itemApiId, String type) {
         ContentValues values = new ContentValues();
         values.put(SongTable.COLUMN_IS_PLAYED, true);
-        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
-        String[] args = new String[] {""+itemId+"", ""+listId+"", ""+type+""};
+        String where = SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
+        String[] args = new String[] {""+itemApiId+"", ""+type+""};
         database.update(SongTable.TABLE_SONG, values, where, args);
     }
 

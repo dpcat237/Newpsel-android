@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.model.Item;
-import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.Song;
 
 public class PlayerQueueManager {
     private Context mContext;
@@ -17,6 +17,7 @@ public class PlayerQueueManager {
     private Integer currentStatus;
     private Integer lastPosition;
     private static final String TAG = "NPS:PlayerQueueManager";
+    private Boolean error = false;
 
 
     public PlayerQueueManager(Context context) {
@@ -26,19 +27,35 @@ public class PlayerQueueManager {
         songRepo.open();
     }
 
-    public Song getCurrentSong()
-    {
+    public Boolean areError() {
+        return error;
+    }
+
+    public Song getCurrentSong() {
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
 
         return song;
     }
 
-    public Boolean setCurrentList(String playType, long listId)
-    {
+    private void checkNewCursor() {
+        error = (cursor.getCount() < 1);
+    }
+
+    public Boolean setCursorList(String playType, Integer listId) {
         cursor = songRepo.getSongsCursor(playType, listId);
         cursor.moveToNext();
         currentPosition = cursor.getPosition();
+        checkNewCursor();
+
+        return true;
+    }
+
+    public Boolean setCursorSong(String playType, Integer itemApiId) {
+        cursor = songRepo.getSongCursor(playType, itemApiId);
+        cursor.moveToNext();
+        currentPosition = cursor.getPosition();
+        checkNewCursor();
 
         return true;
     }
@@ -47,17 +64,12 @@ public class PlayerQueueManager {
         this.currentStatus = status;
     }
 
-    public Boolean isPaused()
-    {
+    public Boolean isPaused() {
         if (currentStatus == PlayerConstants.PLAYER_STATUS_PAUSED) {
             return true;
         }
 
         return false;
-    }
-
-    public int getLastPosition() {
-        return this.lastPosition;
     }
 
     public void setLastPosition(Integer postition) {
@@ -105,7 +117,7 @@ public class PlayerQueueManager {
         itemRepo.open();
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
-        Item item = itemRepo.getItem(song.getItemId());
+        Item item = itemRepo.getItem(song.getItemApiId());
         itemRepo.close();
 
         return item;
@@ -117,14 +129,6 @@ public class PlayerQueueManager {
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
 
-        return song.getItemId();
-    }
-
-    public Boolean hasSongs() {
-        if (cursor != null && cursor.getCount() > 0) {
-            return true;
-        }
-
-        return false;
+        return song.getItemApiId();
     }
 }

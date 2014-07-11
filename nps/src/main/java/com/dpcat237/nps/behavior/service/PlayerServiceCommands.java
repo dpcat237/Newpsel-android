@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.model.Song;
 
 public abstract class PlayerServiceCommands extends Service {
     public static void play(Context context) {
@@ -22,6 +21,10 @@ public abstract class PlayerServiceCommands extends Service {
 
     public static void playpause(Context context, String type, Integer listId) {
         PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_LIST, type, listId);
+    }
+
+    public static void playpauseDictation(Context context, String type) {
+        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_DICTATION, type, 0);
     }
 
     public static void pause(Context context, int pause_reason) {
@@ -52,8 +55,8 @@ public abstract class PlayerServiceCommands extends Service {
         //PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_SKIPTO, secs);
     }
 
-    public static void play(Context context, Song song) {
-        //PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY_SPECIFIC_SONG, song.getId());
+    public static void playPauseSong(Context context, String type, Integer itemApiId) {
+        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY_SPECIFIC_SONG, type, itemApiId);
     }
 
     protected static void sendCommand(Context context, int command) {
@@ -69,11 +72,11 @@ public abstract class PlayerServiceCommands extends Service {
         context.startService(intent);
     }
 
-    protected static void sendCommand(Context context, int command, String type, Integer listId) {
+    protected static void sendCommand(Context context, int command, String type, Integer argInt) {
         Intent intent = new Intent(context, PlayerService.class);
         intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, command);
         intent.putExtra(PlayerConstants.EXTRA_PLAYER_TYPE, type);
-        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, listId);
+        intent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, argInt);
         context.startService(intent);
     }
 }

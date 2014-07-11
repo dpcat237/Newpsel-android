@@ -3,13 +3,11 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.LabelItemTable;
 import com.dpcat237.nps.database.table.LabelTable;
-import com.dpcat237.nps.database.table.NPSDatabase;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.model.LabelItem;
 
@@ -21,24 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LabelRepository {
-
-	// Database fields
-	private SQLiteDatabase database;
-	private NPSDatabase dbHelper;
-	private String[] allColumns = {
-				LabelTable.COLUMN_ID,
-				LabelTable.COLUMN_API_ID,
-				LabelTable.COLUMN_NAME,
-				LabelTable.COLUMN_UNREAD_COUNT
-			};
-	
+public class LabelRepository extends BaseRepository {
 	private String[] basicColumns = {
 			LabelTable.COLUMN_ID,
 			LabelTable.COLUMN_API_ID,
 			LabelTable.COLUMN_NAME,
 		};
-	
 	private String[] selectedItemsColumns = {
 			LabelItemTable.COLUMN_ID,
 			LabelItemTable.COLUMN_API_ID,
@@ -47,27 +33,11 @@ public class LabelRepository {
 			LabelItemTable.COLUMN_ITEM_API_ID,
 		};
 
+
 	public LabelRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
 	}
 
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
-		dbHelper.onCreate(database);
-	}
-
-	public void close() {
-		dbHelper.close();
-	}
-	
-	public void create(){
-		dbHelper.onCreate(database);
-	}
-	
-	public void drop(){
-		dbHelper.onDelete(database);
-	}
-	
 	public void addLabel(Label label, Boolean defaultChanged){
 		if (!checkLabelExists(label.getApiId())) {
 			ContentValues values = new ContentValues();
@@ -140,41 +110,6 @@ public class LabelRepository {
 		cursor.close();
 		return labels;
 	}
-	
-	//TODO: review!
-	public ArrayList<Label> getAllLabelsUnread() {
-		ArrayList<Label> labels = new ArrayList<Label>();
-		String where = LabelTable.COLUMN_UNREAD_COUNT+">?";
-		String[] args = new String[] {""+0+""};
-		String orderBy = LabelTable.COLUMN_NAME+" ASC";
-		Cursor cursor = database.query(LabelTable.TABLE_LABEL, allColumns, where, args, null, null, orderBy);
-
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Label label = cursorToLabel(cursor);
-			labels.add(label);
-			cursor.moveToNext();
-		}
-
-		cursor.close();
-		return labels;
-	}
-	
-	public Label getLabel(Integer labelApiId) {
-		Label label = null;
-		String where = LabelTable.COLUMN_API_ID+"=?";
-		String[] args = new String[] {""+labelApiId+""};
-		
-		Cursor cursor = database.query(LabelTable.TABLE_LABEL, allColumns, where, args, null, null, null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			label = cursorToLabel(cursor);
-			cursor.moveToNext();
-		}
-
-		cursor.close();
-		return label;
-	}
 
 	private Label cursorToBasicLabel(Cursor cursor) {
 		Label label = new Label();
@@ -192,44 +127,7 @@ public class LabelRepository {
 		label.setUnreadCount(cursor.getInt(3));
 		return label;
 	}
-	
-	private ArrayList<Label> getUnreadCount () {
-		ArrayList<Label> labels = new ArrayList<Label>();
-		String sql = "SELECT tb1."+LabelItemTable.COLUMN_LABEL_ID + ", " +
-				"(SELECT COUNT(tb2."+LabelItemTable.COLUMN_ID+") AS total FROM "+LabelItemTable.TABLE_LABEL_ITEM+" AS tb2 " +
-						"WHERE tb2."+LabelItemTable.COLUMN_LABEL_ID+"=tb1."+LabelItemTable.COLUMN_LABEL_ID+" AND tb2."+LabelItemTable.COLUMN_IS_UNREAD+"=1) AS count " +
-				" FROM "+LabelItemTable.TABLE_LABEL_ITEM+" AS tb1 GROUP BY tb1."+LabelItemTable.COLUMN_LABEL_ID;
-		Cursor cursor = database.rawQuery(sql, null);
-		
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Label label = new Label();
-			label.setApiId(cursor.getInt(0));
-			label.setUnreadCount(cursor.getInt(1));
-			labels.add(label);
-			cursor.moveToNext();
-		}
-		
-		return labels;
-	}
-	
-	public void updateLabelUnreads(Integer labelApiId, Integer count) {
-		ContentValues values = new ContentValues();
-		values.put(LabelTable.COLUMN_UNREAD_COUNT, count);
-		String where = LabelTable.COLUMN_API_ID+"=?";
-		String[] args = new String[] {""+labelApiId+""};
-		database.update(LabelTable.TABLE_LABEL, values, where, args);
-	}
-	
-	public void unreadCountUpdate () {
-		ArrayList<Label> labels = getUnreadCount();
-		if (labels.size() > 0) {
-			for (Label label : labels) {
-				updateLabelUnreads(label.getApiId(), label.getUnreadCount());
-	    	}
-		}
-	}
-	
+
 	public void setLabel(LabelItem labelItem){
 		ContentValues values = new ContentValues();
 		values.put(LabelItemTable.COLUMN_LABEL_ID, labelItem.getLabelId());
@@ -238,24 +136,7 @@ public class LabelRepository {
 		values.put(LabelItemTable.COLUMN_IS_UNREAD, labelItem.isUnread());
 		database.insert(LabelItemTable.TABLE_LABEL_ITEM, null, values);
 	}
-	
-	public ArrayList<Label> getChangedLabels() {
-		ArrayList<Label> labels = new ArrayList<Label>();
-		String where = LabelTable.COLUMN_IS_CHANGED+"=?";
-		String[] args = new String[] {""+1+""};
-		Cursor cursor = database.query(LabelTable.TABLE_LABEL, allColumns, where, args, null, null, null);
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Label label = cursorToLabel(cursor);
-			labels.add(label);
-			cursor.moveToNext();
-		}
-
-		cursor.close();
-		return labels;
-	}
-	
 	public Map<String, Object> getLabelsToSync() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		JSONArray labelsJson = new JSONArray();

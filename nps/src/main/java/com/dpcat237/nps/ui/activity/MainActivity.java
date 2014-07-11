@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +24,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.DownloadDataTask;
+import com.dpcat237.nps.constant.MainActivityConstants;
+import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.ui.factory.MainFragmentFactory;
 import com.dpcat237.nps.ui.factory.MainFragmentFactoryManager;
 
@@ -42,8 +48,11 @@ public class MainActivity extends Activity {
 	Boolean ON_CREATE = false;
 	public boolean isInFront;
     private SharedPreferences pref;
-    private MenuItem buttonAddFeed;
     private Menu mainMenu = null;
+    private MenuItem buttonAddFeed;
+    private MenuItem buttonSync;
+    private MenuItem buttonDictate;
+    private Boolean itemsActivated;
 	//DrawerList
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -87,16 +96,12 @@ public class MainActivity extends Activity {
 	    	reloadList();
 	    }
 	    
-        if (logged && buttonAddFeed != null) {
-            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
-            if (itemsActivated) {
-                buttonAddFeed.setVisible(true);
-            } else {
-                buttonAddFeed.setVisible(false);
-            }
+        if (logged) {
+            itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            drawerUpdateMenuItems();
         }
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -118,7 +123,7 @@ public class MainActivity extends Activity {
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 	        
 	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-	        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.fragment_item_list, mListsTitles));
+	        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.fragment_drawer_row, mListsTitles));
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	        getActionBar().setDisplayHomeAsUpEnabled(true);
 	        getActionBar().setHomeButtonEnabled(true);
@@ -137,16 +142,24 @@ public class MainActivity extends Activity {
 			mainMenu = menu;
 			getMenuInflater().inflate(R.menu.main, menu);
             buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
-            Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
-            if (!itemsActivated) {
-                buttonAddFeed.setVisible(false);
-            }
+            buttonSync = menu.findItem(R.id.buttonSync);
+            buttonDictate = menu.findItem(R.id.buttonDictate);
+            itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            drawerUpdateMenuItems();
 
 			return true;
 		}
 		
 		return false;
 	}
+
+    private void showButtonAddFeed() {
+        if (itemsActivated) {
+            buttonAddFeed.setVisible(true);
+        } else {
+            buttonAddFeed.setVisible(false);
+        }
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -176,6 +189,9 @@ public class MainActivity extends Activity {
 		    case R.id.buttonAbout:
 		    	showAbout();
 		        return true;
+            case R.id.buttonDictate:
+                PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, 0);
+                return true;
 	    }
 		return false;
 	}
@@ -217,8 +233,9 @@ public class MainActivity extends Activity {
 			feedRepo.unreadCountUpdate();
 
 			if (mainMenu != null) {
-				mainMenu.findItem(R.id.buttonSync).setEnabled(true);
+                buttonSync.setEnabled(true);
 			}
+            updateFragment();
 		}
 	}
 	
@@ -260,6 +277,7 @@ public class MainActivity extends Activity {
     private void selectItem(int position) {
         lastPosition = position;
         updateFragment();
+        drawerUpdateMenuItems();
 
     	mDrawerList.setItemChecked(position, true);
     	mDrawerLayout.closeDrawer(mDrawerList);
@@ -269,6 +287,30 @@ public class MainActivity extends Activity {
             reloadList();
         }
         lastPosition = position;
+
+    }
+
+    private void drawerUpdateMenuItems() {
+        if (mainMenu == null) {
+            return;
+        }
+
+        if (lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+            buttonSync.setVisible(false);
+            buttonAddFeed.setVisible(false);
+            DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
+            dictateRepo.open();
+            Integer unreadCount = dictateRepo.countUnreadItems();
+            Log.d(TAG, "tut: drawerUpdateMenuItems unreadCount "+unreadCount);
+            if (unreadCount > 0) {
+                buttonDictate.setVisible(true);
+            }
+            dictateRepo.close();
+        } else {
+            buttonSync.setVisible(true);
+            showButtonAddFeed();
+            buttonDictate.setVisible(false);
+        }
     }
 
     public static class UnreadItemsFragment extends Fragment {
@@ -281,9 +323,9 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             mainList = getArguments().getInt(ARG_MAIN_LIST);
-            View rootView = inflater.inflate(MainFragmentFactory.getFragmentLayout(mainList), container, false);
+            View rootView = inflater.inflate(R.layout.fragment_main_list, container, false);
             factoryManager = new MainFragmentFactoryManager();
-            listView = (ListView) rootView.findViewById(R.id.feedslist);
+            listView = (ListView) rootView.findViewById(R.id.mainFragmentList);
             factoryManager.prepareView(mainList, getActivity(), listView);
 
             return rootView;

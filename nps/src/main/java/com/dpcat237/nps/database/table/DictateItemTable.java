@@ -19,6 +19,7 @@ public class DictateItemTable {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_CONTENT = "content";
     public static final String COLUMN_TEXT = "text";
+    public static final String COLUMN_HAS_TTS_ERROR = "has_tts_error";
 
 
 	// Database creation SQL statement
@@ -35,7 +36,8 @@ public class DictateItemTable {
             + COLUMN_TITLE + " text not null,"
             + COLUMN_CONTENT + " text not null,"
             + COLUMN_TEXT + " text not null,"
-            + COLUMN_DATE_ADD + " integer not null"
+            + COLUMN_DATE_ADD + " integer not null,"
+            + COLUMN_HAS_TTS_ERROR + " boolean"
 			+ ");";
 
 	public static void onCreate(SQLiteDatabase database) {

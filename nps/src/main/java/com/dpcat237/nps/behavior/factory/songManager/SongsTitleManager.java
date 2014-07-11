@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.songManager;
 
 
 import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.model.List;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -9,12 +10,13 @@ import com.dpcat237.nps.database.repository.ItemRepository;
 public class SongsTitleManager extends SongsManager {
     protected ItemRepository itemRepo;
     private static final String TAG = "NPS:SongsManagerTitle";
+    private List currentList;
 
-    public void getListItems(Integer listId) {
+    protected void getListItems(Integer listId) {
         listItems = itemRepo.getUnreadItemsTitles(listId);
     }
 
-    public void getLists() {
+    protected void getLists() {
         lists = feedRepo.getLists();
     }
 
@@ -31,19 +33,36 @@ public class SongsTitleManager extends SongsManager {
         itemRepo.open();
     }
 
-    public void setCreatorType() {
+    protected void setCreatorType() {
         grabberType = SongConstants.GRABBER_TYPE_TITLE;
     }
 
-    public void setSongContent(Song song, ListItem listItem) {
+    protected void setSongContent(Song song, ListItem listItem) {
         song.setContent(listItem.getTitle());
     }
 
-    public void getListItem(Integer itemId){
+    protected void getListItem(Integer itemId){
         songListItem =  itemRepo.getListItem(itemId);
     }
 
-    public void markAsDictated(Integer itemId) {
-        itemRepo.readItem(itemId, false);
+    protected void markAsDictated(Integer itemApiId) {
+        itemRepo.readItem(itemApiId, false);
+    }
+
+    protected void markTtsError(Integer itemApiId) {}
+
+    protected void createSongsProcess() {
+        getLists();
+
+        for (List list : lists) {
+            currentList = list;
+            getListItems(list.getApiId());
+            createListSongs();
+        }
+    }
+
+    protected void createListSong(ListItem listItem) {
+        Song song = createSong(currentList, listItem);
+        songRepo.addSong(song);
     }
 }

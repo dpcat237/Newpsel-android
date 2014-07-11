@@ -3,11 +3,9 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.dpcat237.nps.database.table.NPSDatabase;
+import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.SharedTable;
 import com.dpcat237.nps.model.Shared;
 
@@ -15,11 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SharedRepository {
-
-	// Database fields
-	private SQLiteDatabase database;
-	private NPSDatabase dbHelper;
+public class SharedRepository extends BaseRepository {
 	private String[] allColumns = {
 				SharedTable.COLUMN_ID,
 				SharedTable.COLUMN_TITLE,
@@ -27,26 +21,11 @@ public class SharedRepository {
                 SharedTable.COLUMN_LABEL_API_ID
 			};
 
+
 	public SharedRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
 	}
 
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
-		dbHelper.onCreate(database);
-	}
-
-	public void close() {
-		dbHelper.close();
-	}
-	
-	public void create(){
-		dbHelper.onCreate(database);
-	}
-	
-	public void drop(){
-		dbHelper.onDelete(database);
-	}
 
 	public Boolean addShared(Shared shared){
 		if (!checkSharedExists(shared.getText())) {

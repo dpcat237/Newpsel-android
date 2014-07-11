@@ -17,13 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedsAdapter extends BaseAdapter {
-
     private Context mContext;
     private LayoutInflater mInflater;
     private List<Feed> dataSet;
+    private Integer imgSize = 0;
+    private Integer txtSize = 0;
 
-    Integer imgSize = 0;
-    Integer txtSize = 0;
+    public static class ViewHolder {
+        public ImageView image;
+        public TextView title;
+        public TextView count;
+    }
 
     public FeedsAdapter(Context context) {
         mContext = context;
@@ -33,8 +37,9 @@ public class FeedsAdapter extends BaseAdapter {
 
     public void addToDataset(List<Feed> collection) {
 
-        if(collection == null)
+        if(collection == null) {
             return;
+        }
 
         dataSet.addAll(collection);
         notifyDataSetChanged();
@@ -87,40 +92,31 @@ public class FeedsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public static class ViewHolder {
-        public ImageView image;
-        public TextView title;
-        public TextView count;
-    }
-
     private void setDimensions(ImageView img, TextView text, TextView count) {
-        setSize();
+        getDimensions();
 
         if (imgSize > 0) {
             img.getLayoutParams().height = imgSize;
             img.getLayoutParams().width = imgSize;
         }
 
-        if (txtSize > 0) {
-            text.setTextSize(txtSize);
-            count.setTextSize(txtSize);
-        }
+        text.setTextSize(txtSize);
+        count.setTextSize(txtSize);
     }
 
-    private void setSize() {
+    private void getDimensions() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String textSize = pref.getString("pref_list_size", "2");
-        Integer size = Integer.parseInt(textSize);
-
-        if (size == 1) {
-            imgSize = 0;
-            txtSize = 0;
-        } else if (size == 2) {
-            imgSize = 47;
+        txtSize = Integer.parseInt(pref.getString("pref_list_size", "17"));
+        if (txtSize < 14) {
             txtSize = 17;
-        } else if (size == 3) {
+        }
+
+        if (txtSize == 14) {
+            imgSize = 0;
+        } else if (txtSize == 2) {
+            imgSize = 47;
+        } else if (txtSize == 3) {
             imgSize = 55;
-            txtSize = 20;
         }
     }
 }

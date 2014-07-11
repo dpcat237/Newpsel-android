@@ -15,42 +15,37 @@ import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
-import com.dpcat237.nps.ui.dialog.LabelsDialog;
-import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.helper.LanguageHelper;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
+import com.dpcat237.nps.helper.LanguageHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.ui.block.ItemBlock;
+import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 @SuppressLint("SimpleDateFormat")
 public class ItemActivity extends Activity implements TextToSpeech.OnInitListener {
+    private static final String TAG = "NPS:ItemActivity";
     private Context mContext;
-    private SharedPreferences pref;
 	private Feed feed;
     private Item item;
 	private ShareActionProvider mShareActionProvider;
-    private TextToSpeech mTTS;
+    private TextToSpeech mTts;
     private MenuItem dictateButton;
     private MenuItem startDictateButton;
     private MenuItem stopButton;
-    private static final String TAG = "ItemActivity";
     private Boolean dictateActive = false;
+    private SharedPreferences pref;
 
-    private int CACHE_MAX_SIZE = 5000;
     private int CHECK_TTS_INSTALLED = 0;
 
 	@SuppressLint("NewApi")
@@ -63,18 +58,19 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 	    setContentView(R.layout.activity_item_view);
         getNecessaryData();
 
-        prepareWebView();
+        WebView mWebView = (WebView) findViewById(R.id.itemContent);
+        ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
 	}
 
     @Override
     @TargetApi(15)
     public void onInit(int initStatus) {
         if (dictateActive) {
-            Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(item.getLanguage(), mTTS);
-            if (localeTTs != null && mTTS.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
+            Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(item.getLanguage(), mTts);
+            if (localeTTs != null && mTts.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
                 startDictateButton.setVisible(false);
                 dictateButton.setVisible(true);
-                mTTS.setLanguage(localeTTs);
+                mTts.setLanguage(localeTTs);
             }
 
             setTtsListener();
@@ -87,7 +83,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         final ItemActivity callWithResult = this;
         if (Build.VERSION.SDK_INT >= 15) {
             int listenerResult =
-                    mTTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                         @Override
                         public void onDone(String utteranceId) { callWithResult.onDone(); }
 
@@ -102,7 +98,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
             }
         } else {
             int listenerResult =
-                    mTTS.setOnUtteranceCompletedListener(
+                    mTts.setOnUtteranceCompletedListener(
                             new TextToSpeech.OnUtteranceCompletedListener() {
                                 @Override
                                 public void onUtteranceCompleted(String utteranceId) {
@@ -128,7 +124,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHECK_TTS_INSTALLED) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                mTTS = new TextToSpeech(mContext, this);
+                mTts = new TextToSpeech(mContext, this);
             } else {
                 Intent installTTSIntent = new Intent();
                 installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
@@ -152,17 +148,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         item = itemRepo.getItem(itemId);
         Integer feedId = PreferencesHelper.getSelectedFeed(mContext);
         feed = feedRepo.getFeed(feedId);
-    }
-
-    private String getDate(long timeStamp){
-        try{
-            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-MM kk:mm:ss");
-            Date netDate = (new Date(timeStamp));
-
-            return sdf.format(netDate);
-        } catch(Exception ex) {
-            return null;
-        }
     }
 
     @Override
@@ -206,7 +191,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
     private void setLabel()
     {
         FragmentManager fm = ((Activity) mContext).getFragmentManager();
-        LabelsDialog editNameDialog = new LabelsDialog(mContext, item);
+        LabelsDialog editNameDialog = new LabelsDialog(mContext, item.getApiId());
         editNameDialog.setRetainInstance(true);
         editNameDialog.show(fm, "fragment_select_label");
     }
@@ -237,9 +222,9 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
     @Override
     public void onDestroy() {
-        if (mTTS != null) {
-            mTTS.stop();
-            mTTS.shutdown();
+        if (mTts != null) {
+            mTts.stop();
+            mTts.shutdown();
         }
         super.onDestroy();
     }
@@ -251,14 +236,16 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         HashMap<String, String> myHashRender = new HashMap();
         String utteranceID = "item_dictate_"+item.getId();
         myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
-        mTTS.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashRender);
+        Float speechRate = Float.parseFloat(pref.getString("pref_dictation_speed", "1.0f"));
+        mTts.setSpeechRate(speechRate);
+        mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashRender);
 
         dictateButton.setVisible(false);
         stopButton.setVisible(true);
     }
 
     private void stopDictate() {
-        mTTS.stop();
+        mTts.stop();
         stopButton.setVisible(false);
         dictateButton.setVisible(true);
     }
@@ -273,36 +260,5 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
     public void stopDictation() {
         stopButton.setVisible(false);
         dictateButton.setVisible(true);
-    }
-
-    /** Web view **/
-    private void prepareWebView() {
-        WebView mWebView = (WebView) findViewById(R.id.itemContent);
-        mWebView.setFocusable(false);
-        mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        WebSettings ws = mWebView.getSettings();
-        ws.setSupportZoom(true);
-        ws.setBuiltInZoomControls(false);
-        String textSize = pref.getString("pref_text_size", "100");
-        ws.setTextZoom(Integer.parseInt(textSize));
-
-        ws.setCacheMode(WebSettings.LOAD_DEFAULT);
-        ws.setAppCacheMaxSize(CACHE_MAX_SIZE);
-        ws.setAppCacheEnabled(true);
-
-        long timestamp = item.getDateAdd() * 1000;
-        String date = getDate(timestamp);
-        String itemLink = item.getLink();
-
-        String contentHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-                "<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +
-                "<a style='text-decoration: none; color:#12c;' href='"+itemLink+"'>"+item.getTitle()+"</a>" +
-                "</div>" +
-                "<p style='margin-top:1px; font-size:1em;'><font style='color:#12c;'>"+feed.getTitle()+"</font>" +
-                " <font style='color:#d3d3d3;'>on "+date+"</font></p>";
-
-        mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-        String content = "<div style='padding:0px 3px 0px 2px;'>"+contentHeader+item.getContent()+"</div>";
-        mWebView.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
     }
 }

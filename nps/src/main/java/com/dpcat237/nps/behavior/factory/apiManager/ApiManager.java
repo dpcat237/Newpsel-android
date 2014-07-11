@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.apiManager;
 
 import android.util.Log;
 
+import com.dpcat237.nps.helper.NumbersHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
 import org.apache.http.client.HttpClient;
@@ -58,7 +59,7 @@ public abstract class ApiManager {
             return;
         }
 
-        if (!PreferencesHelper.isNumeric(httpResponse)) {
+        if (!NumbersHelper.isNumeric(httpResponse)) {
             getRequestResult();
         } else {
             error = true;

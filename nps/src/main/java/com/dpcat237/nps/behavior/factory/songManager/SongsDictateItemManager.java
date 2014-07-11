@@ -2,20 +2,17 @@ package com.dpcat237.nps.behavior.factory.songManager;
 
 
 import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
+import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
-import com.dpcat237.nps.database.repository.DictateItemRepository;
 
 public class SongsDictateItemManager extends SongsManager {
     protected DictateItemRepository itemRepo;
     private static final String TAG = "NPS:SongsDictateItemManager";
 
-    public void getListItems(Integer feedId) {
-        listItems = itemRepo.getUnreadItemsByFeed(feedId);
-    }
-
-    public void getLists() {
-        lists = feedRepo.getLists();
+    protected void getListItems() {
+        listItems = itemRepo.getUnreadItems();
     }
 
     @Override
@@ -31,20 +28,38 @@ public class SongsDictateItemManager extends SongsManager {
         itemRepo.open();
     }
 
-    public void setCreatorType() {
+    protected void setCreatorType() {
         grabberType = SongConstants.GRABBER_TYPE_DICTATE_ITEM;
     }
 
-    public void setSongContent(Song song, ListItem listItem) {
+    protected void setSongContent(Song song, ListItem listItem) {
         String content = song.getListTitle()+" "+song.getTitle()+" "+listItem.getText();
         song.setContent(content);
     }
 
-    public void getListItem(Integer itemId){
-        songListItem =  itemRepo.getListItem(itemId);
+    protected void getListItem(Integer itemApiId){
+        songListItem =  itemRepo.getListItem(itemApiId);
+        if (songListItem == null) {
+            error = true;
+        }
     }
 
-    public void markAsDictated(Integer itemId) {
-        itemRepo.readItem(itemId, false);
+    protected void markAsDictated(Integer itemApiId) {
+        itemRepo.readItem(itemApiId, false);
+    }
+
+    protected void markTtsError(Integer itemApiId) {
+        itemRepo.markItemTtsError(itemApiId);
+    }
+
+    protected void createSongsProcess() {
+        getListItems();
+        createListSongs();
+    }
+
+    protected void createListSong(ListItem listItem) {
+        Feed list = feedRepo.getFeed(listItem.getListApiId());
+        Song song = createSong(list, listItem);
+        songRepo.addSong(song);
     }
 }

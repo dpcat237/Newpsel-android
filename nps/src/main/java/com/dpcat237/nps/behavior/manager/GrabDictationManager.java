@@ -2,7 +2,9 @@ package com.dpcat237.nps.behavior.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -35,6 +37,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     private Boolean grabbedSongs = false;
     private String dictationTypes[] = new String[] {SongConstants.GRABBER_TYPE_TITLE, SongConstants.GRABBER_TYPE_DICTATE_ITEM};
     private Integer dictationTypesCount;
+    private File soundFile;
 
     private GrabDictationManager(Context context) {
         mContext = context;
@@ -67,6 +70,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
             Log.d(TAG, "tut: process finishProcess ");
             return;
         }
+        setSpeechSpeed();
         setSongsCursor();
         startGrabDictationTypeSongs();
     }
@@ -86,10 +90,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     private void startGrabDictationTypeSongs()
     {
         if (songGrabManager.areError()) {
-            Log.d(TAG, "tut: songGrabManager.areError - nextDictationType");
             nextDictationType();
         } else {
-            Log.d(TAG, "tut: startGrabDictationTypeSongs ");
             grabbedSongs = false;
             voicesFolder = fileService.getVoicesFolder();
             currentSong = songGrabManager.getCurrentSong();
@@ -113,9 +115,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     private void setDictationLanguage() {
         Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(currentSong.getLanguage(), mTts);
-        Log.d(TAG, "tut: setDictationLanguage "+currentSong.getLanguage());
         if (localeTTs != null && mTts.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
-            Log.d(TAG, "tut: setDictationLanguage Ok");
             mTts.setLanguage(localeTTs);
         }
     }
@@ -127,8 +127,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     @SuppressLint("NewApi")
-    private void setTtsListener()
-    {
+    private void setTtsListener() {
         final GrabDictationManager callWithResult = this;
         if (Build.VERSION.SDK_INT >= 15) {
             int listenerResult =
@@ -137,10 +136,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
                         public void onDone(String utteranceId) { callWithResult.onDone(); }
 
                         @Override
-                        public void onError(String utteranceId) {
-                            callWithResult.grabNextSong();
-                            Log.d(TAG, "tut: onError "+utteranceId);
-                        }
+                        public void onError(String utteranceId) { callWithResult.onError(); }
 
                         @Override
                         public void onStart(String utteranceId) {
@@ -187,20 +183,33 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         }
     }
 
-    public void onDone()
-    {
+    public void onDone() {
         grabbedSongs = true;
-        Log.d(TAG, "tut: onDone "+currentSong.getId());
+        Log.d(TAG, "tut: onDone "+currentSong.getId()+" file: "+soundFile.length());
         songGrabManager.setAsGrabbedSong(currentSong.getId());
         grabNextSong();
     }
 
-    private void createSongFile() {
-        songFilename = voicesFolder.getAbsolutePath()+"/"+currentSong.getFilename();
-        File soundFile = new File(songFilename);
-        if (soundFile.exists()) {
+    public void onError() {
+        Log.d(TAG, "tut: onError "+currentSong.getId()+" file: "+soundFile.length());
+        if (soundFile.length() < 1) {
+            songGrabManager.markTtsError(currentSong);
+            deleteSongFile();
+        }
+
+        grabNextSong();
+    }
+
+    private void deleteSongFile() {
+        if (soundFile != null && soundFile.exists()) {
             soundFile.delete();
         }
+    }
+
+    private void createSongFile() {
+        songFilename = voicesFolder.getAbsolutePath()+"/"+currentSong.getFilename();
+        soundFile = new File(songFilename);
+        deleteSongFile();
     }
 
     private void grabSong() {
@@ -208,8 +217,9 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         String utteranceID = "wpta";
         myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
         mTts.synthesizeToFile(currentSong.getContent(), myHashRender, songFilename);
-        Log.d(TAG, "tut: grabSong "+currentSong.getId());
-        //Log.d(TAG, "tut: grabSong getContent"+currentSong.getContent());
+
+        Log.d(TAG, "tut: grabSong "+currentSong.getId()+" title: "+currentSong.getTitle());
+        //Log.d(TAG, "tut: grabSong getContent:  "+currentSong.getContent());
     }
 
     public Boolean isRunning() {
@@ -229,7 +239,14 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     private void finishProcess() {
+        Log.d(TAG, "tut: finishProcess");
         running = false;
         dictationTypesCount=0;
+    }
+
+    private void setSpeechSpeed() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Float speechRate = Float.parseFloat(pref.getString("pref_dictation_speed", "1.0f"));
+        mTts.setSpeechRate(speechRate);
     }
 }

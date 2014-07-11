@@ -24,22 +24,23 @@ public abstract class SongsManager {
     protected ListItem songListItem;
     protected Boolean error = false;
 
-    protected void createListSongs(List list) {
+
+    protected void createListSongs() {
         if (listItems.size() < 1) {
             return;
         }
+
         for (ListItem listItem : listItems) {
-            if (!isSongExists(list.getApiId(), listItem.getId())) {
-                Song song = createSong(list, listItem);
-                songRepo.addSong(song);
+            if (!isSongExists(listItem.getListApiId(), listItem.getItemApiId())) {
+                createListSong(listItem);
             }
         }
     }
 
-    protected Song  createSong(List list, ListItem listItem) {
+    protected Song createSong(List list, ListItem listItem) {
         Song song = new Song();
         song.setListId(list.getApiId());
-        song.setItemId(listItem.getApiId());
+        song.setItemApiId(listItem.getItemApiId());
         song.setListTitle(list.getTitle());
         song.setTitle(listItem.getTitle());
         song.setType(grabberType);
@@ -55,16 +56,11 @@ public abstract class SongsManager {
     }
 
     public void createSongs() {
-        getLists();
-
-        for (List list : lists) {
-            getListItems(list.getApiId());
-            createListSongs(list);
-        }
+        createSongsProcess();
     }
 
-    protected Boolean isSongExists(Integer listId, Integer itemId) {
-        return songRepo.checkListSongExists(listId, itemId, grabberType);
+    protected Boolean isSongExists(Integer listApiId, Integer itemApiId) {
+        return songRepo.checkListSongExists(listApiId, itemApiId, grabberType);
     }
 
     protected void openDB() {
@@ -99,7 +95,10 @@ public abstract class SongsManager {
     }
 
     private Song setSongExtraData(Song song) {
-        getListItem(song.getItemId());
+        getListItem(song.getItemApiId());
+        if (error) {
+            return null;
+        }
         setSongContent(song, songListItem);
         song.setLanguage(songListItem.getLanguage());
 
@@ -107,16 +106,22 @@ public abstract class SongsManager {
     }
 
     public Song getNextSong() {
-        Song song = null;
+        Song song;
         if (songsCursor.isLast()) {
             error = true;
 
-            return song;
+            return null;
         }
 
-        songsCursor.moveToNext();
-        song = songRepo.cursorToSong(songsCursor);
-        song = setSongExtraData(song);
+        try {
+            songsCursor.moveToNext();
+            song = songRepo.cursorToSong(songsCursor);
+            song = setSongExtraData(song);
+        } catch (Exception e) {
+            error = true;
+
+            return null;
+        }
 
         return song;
     }
@@ -131,13 +136,19 @@ public abstract class SongsManager {
 
     public void markAsPlayed(Song song) {
         songRepo.markAsPlayed(song.getId());
-        markAsDictated(song.getItemId());
+        markAsDictated(song.getItemApiId());
     }
 
-    abstract void getLists();
-    abstract void getListItems(Integer listId);
-    abstract void setCreatorType();
-    abstract void setSongContent(Song song, ListItem listItem);
-    abstract void getListItem(Integer itemId);
-    abstract void markAsDictated(Integer itemId);
+    public void markTtsError(Song song) {
+        songRepo.deleteSong(song.getId());
+        markTtsError(song.getItemApiId());
+    }
+
+    abstract protected void setCreatorType();
+    abstract protected void setSongContent(Song song, ListItem listItem);
+    abstract protected void getListItem(Integer itemId);
+    abstract protected void markAsDictated(Integer itemApiId);
+    abstract protected void markTtsError(Integer itemApiId);
+    abstract protected void createSongsProcess();
+    abstract protected void createListSong(ListItem listItem);
 }

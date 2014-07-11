@@ -19,14 +19,14 @@ import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 public class LabelsDialog extends DialogFragment{
-	Context mContext;
-	Item item;
+    private Context mContext;
+    private Integer itemApiId;
 	private LabelRepository labelRepo;
-	ArrayAdapter<Label> adapter;
+    private ArrayAdapter<Label> adapter;
 
-	public LabelsDialog(Context context, Item selectedItem) {
+	public LabelsDialog(Context context, Integer itemApiId) {
 		mContext = context;
-		item = selectedItem;
+        this.itemApiId = itemApiId;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class LabelsDialog extends DialogFragment{
 		    public void onClick(DialogInterface dialog, int position) {
 		    	Label label = adapter.getItem(position);
 		    	
-		    	SetLabelTask task = new SetLabelTask(mContext, item.getApiId(), label);
+		    	SetLabelTask task = new SetLabelTask(mContext, itemApiId, label);
 				task.execute();
 		    }
 		});

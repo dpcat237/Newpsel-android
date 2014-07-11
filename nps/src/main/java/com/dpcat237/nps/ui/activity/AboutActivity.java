@@ -7,14 +7,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.DownloadSongsService;
 import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
 
 public class AboutActivity extends Activity {
+    private static final String TAG = "NPS:AboutActivity";
 	private Context mContext;
 	private View mView;
 	
@@ -36,11 +39,5 @@ public class AboutActivity extends Activity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-
-        /*Intent downloadSongsService = new Intent(mContext, DownloadSongsService.class);
-        startService(downloadSongsService);*/
-
-        /*Intent downloadSongsService = new Intent(mContext, SyncDictationItemsService.class);
-        startService(downloadSongsService);*/
-	}
+    }
 }

@@ -64,12 +64,12 @@ public class SyncDictationItemsService extends IntentService {
             return false;
         }
 
-        Boolean wifiEnabled = pref.getBoolean("pref_dictation_later_wifi_enable", false);
+        Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
         if (wifiEnabled && ConnectionHelper.hasWifiConnection(mContext)) {
             return true;
         }
 
-        Boolean mobileEnabled = pref.getBoolean("pref_dictation_later_mobile_enable", false);
+        Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
         if (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext)) {
             return true;
         }
@@ -81,7 +81,6 @@ public class SyncDictationItemsService extends IntentService {
         Log.d(TAG, "tut: startProcess");
         syncManager.syncDictations();
         if (PreferencesHelper.areNewDictationItems(mContext)) {
-            //TODO: create songs without feed too!
             songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_DICTATE_ITEM, mContext);
             PreferencesHelper.setNewDictationItems(mContext, false);
             Log.d(TAG, "tut: createSongs done");

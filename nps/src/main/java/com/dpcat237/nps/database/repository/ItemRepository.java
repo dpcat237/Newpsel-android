@@ -3,12 +3,10 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.ItemTable;
-import com.dpcat237.nps.database.table.NPSDatabase;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.ListItem;
 
@@ -18,11 +16,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ItemRepository {
-
-	// Database fields
-	private SQLiteDatabase database;
-	private NPSDatabase dbHelper;
+public class ItemRepository extends BaseRepository {
 	private String[] allColumns = {
 			ItemTable.COLUMN_ID,
 			ItemTable.COLUMN_API_ID,
@@ -36,7 +30,6 @@ public class ItemRepository {
 			ItemTable.COLUMN_DATE_ADD,
             ItemTable.COLUMN_LANGUAGE
 			};
-
     private String[] listItemColumns = {
             ItemTable.COLUMN_ID,
             ItemTable.COLUMN_API_ID,
@@ -44,7 +37,6 @@ public class ItemRepository {
             ItemTable.COLUMN_TITLE,
             ItemTable.COLUMN_LANGUAGE
     };
-
     private String[] listItemContentColumns = {
             ItemTable.COLUMN_ID,
             ItemTable.COLUMN_API_ID,
@@ -53,18 +45,11 @@ public class ItemRepository {
             ItemTable.COLUMN_LANGUAGE
     };
 
+
 	public ItemRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
 	}
 
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
-	}
-
-	public void close() {
-		dbHelper.close();
-	}
-	
 	public void addItem(Item item) {
 		if (!checkItemExists(item.getApiId())) {
 			ContentValues values = new ContentValues();
@@ -203,7 +188,7 @@ public class ItemRepository {
 		item.setContent(cursor.getString(6));
 		item.setIsStared(cursor.getInt(7)>0);
 		item.setIsUnread(cursor.getInt(8)>0);
-		item.setDateAdd(cursor.getLong(9));
+		item.setDateAdd(cursor.getInt(9));
         item.setLanguage(cursor.getString(10));
 
 		return item;
@@ -224,6 +209,7 @@ public class ItemRepository {
         ListItem listenItem = new ListItem();
         listenItem.setId(cursor.getInt(0));
         listenItem.setApiId(cursor.getInt(1));
+        listenItem.setItemApiId(cursor.getInt(1));
         listenItem.setTitle(cursor.getString(2));
         listenItem.setContent(cursor.getString(3));
         listenItem.setLanguage(cursor.getString(4));
@@ -231,11 +217,11 @@ public class ItemRepository {
         return listenItem;
     }
 	
-	public void readItem(Integer itemId, Boolean isUnread) {
+	public void readItem(Integer itemApiId, Boolean isUnread) {
 		ContentValues values = new ContentValues();
 		values.put(ItemTable.COLUMN_IS_UNREAD, isUnread);
-		String where = ItemTable.COLUMN_ID+"=?";
-		String[] args = new String[] {""+itemId+""};
+		String where = ItemTable.COLUMN_API_ID+"=?";
+		String[] args = new String[] {""+itemApiId+""};
 		database.update(ItemTable.TABLE_ITEM, values, where, args);
 	}
 	

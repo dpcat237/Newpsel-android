@@ -7,22 +7,28 @@ import com.dpcat237.nps.database.repository.ItemRepository;
 
 public class ReadItemTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
-	private Integer itemId;
+	private Integer itemApiId;
 	ItemRepository itemRepo;
 	Boolean isUnread;
 	
-	public ReadItemTask(Context context, Integer itemIntentId, Boolean unread) {
-        mContext = context;
-        itemId = itemIntentId;
-        isUnread = unread;
-        itemRepo = new ItemRepository(mContext);
+	public ReadItemTask(Context context, Integer itemApiId, Boolean unread) {
+        this.mContext = context;
+        this.itemApiId = itemApiId;
+        this.isUnread = unread;
+        this.itemRepo = new ItemRepository(mContext);
         itemRepo.open();
     }
     
 	@Override
 	protected Void doInBackground(Void... params) {
-		itemRepo.readItem(itemId, isUnread);
+		itemRepo.readItem(itemApiId, isUnread);
 		
 		return null;
 	}
+
+    @Override
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        itemRepo.close();
+    }
 }

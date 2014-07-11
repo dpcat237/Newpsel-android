@@ -100,7 +100,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		error = (Boolean) result.get("error");
 
 		if (feeds != null && !error) {
-			updateProgress(10); //TODO: count download progress
+			updateProgress(10);
 			Integer lastUpdate = 0;
 			Integer count = 0;
 			Integer total = feeds.length;
@@ -140,7 +140,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		error = (Boolean) result.get("error");
 
 		if (items != null) {
-			updateProgress(50); //TODO: count download progress
+			updateProgress(50);
 			Integer count = 0;
 			Integer total = items.length;
 			
@@ -171,7 +171,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		result = api.syncLabels(PreferencesHelper.generateKey(mContext), changedLabels, PreferencesHelper.getLastLabelsUpdate(mContext));
 		Label[] labels = (Label[]) result.get("labels");
 		error = (Boolean) result.get("error");
-		updateProgress(75); //TODO: count download progress
+		updateProgress(75);
 		
 		if (!error) {
 			Integer lastUpdate = 0;
@@ -252,7 +252,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         labelRepo.close();
 
         if (((MainActivity) mContext).isInFront) {
-          ((MainActivity) mContext).updateFragment();
+          ((MainActivity) mContext).reloadList();
 
           Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
         }

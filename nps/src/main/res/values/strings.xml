@@ -24,6 +24,7 @@
     <string name="action_drop_db">Drop DB</string>
     <string name="action_check">Check this</string>
     <string name="action_speech">Speech</string>
+    <string name="activity_articles">New articles</string>
 
     <!-- Toast -->
     <string name="ts_successfully_saved">Page successfully saved to </string>
@@ -76,6 +77,7 @@
     <string name="no_new_articles">Aren\'t new articles</string>
     <string name="drawer_item_unread">Unread articles</string>
     <string name="drawer_item_all">All articles</string>
+    <string name="drawer_item_dictate">Dictation articles</string>
 
     <!-- Item -->
     <string name="button_dictate">Dictate</string>
@@ -87,8 +89,9 @@
 
     <!-- Drawer -->
     <string-array name="feeds_list_array">
-        <item>Unread</item>
-        <item>All</item>
+        <item>@string/drawer_item_unread</item>
+        <item>@string/drawer_item_all</item>
+        <item>@string/drawer_item_dictate</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -151,6 +154,7 @@
     <string name="button_pause_play">Play / Pause</string>
     <string name="notification_last_track">Player stopped because was last track</string>
     <string name="player_nt_finish_titles">Finished dictation of headlines</string>
+    <string name="player_start_problem">Are some problem to play this song</string>
     
     <!-- Settings -->
     <string name="label_st">Settings</string>
@@ -179,9 +183,23 @@
         <item>Larger</item>
     </string-array>
     <string-array name="st_list_size_list_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>14</item>
+        <item>17</item>
+        <item>20</item>
+    </string-array>
+    <string name="st_dictation_speed">Dictation speed</string>
+    <string name="st_dictation_speed_s">Adjust dictation speed</string>
+    <string-array name="st_list_dictation_speed_titles">
+        <item>Slow</item>
+        <item>Normal</item>
+        <item>Fast</item>
+        <item>Very Fast</item>
+    </string-array>
+    <string-array name="st_list_dictation_speed_values">
+        <item>0.5f</item>
+        <item>1.0f</item>
+        <item>1.5f</item>
+        <item>2.0f</item>
     </string-array>
     <string name="st_other">Other</string>
     <string name="st_dictation_preference">Dictation preference</string>
@@ -201,7 +219,7 @@
     <string name="st_dictation_label">Dictation label</string>
     <string name="st_dictation_label_select">Select label which articles you want listen</string>
     <string name="st_services">Services</string>
-    <string name="st_items_download">News download</string>
+    <string name="st_items_download">Download news</string>
     <string name="st_items_download_check">Check to enable news download</string>
 
     <string name="hello_world">Now Playing:</string>

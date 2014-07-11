@@ -22,11 +22,11 @@ public class Song extends Generic {
         this.list_id = listId;
     }
 
-    public Integer getItemId() {
+    public Integer getItemApiId() {
         return item_id;
     }
 
-    public void setItemId(Integer itemId) {
+    public void setItemApiId(Integer itemId) {
         this.item_id = itemId;
     }
 

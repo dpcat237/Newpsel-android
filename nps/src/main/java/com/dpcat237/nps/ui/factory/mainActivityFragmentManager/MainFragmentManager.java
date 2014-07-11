@@ -22,6 +22,7 @@ public abstract class MainFragmentManager {
     }
 
     public void prepareAdapter() {
+        setTitle();
         setItems();
         setAdapter();
         setOnClickListener();
