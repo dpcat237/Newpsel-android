@@ -14,19 +14,17 @@ import java.util.ArrayList;
 
 public class SettingsActivity extends PreferenceActivity {
     private static final String TAG = "NPS:SettingsActivity";
-    public Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        mContext = getApplicationContext();
 
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 	}
 
-    public class SettingsFragment extends PreferenceFragment {
+    public static class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -37,7 +35,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
 
         private void setListenLabel(ListPreference labelsList) {
-            LabelRepository labelRepo = new LabelRepository(mContext);
+            LabelRepository labelRepo = new LabelRepository(getActivity());
             labelRepo.open();
             ArrayList<Label> labels = labelRepo.getAllLabels();
             labelRepo.close();
