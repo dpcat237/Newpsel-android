@@ -35,7 +35,6 @@ public class DictateItemRepository extends BaseRepository {
     private String[] syncColumns = {
             DictateItemTable.COLUMN_API_ID,
             DictateItemTable.COLUMN_IS_UNREAD,
-            DictateItemTable.COLUMN_HAS_TTS_ERROR
     };
     private String[] listItemColumns = {
             DictateItemTable.COLUMN_ID,
@@ -113,7 +112,6 @@ public class DictateItemRepository extends BaseRepository {
         try {
             item.put("api_id", cursor.getInt(0));
             item.put("is_unread", cursor.getInt(1));
-            item.put("has_tts_error", cursor.getInt(2));
         } catch (JSONException e) {
             Log.e(TAG, "Error", e);
         }
