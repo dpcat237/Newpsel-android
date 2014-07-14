@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.receiver.AlarmReceiver;
+import com.dpcat237.nps.behavior.receiver.AlarmRemoveOldReceiver;
+import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
 import com.dpcat237.nps.behavior.receiver.BootReceiver;
 
 public class ReceiverHelper {
@@ -20,8 +21,15 @@ public class ReceiverHelper {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        AlarmReceiver alarm = new AlarmReceiver();
-        alarm.setAlarm(context);
+        enableAlarms(context);
+    }
+
+    private static void enableAlarms(Context context) {
+        AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
+        alarmSyncDictations.setAlarm(context);
+
+        AlarmRemoveOldReceiver alarmRemoveOld = new AlarmRemoveOldReceiver();
+        alarmRemoveOld.setAlarm(context);
     }
 
     public static void disableBootReceiver(Context context) {
@@ -32,7 +40,14 @@ public class ReceiverHelper {
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
 
-        AlarmReceiver alarm = new AlarmReceiver();
-        alarm.cancelAlarm(context);
+        cancelAlarms(context);
+    }
+
+    private static void cancelAlarms(Context context) {
+        AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
+        alarmSyncDictations.cancelAlarm(context);
+
+        AlarmRemoveOldReceiver alarmRemoveOld = new AlarmRemoveOldReceiver();
+        alarmRemoveOld.cancelAlarm(context);
     }
 }

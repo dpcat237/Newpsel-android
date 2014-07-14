@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
 
 import com.dpcat237.nps.behavior.service.CreateSongsService;
 import com.dpcat237.nps.behavior.service.DownloadSongsService;
@@ -18,15 +17,13 @@ import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
  * and then starts the IntentService {@code SampleSchedulingService} to do some work.
  */
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+public class AlarmSyncDictationsReceiver extends WakefulBroadcastReceiver {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
-    private static final String TAG = "NPS:AlarmReceiver";
+    private static final String TAG = "NPS:AlarmSyncDictationsReceiver";
   
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "tut: onReceive");
-
         Intent createSongsService = new Intent(context, CreateSongsService.class);
         startWakefulService(context, createSongsService);
 
@@ -43,13 +40,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
      * @param context
      */
     public void setAlarm(Context context) {
-        Log.d(TAG, "tut: setAlarm");
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmSyncDictationsReceiver.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         //https://developer.android.com/training/scheduling/alarms.html
-        Integer interval = 15*60;
+        Integer interval = 15*60; //15 minutes
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5*1000, interval*1000, alarmIntent);
 
         ComponentName receiver = new ComponentName(context, BootReceiver.class);

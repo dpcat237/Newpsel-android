@@ -78,7 +78,6 @@ public class SyncDictationItemsManager {
             setLastSyncCount(newCount);
         }
         dictateRepo.deleteReadItems();
-        //dictateRepo.deleteItemsTtsError();
         dictateRepo.close();
         Log.d(TAG, "tut: finish syncDictations");
     }

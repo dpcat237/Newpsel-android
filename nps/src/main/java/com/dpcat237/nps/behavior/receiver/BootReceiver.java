@@ -3,7 +3,6 @@ package com.dpcat237.nps.behavior.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * This BroadcastReceiver automatically (re)starts the alarm when the device is
@@ -13,14 +12,14 @@ import android.util.Log;
  * device will not trigger this receiver.
  */
 public class BootReceiver extends BroadcastReceiver {
-    AlarmReceiver alarm = new AlarmReceiver();
-    private static final String TAG = "NPS:BootReceiver";
+    private AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
+    private AlarmRemoveOldReceiver alarmRemoveOld = new AlarmRemoveOldReceiver();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            Log.d(TAG, "tut: onReceive");
-            alarm.setAlarm(context);
+            alarmSyncDictations.setAlarm(context);
+            alarmRemoveOld.setAlarm(context);
         }
     }
 }

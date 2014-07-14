@@ -7,13 +7,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.behavior.receiver.AlarmReceiver;
 
 public class CreateSongsService extends IntentService {
-    private static final String TAG = "NPS:DownloadSongsService";
+    private static final String TAG = "NPS:CreateSongsService";
     private volatile static Boolean running = false;
     private Intent mIntent;
     private Context mContext;
@@ -64,7 +64,7 @@ public class CreateSongsService extends IntentService {
         songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
 
         running = false;
-        AlarmReceiver.completeWakefulIntent(mIntent);
+        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }

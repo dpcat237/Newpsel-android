@@ -7,12 +7,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.behavior.manager.SyncDictationItemsManager;
-import com.dpcat237.nps.behavior.receiver.AlarmReceiver;
 
 public class SyncDictationItemsService extends IntentService {
     private static final String TAG = "NPS:SyncDictationItemsService";
@@ -87,7 +87,7 @@ public class SyncDictationItemsService extends IntentService {
         }
 
         running = false;
-        AlarmReceiver.completeWakefulIntent(mIntent);
+        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }
