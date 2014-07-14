@@ -20,13 +20,13 @@ android {
         applicationId "com.dpcat237.nps"
         minSdkVersion 15
         targetSdkVersion 20
-        versionCode 128
-        versionName '0.1.28'
+        versionCode 129
+        versionName '0.1.29'
     }
     buildTypes {
         debug {
             debuggable true
-            //packageNameSuffix '.debug'
+            applicationIdSuffix '.debug'
             runProguard false
         }
         release {
