@@ -34,7 +34,8 @@ public class DictateItemRepository extends BaseRepository {
 			};
     private String[] syncColumns = {
             DictateItemTable.COLUMN_API_ID,
-            DictateItemTable.COLUMN_IS_UNREAD
+            DictateItemTable.COLUMN_IS_UNREAD,
+            DictateItemTable.COLUMN_HAS_TTS_ERROR
     };
     private String[] listItemColumns = {
             DictateItemTable.COLUMN_ID,
@@ -54,36 +55,29 @@ public class DictateItemRepository extends BaseRepository {
 	}
 
 	public void addItem(DictateItem item) {
-		if (!checkItemExists(item.getApiId())) {
-			ContentValues values = new ContentValues();
-			values.put(DictateItemTable.COLUMN_API_ID, item.getApiId());
-            values.put(DictateItemTable.COLUMN_ITEM_ID, item.getItemApiId());
-            values.put(DictateItemTable.COLUMN_FEED_ID, item.getFeedApiId());
-            values.put(DictateItemTable.COLUMN_LATER_ID, item.getLabelApiId());
-            values.put(DictateItemTable.COLUMN_IS_UNREAD, item.isUnread());
-            values.put(DictateItemTable.COLUMN_DATE_ADD, item.getDateAdd());
-            values.put(DictateItemTable.COLUMN_LANGUAGE, item.getLanguage());
-            values.put(DictateItemTable.COLUMN_LINK, item.getLink());
-            values.put(DictateItemTable.COLUMN_TITLE, item.getTitle());
-            values.put(DictateItemTable.COLUMN_CONTENT, item.getContent());
-            values.put(DictateItemTable.COLUMN_TEXT, item.getText());
-            values.put(DictateItemTable.COLUMN_HAS_TTS_ERROR, item.hasTtsError());
-			database.insert(DictateItemTable.TABLE_NAME, null, values);
-		}
+        ContentValues values = new ContentValues();
+        values.put(DictateItemTable.COLUMN_API_ID, item.getApiId());
+        values.put(DictateItemTable.COLUMN_ITEM_ID, item.getItemApiId());
+        values.put(DictateItemTable.COLUMN_FEED_ID, item.getFeedApiId());
+        values.put(DictateItemTable.COLUMN_LATER_ID, item.getLabelApiId());
+        values.put(DictateItemTable.COLUMN_IS_UNREAD, item.isUnread());
+        values.put(DictateItemTable.COLUMN_DATE_ADD, item.getDateAdd());
+        values.put(DictateItemTable.COLUMN_LANGUAGE, item.getLanguage());
+        values.put(DictateItemTable.COLUMN_LINK, item.getLink());
+        values.put(DictateItemTable.COLUMN_TITLE, item.getTitle());
+        values.put(DictateItemTable.COLUMN_CONTENT, item.getContent());
+        values.put(DictateItemTable.COLUMN_TEXT, item.getText());
+        values.put(DictateItemTable.COLUMN_HAS_TTS_ERROR, item.hasTtsError());
+        database.insert(DictateItemTable.TABLE_NAME, null, values);
 	}
 	
 	public Boolean checkItemExists(Integer apiId){
-		Boolean result = false;
 		String[] columns = new String[] {DictateItemTable.COLUMN_API_ID};
 		String where = DictateItemTable.COLUMN_API_ID+"=?";
 		String[] args = new String[] {""+apiId+""};
 		Cursor cursor = database.query(DictateItemTable.TABLE_NAME, columns, where, args, null, null, null);
 		
-		if (cursor.getCount() > 0) {
-			result = true;
-		}
-		
-		return result;
+        return (cursor.getCount() > 0);
 	}
 
     public Integer countUnreadItems() {
@@ -108,8 +102,9 @@ public class DictateItemRepository extends BaseRepository {
             items.put(cursorToItemSync(cursor));
             cursor.moveToNext();
         }
-
         cursor.close();
+        Log.d(TAG, "tut: "+cursor.getCount());
+
         return items;
     }
 
@@ -118,6 +113,7 @@ public class DictateItemRepository extends BaseRepository {
         try {
             item.put("api_id", cursor.getInt(0));
             item.put("is_unread", cursor.getInt(1));
+            item.put("has_tts_error", cursor.getInt(2));
         } catch (JSONException e) {
             Log.e(TAG, "Error", e);
         }
@@ -138,7 +134,7 @@ public class DictateItemRepository extends BaseRepository {
     }
 
     public void deleteItem(Integer itemApiId) {
-        String where = DictateItemTable.COLUMN_API_ID+"=?";
+        String where = DictateItemTable.COLUMN_ITEM_ID+"=?";
         String[] args = new String[] {""+itemApiId+""};
         database.delete(DictateItemTable.TABLE_NAME, where, args);
     }
@@ -149,25 +145,6 @@ public class DictateItemRepository extends BaseRepository {
         Integer hasError = 0;
         String where = DictateItemTable.COLUMN_IS_UNREAD+"=? AND "+DictateItemTable.COLUMN_HAS_TTS_ERROR+"=?";
         String[] args = new String[] {""+isUnread+"", ""+hasError+""};
-        String orderBy = DictateItemTable.COLUMN_DATE_ADD+" DESC";
-        Cursor cursor = database.query(DictateItemTable.TABLE_NAME, listItemColumns, where, args, null, null, orderBy);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            ListItem item = cursorToListItem(cursor);
-            items.add(item);
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return items;
-    }
-
-    public ArrayList<ListItem> getUnreadItemsByFeed(Integer feedId) {
-        ArrayList<ListItem> items = new ArrayList<ListItem>();
-        Integer isUnread = 1;
-        String where = DictateItemTable.COLUMN_FEED_ID+"=? AND "+DictateItemTable.COLUMN_IS_UNREAD+"=?";
-        String[] args = new String[] {""+feedId+"", ""+isUnread+""};
         String orderBy = DictateItemTable.COLUMN_DATE_ADD+" DESC";
         Cursor cursor = database.query(DictateItemTable.TABLE_NAME, listItemColumns, where, args, null, null, orderBy);
 

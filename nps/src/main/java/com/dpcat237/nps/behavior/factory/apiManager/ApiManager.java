@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ApiManager {
+    private static final String TAG = "NPS:ApiManager";
     protected JSONObject jsonData;
     protected Map<String, Object> result;
     protected Boolean error;
@@ -45,6 +46,7 @@ public abstract class ApiManager {
     private void prepareData() {
         try {
             jsonString = jsonData.toString();
+            //Log.d(TAG, "tut: request: "+jsonString);
             jsonEntity = new StringEntity(jsonString);
             setRequestData(jsonEntity);
         } catch (UnsupportedEncodingException e) {

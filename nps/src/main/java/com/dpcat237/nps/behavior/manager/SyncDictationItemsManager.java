@@ -53,19 +53,23 @@ public class SyncDictationItemsManager {
         error = (Boolean) result.get("error");
         if (error || items.length < 1) {
             Log.d(TAG, "tut: arant items");
+            dictateRepo.deleteReadItems();
             finish();
 
             return;
         }
 
         Integer newCount = 0;
+        Log.d(TAG, "tut: downloaded items "+items.length);
         for (DictateItem item : items) {
             if (item.isUnread()) {
-                dictateRepo.addItem(item);
-                //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText());
-                newCount++;
+                if (!dictateRepo.checkItemExists(item.getApiId())) {
+                    dictateRepo.addItem(item);
+                    newCount++;
+                    //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText());
+                }
             } else {
-                removeItem(item.getApiId());
+                removeItem(item.getItemApiId());
             }
         }
 
@@ -74,7 +78,7 @@ public class SyncDictationItemsManager {
             setLastSyncCount(newCount);
         }
         dictateRepo.deleteReadItems();
-        dictateRepo.deleteItemsTtsError();
+        //dictateRepo.deleteItemsTtsError();
         dictateRepo.close();
         Log.d(TAG, "tut: finish syncDictations");
     }
