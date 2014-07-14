@@ -58,7 +58,7 @@ public class SharedReceiver extends Activity {
 	}
 
     public void savedShared(Label label) {
-        Toast.makeText(mContext, mContext.getString(R.string.ts_successfully_saved)+label.getName()+" "+mContext.getString(R.string.label_s)+".", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getString(R.string.ts_successfully_saved)+" "+label.getName()+" "+mContext.getString(R.string.label_s)+".", Toast.LENGTH_LONG).show();
 
         String subject = extras.getString(Intent.EXTRA_SUBJECT);
         String link = pullLink(extras.getString(Intent.EXTRA_TEXT));
