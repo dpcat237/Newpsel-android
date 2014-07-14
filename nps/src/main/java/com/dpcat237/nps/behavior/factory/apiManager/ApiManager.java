@@ -5,6 +5,7 @@ import android.util.Log;
 import com.dpcat237.nps.helper.NumbersHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,6 +24,7 @@ public abstract class ApiManager {
     protected HttpClient httpClient;
     protected StringEntity jsonEntity;
     protected String jsonString;
+    protected HttpResponse response;
     protected String httpResponse;
 
     public void setup(JSONObject jsonData) {
@@ -50,7 +52,7 @@ public abstract class ApiManager {
             jsonEntity = new StringEntity(jsonString);
             setRequestData(jsonEntity);
         } catch (UnsupportedEncodingException e) {
-            Log.e("ApiHelper - getFeeds", "Error", e);
+            Log.e(TAG, "prepareData", e);
             error = true;
         }
     }
@@ -61,7 +63,7 @@ public abstract class ApiManager {
             return;
         }
 
-        if (!NumbersHelper.isNumeric(httpResponse)) {
+        if (response.getStatusLine().getStatusCode() == 200) {
             getRequestResult();
         } else {
             error = true;

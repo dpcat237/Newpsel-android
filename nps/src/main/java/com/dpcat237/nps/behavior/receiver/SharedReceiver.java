@@ -12,11 +12,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.ConnectionHelper;
-import com.dpcat237.nps.model.Label;
-import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.behavior.task.SaveSharedTask;
 import com.dpcat237.nps.behavior.task.SendSharedTask;
+import com.dpcat237.nps.database.repository.LabelRepository;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

@@ -33,8 +33,6 @@ import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.DictateItem;
-import com.dpcat237.nps.ui.factory.MainFragmentFactory;
 import com.dpcat237.nps.ui.factory.MainFragmentFactoryManager;
 
 public class MainActivity extends Activity {
@@ -221,7 +219,7 @@ public class MainActivity extends Activity {
 	public void downloadData(MenuItem item) {
 		if (ConnectionHelper.hasConnection(this)) {
             item.setEnabled(false);
-			DownloadDataTask task = new DownloadDataTask(this, mView, listView);
+			DownloadDataTask task = new DownloadDataTask(this, mView);
 			task.execute();
 		} else {
 			Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();

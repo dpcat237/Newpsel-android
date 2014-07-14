@@ -10,29 +10,32 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dpcat237.nps.ui.activity.MainActivity;
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
+import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.helper.LoginHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.activity.MainActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginTask extends AsyncTask<Void, Integer, Void>{
-	ApiHelper api;
-	int progress_status;
 	private Context mContext;
 	private View mView;
-	String username;
-	String password;
-	String appKey;
-	Boolean checkLogin = false;
-	ProgressDialog dialog;
+    private String username;
+    private String password;
+    private String appKey;
+    private Boolean checkLogin = false;
+    private ProgressDialog dialog;
+    private ApiFactoryManager apiFactoryManager;
 	
 	public LoginTask(Context context, View view) {
-		api = new ApiHelper();
         mContext = context;
         mView = view;
         getData();
@@ -59,14 +62,23 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 	protected void onPreExecute() {
 		super.onPreExecute();
 		dialog = ProgressDialog.show(mContext, "Loading", "Please wait...", true);
+        apiFactoryManager = new ApiFactoryManager();
 	}
      
 	@Override
 	protected Void doInBackground(Void... params) {
-		Map<String, Object> result = null;
-		Boolean error = false;
-		result = ApiHelper.doLogin(username, password, appKey);
-		error = (Boolean) result.get("error");
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            jsonData.put("appKey", appKey);
+            jsonData.put("username", username);
+            jsonData.put("password", password);
+            result = apiFactoryManager.makeRequest(ApiConstants.URL_SIGN_IN, jsonData);
+        } catch (JSONException e) {
+            result.put("error", true);
+        }
+        Boolean error = (Boolean) result.get("error");
 		
 		if (!error) {
 			checkLogin = true;

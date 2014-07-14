@@ -20,7 +20,7 @@ public abstract class ApiPostManager extends ApiManager {
 
     protected void executeRequest() {
         try {
-            HttpResponse response = httpClient.execute(post);
+            response = httpClient.execute(post);
             httpResponse = EntityUtils.toString(response.getEntity());
             //Log.d(TAG, "tut: httpResponse: "+httpResponse);
         } catch(Exception e) {

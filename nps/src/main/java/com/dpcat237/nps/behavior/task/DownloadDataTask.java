@@ -1,61 +1,52 @@
 package com.dpcat237.nps.behavior.task;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.ui.activity.MainActivity;
-import com.dpcat237.nps.helper.ApiHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.Item;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
+import com.dpcat237.nps.behavior.service.DownloadSongsService;
+import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.SharedRepository;
-import com.dpcat237.nps.behavior.service.DownloadSongsService;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.ui.activity.MainActivity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
-    private ApiHelper api;
     private int progressStatus;
 	private Context mContext;
-	private View mView;
-    private ListView listView;
     private ProgressBar progressBar;
     private FeedRepository feedRepo;
     private ItemRepository itemRepo;
     private LabelRepository labelRepo;
     private SharedRepository sharedRepo;
     private SharedPreferences pref;
+    private ApiFactoryManager apiFactoryManager;
 
-	public DownloadDataTask(Context context, View view, ListView list) {
+	public DownloadDataTask(Context context, View view) {
         mContext = context;
-        mView = view;
-        listView = list;
-        feedRepo = new FeedRepository(mContext);
-        feedRepo.open();
-        itemRepo = new ItemRepository(mContext);
-        itemRepo.open();
-        labelRepo = new LabelRepository(mContext);
-        labelRepo.open();
-        sharedRepo = new SharedRepository(mContext);
-        sharedRepo.open();
-        progressBar = (ProgressBar) mView.findViewById(R.id.progress);
+        openDBs();
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
     
@@ -66,7 +57,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.setMax(100);
 
-        api = new ApiHelper();
+        apiFactoryManager = new ApiFactoryManager();
 	}
      
 	@Override
@@ -87,17 +78,23 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	}
 	
 	private void syncFeeds () {
-		Map<String, Object> result = null;
-		Boolean error = false;
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
         ArrayList<Feed> feedsNow = feedRepo.getAllFeeds();
         Integer feedsUpdate = 0;
         if (feedsNow.size() > 0) {
              feedsUpdate = PreferencesHelper.getLastFeedsUpdate(mContext);
         }
 
-		result = api.getFeeds(PreferencesHelper.generateKey(mContext), feedsUpdate);
+        try {
+            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put("lastUpdate", feedsUpdate);
+            result = apiFactoryManager.makeRequest(ApiConstants.URL_GET_FEEDS, jsonData);
+        } catch (JSONException e) {
+            result.put("error", true);
+        }
 		Feed[] feeds = (Feed[]) result.get("feeds");
-		error = (Boolean) result.get("error");
+		Boolean error = (Boolean) result.get("error");
 
 		if (feeds != null && !error) {
 			updateProgress(10);
@@ -131,13 +128,19 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	
 	private void syncItems () {
 		JSONArray viewedItems = itemRepo.getItemsToSync();
-		Map<String, Object> result = null;
-		Boolean isDownload = true;
-		Boolean error = false;
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
 
-		result = api.getItems(PreferencesHelper.generateKey(mContext), viewedItems, isDownload);
+        try {
+            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put("viewedItems", viewedItems);
+            jsonData.put("isDownload", true);
+            result = apiFactoryManager.makeRequest(ApiConstants.URL_SYNC_ITEMS_UNREAD, jsonData);
+        } catch (JSONException e) {
+            result.put("error", true);
+        }
 		Item[] items = (Item[]) result.get("items");
-		error = (Boolean) result.get("error");
+        Boolean error = (Boolean) result.get("error");
 
 		if (items != null) {
 			updateProgress(50);
@@ -162,15 +165,22 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	
 	@SuppressWarnings("unchecked")
 	private void syncLabels() {
-		Map<String, Object> resultChanged = (Map<String, Object>) labelRepo.getLabelsToSync();
+		Map<String, Object> resultChanged = labelRepo.getLabelsToSync();
 		JSONArray changedLabels = (JSONArray) resultChanged.get("labelsJson");
 		ArrayList<Label> changedLabelsArray = (ArrayList<Label>) resultChanged.get("labelsArray");
-		Map<String, Object> result = null;
-		Boolean error = false;
-		
-		result = api.syncLabels(PreferencesHelper.generateKey(mContext), changedLabels, PreferencesHelper.getLastLabelsUpdate(mContext));
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put("changedLabels", changedLabels);
+            jsonData.put("lastUpdate", PreferencesHelper.getLastLabelsUpdate(mContext));
+            result = apiFactoryManager.makeRequest(ApiConstants.URL_SYNC_LABELS, jsonData);
+        } catch (JSONException e) {
+            result.put("error", true);
+        }
 		Label[] labels = (Label[]) result.get("labels");
-		error = (Boolean) result.get("error");
+        Boolean error = (Boolean) result.get("error");
 		updateProgress(75);
 		
 		if (!error) {
@@ -184,7 +194,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 					} else {
 						labelRepo.addLabel(label, false);
 					}
-					lastUpdate = (int) label.getLastUpdate();
+					lastUpdate = label.getLastUpdate();
 			    }
 			}
 			
@@ -204,12 +214,18 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	private void syncLaterItems() {
 		JSONArray selectedItems = labelRepo.getSelectedItemsToSync();
 		updateProgress(90);
-		Map<String, Object> result = null;
-		Boolean error = false;
-		
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
+
 		if (selectedItems.length() > 0) {
-			result = api.syncLaterItems(PreferencesHelper.generateKey(mContext), selectedItems);
-			error = (Boolean) result.get("error");
+            try {
+                jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+                jsonData.put("laterItems", selectedItems);
+                result = apiFactoryManager.makeRequest(ApiConstants.URL_SYNC_LATER_ITEMS, jsonData);
+            } catch (JSONException e) {
+                result.put("error", true);
+            }
+            Boolean error = (Boolean) result.get("error");
 
 			if (!error) {
 				labelRepo.removeLaterItems();
@@ -221,12 +237,18 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	
 	private void syncSharedItems() {
 		JSONArray sharedItems = sharedRepo.getSharedToSync();
-		Map<String, Object> result = null;
-		Boolean error = false;
+        JSONObject jsonData = new JSONObject();
+        Map<String, Object> result = new HashMap<String, Object>();
 		
 		if (sharedItems.length() > 0) {
-			result = api.syncSharedItems(PreferencesHelper.generateKey(mContext), sharedItems);
-			error = (Boolean) result.get("error");
+            try {
+                jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+                jsonData.put("sharedItems", sharedItems);
+                result = apiFactoryManager.makeRequest(ApiConstants.URL_SYNC_SHARED_ITEMS, jsonData);
+            } catch (JSONException e) {
+                result.put("error", true);
+            }
+			Boolean error = (Boolean) result.get("error");
 			
 			if (!error) {
 				sharedRepo.removeSharedItems();
@@ -235,6 +257,24 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 		
 		updateProgress(100);
 	}
+
+    private void openDBs() {
+        feedRepo = new FeedRepository(mContext);
+        feedRepo.open();
+        itemRepo = new ItemRepository(mContext);
+        itemRepo.open();
+        labelRepo = new LabelRepository(mContext);
+        labelRepo.open();
+        sharedRepo = new SharedRepository(mContext);
+        sharedRepo.open();
+    }
+
+    private void closeDBs() {
+        feedRepo.close();
+        itemRepo.close();
+        labelRepo.close();
+        sharedRepo.close();
+    }
  
 	@Override
 	protected void onProgressUpdate(Integer... values) {
@@ -247,9 +287,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         super.onPostExecute(result);
         progressBar.setVisibility(View.GONE);
         publishProgress(0);
-        feedRepo.close();
-        itemRepo.close();
-        labelRepo.close();
+        closeDBs();
 
         if (((MainActivity) mContext).isInFront) {
           ((MainActivity) mContext).reloadList();
