@@ -26,7 +26,6 @@
         <SwitchPreference
             android:title="@string/st_notifications_enable"
             android:key="pref_notifications_enable"
-            android:summary="@string/st_notifications_enable_check"
             android:defaultValue="true" />
     </PreferenceCategory>
 
