@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,7 +13,7 @@ import android.widget.ListView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.helper.DisplayHelper;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.LabelRepository;
@@ -36,7 +35,11 @@ public class PlayerLabelsDialog extends Activity {
 		super.onCreate(savedInstanceState);
 		mContext = this;
         PlayerService.pause(mContext, PlayerConstants.PAUSE_NOTIFICATION);
-        setContentView(R.layout.dialog_shared_labels);
+        if (DisplayHelper.isTablet(mContext)) {
+            setContentView(R.layout.dialog_shared_labels_tablet);
+        } else {
+            setContentView(R.layout.dialog_shared_labels_mobile);
+        }
 		Intent intent = getIntent();
         ItemRepository itemRepo = new ItemRepository(this);
         itemRepo.open();

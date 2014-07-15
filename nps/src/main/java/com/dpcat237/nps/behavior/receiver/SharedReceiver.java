@@ -16,6 +16,7 @@ import com.dpcat237.nps.behavior.task.SaveSharedTask;
 import com.dpcat237.nps.behavior.task.SendSharedTask;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.DisplayHelper;
 import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
@@ -35,7 +36,12 @@ public class SharedReceiver extends Activity {
 		mContext = this;
 		Intent intent = getIntent();
 		extras = intent.getExtras();
-		setContentView(R.layout.dialog_shared_labels);
+
+        if (DisplayHelper.isTablet(mContext)) {
+            setContentView(R.layout.dialog_shared_labels_tablet);
+        } else {
+            setContentView(R.layout.dialog_shared_labels_mobile);
+        }
         LabelRepository labelRepo = new LabelRepository(this);
 		labelRepo.open();
 
