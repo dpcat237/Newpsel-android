@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
 import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class CreateSongsService extends IntentService {

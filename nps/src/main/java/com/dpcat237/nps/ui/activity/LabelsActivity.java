@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.database.repository.LabelRepository;
+import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
 

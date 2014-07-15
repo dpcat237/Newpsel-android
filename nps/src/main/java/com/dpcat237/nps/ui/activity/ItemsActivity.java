@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -18,19 +17,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.ui.adapter.ItemsAdapter;
-import com.dpcat237.nps.constant.ItemConstants;
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.Item;
-import com.dpcat237.nps.database.repository.FeedRepository;
-import com.dpcat237.nps.database.repository.ItemRepository;
-import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.ReadItemTask;
 import com.dpcat237.nps.behavior.task.StarItemTask;
+import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.database.repository.FeedRepository;
+import com.dpcat237.nps.database.repository.ItemRepository;
+import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.ui.adapter.ItemsAdapter;
 
 import java.util.ArrayList;
 

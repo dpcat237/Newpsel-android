@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.behavior.service.FileService;
+import com.dpcat237.nps.database.repository.FeedRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

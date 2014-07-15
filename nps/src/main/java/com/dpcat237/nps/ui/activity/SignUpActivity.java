@@ -7,8 +7,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.behavior.task.SignUpTask;
+import com.dpcat237.nps.helper.ConnectionHelper;
 
 public class SignUpActivity extends Activity {
 	View mView;

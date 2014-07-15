@@ -1,11 +1,8 @@
 package com.dpcat237.nps.helper;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
-
-import com.dpcat237.nps.constant.FileConstants;
 
 public class DisplayHelper {
     private static final String TAG = "NPS:DisplayHelper";

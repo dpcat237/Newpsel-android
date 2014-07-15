@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.constant.PlayerConstants;
 
 public class LockscreenReceiver extends BroadcastReceiver {
     private static final String TAG = "NPS:LockscreenReceiver";

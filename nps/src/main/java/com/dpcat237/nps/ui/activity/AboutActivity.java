@@ -2,19 +2,14 @@ package com.dpcat237.nps.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.behavior.service.DownloadSongsService;
-import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
-import com.dpcat237.nps.database.repository.DictateItemRepository;
 
 public class AboutActivity extends Activity {
     private static final String TAG = "NPS:AboutActivity";

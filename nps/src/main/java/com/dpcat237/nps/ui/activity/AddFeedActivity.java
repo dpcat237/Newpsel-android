@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.behavior.task.AddFeedTask;
+import com.dpcat237.nps.helper.ConnectionHelper;
 
 public class AddFeedActivity extends Activity {
 	View mView;

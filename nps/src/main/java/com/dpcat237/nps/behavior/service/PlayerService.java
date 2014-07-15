@@ -17,20 +17,18 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.constant.ItemConstants;
-import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.helper.NotificationHelper;
-import com.dpcat237.nps.ui.activity.DictateItemActivity;
-import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
-import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.behavior.manager.LockscreenManager;
 import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
-import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
+import com.dpcat237.nps.constant.PlayerConstants;
+import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.helper.FileHelper;
+import com.dpcat237.nps.helper.NotificationHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
 import java.io.IOException;
 import java.util.Locale;

@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.behavior.service.FileService;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.database.repository.SongRepository;
 
 import java.util.concurrent.TimeUnit;
 
