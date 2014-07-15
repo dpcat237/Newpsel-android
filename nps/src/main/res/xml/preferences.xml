@@ -23,7 +23,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/st_notifications">
-        <CheckBoxPreference
+        <SwitchPreference
             android:title="@string/st_notifications_enable"
             android:key="pref_notifications_enable"
             android:summary="@string/st_notifications_enable_check"
@@ -31,7 +31,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/st_services">
-        <CheckBoxPreference
+        <SwitchPreference
             android:title="@string/st_items_download"
             android:key="pref_items_download_enable"
             android:summary="@string/st_items_download_check"
@@ -41,12 +41,12 @@
     <PreferenceCategory android:title="@string/st_other">
         <PreferenceScreen android:title="@string/st_dictation_preference">
             <PreferenceCategory android:title="@string/st_download_preferences">
-                <CheckBoxPreference
+                <SwitchPreference
                     android:title="@string/st_download_wifi_enable"
                     android:key="pref_dictation_wifi_enable"
                     android:summary="@string/st_download_wifi_enable_text"
                     android:defaultValue="true" />
-                <CheckBoxPreference
+                <SwitchPreference
                     android:title="@string/st_download_mobile_enable"
                     android:key="pref_dictation_mobile_enable"
                     android:summary="@string/st_download_mobile_enable_text"
@@ -62,14 +62,14 @@
                     android:summary="@string/st_dictation_speed_s" />
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/st_dictation_titles">
-                <CheckBoxPreference
+                <SwitchPreference
                     android:title="@string/st_dictation_enable"
                     android:key="pref_dictation_title_enable"
                     android:summary="@string/st_dictation_enable_titles"
                     android:defaultValue="false"/>
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/st_dictation_later">
-                <CheckBoxPreference
+                <SwitchPreference
                     android:title="@string/st_dictation_enable"
                     android:key="pref_dictation_later_enable"
                     android:summary="@string/st_dictation_enable_later"
