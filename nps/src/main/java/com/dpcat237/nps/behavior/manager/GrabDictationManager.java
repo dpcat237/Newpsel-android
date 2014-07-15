@@ -12,8 +12,8 @@ import android.util.Log;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
-import com.dpcat237.nps.behavior.service.FileService;
 import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.model.Song;
@@ -25,7 +25,6 @@ import java.util.Locale;
 public class GrabDictationManager implements TextToSpeech.OnInitListener {
     private static final String TAG = "NPS:GrabDictationManager";
     private TextToSpeech mTts;
-    private FileService fileService;
     private volatile static GrabDictationManager uniqueInstance;
     protected Context mContext;
     private Song currentSong;
@@ -59,13 +58,13 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         running = true;
         dictationTypesCount = 0;
         mTts = new TextToSpeech(mContext, this);
-        fileService = FileService.getInstance();
+        voicesFolder = FileHelper.getVoicesFolder(mContext);
         Log.d(TAG, "tut: startProcess ");
     }
 
     private void process() {
         Log.d(TAG, "tut: process ");
-        if (fileService.getError()) {
+        if (!voicesFolder.exists()) {
             finishProcess();
             Log.d(TAG, "tut: process finishProcess ");
             return;
@@ -93,7 +92,6 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
             nextDictationType();
         } else {
             grabbedSongs = false;
-            voicesFolder = fileService.getVoicesFolder();
             currentSong = songGrabManager.getCurrentSong();
             setDictationLanguage();
             createSongFile();

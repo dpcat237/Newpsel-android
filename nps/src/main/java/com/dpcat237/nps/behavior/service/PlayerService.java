@@ -30,6 +30,7 @@ import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Timer;
@@ -54,8 +55,10 @@ public class PlayerService extends PlayerServiceCommands {
     private SongsManager songGrabManager;
     private String playType;
     private class UpdatePositionTimerTask extends TimerTask {
-        protected int lastPosition = 0;
-        public void run() {
+    protected int lastPosition = 0;
+
+
+    public void run() {
             if (player != null && !player.isPlaying())
                 return;
             int oldPosition = lastPosition;
@@ -94,16 +97,15 @@ public class PlayerService extends PlayerServiceCommands {
         }
     };
 
-
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     private void createUpdateTimer() {
-        if (updateTimer != null)
+        if (updateTimer != null) {
             return;
+        }
 
         updateTimer = new Timer();
         updateTimer.schedule(new UpdatePositionTimerTask(), 250, 250);
@@ -439,8 +441,15 @@ public class PlayerService extends PlayerServiceCommands {
 
     private boolean prepareMediaPlayer(Song song) {
         try {
+            String songPath = FileHelper.getSongPath(mContext, song.getFilename());
+            if (!songExists(songPath)) {
+                markSongAsRead();
+                stop();
+
+                return false;
+            }
+
             player.reset();
-            String songPath = FileHelper.getSongPath(song.getFilename());
             player.setDataSource(songPath);
             player.prepare();
             //player.seekTo(song.getLastPosition());
@@ -458,6 +467,12 @@ public class PlayerService extends PlayerServiceCommands {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    private Boolean songExists(String songPath) {
+        File songFile = new File(songPath);
+
+        return songFile.exists();
     }
 
     private void skip(int secs) {
@@ -582,7 +597,6 @@ public class PlayerService extends PlayerServiceCommands {
 
         //set up label intent - show labels popup
         Intent labelIntent = new Intent(this, PlayerLabelsDialog.class);
-        Log.d(TAG, "tut: labelIntent "+song.getItemApiId());
         PendingIntent showLabelIntent = PendingIntent.getActivity(this, 0, labelIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonAddLabel, showLabelIntent);
 

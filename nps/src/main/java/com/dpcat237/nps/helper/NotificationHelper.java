@@ -22,8 +22,8 @@ public class NotificationHelper {
         return activated;
     }
 
-    public static void showSimpleNotification(Context context, String msg) {
-        if (!NotificationHelper.areNotificationActivated(context)) {
+    public static void showSimpleNotification(Context context, String message) {
+        if (!NotificationHelper.areNotificationActivated(context) || message.length() < 1) {
             return;
         }
 
@@ -36,14 +36,17 @@ public class NotificationHelper {
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(context.getString(R.string.nt_download))
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg);
+                                .bigText(message))
+                        .setContentText(message);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     public static void showSimpeToast(Context context, String message) {
+        if (message.length() < 1) {
+            return;
+        }
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

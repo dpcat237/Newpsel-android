@@ -13,14 +13,12 @@ import com.dpcat237.nps.R;
 
 public class AboutActivity extends Activity {
     private static final String TAG = "NPS:AboutActivity";
-	private Context mContext;
-	private View mView;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext = this;
-		mView = this.findViewById(android.R.id.content).getRootView();
+        Context mContext = this;
+        View mView = this.findViewById(android.R.id.content).getRootView();
 		
 		setContentView(R.layout.activity_about);
 		

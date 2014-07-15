@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.dpcat237.nps.behavior.service.FileService;
 import com.dpcat237.nps.database.repository.FeedRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -50,8 +49,7 @@ public class LoginHelper {
         feedRepository.drop();
 
         //delete folders with user files
-        FileService fileService = FileService.getInstance();
-        fileService.deleteFolders();
+        FileHelper.deleteFolders(FileHelper.getVoicesFolder(context));
 
         //disable services
         ReceiverHelper.disableBootReceiver(context);

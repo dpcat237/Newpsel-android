@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.behavior.service.FileService;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.SongRepository;
@@ -32,7 +31,6 @@ public class PlayerActivity extends Activity{
     private ImageButton playButton,pauseButton;
     public static int oneTimeOnly = 0;
     private static final String TAG = "NPS:PlayerActivity";
-    private FileService fileService;
 
 
     @Override
@@ -47,7 +45,6 @@ public class PlayerActivity extends Activity{
         pauseButton = (ImageButton)findViewById(R.id.imageButton2);
         songName.setText("song.mp3");
 
-        fileService = FileService.getInstance();
         /*File voicesFolder = fileService.getVoicesFolder();
         String fileName = voicesFolder.getAbsolutePath()+"/test2.wav";
         Uri uri  = Uri.parse("file://" + fileName);*/

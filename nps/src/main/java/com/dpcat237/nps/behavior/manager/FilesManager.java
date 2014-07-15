@@ -21,16 +21,16 @@ public class FilesManager {
 
             ArrayList<Song> songs = songRepository.getPlayedSongs();
             if (songs.size() > 0) {
-                deleteSongs(songs);
+                deleteSongs(context, songs);
             }
         }
     }
 
-    private void deleteSongs(ArrayList<Song> songs) {
+    private void deleteSongs(Context context, ArrayList<Song> songs) {
         for (Song song : songs) {
-            File soundFile = new File(FileHelper.getSongPath(song.getFilename()));
-            if (soundFile.exists()) {
-                soundFile.delete();
+            File songFile = new File(FileHelper.getSongPath(context, song.getFilename()));
+            if (songFile.exists()) {
+                songFile.delete();
             }
             songRepository.deleteSong(song.getId());
         }
