@@ -201,6 +201,16 @@
         <item>1.5f</item>
         <item>2.0f</item>
     </string-array>
+    <string name="st_dictation_quantity">Dictations to download</string>
+    <string name="st_dictation_quantity_s">Adjust limit of dictations in device</string>
+    <string-array name="st_list_dictation_quantity">
+        <item>25</item>
+        <item>50</item>
+        <item>100</item>
+        <item>150</item>
+        <item>200</item>
+        <item>250</item>
+    </string-array>
     <string name="st_other">Other</string>
     <string name="st_dictation_preference">Dictation preference</string>
     <string name="st_dictation_titles">Titles dictation</string>

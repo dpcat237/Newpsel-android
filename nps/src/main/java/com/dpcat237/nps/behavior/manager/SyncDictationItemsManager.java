@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
-import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.DictateItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +23,7 @@ public class SyncDictationItemsManager {
     private Context mContext;
     private DictateItemRepository dictateRepo;
     private SongRepository songRepo;
-    private final Integer downloadQuantity = 50;
+    private Integer downloadQuantity;
     private JSONObject jsonData;
     private Boolean error = false;
     private Integer labelId;
@@ -38,6 +38,8 @@ public class SyncDictationItemsManager {
         Log.d(TAG, "tut: syncDictations");
 
         getRepositories();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        downloadQuantity = Integer.parseInt(pref.getString("pref_dictation_quantity", "25"));
         if (!checkIfNecessarySync()) {
             Log.d(TAG, "tut: arant necessary");
             finish();
