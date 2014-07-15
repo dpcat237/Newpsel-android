@@ -241,10 +241,10 @@ public class ItemRepository extends BaseRepository {
 		database.update(ItemTable.TABLE_ITEM, values, where, args);
 	}
 	
-	public Item getItem(Integer itemId) {
+	public Item getItem(Integer itemApiId) {
 		Item item = null;
-		String where = ItemTable.COLUMN_ID+"=?";
-		String[] args = new String[] {""+itemId+""};
+		String where = ItemTable.COLUMN_API_ID+"=?";
+		String[] args = new String[] {""+itemApiId+""};
 		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, where, args, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

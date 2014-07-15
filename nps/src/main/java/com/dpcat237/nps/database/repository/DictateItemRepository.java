@@ -190,11 +190,14 @@ public class DictateItemRepository extends BaseRepository {
         return item;
     }
 
-    public DictateItem getItem(Integer itemId) {
-        String where = DictateItemTable.COLUMN_ID+"=?";
-        String[] args = new String[] {""+itemId+""};
+    public DictateItem getItem(Integer itemApiId) {
+        String where = DictateItemTable.COLUMN_ITEM_ID+"=?";
+        String[] args = new String[] {""+itemApiId+""};
         Cursor cursor = database.query(DictateItemTable.TABLE_NAME, allColumns, where, args, null, null, null);
 
+        if (cursor.getCount() < 1) {
+            return null;
+        }
         cursor.moveToFirst();
         DictateItem item = cursorToItem(cursor);
         cursor.close();

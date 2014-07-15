@@ -21,6 +21,7 @@ import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.NotificationHelper;
+import com.dpcat237.nps.ui.activity.DictateItemActivity;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
@@ -237,6 +238,7 @@ public class PlayerService extends PlayerServiceCommands {
                     Toast.makeText(this, R.string.notification_last_track, Toast.LENGTH_SHORT).show();
                 }
                 playNextPodcast();
+                changeNotificationPlayButtonPause();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE:
                 if (player.isPlaying()) {
@@ -445,6 +447,8 @@ public class PlayerService extends PlayerServiceCommands {
             player.prepare();
             //player.seekTo(song.getLastPosition());
             isPlayerPrepared = true;
+            PreferencesHelper.setCurrentItemApiId(mContext, song.getItemApiId());
+
             return true;
         } catch (IllegalStateException e) {
             // called if player is not in idle state
@@ -548,6 +552,13 @@ public class PlayerService extends PlayerServiceCommands {
         notificationView.setTextViewText(R.id.songListTitle, song.getListTitle());
         notificationView.setTextViewText(R.id.songTitle, song.getTitle());
 
+        //set up details intent
+        Intent detailsIntent = SongsFactory.getActivityIntent(mContext, song.getType());
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        PendingIntent showItemIntent = PendingIntent.getActivity(this, 0, detailsIntent, 0);
+        notificationView.setOnClickPendingIntent(R.id.buttonDetails, showItemIntent);
+        notificationView.setOnClickPendingIntent(R.id.lineSongInfo, showItemIntent);
+
         // set up pause intent
         Intent pauseIntent = new Intent(this, PlayerService.class);
         // use data to make intent unique
@@ -571,8 +582,9 @@ public class PlayerService extends PlayerServiceCommands {
         PendingIntent removePendingIntent = PendingIntent.getService(this, 0, removeIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonRemove, removePendingIntent);
 
+        //set up label intent - show labels popup
         Intent labelIntent = new Intent(this, PlayerLabelsDialog.class);
-        labelIntent.putExtra(ItemConstants.ITEM_ID, queryManager.getItemId());
+        Log.d(TAG, "tut: labelIntent "+song.getItemApiId());
         PendingIntent showLabelIntent = PendingIntent.getActivity(this, 0, labelIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonAddLabel, showLabelIntent);
 
@@ -589,6 +601,14 @@ public class PlayerService extends PlayerServiceCommands {
         } else {
             notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.av_play_white);
         }
+        startNotification();
+    }
+
+    private void changeNotificationPlayButtonPause() {
+        if (notificationView == null || player == null) {
+            return;
+        }
+        notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.ic_activity_pause);
         startNotification();
     }
 

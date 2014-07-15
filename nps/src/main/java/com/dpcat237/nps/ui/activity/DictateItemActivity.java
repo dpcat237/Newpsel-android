@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -20,6 +21,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.ui.block.ItemBlock;
@@ -33,6 +35,8 @@ public class DictateItemActivity extends Activity {
     private DictateItem item;
 	private ShareActionProvider mShareActionProvider;
     private MenuItem buttonDictate;
+    private DictateItemRepository itemRepo;
+    private FeedRepository feedRepo;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -44,24 +48,51 @@ public class DictateItemActivity extends Activity {
 	    setContentView(R.layout.activity_item_view);
         getNecessaryData();
 
+        if (item == null) {
+            finish();
+            return;
+        }
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
         ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
 	}
+
+    private void openDB() {
+        itemRepo = new DictateItemRepository(this);
+        itemRepo.open();
+        feedRepo = new FeedRepository(this);
+        feedRepo.open();
+    }
+
+    private void closeDB() {
+        itemRepo.close();
+        feedRepo.close();
+    }
 
     /**
      * Get item and feed data
      */
     private void getNecessaryData() {
-        DictateItemRepository itemRepo = new DictateItemRepository(this);
-        itemRepo.open();
-        FeedRepository feedRepo = new FeedRepository(this);
-        feedRepo.open();
+        openDB();
 
         //Get passed item Id and them his and feed data
-        Intent intent = getIntent();
-        Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
-        item = itemRepo.getItem(itemId);
+        Integer itemApiId = getItemApiId();
+        item = itemRepo.getItem(itemApiId);
+        if (item == null) {
+            return;
+        }
         feed = feedRepo.getFeed(item.getFeedApiId());
+        closeDB();
+    }
+
+    private Integer getItemApiId() {
+        Integer itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
+        if (itemApiId > 1) {
+            itemRepo.readItem(itemApiId, false);
+
+            return itemApiId;
+        }
+
+        return getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
     }
 
     @Override

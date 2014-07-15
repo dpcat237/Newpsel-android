@@ -4,9 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
-import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Song;
 
 public class PlayerQueueManager {
@@ -112,20 +110,7 @@ public class PlayerQueueManager {
         return cursor.isLast();
     }
 
-    public Item getItem() {
-        ItemRepository itemRepo = new ItemRepository(mContext);
-        itemRepo.open();
-        cursor.moveToPosition(currentPosition);
-        Song song = songRepo.cursorToSong(cursor);
-        Item item = itemRepo.getItem(song.getItemApiId());
-        itemRepo.close();
-
-        return item;
-    }
-
-    public Integer getItemId() {
-        ItemRepository itemRepo = new ItemRepository(mContext);
-        itemRepo.open();
+    public Integer getItemApiId() {
         cursor.moveToPosition(currentPosition);
         Song song = songRepo.cursorToSong(cursor);
 

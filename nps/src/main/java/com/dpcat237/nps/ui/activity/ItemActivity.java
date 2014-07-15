@@ -20,6 +20,7 @@ import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.helper.LanguageHelper;
@@ -45,6 +46,8 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
     private MenuItem stopButton;
     private Boolean dictateActive = false;
     private SharedPreferences pref;
+    private ItemRepository itemRepo;
+    private FeedRepository feedRepo;
 
     private int CHECK_TTS_INSTALLED = 0;
 
@@ -133,21 +136,41 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         }
     }
 
+    private void openDB() {
+        itemRepo = new ItemRepository(this);
+        itemRepo.open();
+        feedRepo = new FeedRepository(this);
+        feedRepo.open();
+    }
+
+    private void closeDB() {
+        itemRepo.close();
+        feedRepo.close();
+    }
+
     /**
      * Get item and feed data
      */
     private void getNecessaryData() {
-        ItemRepository itemRepo = new ItemRepository(this);
-        itemRepo.open();
-        FeedRepository feedRepo = new FeedRepository(this);
-        feedRepo.open();
+        openDB();
 
-        //Get passed item Id and them his and feed data
-        Intent intent = getIntent();
-        Integer itemId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
-        item = itemRepo.getItem(itemId);
+        Integer itemApiId = getItemApiId();
+        item = itemRepo.getItem(itemApiId);
         Integer feedId = PreferencesHelper.getSelectedFeed(mContext);
         feed = feedRepo.getFeed(feedId);
+
+        closeDB();
+    }
+
+    private Integer getItemApiId() {
+        Integer itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
+        if (itemApiId > 1) {
+            itemRepo.readItem(itemApiId, false);
+
+            return itemApiId;
+        }
+
+        return getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
     }
 
     @Override

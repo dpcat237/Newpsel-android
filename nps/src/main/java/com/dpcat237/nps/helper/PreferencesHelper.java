@@ -193,4 +193,20 @@ public class PreferencesHelper {
 
         return areNew;
     }
+
+    public static void setCurrentItemApiId(Context context, Integer itemApiId) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putInt("current_item_api_id", itemApiId);
+        editor.commit();
+    }
+
+    public static Integer getCurrentItemApiId(Context context) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        Integer itemApiId = userPref.getInt("current_item_api_id", 0);
+
+        return itemApiId;
+    }
 }

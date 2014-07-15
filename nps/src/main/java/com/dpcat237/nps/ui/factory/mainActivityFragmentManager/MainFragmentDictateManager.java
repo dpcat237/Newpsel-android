@@ -9,6 +9,7 @@ import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
@@ -38,7 +39,8 @@ public class MainFragmentDictateManager extends MainFragmentItemsManager {
         songRepo.close();
 
         Intent intent = new Intent(mActivity, DictateItemActivity.class);
-        intent.putExtra(ItemConstants.ITEM_ID, item.getId());
+        intent.putExtra(ItemConstants.ITEM_API_ID, item.getItemApiId());
+        PreferencesHelper.setCurrentItemApiId(mActivity, 0);
         mActivity.startActivity(intent);
     }
 }

@@ -95,7 +95,7 @@ public class ItemsActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (mAdapter.getCount() > 0) {
 					Item item = mAdapter.getItem(position);
-					showItem(item.getId());
+					showItem(item.getApiId());
 
 					if (item.isUnread()) {
 						markReadItem(item.getApiId(), view);
@@ -274,9 +274,9 @@ public class ItemsActivity extends Activity {
 		startActivity(Intent.createChooser(intent, "Share:"));
 	}
 
-	public void showItem(Integer itemId) {
+	public void showItem(Integer itemApiId) {
 		Intent intent = new Intent(this, ItemActivity.class);
-		intent.putExtra(ItemConstants.ITEM_ID, itemId);
+		intent.putExtra(ItemConstants.ITEM_API_ID, itemApiId);
 		startActivity(intent);
 	}
 

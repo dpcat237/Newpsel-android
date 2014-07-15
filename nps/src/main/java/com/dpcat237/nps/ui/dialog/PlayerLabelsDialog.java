@@ -11,14 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.constant.ItemConstants;
-import com.dpcat237.nps.constant.PlayerConstants;
-import com.dpcat237.nps.helper.DisplayHelper;
-import com.dpcat237.nps.model.Label;
-import com.dpcat237.nps.database.repository.ItemRepository;
-import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.SetLabelTask;
+import com.dpcat237.nps.constant.PlayerConstants;
+import com.dpcat237.nps.database.repository.ItemRepository;
+import com.dpcat237.nps.database.repository.LabelRepository;
+import com.dpcat237.nps.helper.DisplayHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
 
@@ -40,13 +40,12 @@ public class PlayerLabelsDialog extends Activity {
         } else {
             setContentView(R.layout.dialog_shared_labels_mobile);
         }
-		Intent intent = getIntent();
         ItemRepository itemRepo = new ItemRepository(this);
         itemRepo.open();
         LabelRepository labelRepo = new LabelRepository(this);
         labelRepo.open();
-        itemApiId = intent.getIntExtra(ItemConstants.ITEM_ID, 0);
 
+        itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
         ListView listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
         mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list_row, values);
@@ -62,6 +61,8 @@ public class PlayerLabelsDialog extends Activity {
 		Intent result = new Intent("com.example.RESULT_ACTION");
 		setResult(Activity.RESULT_OK, result);
 	}
+
+
 
     public void setLabel(Integer itemApiId, Label label) {
         SetLabelTask task = new SetLabelTask(mContext, itemApiId, label);
