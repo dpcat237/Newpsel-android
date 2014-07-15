@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import com.dpcat237.nps.behavior.task.StarItemTask;
 import java.util.ArrayList;
 
 public class ItemsActivity extends Activity {
+    private static final String TAG = "NPS:ItemsActivity";
 	private ItemRepository itemRepo;
 	private FeedRepository feedRepo;
     private SongRepository songRepo;
@@ -73,6 +75,7 @@ public class ItemsActivity extends Activity {
 
 	    feedId = PreferencesHelper.getSelectedFeed(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
+
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
 
@@ -114,6 +117,10 @@ public class ItemsActivity extends Activity {
 	    feedRepo.open();
 	    itemRepo.open();
         songRepo.open();
+
+        if (feedRepo.getFeedUnreadCount(feedId) < 1) {
+            finish();
+        }
 	}
 
 	@Override
@@ -277,6 +284,7 @@ public class ItemsActivity extends Activity {
 	public void showItem(Integer itemApiId) {
 		Intent intent = new Intent(this, ItemActivity.class);
 		intent.putExtra(ItemConstants.ITEM_API_ID, itemApiId);
+        PreferencesHelper.setCurrentItemApiId(mContext, 0);
 		startActivity(intent);
 	}
 

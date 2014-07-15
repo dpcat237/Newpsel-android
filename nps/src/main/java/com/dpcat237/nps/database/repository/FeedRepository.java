@@ -69,27 +69,6 @@ public class FeedRepository extends BaseRepository {
 		return result;
 	}
 
-	public Feed createFeed(String feed) {
-		ContentValues values = new ContentValues();
-		values.put(FeedTable.COLUMN_TITLE, feed);
-		long insertId = database.insert(FeedTable.TABLE_FEED, null,
-				values);
-		Cursor cursor = database.query(FeedTable.TABLE_FEED,
-				allColumns, FeedTable.COLUMN_ID + " = " + insertId, null,
-				null, null, null);
-		cursor.moveToFirst();
-		Feed newFeed = cursorToFeed(cursor);
-		cursor.close();
-
-		return newFeed;
-	}
-
-	public void deleteFeed(Feed feed) {
-		long id = feed.getId();
-		System.out.println("Feed deleted with id: " + id);
-		database.delete(FeedTable.TABLE_FEED, FeedTable.COLUMN_ID + " = " + id, null);
-	}
-
 	public ArrayList<Feed> getAllFeeds() {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
 		String orderBy = FeedTable.COLUMN_TITLE+" ASC";
@@ -195,8 +174,18 @@ public class FeedRepository extends BaseRepository {
 
         return feed;
     }
+
+    public Integer getFeedUnreadCount(Integer feedApiId) {
+        String sql = "SELECT (SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
+                    "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread " +
+                " FROM "+ItemTable.TABLE_ITEM+" AS tb1 WHERE tb1."+ItemTable.COLUMN_FEED_ID+"="+feedApiId+";";
+        Cursor cursor = database.rawQuery(sql, null);
+        cursor.moveToFirst();
+
+        return cursor.getInt(0);
+    }
 	
-	private ArrayList<Feed> getUnreadCount () {
+	private ArrayList<Feed> getUnreadCount() {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
 		String sql = "SELECT tb1."+ItemTable.COLUMN_FEED_ID + ", " +
 				"(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
@@ -220,7 +209,7 @@ public class FeedRepository extends BaseRepository {
 		return feeds;
 	}
 	
-	public void updateFeedCountss(Integer feedApiId, Integer countUnreadItems, Integer countItems) {
+	public void updateFeedCounts(Integer feedApiId, Integer countUnreadItems, Integer countItems) {
 		ContentValues values = new ContentValues();
 		values.put(FeedTable.COLUMN_UNREAD_COUNT, countUnreadItems);
         values.put(FeedTable.COLUMN_ITEMS_COUNT, countItems);
@@ -233,7 +222,7 @@ public class FeedRepository extends BaseRepository {
 		ArrayList<Feed> feeds = getUnreadCount();
 		if (feeds.size() > 0) {
 			for (Feed feed : feeds) {
-                updateFeedCountss(feed.getApiId(), feed.getUnreadCount(), feed.getItemsCount());
+                updateFeedCounts(feed.getApiId(), feed.getUnreadCount(), feed.getItemsCount());
 	    	}
 		}
 	}
