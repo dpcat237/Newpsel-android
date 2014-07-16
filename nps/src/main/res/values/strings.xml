@@ -208,8 +208,6 @@
         <item>50</item>
         <item>100</item>
         <item>150</item>
-        <item>200</item>
-        <item>250</item>
     </string-array>
     <string name="st_other">Other</string>
     <string name="st_dictation_preference">Dictation preference</string>
