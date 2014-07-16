@@ -118,15 +118,6 @@ public class LabelRepository extends BaseRepository {
 		label.setName(cursor.getString(2));
 		return label;
 	}
-	
-	private Label cursorToLabel(Cursor cursor) {
-		Label label = new Label();
-		label.setId(cursor.getInt(0));
-		label.setApiId(cursor.getInt(1));
-		label.setName(cursor.getString(2));
-		label.setUnreadCount(cursor.getInt(3));
-		return label;
-	}
 
 	public void setLabel(LabelItem labelItem){
 		ContentValues values = new ContentValues();
