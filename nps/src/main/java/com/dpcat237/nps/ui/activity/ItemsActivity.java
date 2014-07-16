@@ -22,6 +22,7 @@ import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.ReadItemTask;
 import com.dpcat237.nps.behavior.task.StarItemTask;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -117,7 +118,8 @@ public class ItemsActivity extends Activity {
 	    itemRepo.open();
         songRepo.open();
 
-        if (feedRepo.getFeedUnreadCount(feedId) < 1) {
+        //finish activity if main list is different than "all items" and feed doesn't have unread items
+        if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getFeedsList(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
             finish();
         }
 	}
