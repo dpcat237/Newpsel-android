@@ -81,6 +81,7 @@ public class SyncDictationItemsManager {
         }
         dictateRepo.deleteReadItems();
         dictateRepo.close();
+        finish();
         Log.d(TAG, "tut: finish syncDictations");
     }
 

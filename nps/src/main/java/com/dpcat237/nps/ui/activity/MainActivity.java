@@ -24,7 +24,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.behavior.service.DownloadSongsService;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.behavior.task.DownloadDataTask;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
@@ -41,7 +43,6 @@ public class MainActivity extends Activity {
 	protected Context mContext;
 	private FeedRepository feedRepo;
 	Boolean logged;
-	ListView listView;
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
 	public boolean isInFront;
@@ -217,12 +218,22 @@ public class MainActivity extends Activity {
 	}
 	
 	public void downloadData(MenuItem item) {
-		if (ConnectionHelper.hasConnection(this)) {
+        if (!ConnectionHelper.hasConnection(mContext)) {
+            Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        if (lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+            Intent syncSongsService = new Intent(mContext, SyncDictationItemsService.class);
+            startService(syncSongsService);
+
+            Intent downloadSongsService = new Intent(mContext, DownloadSongsService.class);
+            startService(downloadSongsService);
+        } else {
             item.setEnabled(false);
-			DownloadDataTask task = new DownloadDataTask(this, mView);
-			task.execute();
-		} else {
-			Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+            DownloadDataTask task = new DownloadDataTask(this, mView);
+            task.execute();
 		}
 	}
 
@@ -294,7 +305,6 @@ public class MainActivity extends Activity {
         }
 
         if (lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
-            buttonSync.setVisible(false);
             buttonAddFeed.setVisible(false);
             DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
             dictateRepo.open();
@@ -305,7 +315,6 @@ public class MainActivity extends Activity {
             }
             dictateRepo.close();
         } else {
-            buttonSync.setVisible(true);
             showButtonAddFeed();
             buttonDictate.setVisible(false);
         }

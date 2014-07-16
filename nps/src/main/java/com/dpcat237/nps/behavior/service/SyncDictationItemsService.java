@@ -51,7 +51,6 @@ public class SyncDictationItemsService extends IntentService {
                 }
             }
         }
-
     }
 
     private Boolean checkCanRun() {
