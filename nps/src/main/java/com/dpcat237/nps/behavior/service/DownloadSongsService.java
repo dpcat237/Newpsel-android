@@ -47,7 +47,7 @@ public class DownloadSongsService extends IntentService {
                 }
             }
         }
-
+        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
     }
 
     private Boolean checkCanRun() {
@@ -72,11 +72,8 @@ public class DownloadSongsService extends IntentService {
 
         Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
         Boolean mobileConnection = ConnectionHelper.hasMobileConnection(mContext);
-        if (mobileEnabled && mobileConnection) {
-            return true;
-        }
 
-        return false;
+        return (mobileEnabled && mobileConnection);
     }
 
     private void startProcess() {
@@ -88,7 +85,6 @@ public class DownloadSongsService extends IntentService {
         }
 
         running = false;
-        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }

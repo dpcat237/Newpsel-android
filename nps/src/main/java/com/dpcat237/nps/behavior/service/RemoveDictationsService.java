@@ -32,6 +32,7 @@ public class RemoveDictationsService extends IntentService {
                 Log.e(TAG, e.getMessage());
             }
         }
+        AlarmRemoveOldReceiver.completeWakefulIntent(mIntent);
     }
 
     private Boolean checkCanRun() {
@@ -47,7 +48,6 @@ public class RemoveDictationsService extends IntentService {
         dictateRepo.deleteItemsTtsError();
         dictateRepo.close();
 
-        AlarmRemoveOldReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }

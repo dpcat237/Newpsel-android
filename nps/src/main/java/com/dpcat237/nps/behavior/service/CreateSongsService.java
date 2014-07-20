@@ -45,6 +45,7 @@ public class CreateSongsService extends IntentService {
                 }
             }
         }
+        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
     }
 
     private Boolean checkCanRun() {
@@ -64,7 +65,6 @@ public class CreateSongsService extends IntentService {
         songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
 
         running = false;
-        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }

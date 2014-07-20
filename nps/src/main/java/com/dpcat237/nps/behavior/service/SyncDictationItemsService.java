@@ -51,6 +51,8 @@ public class SyncDictationItemsService extends IntentService {
                 }
             }
         }
+
+        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
     }
 
     private Boolean checkCanRun() {
@@ -86,7 +88,6 @@ public class SyncDictationItemsService extends IntentService {
         }
 
         running = false;
-        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
         stopSelf();
     }
 }
