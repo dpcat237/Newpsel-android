@@ -13,8 +13,6 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.ui.activity.MainActivity;
 
 public class NotificationHelper {
-    public static final int NOTIFICATION_ID = 1;
-
     public static Boolean areNotificationActivated(Context context) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         Boolean activated = pref.getBoolean("pref_notifications_enable", false);
@@ -22,7 +20,7 @@ public class NotificationHelper {
         return activated;
     }
 
-    public static void showSimpleNotification(Context context, String message) {
+    public static void showSimpleNotification(Context context, Integer notificationId, String message) {
         if (!NotificationHelper.areNotificationActivated(context) || message.length() < 1) {
             return;
         }
@@ -40,7 +38,7 @@ public class NotificationHelper {
                         .setContentText(message);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(notificationId, mBuilder.build());
     }
 
     public static void showSimpeToast(Context context, String message) {

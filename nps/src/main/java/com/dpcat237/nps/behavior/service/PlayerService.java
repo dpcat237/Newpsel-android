@@ -22,6 +22,7 @@ import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
 import com.dpcat237.nps.behavior.manager.LockscreenManager;
 import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
+import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
@@ -635,7 +636,7 @@ public class PlayerService extends PlayerServiceCommands {
         if (notificationManager == null) {
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
-        notificationManager.notify(PlayerConstants.NOTIFICATION_ID, bld.build());
+        notificationManager.notify(NotificationConstants.ID_PLAYER_MANAGER, bld.build());
     }
 
     private void removeNotification() {

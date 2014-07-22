@@ -1,11 +1,6 @@
 package com.dpcat237.nps.constant;
 
 public class PlayerConstants {
-    public static final int NOTIFICATION_ID = 1;
-    public static final int NOTIFICATION_UPDATE = 1;
-    public static final int SUBSCRIPTION_UPDATE_ERROR = 2;
-    public static final int NOTIFICATION_PLAYING = 3;
-
     //command
     public static final int PLAYER_COMMAND_SKIPTOEND = 0;
     public static final int PLAYER_COMMAND_RESTART = 1;

@@ -12,6 +12,7 @@ import android.util.Log;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
+import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
@@ -161,7 +162,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     private void endListProcess() {
         if (grabbedSongs) {
-            NotificationHelper.showSimpleNotification(mContext, getNotificationMessage());
+            NotificationHelper.showSimpleNotification(mContext, NotificationConstants.ID_DICTATIONS_DOWNLOAD, getNotificationMessage());
         }
         nextDictationType();
     }
