@@ -196,10 +196,10 @@
         <item>Very Fast</item>
     </string-array>
     <string-array name="st_list_dictation_speed_values">
-        <item>0.5f</item>
         <item>1.0f</item>
         <item>1.5f</item>
         <item>2.0f</item>
+        <item>2.5f</item>
     </string-array>
     <string name="st_dictation_quantity">Dictations to download</string>
     <string name="st_dictation_quantity_s">Adjust limit of dictations in device</string>

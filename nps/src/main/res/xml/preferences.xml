@@ -51,7 +51,7 @@
                     android:summary="@string/st_download_mobile_enable_text"
                     android:defaultValue="false" />
                 <ListPreference
-                    android:defaultValue="1.0f"
+                    android:defaultValue="1.5f"
                     android:entries="@array/st_list_dictation_speed_titles"
                     android:entryValues="@array/st_list_dictation_speed_values"
                     android:key="pref_dictation_speed"
