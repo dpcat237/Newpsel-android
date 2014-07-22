@@ -129,12 +129,12 @@
             android:name=".behavior.receiver.LockscreenReceiver"
             android:exported="false" >
         </receiver>
-        <receiver android:name=".behavior.receiver.AlarmSyncDictationsReceiver"></receiver>
-        <receiver android:name=".behavior.receiver.AlarmRemoveOldReceiver"></receiver>
+        <receiver android:name=".behavior.receiver.AlarmSyncDictationsReceiver" />
+        <receiver android:name=".behavior.receiver.AlarmRemoveOldReceiver" />
         <receiver android:name=".behavior.receiver.BootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
