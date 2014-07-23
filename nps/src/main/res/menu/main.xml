@@ -7,16 +7,16 @@
         android:title="@string/button_read_dictate"
         android:visible="false" />
 
-    <item android:id="@+id/buttonSync"
-          android:icon="@drawable/actionbar_refresh"
-          android:title="@string/button_sync"
-          android:showAsAction="ifRoom|withText"  />
-    
     <item android:id="@+id/buttonAddFeed"
           android:icon="@drawable/actionbar_add"
           android:title="@string/button_add_feed"
           android:showAsAction="ifRoom|withText"  />
-    
+
+    <item android:id="@+id/buttonSync"
+        android:icon="@drawable/actionbar_refresh"
+        android:title="@string/button_sync"
+        android:showAsAction="ifRoom|withText"  />
+
     <item
         android:id="@+id/buttonActionLabels"
         android:orderInCategory="100"
