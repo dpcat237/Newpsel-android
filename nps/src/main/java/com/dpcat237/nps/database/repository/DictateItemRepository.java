@@ -102,7 +102,7 @@ public class DictateItemRepository extends BaseRepository {
             cursor.moveToNext();
         }
         cursor.close();
-        Log.d(TAG, "tut: "+cursor.getCount());
+        Log.d(TAG, "tut: getItemsForSync "+cursor.getCount());
 
         return items;
     }

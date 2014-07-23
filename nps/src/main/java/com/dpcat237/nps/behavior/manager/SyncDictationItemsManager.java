@@ -92,25 +92,24 @@ public class SyncDictationItemsManager {
         songRepo.open();
     }
 
-    private Boolean checkIfNecessarySync()
-    {
+    private Boolean checkIfNecessarySync() {
         Boolean sync = false;
         Integer unreadCount = dictateRepo.countUnreadItems();
         Integer lastSyncCount = getLastSyncCount();
-        Log.d(TAG, "tut: unreadCount "+unreadCount);
 
         if (unreadCount < downloadQuantity) {
             sync = true;
+            downloadQuantity = ((downloadQuantity - unreadCount) < 10)? 10 : (downloadQuantity - unreadCount);
         }
         if (lastSyncCount > 0 && lastSyncCount.equals(unreadCount)) {
             sync = false;
         }
+        Log.d(TAG, "tut: unreadCount "+unreadCount+" downloadQuantity "+downloadQuantity);
 
         return sync;
     }
 
-    private void getData()
-    {
+    private void getData() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         labelId = Integer.parseInt(pref.getString("dictation_label_id", ""));
         jsonData = new JSONObject();

@@ -59,6 +59,7 @@ public abstract class ApiManager {
 
     private void execute() {
         executeRequest();
+        //Log.d(TAG, "tut: httpResponse: "+httpResponse);
         if (error) {
             return;
         }
