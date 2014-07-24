@@ -598,6 +598,9 @@ public class PlayerService extends PlayerServiceCommands {
 
         //set up label intent - show labels popup
         Intent labelIntent = new Intent(this, PlayerLabelsDialog.class);
+        labelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+                Intent.FLAG_ACTIVITY_SINGLE_TOP|
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent showLabelIntent = PendingIntent.getActivity(this, 0, labelIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonAddLabel, showLabelIntent);
 

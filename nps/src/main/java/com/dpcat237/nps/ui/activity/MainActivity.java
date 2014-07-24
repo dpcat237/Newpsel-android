@@ -103,6 +103,10 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
+        if (PreferencesHelper.isPlayerActive(mContext)) {
+            finish();
+        }
+
 		super.onPause();
 		isInFront = false;
 		feedRepo.close();

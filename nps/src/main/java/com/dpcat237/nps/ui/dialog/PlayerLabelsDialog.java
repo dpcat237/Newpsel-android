@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -40,6 +42,7 @@ public class PlayerLabelsDialog extends Activity {
         } else {
             setContentView(R.layout.dialog_shared_labels_mobile);
         }
+
         ItemRepository itemRepo = new ItemRepository(this);
         itemRepo.open();
         LabelRepository labelRepo = new LabelRepository(this);
@@ -69,5 +72,11 @@ public class PlayerLabelsDialog extends Activity {
         PlayerService.play(mContext);
         task.execute();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        PlayerService.play(mContext);
+        super.onStop();
     }
 }

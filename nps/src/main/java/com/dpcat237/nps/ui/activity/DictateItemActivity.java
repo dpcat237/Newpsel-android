@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -163,7 +164,10 @@ public class DictateItemActivity extends Activity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        if (PreferencesHelper.isPlayerActive(mContext)) {
+            finish();
+        }
+        super.onPause();
     }
 }
