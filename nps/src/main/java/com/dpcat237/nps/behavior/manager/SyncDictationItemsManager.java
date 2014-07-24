@@ -26,7 +26,7 @@ public class SyncDictationItemsManager {
     private Integer downloadQuantity;
     private JSONObject jsonData;
     private Boolean error = false;
-    private Integer labelId;
+    private SharedPreferences preferences;
 
     public SyncDictationItemsManager(Context context)
     {
@@ -36,10 +36,7 @@ public class SyncDictationItemsManager {
     public void syncDictations()
     {
         Log.d(TAG, "tut: syncDictations");
-
         getRepositories();
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        downloadQuantity = Integer.parseInt(pref.getString("pref_dictation_quantity", "25"));
         if (!checkIfNecessarySync()) {
             Log.d(TAG, "tut: arant necessary");
             finish();
@@ -47,12 +44,7 @@ public class SyncDictationItemsManager {
             return;
         }
 
-        getData();
-        ApiFactoryManager apiFactoryManager = new ApiFactoryManager();
-        Log.d(TAG, "tut: request data");
-        Map<String, Object> result = apiFactoryManager.makeRequest(ApiConstants.TYPE_SYNC_DICTATE_ITEMS, jsonData);
-        DictateItem[] items = (DictateItem[]) result.get("items");
-        error = (Boolean) result.get("error");
+        DictateItem[] items = downloadItems();
         if (error || items.length < 1) {
             Log.d(TAG, "tut: arant items");
             dictateRepo.deleteReadItems();
@@ -61,6 +53,19 @@ public class SyncDictationItemsManager {
             return;
         }
 
+        Integer newCount = syncDownloadedItems(items);
+        Log.d(TAG, "tut: newCount "+newCount);
+
+        if (newCount > 0) {
+            setLastSyncCount(newCount);
+        }
+        dictateRepo.deleteReadItems();
+        dictateRepo.close();
+        finish();
+        Log.d(TAG, "tut: finish syncDictations");
+    }
+
+    private Integer syncDownloadedItems(DictateItem[] items) {
         Integer newCount = 0;
         Log.d(TAG, "tut: downloaded items "+items.length);
         for (DictateItem item : items) {
@@ -75,14 +80,7 @@ public class SyncDictationItemsManager {
             }
         }
 
-        Log.d(TAG, "tut: newCount "+newCount);
-        if (newCount > 0) {
-            setLastSyncCount(newCount);
-        }
-        dictateRepo.deleteReadItems();
-        dictateRepo.close();
-        finish();
-        Log.d(TAG, "tut: finish syncDictations");
+        return newCount;
     }
 
     private void getRepositories() {
@@ -90,9 +88,11 @@ public class SyncDictationItemsManager {
         dictateRepo.open();
         songRepo = new SongRepository(mContext);
         songRepo.open();
+        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     private Boolean checkIfNecessarySync() {
+        downloadQuantity = Integer.parseInt(preferences.getString("pref_dictation_quantity", "25"));
         Boolean sync = false;
         Integer unreadCount = dictateRepo.countUnreadItems();
         Integer lastSyncCount = getLastSyncCount();
@@ -110,8 +110,7 @@ public class SyncDictationItemsManager {
     }
 
     private void getData() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        labelId = Integer.parseInt(pref.getString("dictation_label_id", ""));
+        Integer labelId = Integer.parseInt(preferences.getString("dictation_label_id", ""));
         jsonData = new JSONObject();
 
         try {
@@ -147,11 +146,22 @@ public class SyncDictationItemsManager {
         SharedPreferences userPref = mContext.getSharedPreferences("UserPreference", mContext.MODE_PRIVATE);
         Integer labelsUpdate = userPref.getInt("sync_dictate_items_last_count", 0);
 
-        if (labelsUpdate != null) {
+        if (labelsUpdate != 0) {
             result = labelsUpdate;
         }
 
         return result;
+    }
+
+    private DictateItem[] downloadItems() {
+        ApiFactoryManager apiFactoryManager = new ApiFactoryManager();
+        getData();
+        Log.d(TAG, "tut: request data");
+        Map<String, Object> result = apiFactoryManager.makeRequest(ApiConstants.TYPE_SYNC_DICTATE_ITEMS, jsonData);
+        DictateItem[] items = (DictateItem[]) result.get("items");
+        error = (Boolean) result.get("error");
+
+        return items;
     }
 
     private void removeItem(Integer itemApiId) {
