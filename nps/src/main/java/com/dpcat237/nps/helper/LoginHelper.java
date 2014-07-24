@@ -54,6 +54,11 @@ public class LoginHelper {
         //disable services
         ReceiverHelper.disableBootReceiver(context);
 
+        /**
+         * from API 19 only with:
+         * ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+         * Boolean result = activityManager.clearApplicationUserData();
+         */
 	}
 	 
 	public static String sha1LoginPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
