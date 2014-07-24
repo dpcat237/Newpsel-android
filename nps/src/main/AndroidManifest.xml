@@ -112,7 +112,7 @@
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
-            android:name=".behavior.receiver.SharedReceiver"
+            android:name=".ui.dialog.SharedDialog"
             android:theme="@style/Theme.FloatingWindow.Popup" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

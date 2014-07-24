@@ -1,4 +1,4 @@
-package com.dpcat237.nps.behavior.receiver;
+package com.dpcat237.nps.ui.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SharedReceiver extends Activity {
+public class SharedDialog extends Activity {
 	Context mContext;
     ListView listView;
     private Bundle extras;
