@@ -19,9 +19,7 @@ public class ItemBlock {
         ws.setCacheMode(WebSettings.LOAD_DEFAULT);
         ws.setAppCacheMaxSize(CACHE_MAX_SIZE);
         ws.setAppCacheEnabled(true);
-
-        Integer timestamp = dateAdd * 1000;
-        String date = NumbersHelper.getDate(timestamp);
+        String date = NumbersHelper.getDate(dateAdd);
 
         String contentHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
                 "<div style='border-bottom:1px solid #d3d3d3; padding-bottom:4px; font-weight: bold; font-size:1em;'>" +

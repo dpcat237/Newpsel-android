@@ -1,16 +1,17 @@
 package com.dpcat237.nps.helper;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class NumbersHelper {
-    public static String getDate(long timeStamp){
-        try{
-            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-MM kk:mm:ss");
-            Date netDate = (new Date(timeStamp));
+    public static String getDate(Integer timeStamp) {
+        try {
+            Date date = new Date(timeStamp*1000L); // *1000 is to convert seconds to milliseconds
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-            return sdf.format(netDate);
+            return dateFormat.format(date);
         } catch(Exception ex) {
             return null;
         }
