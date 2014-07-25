@@ -345,7 +345,7 @@ public class MainActivity extends Activity {
             listView = (ListView) rootView.findViewById(R.id.mainFragmentList);
             Integer countItems = factoryManager.prepareView(mainList, getActivity(), listView);
             if (countItems < 1 && viewed == 1) {
-                NotificationHelper.showSimpeToast(getActivity(), getActivity().getString(R.string.no_new_articles));
+                NotificationHelper.showSimpleToast(getActivity(), getActivity().getString(R.string.no_new_articles));
             }
 
             return rootView;

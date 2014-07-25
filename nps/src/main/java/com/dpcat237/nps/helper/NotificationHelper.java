@@ -41,8 +41,8 @@ public class NotificationHelper {
         mNotificationManager.notify(notificationId, mBuilder.build());
     }
 
-    public static void showSimpeToast(Context context, String message) {
-        if (message.length() < 1) {
+    public static void showSimpleToast(Context context, String message) {
+        if (message.length() < 3) {
             return;
         }
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();

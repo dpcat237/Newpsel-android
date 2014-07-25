@@ -338,7 +338,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void notifyStartProblem() {
-        NotificationHelper.showSimpeToast(mContext, mContext.getString(R.string.player_start_problem));
+        NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.player_start_problem));
     }
 
     private void pause(int reason) {
