@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
+    private static final String TAG = "NPS:DownloadDataTask";
     private int progressStatus;
 	private Context mContext;
     private ProgressBar progressBar;
@@ -64,7 +66,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
 	protected Void doInBackground(Void... params) {
         syncFeeds();          //progressStatus = 0  -> 10; 10 -> 20
 
-        Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+        Boolean itemsActivated = pref.getBoolean("pref_items_download_enable", true);
         if (itemsActivated) {
             syncItems();      //progressStatus = 20 -> 50; 50 -> 70
             feedRepo.unreadCountUpdate();
@@ -141,6 +143,7 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         }
 		Item[] items = (Item[]) result.get("items");
         Boolean error = (Boolean) result.get("error");
+        Log.d(TAG, "tut: items "+items.length);
 
 		if (items != null) {
 			updateProgress(50);

@@ -205,6 +205,21 @@ public class DictateItemRepository extends BaseRepository {
         return item;
     }
 
+    public DictateItem getItemByApiId(Integer apiId) {
+        String where = DictateItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+apiId+""};
+        Cursor cursor = database.query(DictateItemTable.TABLE_NAME, allColumns, where, args, null, null, null);
+
+        if (cursor.getCount() < 1) {
+            return null;
+        }
+        cursor.moveToFirst();
+        DictateItem item = cursorToItem(cursor);
+        cursor.close();
+
+        return item;
+    }
+
     public ListItem getListItem(Integer itemApiId) {
         ListItem listItem = null;
         String where = DictateItemTable.COLUMN_ITEM_ID+"=?";

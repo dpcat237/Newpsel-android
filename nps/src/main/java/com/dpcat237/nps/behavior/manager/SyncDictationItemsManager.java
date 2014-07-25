@@ -12,6 +12,7 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.DictateItem;
+import com.dpcat237.nps.model.Item;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,10 +74,11 @@ public class SyncDictationItemsManager {
                 if (!dictateRepo.checkItemExists(item.getApiId())) {
                     dictateRepo.addItem(item);
                     newCount++;
-                    //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText());
+                    //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
                 }
             } else {
-                removeItem(item.getItemApiId());
+                //Log.d(TAG, "tut: removeItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
+                removeItem(item.getApiId());
             }
         }
 
@@ -164,8 +166,9 @@ public class SyncDictationItemsManager {
         return items;
     }
 
-    private void removeItem(Integer itemApiId) {
-        dictateRepo.deleteItem(itemApiId);
-        songRepo.markAsPlayed(itemApiId, SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
+    private void removeItem(Integer apiId) {
+        DictateItem item = dictateRepo.getItemByApiId(apiId);
+        dictateRepo.deleteItem(item.getItemApiId());
+        songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
     }
 }
