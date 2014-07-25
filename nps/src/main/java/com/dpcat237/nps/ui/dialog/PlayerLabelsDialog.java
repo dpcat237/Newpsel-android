@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -14,12 +12,11 @@ import android.widget.ListView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.behavior.task.SetLabelTask;
-import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.DisplayHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
@@ -36,7 +33,12 @@ public class PlayerLabelsDialog extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-        PlayerService.pause(mContext, PlayerConstants.PAUSE_NOTIFICATION);
+        PlayerServiceStatus playerStatus = PlayerServiceStatus.getInstance();
+        if (!playerStatus.hasActiveSong()) {
+            finish();
+        }
+
+        PlayerService.pause(mContext);
         if (DisplayHelper.isTablet(mContext)) {
             setContentView(R.layout.dialog_shared_labels_tablet);
         } else {
@@ -48,7 +50,7 @@ public class PlayerLabelsDialog extends Activity {
         LabelRepository labelRepo = new LabelRepository(this);
         labelRepo.open();
 
-        itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
+        itemApiId = playerStatus.getCurrentSong().getItemApiId();
         ListView listView = (ListView) findViewById(R.id.labelsList);
 		ArrayList<Label> values = labelRepo.getAllLabels();
         mAdapter = new ArrayAdapter<Label>(this, R.layout.dialog_labels_list_row, values);
@@ -64,7 +66,6 @@ public class PlayerLabelsDialog extends Activity {
 		Intent result = new Intent("com.example.RESULT_ACTION");
 		setResult(Activity.RESULT_OK, result);
 	}
-
 
 
     public void setLabel(Integer itemApiId, Label label) {

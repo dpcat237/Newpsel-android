@@ -22,12 +22,14 @@ import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
 import com.dpcat237.nps.behavior.manager.LockscreenManager;
 import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
+import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.helper.WidgetHelper;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
@@ -42,6 +44,7 @@ public class PlayerService extends PlayerServiceCommands {
     protected MediaPlayer player;
     private LockscreenManager lockscreenManager = null;
     private PlayerQueueManager queryManager = null;
+    private PlayerServiceStatus playerStatus;
     private Context mContext;
     private RemoteViews notificationView = null;
     private NotificationCompat.Builder bld = null;
@@ -49,7 +52,6 @@ public class PlayerService extends PlayerServiceCommands {
     private boolean isPlayerPrepared;
     protected boolean onPhone;
     protected Timer updateTimer;
-    private boolean pausingFor[] = new boolean[] {false, false, false, false, false};
     private Integer currentId;
     private Integer justStarted = 1;
     private static final String TAG = "NPS:PlayerService";
@@ -80,10 +82,10 @@ public class PlayerService extends PlayerServiceCommands {
                 PlayerService.stop(PlayerService.this);
             }
 
-            if (queryManager.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            if (playerStatus.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 PlayerService.play(PlayerService.this);
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                PlayerService.pause(PlayerService.this, PlayerConstants.PAUSE_AUDIOFOCUS);
+                PlayerService.pause(PlayerService.this);
             }
         }
     };
@@ -138,6 +140,9 @@ public class PlayerService extends PlayerServiceCommands {
     private void setup() {
         if (queryManager == null) {
             queryManager = new PlayerQueueManager(mContext);
+        }
+        if (playerStatus == null) {
+            playerStatus = PlayerServiceStatus.getInstance();
         }
 
         if (player == null) {
@@ -200,6 +205,10 @@ public class PlayerService extends PlayerServiceCommands {
         return START_STICKY;
     }
 
+    public PlayerServiceStatus getCurrentStatus() {
+        return playerStatus;
+    }
+
     private void handleIntent(Intent intent) {
         if (intent == null || intent.getExtras() == null) {
             return;
@@ -209,9 +218,6 @@ public class PlayerService extends PlayerServiceCommands {
         }
 
         setup();
-
-        int pauseReason = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
-
         switch (intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1)) {
             case -1:
                 return;
@@ -231,10 +237,16 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPBACK:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPBACK");
-                playPreviousPodcast();
+                if (playerStatus.hasActiveSong()) {
+                    playPreviousPodcast();
+                }
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPFORWARD:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPFORWARD");
+                if (!playerStatus.hasActiveSong()) {
+                    break;
+                }
+
                 if (queryManager.isLast()) {
                     Toast.makeText(this, R.string.notification_last_track, Toast.LENGTH_SHORT).show();
                 }
@@ -243,8 +255,8 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE:
                 if (player.isPlaying()) {
-                    pause(pauseReason);
-                } else {
+                    pause();
+                } else if (playerStatus.hasActiveSong()) {
                     grabAudioFocusAndResume();
                 }
                 changeNotificationPlayButton();
@@ -264,7 +276,7 @@ public class PlayerService extends PlayerServiceCommands {
                 grabAudioFocusAndResume();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PAUSE:
-                pause(pauseReason);
+                pause();
                 break;
             case PlayerConstants.PLAYER_COMMAND_STOP:
                 stop();
@@ -273,7 +285,7 @@ public class PlayerService extends PlayerServiceCommands {
                 Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY_SPECIFIC_SONG");
                 Integer itemApiId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
                 if (itemApiId.equals(currentId) && player.isPlaying()) {
-                    pause(PlayerConstants.PAUSE_ACTIONBUTTON);
+                    pause();
                 } else {
                     playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
                     playSong(playType, itemApiId);
@@ -285,7 +297,7 @@ public class PlayerService extends PlayerServiceCommands {
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_LIST:
                 Integer listId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
                 if (listId.equals(currentId) && player.isPlaying()) {
-                    pause(PlayerConstants.PAUSE_ACTIONBUTTON);
+                    pause();
                 } else {
                     playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
                     play(playType, listId);
@@ -341,15 +353,10 @@ public class PlayerService extends PlayerServiceCommands {
         NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.player_start_problem));
     }
 
-    private void pause(int reason) {
-        if (reason == -1){
-            return;
-        }
-
-        pausingFor[reason] = true;
+    private void pause() {
         player.pause();
         updateActivePodcastPosition(player.getCurrentPosition());
-        queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PAUSED);
+        updatePlayerStatus(PlayerConstants.STATUS_PAUSED);
         lockscreenManager.setLockscreenPaused();
     }
 
@@ -367,11 +374,27 @@ public class PlayerService extends PlayerServiceCommands {
             player.stop();
         }
 
-        queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_STOPPED);
+        updatePlayerStatus(PlayerConstants.STATUS_STOPPED);
         player = null;
         justStarted = 1;
-        PreferencesHelper.setPlayerActive(mContext, false);
         stopSelf();
+    }
+
+    private void updatePlayerStatus(int status) {
+        playerStatus.updateStatus(status);
+        switch (status) {
+            case PlayerConstants.STATUS_QUEUEEMPTY:
+                break;
+            case PlayerConstants.STATUS_STOPPED:
+                PreferencesHelper.setPlayerActive(mContext, false);
+                break;
+            case PlayerConstants.STATUS_PAUSED:
+                break;
+            case PlayerConstants.STATUS_PLAYING:
+                lockscreenManager.setLockscreenPlaying();
+                break;
+        }
+        WidgetHelper.updateWidgets(mContext);
     }
 
     private boolean grabAudioFocus() {
@@ -398,15 +421,9 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
 
-        // make sure we don't pause for media button when audio focus event happens
-        for (int i = 0; i < PlayerConstants.PAUSE_COUNT; ++i) {
-            pausingFor[i] = false;
-        }
-
-        if (queryManager.isPaused() && isPlayerPrepared) {
+        if (playerStatus.isPaused() && isPlayerPrepared) {
             player.start();
-            queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PLAYING);
-            lockscreenManager.setLockscreenPlaying();
+            updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
             return;
         }
@@ -417,7 +434,7 @@ public class PlayerService extends PlayerServiceCommands {
         lockscreenManager = new LockscreenManager();
         lockscreenManager.setupLockscreenControls(this, song);
 
-        queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PLAYING);
+        updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
         showNotification();
         createUpdateTimer();
@@ -434,7 +451,7 @@ public class PlayerService extends PlayerServiceCommands {
         lockscreenManager = new LockscreenManager();
         lockscreenManager.setupLockscreenControls(this, song);
 
-        queryManager.setCurrentStatus(PlayerConstants.PLAYER_STATUS_PLAYING);
+        updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
         showNotification();
         createUpdateTimer();
@@ -454,6 +471,7 @@ public class PlayerService extends PlayerServiceCommands {
             player.setDataSource(songPath);
             player.prepare();
             //player.seekTo(song.getLastPosition());
+            playerStatus.setCurrentSong(song);
             isPlayerPrepared = true;
             PreferencesHelper.setCurrentItemApiId(mContext, song.getItemApiId());
 
@@ -569,39 +587,38 @@ public class PlayerService extends PlayerServiceCommands {
         //set up details intent
         Intent detailsIntent = SongsFactory.getActivityIntent(mContext, song.getType());
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent showItemIntent = PendingIntent.getActivity(this, 0, detailsIntent, 0);
+        PendingIntent showItemIntent = PendingIntent.getActivity(mContext, 0, detailsIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonDetails, showItemIntent);
         notificationView.setOnClickPendingIntent(R.id.lineSongInfo, showItemIntent);
 
         // set up pause intent
-        Intent pauseIntent = new Intent(this, PlayerService.class);
+        Intent pauseIntent = new Intent(mContext, PlayerService.class);
         // use data to make intent unique
-        pauseIntent.setData(Uri.parse("newpsel://playercommand/pause"));
+        pauseIntent.setData(Uri.parse(PlayerConstants.INTENT_DATA_PLAYPAUSE));
         pauseIntent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE);
-        pauseIntent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, PlayerConstants.PAUSE_NOTIFICATION);
         PendingIntent pausePendingIntent = PendingIntent.getService(this, 0, pauseIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonPausePlay, pausePendingIntent);
 
         // set up forward intent
-        Intent forwardIntent = new Intent(this, PlayerService.class);
-        forwardIntent.setData(Uri.parse("newpsel://playercommand/forward"));
+        Intent forwardIntent = new Intent(mContext, PlayerService.class);
+        forwardIntent.setData(Uri.parse(PlayerConstants.INTENT_DATA_FORWARD));
         forwardIntent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, PlayerConstants.PLAYER_COMMAND_SKIPFORWARD);
         PendingIntent forwardPendingIntent = PendingIntent.getService(this, 0, forwardIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonForward, forwardPendingIntent);
 
         // set up remove intent
-        Intent removeIntent = new Intent(this, PlayerService.class);
-        removeIntent.setData(Uri.parse("newpsel://playercommand/stop"));
+        Intent removeIntent = new Intent(mContext, PlayerService.class);
+        removeIntent.setData(Uri.parse(PlayerConstants.INTENT_DATA_STOP));
         removeIntent.putExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, PlayerConstants.PLAYER_COMMAND_STOP);
         PendingIntent removePendingIntent = PendingIntent.getService(this, 0, removeIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonRemove, removePendingIntent);
 
         //set up label intent - show labels popup
-        Intent labelIntent = new Intent(this, PlayerLabelsDialog.class);
+        Intent labelIntent = new Intent(mContext, PlayerLabelsDialog.class);
         labelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
                 Intent.FLAG_ACTIVITY_SINGLE_TOP|
                 Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent showLabelIntent = PendingIntent.getActivity(this, 0, labelIntent, 0);
+        PendingIntent showLabelIntent = PendingIntent.getActivity(mContext, 0, labelIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonAddLabel, showLabelIntent);
 
         startNotification();

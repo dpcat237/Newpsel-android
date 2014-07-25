@@ -15,8 +15,8 @@ public abstract class PlayerServiceCommands extends Service {
         PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAY_LIST, type, listId);
     }
 
-    public static void playpause(Context context, int pause_reason) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE, pause_reason);
+    public static void playpause(Context context) {
+        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE);
     }
 
     public static void playpause(Context context, String type, Integer listId) {
@@ -27,8 +27,8 @@ public abstract class PlayerServiceCommands extends Service {
         PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_DICTATION, type, 0);
     }
 
-    public static void pause(Context context, int pause_reason) {
-        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PAUSE, pause_reason);
+    public static void pause(Context context) {
+        PlayerService.sendCommand(context, PlayerConstants.PLAYER_COMMAND_PAUSE);
     }
 
     public static void stop(Context context) {

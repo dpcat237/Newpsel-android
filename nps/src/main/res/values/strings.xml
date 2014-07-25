@@ -233,4 +233,8 @@
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>
+
+    <!-- Player widget -->
+    <string name="widget_title">Newpsel - Dictations widget</string>
+    <string name="widget_title_query_empty">Newpsel - Dictations widget</string>
 </resources>

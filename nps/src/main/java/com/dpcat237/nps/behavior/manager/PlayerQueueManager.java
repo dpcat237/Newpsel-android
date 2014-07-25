@@ -12,7 +12,6 @@ public class PlayerQueueManager {
     private Cursor cursor = null;
     private SongRepository songRepo;
     private Integer currentPosition;
-    private Integer currentStatus;
     private Integer lastPosition;
     private static final String TAG = "NPS:PlayerQueueManager";
     private Boolean error = false;
@@ -20,7 +19,6 @@ public class PlayerQueueManager {
 
     public PlayerQueueManager(Context context) {
         mContext = context;
-        currentStatus = PlayerConstants.PLAYER_STATUS_QUEUEEMPTY;
         songRepo = new SongRepository(mContext);
         songRepo.open();
     }
@@ -56,18 +54,6 @@ public class PlayerQueueManager {
         checkNewCursor();
 
         return true;
-    }
-
-    public void setCurrentStatus(Integer status) {
-        this.currentStatus = status;
-    }
-
-    public Boolean isPaused() {
-        if (currentStatus == PlayerConstants.PLAYER_STATUS_PAUSED) {
-            return true;
-        }
-
-        return false;
     }
 
     public void setLastPosition(Integer postition) {
