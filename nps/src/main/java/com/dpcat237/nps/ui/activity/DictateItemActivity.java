@@ -35,8 +35,11 @@ public class DictateItemActivity extends Activity {
     private DictateItem item;
 	private ShareActionProvider mShareActionProvider;
     private MenuItem buttonDictate;
+    private MenuItem readButton;
+    private MenuItem unreadButton;
     private DictateItemRepository itemRepo;
     private FeedRepository feedRepo;
+    private SongRepository songRepo;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -44,6 +47,7 @@ public class DictateItemActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mContext = this;
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
         getNecessaryData();
@@ -57,15 +61,18 @@ public class DictateItemActivity extends Activity {
 	}
 
     private void openDB() {
-        itemRepo = new DictateItemRepository(this);
+        itemRepo = new DictateItemRepository(mContext);
         itemRepo.open();
-        feedRepo = new FeedRepository(this);
+        feedRepo = new FeedRepository(mContext);
         feedRepo.open();
+        songRepo = new SongRepository(mContext);
+        songRepo.open();
     }
 
     private void closeDB() {
         itemRepo.close();
         feedRepo.close();
+        songRepo.close();
     }
 
     /**
@@ -81,7 +88,6 @@ public class DictateItemActivity extends Activity {
             return;
         }
         feed = feedRepo.getFeed(item.getFeedApiId());
-        closeDB();
     }
 
     private Integer getItemApiId() {
@@ -99,6 +105,8 @@ public class DictateItemActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.item, menu);
         buttonDictate = menu.findItem(R.id.buttonStartDictate);
+        readButton = menu.findItem(R.id.buttonRead);
+        unreadButton = menu.findItem(R.id.buttonUnread);
         MenuItem buttonShare = menu.findItem(R.id.buttonShare);
 
         prepareDictateButton();
@@ -152,6 +160,12 @@ public class DictateItemActivity extends Activity {
             case R.id.buttonLabel:
                 setLabel();
                 return true;
+            case R.id.buttonRead:
+                markUnread();
+                return true;
+            case R.id.buttonUnread:
+                markRead();
+                return true;
             case R.id.buttonShare:
                 setShareIntent(createShareIntent());
                 return true;
@@ -165,9 +179,26 @@ public class DictateItemActivity extends Activity {
 
     @Override
     protected void onPause() {
+        closeDB();
         if (PreferencesHelper.isPlayerActive(mContext)) {
             finish();
         }
         super.onPause();
+    }
+
+    private void markRead() {
+        item.setIsUnread(false);
+        readButton.setVisible(true);
+        unreadButton.setVisible(false);
+        itemRepo.readItem(item.getItemApiId(), false);
+        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
+    }
+
+    private void markUnread() {
+        item.setIsUnread(true);
+        readButton.setVisible(false);
+        unreadButton.setVisible(true);
+        itemRepo.readItem(item.getItemApiId(), true);
+        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, false);
     }
 }

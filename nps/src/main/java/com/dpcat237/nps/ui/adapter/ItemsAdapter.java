@@ -163,4 +163,10 @@ public class ItemsAdapter extends BaseAdapter {
         }
         text.setTextSize(textSize);
     }
+
+    public void updateList(List<Item> collection) {
+        dataSet.clear();
+        dataSet.addAll(collection);
+        notifyDataSetChanged();
+    }
 }

@@ -81,6 +81,8 @@
 
     <!-- Item -->
     <string name="button_dictate">Dictate</string>
+    <string name="button_read_item">Read item</string>
+    <string name="button_unread_item">Unread item</string>
     <string name="button_read_label">Label</string>
     <string name="button_start_dictate">Start dictate</string>
     <string name="button_read_dictate">Dictate</string>

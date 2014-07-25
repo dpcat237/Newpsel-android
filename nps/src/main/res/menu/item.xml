@@ -1,5 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item android:id="@+id/buttonRead"
+        android:icon="@drawable/actionbar_icon_read"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_read_item"  />
+
+    <item android:id="@+id/buttonUnread"
+        android:icon="@drawable/actionbar_icon_unread"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_unread_item"
+        android:visible="false" />
+
     <item android:id="@+id/buttonStartDictate"
         android:icon="@drawable/ic_actionbar_dictate"
         android:showAsAction="ifRoom"

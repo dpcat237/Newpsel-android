@@ -34,7 +34,7 @@ public class MainFragmentDictateManager extends MainFragmentItemsManager {
 
         item.setIsUnread(false);
         itemRepo.readItem(item.getItemApiId(), false);
-        songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM);
+        songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
         itemRepo.close();
         songRepo.close();
 

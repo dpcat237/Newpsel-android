@@ -20,8 +20,10 @@ import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
+import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Feed;
@@ -41,12 +43,15 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 	private ShareActionProvider mShareActionProvider;
     private TextToSpeech mTts;
     private MenuItem dictateButton;
+    private MenuItem readButton;
+    private MenuItem unreadButton;
     private MenuItem startDictateButton;
     private MenuItem stopButton;
     private Boolean dictateActive = false;
     private SharedPreferences pref;
     private ItemRepository itemRepo;
     private FeedRepository feedRepo;
+    private SongRepository songRepo;
 
     private int CHECK_TTS_INSTALLED = 0;
 
@@ -56,6 +61,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 		super.onCreate(savedInstanceState);
 		mContext = this;
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
         getNecessaryData();
@@ -136,15 +142,18 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
     }
 
     private void openDB() {
-        itemRepo = new ItemRepository(this);
+        itemRepo = new ItemRepository(mContext);
         itemRepo.open();
-        feedRepo = new FeedRepository(this);
+        feedRepo = new FeedRepository(mContext);
         feedRepo.open();
+        songRepo = new SongRepository(mContext);
+        songRepo.open();
     }
 
     private void closeDB() {
         itemRepo.close();
         feedRepo.close();
+        songRepo.close();
     }
 
     /**
@@ -157,8 +166,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         item = itemRepo.getItem(itemApiId);
         Integer feedId = PreferencesHelper.getSelectedFeed(mContext);
         feed = feedRepo.getFeed(feedId);
-
-        closeDB();
     }
 
     private Integer getItemApiId() {
@@ -179,6 +186,8 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         //get menu items
         MenuItem shareItem = menu.findItem(R.id.buttonShare);
         startDictateButton = menu.findItem(R.id.buttonStartDictate);
+        readButton = menu.findItem(R.id.buttonRead);
+        unreadButton = menu.findItem(R.id.buttonUnread);
         dictateButton = menu.findItem(R.id.buttonDictate);
         stopButton = menu.findItem(R.id.buttonStop);
 
@@ -227,6 +236,12 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
             case R.id.buttonLabel:
                 setLabel();
                 return true;
+            case R.id.buttonRead:
+                markUnread();
+                return true;
+            case R.id.buttonUnread:
+                markRead();
+                return true;
             case R.id.buttonShare:
                 setShareIntent(createShareIntent());
                 return true;
@@ -242,12 +257,29 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         return false;
     }
 
+    private void markRead() {
+        item.setIsUnread(false);
+        readButton.setVisible(true);
+        unreadButton.setVisible(false);
+        itemRepo.readItem(item.getApiId(), false);
+        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
+    }
+
+    private void markUnread() {
+        item.setIsUnread(true);
+        readButton.setVisible(false);
+        unreadButton.setVisible(true);
+        itemRepo.readItem(item.getApiId(), true);
+        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, false);
+    }
+
     @Override
     public void onDestroy() {
         if (mTts != null) {
             mTts.stop();
             mTts.shutdown();
         }
+        closeDB();
         super.onDestroy();
     }
 

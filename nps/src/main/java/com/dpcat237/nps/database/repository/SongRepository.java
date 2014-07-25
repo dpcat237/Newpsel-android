@@ -158,9 +158,9 @@ public class SongRepository extends  BaseRepository {
         database.update(SongTable.TABLE_SONG, values, where, args);
     }
 
-    public void markAsPlayed(Integer itemApiId, String type) {
+    public void markAsPlayed(Integer itemApiId, String type, Boolean isPlayed) {
         ContentValues values = new ContentValues();
-        values.put(SongTable.COLUMN_IS_PLAYED, true);
+        values.put(SongTable.COLUMN_IS_PLAYED, isPlayed);
         String where = SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
         String[] args = new String[] {""+itemApiId+"", ""+type+""};
         database.update(SongTable.TABLE_SONG, values, where, args);

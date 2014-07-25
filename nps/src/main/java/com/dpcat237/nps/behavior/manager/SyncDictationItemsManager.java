@@ -166,6 +166,6 @@ public class SyncDictationItemsManager {
 
     private void removeItem(Integer itemApiId) {
         dictateRepo.deleteItem(itemApiId);
-        songRepo.markAsPlayed(itemApiId, SongConstants.GRABBER_TYPE_DICTATE_ITEM);
+        songRepo.markAsPlayed(itemApiId, SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
     }
 }

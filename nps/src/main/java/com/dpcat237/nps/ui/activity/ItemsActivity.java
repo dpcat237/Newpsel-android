@@ -55,6 +55,7 @@ public class ItemsActivity extends Activity {
 	private final Integer CM_OPTION_4 = 4;
 	private final Integer CM_OPTION_5 = 5;
 	private final Integer CM_OPTION_6 = 6;
+    private Integer feedList;
 
 
 	@Override
@@ -78,18 +79,11 @@ public class ItemsActivity extends Activity {
 
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
-
-	    Integer feedList = PreferencesHelper.getFeedsList(this);
-	    ArrayList<Item> items = null;
-	    if (feedList == 0) {
-	    	items = itemRepo.getIsUnreadItems(feedId, true);
-		} else if (feedList == 1) {
-			items = itemRepo.getIsUnreadItems(feedId, false);
-		}
+	    feedList = PreferencesHelper.getFeedsList(this);
 
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this);
-        mAdapter.addToDataset(items);
+        mAdapter.addToDataset(getItems());
 	    listView.setAdapter(mAdapter);
 	    registerForContextMenu(listView);
 
@@ -103,7 +97,7 @@ public class ItemsActivity extends Activity {
 					if (item.isUnread()) {
 						markReadItem(item.getApiId(), view);
 						item.setIsUnread(false);
-                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
 					}
 				}
 			}
@@ -122,6 +116,8 @@ public class ItemsActivity extends Activity {
         if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getFeedsList(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
             finish();
         }
+
+        mAdapter.updateList(getItems());
 	}
 
 	@Override
@@ -200,14 +196,14 @@ public class ItemsActivity extends Activity {
 		        case 2:
 		        	markUnreadItem(item.getApiId(), line);
 		        	item.setIsUnread(true);
-                    songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+                    songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, false);
 		        	return true;
 		        case 3:
 		        	if (info.position > 0) {
                         markPreviousRead(info.position);
 		        	} else {
 		        		markReadItem(item.getApiId(), line);
-                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+                        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
 			        	item.setIsUnread(false);
 		        	}
 		        	return true;
@@ -230,6 +226,17 @@ public class ItemsActivity extends Activity {
 	    return false;
 	}
 
+    private ArrayList<Item> getItems() {
+        ArrayList<Item> items = null;
+        if (feedList == 0) {
+            items = itemRepo.getIsUnreadItems(feedId, true);
+        } else if (feedList == 1) {
+            items = itemRepo.getIsUnreadItems(feedId, false);
+        }
+
+        return items;
+    }
+
 	public void markPreviousRead (Integer position) {
 		for (int i = listView.getFirstVisiblePosition(); i <= position; i++) {
 			View line = listView.getChildAt(i - listView.getFirstVisiblePosition());
@@ -239,7 +246,7 @@ public class ItemsActivity extends Activity {
 		for (int i = 0; i <= position; i++) {
 			Item item = mAdapter.getItem(i);
         	item.setIsUnread(false);
-            songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE);
+            songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
 
         	ReadItemTask task = new ReadItemTask(this, item.getApiId(), false);
     		task.execute();
