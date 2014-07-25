@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 	    }
 	    
         if (logged) {
-            itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            itemsActivated = pref.getBoolean("pref_items_download_enable", true);
             drawerUpdateMenuItems();
         }
 	}
@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
             buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
             buttonSync = menu.findItem(R.id.buttonSync);
             buttonDictate = menu.findItem(R.id.buttonDictate);
-            itemsActivated = pref.getBoolean("pref_items_download_enable", false);
+            itemsActivated = pref.getBoolean("pref_items_download_enable", true);
             drawerUpdateMenuItems();
 
 			return true;
