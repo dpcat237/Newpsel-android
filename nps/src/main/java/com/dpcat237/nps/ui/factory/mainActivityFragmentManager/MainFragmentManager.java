@@ -21,12 +21,13 @@ public abstract class MainFragmentManager {
         initializeAdapter();
     }
 
-    public void prepareAdapter() {
+    public Integer prepareAdapter() {
         setTitle();
         setItems();
         setAdapter();
         setOnClickListener();
-        showToast();
+
+        return countItems();
     }
 
     //abstract methods
@@ -37,5 +38,5 @@ public abstract class MainFragmentManager {
     abstract protected void setItems();
     abstract protected void setAdapter();
     abstract protected void setOnClickListener();
-    abstract protected void showToast();
+    abstract protected Integer countItems();
 }

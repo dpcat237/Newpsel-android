@@ -1,6 +1,7 @@
 package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -65,10 +66,8 @@ public abstract class MainFragmentFeedsManager extends MainFragmentManager {
         mActivity.startActivity(intent);
     }
 
-    protected void showToast() {
-        if (mAdapter.getCount() < 1) {
-            Toast.makeText(mActivity, R.string.no_new_articles, Toast.LENGTH_SHORT).show();
-        }
+    protected Integer countItems() {
+        return mAdapter.getCount();
     }
 
     //abstract methods

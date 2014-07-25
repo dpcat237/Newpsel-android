@@ -34,6 +34,7 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
+import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.ui.factory.MainFragmentFactoryManager;
 
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
     private String[] mListsTitles;
     Bundle instanceState;
     private int lastPosition;
+    private Integer countFragmentView = 0;
 
     
 	@Override
@@ -273,9 +275,11 @@ public class MainActivity extends Activity {
     }
 
     public void updateFragment() {
+        countFragmentView++;
         Fragment fragment = new UnreadItemsFragment();
         Bundle args = new Bundle();
         args.putInt(UnreadItemsFragment.ARG_MAIN_LIST, lastPosition);
+        args.putInt(UnreadItemsFragment.ARG_VIEWED, countFragmentView);
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.content_fragment_main, fragment).commit();
     }
@@ -327,6 +331,7 @@ public class MainActivity extends Activity {
     public static class UnreadItemsFragment extends Fragment {
         private static final String TAG = "NPS:UnreadItemsFragment";
         public static final String ARG_MAIN_LIST = "main_list";
+        public static final String ARG_VIEWED = "viewed";
         private ListView listView;
         private Integer mainList;
         private MainFragmentFactoryManager factoryManager;
@@ -334,10 +339,14 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             mainList = getArguments().getInt(ARG_MAIN_LIST);
+            Integer viewed = getArguments().getInt(ARG_VIEWED);
             View rootView = inflater.inflate(R.layout.fragment_main_list, container, false);
             factoryManager = new MainFragmentFactoryManager();
             listView = (ListView) rootView.findViewById(R.id.mainFragmentList);
-            factoryManager.prepareView(mainList, getActivity(), listView);
+            Integer countItems = factoryManager.prepareView(mainList, getActivity(), listView);
+            if (countItems < 1 && viewed == 1) {
+                NotificationHelper.showSimpeToast(getActivity(), getActivity().getString(R.string.no_new_articles));
+            }
 
             return rootView;
         }
