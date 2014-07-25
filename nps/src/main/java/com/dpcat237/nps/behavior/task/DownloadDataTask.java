@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -143,7 +142,6 @@ public class DownloadDataTask extends AsyncTask<Void, Integer, Void> {
         }
 		Item[] items = (Item[]) result.get("items");
         Boolean error = (Boolean) result.get("error");
-        Log.d(TAG, "tut: items "+items.length);
 
 		if (items != null) {
 			updateProgress(50);
