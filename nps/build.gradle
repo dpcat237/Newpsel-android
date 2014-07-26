@@ -1,16 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
-    }
-}
-apply plugin: 'android'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 20
@@ -32,7 +20,7 @@ android {
         release {
             debuggable  false
             runProguard false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
     signingConfigs {
@@ -42,8 +30,6 @@ android {
             keyAlias 'npsKey'
             keyPassword 'D#25c01a1987t#Pnps'
         }
-    }
-    productFlavors {
     }
 }
 
