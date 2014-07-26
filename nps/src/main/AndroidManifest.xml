@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dpcat237.nps"
-    android:installLocation="preferExternal" >
+    android:installLocation="auto" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -139,7 +139,6 @@
         </receiver>
         <receiver
             android:name=".ui.widget.PlayerWidgetProvider"
-            android:exported="false"
             android:icon="@drawable/ic_launcher"
             android:label="@string/widget_title" >
             <intent-filter>
