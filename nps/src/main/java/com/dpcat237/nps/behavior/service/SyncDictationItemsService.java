@@ -59,9 +59,8 @@ public class SyncDictationItemsService extends IntentService {
         Log.d(TAG, "tut: check startProcess");
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         Boolean dictationEnabled = pref.getBoolean("pref_dictation_later_enable", false);
-        String labelId = pref.getString("dictation_label_id", "");
 
-        if (!dictationEnabled || labelId.equals("") || !ConnectionHelper.hasConnection(mContext)) {
+        if (!dictationEnabled || !ConnectionHelper.hasConnection(mContext)) {
             return false;
         }
 

@@ -112,13 +112,11 @@ public class SyncDictationItemsManager {
     }
 
     private void getData() {
-        Integer labelId = Integer.parseInt(preferences.getString("dictation_label_id", ""));
         jsonData = new JSONObject();
 
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
             jsonData.put("items", dictateRepo.getItemsForSync());
-            jsonData.put("laterId", labelId);
             jsonData.put("limit", downloadQuantity);
         } catch (JSONException e) {
             Log.e(TAG, "tut:  "+e.getMessage());

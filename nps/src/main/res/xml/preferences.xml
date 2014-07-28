@@ -82,13 +82,6 @@
                     android:key="pref_dictation_later_enable"
                     android:summary="@string/st_dictation_enable_later"
                     android:defaultValue="false" />
-                <ListPreference
-                    android:dependency="pref_dictation_later_enable"
-                    android:key="dictation_label_id"
-                    android:title="@string/st_dictation_label"
-                    android:dialogTitle="@string/st_dictation_label"
-                    android:summary="@string/st_dictation_label_select"
-                    />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
