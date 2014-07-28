@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.SharedTable;
+import com.dpcat237.nps.helper.StringHelper;
 import com.dpcat237.nps.model.Shared;
 
 import org.json.JSONArray;
@@ -65,7 +66,7 @@ public class SharedRepository extends BaseRepository {
 			try {
 				JSONObject object = new JSONObject();
 				object.put("id", cursor.getInt(0));
-				object.put("title", cursor.getString(1));
+				object.put("title", StringHelper.convertToUTF8(cursor.getString(1)));
 				object.put("text", cursor.getString(2));
                 object.put("label_api_id", cursor.getInt(3));
 				collectionJson.put(object);
@@ -78,7 +79,7 @@ public class SharedRepository extends BaseRepository {
 		cursor.close();
 		return collectionJson;
 	}
-	
+
 	public void removeSharedItems() {
 		String where = SharedTable.COLUMN_ID+"!=?";
 		String[] args = new String[] {""+0+""};
