@@ -22,11 +22,11 @@ import com.dpcat237.nps.model.Label;
 import java.util.ArrayList;
 
 public class PlayerLabelsDialog extends Activity {
-
+    private static final String TAG = "NPS:PlayerLabelsDialog";
 	private Context mContext;
     private Integer itemApiId;
     private ArrayAdapter<Label> mAdapter;
-    private static final String TAG = "NPS:PlayerLabelsDialog";
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -38,7 +38,7 @@ public class PlayerLabelsDialog extends Activity {
             finish();
         }
 
-        PlayerService.pause(mContext);
+        PlayerService.playpause(mContext);
         if (DisplayHelper.isTablet(mContext)) {
             setContentView(R.layout.dialog_shared_labels_tablet);
         } else {
@@ -70,14 +70,13 @@ public class PlayerLabelsDialog extends Activity {
 
     public void setLabel(Integer itemApiId, Label label) {
         SetLabelTask task = new SetLabelTask(mContext, itemApiId, label);
-        PlayerService.play(mContext);
         task.execute();
         finish();
     }
 
     @Override
     protected void onStop() {
-        PlayerService.play(mContext);
+        PlayerService.playpause(mContext);
         super.onStop();
     }
 }
