@@ -38,8 +38,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/st_other">
-        <PreferenceScreen android:title="@string/st_dictation_preference">
-            <PreferenceCategory android:title="@string/st_download_preferences">
+        <PreferenceScreen android:title="@string/st_dictation_preferences">
+            <SwitchPreference
+                android:title="@string/st_dictation_titles"
+                android:key="pref_dictation_title_enable"
+                android:summary="@string/st_dictation_enable_titles"
+                android:defaultValue="false"/>
+            <SwitchPreference
+                android:title="@string/st_dictation_later"
+                android:key="pref_dictation_later_enable"
+                android:summary="@string/st_dictation_enable_later"
+                android:defaultValue="false" />
+            <PreferenceCategory android:title="@string/st_dictations_download_title">
                 <SwitchPreference
                     android:title="@string/st_download_wifi_enable"
                     android:key="pref_dictation_wifi_enable"
@@ -64,24 +74,21 @@
                     android:entries="@array/st_list_dictation_quantity"
                     android:entryValues="@array/st_list_dictation_quantity"
                     android:key="pref_dictation_quantity"
+                    android:dependency="pref_dictation_later_enable"
                     android:negativeButtonText="@null"
                     android:positiveButtonText="@null"
                     android:title="@string/st_dictation_quantity"
                     android:summary="@string/st_dictation_quantity_s" />
-            </PreferenceCategory>
-            <PreferenceCategory android:title="@string/st_dictation_titles">
-                <SwitchPreference
-                    android:title="@string/st_dictation_enable"
-                    android:key="pref_dictation_title_enable"
-                    android:summary="@string/st_dictation_enable_titles"
-                    android:defaultValue="false"/>
-            </PreferenceCategory>
-            <PreferenceCategory android:title="@string/st_dictation_later">
-                <SwitchPreference
-                    android:title="@string/st_dictation_enable"
-                    android:key="pref_dictation_later_enable"
-                    android:summary="@string/st_dictation_enable_later"
-                    android:defaultValue="false" />
+                <ListPreference
+                    android:defaultValue="40.0f"
+                    android:entries="@array/st_list_st_battery_level_titles"
+                    android:entryValues="@array/st_list_st_battery_level_values"
+                    android:key="pref_battery_level"
+                    android:dependency="pref_dictation_later_enable"
+                    android:negativeButtonText="@null"
+                    android:positiveButtonText="@null"
+                    android:title="@string/st_battery_level_title"
+                    android:summary="@string/st_battery_level_s" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>

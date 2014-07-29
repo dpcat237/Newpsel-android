@@ -203,7 +203,7 @@
         <item>2.0f</item>
         <item>2.5f</item>
     </string-array>
-    <string name="st_dictation_quantity">Dictations to download</string>
+    <string name="st_dictation_quantity">Quantity of later articles</string>
     <string name="st_dictation_quantity_s">Adjust limit of dictations in device</string>
     <string-array name="st_list_dictation_quantity">
         <item>25</item>
@@ -212,10 +212,10 @@
         <item>150</item>
     </string-array>
     <string name="st_other">Other</string>
-    <string name="st_dictation_preference">Dictation preference</string>
+    <string name="st_dictation_preferences">Dictation preferences</string>
+    <string name="st_dictations_download_title">Configure dictations download</string>
     <string name="st_dictation_titles">Titles dictation</string>
     <string name="st_download_preferences">Download preferences</string>
-    <string name="st_dictation_enable">Enable dictation</string>
     <string name="st_dictation_enable_titles">Activate to enable dictation of news titles</string>
     <string name="st_dictation_later">Later articles dictation</string>
     <string name="st_dictation_enable_later">Activate to enable dictation of saved articles</string>
@@ -230,6 +230,20 @@
     <string name="st_services">Services</string>
     <string name="st_items_download">Download news</string>
     <string name="st_items_download_check">Activate to enable news download</string>
+    <string name="st_battery_level_title">Min battery level</string>
+    <string name="st_battery_level_s">Adjust minimum level of battery to download dictations</string>
+    <string-array name="st_list_st_battery_level_titles">
+        <item>30%</item>
+        <item>40%</item>
+        <item>50%</item>
+        <item>60%</item>
+    </string-array>
+    <string-array name="st_list_st_battery_level_values">
+        <item>30.0f</item>
+        <item>40.0f</item>
+        <item>50.0f</item>
+        <item>60.0f</item>
+    </string-array>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>

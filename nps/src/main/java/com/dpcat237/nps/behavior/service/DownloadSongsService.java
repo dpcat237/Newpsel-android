@@ -10,6 +10,7 @@ import android.util.Log;
 import com.dpcat237.nps.behavior.manager.FilesManager;
 import com.dpcat237.nps.behavior.manager.GrabDictationManager;
 import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
+import com.dpcat237.nps.helper.BatteryHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 
 public class DownloadSongsService extends IntentService {
@@ -66,7 +67,8 @@ public class DownloadSongsService extends IntentService {
 
         Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
         Boolean wifiConnection = ConnectionHelper.hasWifiConnection(mContext);
-        if (wifiEnabled && wifiConnection) {
+        Boolean enoughBattery = BatteryHelper.isEnoughtBattery(mContext);
+        if (wifiEnabled && wifiConnection && enoughBattery) {
             return true;
         }
 
