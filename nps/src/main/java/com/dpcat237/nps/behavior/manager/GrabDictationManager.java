@@ -114,7 +114,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     private void setDictationLanguage() {
         Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(currentSong.getLanguage(), mTts);
-        if (localeTTs != null && mTts.isLanguageAvailable(localeTTs) == TextToSpeech.LANG_AVAILABLE) {
+        if (localeTTs != null && LanguageHelper.isLanguageAvailable(mContext, mTts, localeTTs)) {
             mTts.setLanguage(localeTTs);
         }
     }
@@ -128,35 +128,21 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     @SuppressLint("NewApi")
     private void setTtsListener() {
         final GrabDictationManager callWithResult = this;
-        if (Build.VERSION.SDK_INT >= 15) {
-            int listenerResult =
-                    mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onDone(String utteranceId) { callWithResult.onDone(); }
+        int listenerResult =
+                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onDone(String utteranceId) { callWithResult.onDone(); }
 
-                        @Override
-                        public void onError(String utteranceId) { callWithResult.onError(); }
+                    @Override
+                    public void onError(String utteranceId) { callWithResult.onError(); }
 
-                        @Override
-                        public void onStart(String utteranceId) {
-                            Log.d(TAG, "tut: onStart "+utteranceId);
-                        }
-                    });
-            if (listenerResult != TextToSpeech.SUCCESS) {
-                Log.e(TAG, "failed to add utterance progress listener");
-            }
-        } else {
-            int listenerResult =
-                    mTts.setOnUtteranceCompletedListener(
-                            new TextToSpeech.OnUtteranceCompletedListener() {
-                                @Override
-                                public void onUtteranceCompleted(String utteranceId) {
-                                    callWithResult.onDone();
-                                }
-                            });
-            if (listenerResult != TextToSpeech.SUCCESS) {
-                Log.e(TAG, "failed to add utterance completed listener");
-            }
+                    @Override
+                    public void onStart(String utteranceId) {
+                        Log.d(TAG, "tut: onStart "+utteranceId);
+                    }
+                });
+        if (listenerResult != TextToSpeech.SUCCESS) {
+            Log.e(TAG, "failed to add utterance progress listener");
         }
     }
 
