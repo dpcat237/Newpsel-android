@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.receiver.AlarmRemoveOldReceiver;
 import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
+import com.dpcat237.nps.behavior.receiver.AlarmSyncNewsReceiver;
 import com.dpcat237.nps.behavior.receiver.BootReceiver;
 
 public class ReceiverHelper {
@@ -25,6 +26,9 @@ public class ReceiverHelper {
     }
 
     private static void enableAlarms(Context context) {
+        AlarmSyncNewsReceiver alarmSyncNews = new AlarmSyncNewsReceiver();
+        alarmSyncNews.setAlarm(context);
+
         AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
         alarmSyncDictations.setAlarm(context);
 
@@ -44,6 +48,9 @@ public class ReceiverHelper {
     }
 
     private static void cancelAlarms(Context context) {
+        AlarmSyncNewsReceiver alarmSyncNews = new AlarmSyncNewsReceiver();
+        alarmSyncNews.cancelAlarm(context);
+
         AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
         alarmSyncDictations.cancelAlarm(context);
 

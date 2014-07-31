@@ -12,12 +12,14 @@ import android.content.Intent;
  * device will not trigger this receiver.
  */
 public class BootReceiver extends BroadcastReceiver {
+    private AlarmSyncNewsReceiver alarmSyncNews = new AlarmSyncNewsReceiver();
     private AlarmSyncDictationsReceiver alarmSyncDictations = new AlarmSyncDictationsReceiver();
     private AlarmRemoveOldReceiver alarmRemoveOld = new AlarmRemoveOldReceiver();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            alarmSyncNews.setAlarm(context);
             alarmSyncDictations.setAlarm(context);
             alarmRemoveOld.setAlarm(context);
         }

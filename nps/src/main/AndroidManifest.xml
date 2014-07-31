@@ -129,6 +129,7 @@
             android:exported="false" >
         </receiver>
         <receiver android:name=".behavior.receiver.AlarmSyncDictationsReceiver" />
+        <receiver android:name=".behavior.receiver.AlarmSyncNewsReceiver" />
         <receiver android:name=".behavior.receiver.AlarmRemoveOldReceiver" />
         <receiver android:name=".behavior.receiver.BootReceiver"
             android:enabled="false">
@@ -150,8 +151,9 @@
         </receiver>
 
         <service android:name=".behavior.service.CreateSongsService" />
-        <service android:name=".behavior.service.SyncDictationItemsService" />
         <service android:name=".behavior.service.DownloadSongsService" />
         <service android:name=".behavior.service.PlayerService" />
+        <service android:name=".behavior.service.SyncDictationItemsService" />
+        <service android:name=".behavior.service.SyncNewsService" />
     </application>
 </manifest>

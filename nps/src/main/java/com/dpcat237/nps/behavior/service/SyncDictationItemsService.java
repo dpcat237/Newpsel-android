@@ -17,7 +17,6 @@ import com.dpcat237.nps.helper.PreferencesHelper;
 public class SyncDictationItemsService extends IntentService {
     private static final String TAG = "NPS:SyncDictationItemsService";
     private volatile static Boolean running = false;
-    private Intent mIntent;
     private Context mContext;
     private SyncDictationItemsManager syncManager;
     private SongsFactoryManager songsFactoryManager;
@@ -29,7 +28,6 @@ public class SyncDictationItemsService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        this.mIntent = intent;
         this.mContext = getApplicationContext();
         if (syncManager == null) {
             syncManager = new SyncDictationItemsManager(mContext);
@@ -52,7 +50,7 @@ public class SyncDictationItemsService extends IntentService {
             }
         }
 
-        AlarmSyncDictationsReceiver.completeWakefulIntent(mIntent);
+        AlarmSyncDictationsReceiver.completeWakefulIntent(intent);
     }
 
     private Boolean checkCanRun() {
@@ -70,11 +68,8 @@ public class SyncDictationItemsService extends IntentService {
         }
 
         Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
-        if (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext)) {
-            return true;
-        }
 
-        return false;
+        return (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext));
     }
 
     private void startProcess() {

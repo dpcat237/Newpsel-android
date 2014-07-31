@@ -12,7 +12,6 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.DictateItem;
-import com.dpcat237.nps.model.Item;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +33,7 @@ public class SyncDictationItemsManager {
         mContext = context;
     }
 
-    public void syncDictations()
-    {
+    public void syncDictations() {
         Log.d(TAG, "tut: syncDictations");
         getRepositories();
         if (!checkIfNecessarySync()) {
@@ -58,7 +56,7 @@ public class SyncDictationItemsManager {
         Log.d(TAG, "tut: newCount "+newCount);
 
         if (newCount > 0) {
-            setLastSyncCount(newCount);
+            PreferencesHelper.setLastSyncCount(mContext, newCount);
         }
         dictateRepo.deleteReadItems();
         dictateRepo.close();
@@ -97,7 +95,7 @@ public class SyncDictationItemsManager {
         downloadQuantity = Integer.parseInt(preferences.getString("pref_dictation_quantity", "25"));
         Boolean sync = false;
         Integer unreadCount = dictateRepo.countUnreadItems();
-        Integer lastSyncCount = getLastSyncCount();
+        Integer lastSyncCount = PreferencesHelper.getLastSyncCount(mContext);
 
         if (unreadCount < downloadQuantity) {
             sync = true;
@@ -122,35 +120,11 @@ public class SyncDictationItemsManager {
             Log.e(TAG, "tut:  "+e.getMessage());
             error = true;
         }
-
     }
 
     private void finish() {
         dictateRepo.close();
         songRepo.close();
-    }
-
-    private void setLastSyncCount(Integer count) {
-        SharedPreferences userPref = mContext.getSharedPreferences("UserPreference", mContext.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putInt("sync_dictate_items_last_count", count);
-        editor.apply();
-
-        PreferencesHelper.setNewDictationItems(mContext, true);
-    }
-
-    private Integer getLastSyncCount() {
-        Integer result = 0;
-
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = mContext.getSharedPreferences("UserPreference", mContext.MODE_PRIVATE);
-        Integer labelsUpdate = userPref.getInt("sync_dictate_items_last_count", 0);
-
-        if (labelsUpdate != 0) {
-            result = labelsUpdate;
-        }
-
-        return result;
     }
 
     private DictateItem[] downloadItems() {

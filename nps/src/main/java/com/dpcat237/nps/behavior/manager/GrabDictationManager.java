@@ -17,6 +17,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
+import com.dpcat237.nps.helper.StringHelper;
 import com.dpcat237.nps.model.Song;
 
 import java.io.File;
@@ -170,7 +171,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     public void onDone() {
         grabbedSongs = true;
-        Log.d(TAG, "tut: onDone "+currentSong.getId()+" file: "+soundFile.length());
+        Log.d(TAG, "tut: onDone "+currentSong.getId()+" file length: "+soundFile.length()+" file: "+soundFile.getName());
         songGrabManager.setAsGrabbedSong(currentSong.getId());
         grabNextSong();
     }
@@ -205,6 +206,12 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
         Log.d(TAG, "tut: grabSong "+currentSong.getId()+" title: "+currentSong.getTitle());
         //Log.d(TAG, "tut: grabSong getContent:  "+currentSong.getContent());
+
+        /* TODO: test for limit content
+        String text = currentSong.getContent();
+        String cnn = text.replace("\n", " ").replace("\r", " ");
+        String tryy = "text"; //text less than 5000 chars
+        mTts.synthesizeToFile(tryy, myHashRender, songFilename);*/
     }
 
     public Boolean isRunning() {
@@ -231,7 +238,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
     private void setSpeechSpeed() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        Float speechRate = Float.parseFloat(pref.getString("pref_dictation_speed", "1.0f"));
+        Float speechRate = Float.parseFloat(pref.getString("pref_dictation_speed", "1.5f"));
         mTts.setSpeechRate(speechRate);
     }
 }

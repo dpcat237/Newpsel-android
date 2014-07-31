@@ -113,10 +113,7 @@ public class ItemRepository extends BaseRepository {
 
 	public JSONArray getItemsToSync() {
 		JSONArray items = new JSONArray();
-		String where = ItemTable.COLUMN_IS_UNREAD+"=?";
-		String[] args = new String[] {""+0+""};
-
-		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, where, args, null, null, null);
+		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			try {
@@ -255,4 +252,22 @@ public class ItemRepository extends BaseRepository {
 		cursor.close();
 		return item;
 	}
+
+    public Integer countUnreadItems() {
+        String sql = "SELECT COUNT(tb."+ItemTable.COLUMN_ID+") AS total " +
+                " FROM "+ItemTable.TABLE_ITEM+" AS tb WHERE tb."+ItemTable.COLUMN_IS_UNREAD+"=1;";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        Integer count = cursor.getInt(0);
+        cursor.close();
+
+        return count;
+    }
+
+    public void deleteItem(Integer itemApiId) {
+        String where = ItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+itemApiId+""};
+        database.delete(ItemTable.TABLE_ITEM, where, args);
+    }
 }

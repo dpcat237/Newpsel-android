@@ -80,13 +80,12 @@ public class DictateItemRepository extends BaseRepository {
 	}
 
     public Integer countUnreadItems() {
-        Integer count = 0;
         String sql = "SELECT COUNT(tb."+DictateItemTable.COLUMN_ID+") AS total " +
                 " FROM "+DictateItemTable.TABLE_NAME+" AS tb WHERE tb."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb."+DictateItemTable.COLUMN_HAS_TTS_ERROR+"=0;";
         Cursor cursor = database.rawQuery(sql, null);
 
         cursor.moveToFirst();
-        count = cursor.getInt(0);
+        Integer count = cursor.getInt(0);
         cursor.close();
 
         return count;

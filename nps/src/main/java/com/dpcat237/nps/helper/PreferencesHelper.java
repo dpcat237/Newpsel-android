@@ -209,4 +209,27 @@ public class PreferencesHelper {
 
         return itemApiId;
     }
+
+    public static void setLastSyncCount(Context context, Integer count) {
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putInt("sync_dictate_items_last_count", count);
+        editor.apply();
+
+        PreferencesHelper.setNewDictationItems(context, true);
+    }
+
+    public static Integer getLastSyncCount(Context context) {
+        Integer result = 0;
+
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        Integer labelsUpdate = userPref.getInt("sync_dictate_items_last_count", 0);
+
+        if (labelsUpdate != 0) {
+            result = labelsUpdate;
+        }
+
+        return result;
+    }
 }
