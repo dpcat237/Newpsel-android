@@ -1,9 +1,11 @@
 package com.dpcat237.nps.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.database.repository.FeedRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -27,6 +29,10 @@ public class LoginHelper {
 		editor.commit();
 
         ReceiverHelper.enableBootReceiver(context);
+
+        //sync feeds and labels first time
+        Intent syncNews = new Intent(context, SyncNewsService.class);
+        context.startService(syncNews);
 	}
 
 	public static void doLogout(Context context) {

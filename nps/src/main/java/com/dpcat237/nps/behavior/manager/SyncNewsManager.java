@@ -43,12 +43,11 @@ public class SyncNewsManager {
         feedRepo.open();
 
         syncFeeds();
-        if (pref.getBoolean("pref_items_download_enable", true)) {
+        if (pref.getBoolean("pref_items_download_enable", false)) {
             syncItems();
             feedRepo.unreadCountUpdate();
         }
         feedRepo.close();
-
         syncLabels();
         syncLaterItems();
         syncSharedItems();

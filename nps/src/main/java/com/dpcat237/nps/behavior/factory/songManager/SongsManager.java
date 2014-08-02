@@ -4,11 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.dpcat237.nps.database.repository.SongPartRepository;
 import com.dpcat237.nps.model.List;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.model.SongPart;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,11 @@ public abstract class SongsManager {
     private Cursor songsCursor;
     protected ListItem songListItem;
     protected Boolean error = false;
+    private Integer ttsStringLimit = 3900;
+    private String filenamePrefix;
+    private SongPartRepository partRepo;
+    private ArrayList<SongPart> parts = null;
+    private Integer partsCount;
 
 
     protected void createListSongs() {
@@ -44,8 +51,6 @@ public abstract class SongsManager {
         song.setListTitle(list.getTitle());
         song.setTitle(listItem.getTitle());
         song.setType(grabberType);
-        String filename = grabberType+"_"+list.getApiId()+"_"+listItem.getId();
-        song.setFilename(filename + ".wav");
 
         return song;
     }
@@ -79,7 +84,7 @@ public abstract class SongsManager {
 
     public void setCursorNotGrabbedSongs() {
         songsCursor = songRepo.getCursorNotGrabbedSongs(grabberType);
-        Log.d(TAG, "tut: setCursorNotGrabbedSongs  "+songsCursor.getCount());
+        Log.d(TAG, "tut: setCursorNotGrabbedSongs "+songsCursor.getCount()+" type: "+grabberType);
         if (songsCursor.getCount() > 0) {
             songsCursor.moveToFirst();
         } else {
@@ -99,13 +104,25 @@ public abstract class SongsManager {
         if (error) {
             return null;
         }
+
         setSongContent(song, songListItem);
         song.setLanguage(songListItem.getLanguage());
+
+        if (parts == null) {
+            setFilenamePrefix(song.getType(), song.getItemApiId(), song.getListId());
+            createSongParts(song, song.getContent());
+        }
+        setSongPart(song);
+        //Log.d(TAG, "tut: parts "+parts.size());
 
         return song;
     }
 
-    public Song getNextSong() {
+    private void setFilenamePrefix(String type, Integer itemApiId, Integer listApiId) {
+        filenamePrefix = type+"_"+itemApiId+"_"+listApiId;
+    }
+
+    public Song getNextSong(Boolean previousError) {
         Song song;
         if (songsCursor.isLast()) {
             error = true;
@@ -114,7 +131,10 @@ public abstract class SongsManager {
         }
 
         try {
-            songsCursor.moveToNext();
+            if (previousError || partsCount >= parts.size()) {
+                songsCursor.moveToNext();
+                parts = null;
+            }
             song = songRepo.cursorToSong(songsCursor);
             song = setSongExtraData(song);
         } catch (Exception e) {
@@ -142,6 +162,68 @@ public abstract class SongsManager {
     public void markTtsError(Song song) {
         songRepo.deleteSong(song.getId());
         markTtsError(song.getItemApiId());
+    }
+
+    private void createSongParts(Song song, String completeText) {
+        partRepo = new SongPartRepository(mContext);
+        partRepo.open();
+        parts = null;
+        partsCount = 0;
+
+        Integer textLength = completeText.length();
+        if (textLength <= ttsStringLimit) {
+            createSongPart(song, completeText, 1);
+            partRepo.close();
+
+            return;
+        }
+
+        cutDictation(song, completeText, textLength, 0, 0);
+        partRepo.close();
+    }
+
+    private void cutDictation(Song song, String completeText, Integer textLength, Integer subInt, Integer count) {
+        count++;
+        Integer subEnd = subInt + ttsStringLimit;
+        if (subEnd >= textLength) {
+            subEnd = textLength;
+        }
+        String subText = completeText.substring(subInt, subEnd);
+
+        if (subEnd.equals(textLength)) {
+            createSongPart(song, subText, count);
+
+            return;
+        }
+        subText = subText.replaceAll(" [^ ]+$", "");
+        createSongPart(song, subText, count);
+
+        String subSearch = subText.substring((subText.length()-50), subText.length());
+        Integer nextSubInt = completeText.lastIndexOf(subSearch) + 50;
+
+        cutDictation(song, completeText, textLength, nextSubInt, count);
+    }
+
+    private void createSongPart(Song song, String content, Integer count) {
+        SongPart songPart = new SongPart();
+        songPart.setSongId(song.getId());
+        songPart.setContent(content);
+        songPart.setFilename(filenamePrefix+"_"+count+".wav");
+        song.addPart(songPart);
+
+        partRepo.addSongPart(songPart);
+    }
+
+    private void setSongPart(Song song) {
+        if (parts == null) {
+            parts = song.getParts();
+        }
+
+        SongPart songPart = parts.get(partsCount);
+        partsCount++;
+
+        song.setContent(songPart.getContent());
+        song.setFilename(songPart.getFilename());
     }
 
     abstract protected void setCreatorType();

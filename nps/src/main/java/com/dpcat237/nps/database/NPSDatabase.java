@@ -10,6 +10,7 @@ import com.dpcat237.nps.database.table.ItemTable;
 import com.dpcat237.nps.database.table.LabelItemTable;
 import com.dpcat237.nps.database.table.LabelTable;
 import com.dpcat237.nps.database.table.SharedTable;
+import com.dpcat237.nps.database.table.SongPartTable;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
@@ -17,7 +18,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,6 +34,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelItemTable.onCreate(db);
 		SharedTable.onCreate(db);
         SongTable.onCreate(db);
+        SongPartTable.onCreate(db);
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
@@ -43,6 +45,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelItemTable.onDelete(db);
 		SharedTable.onDelete(db);
         SongTable.onDelete(db);
+        SongPartTable.onDelete(db);
 	}
 
 	@Override
@@ -55,9 +58,8 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		LabelItemTable.onUpgrade(db, oldVersion, newVersion);
 		SharedTable.onUpgrade(db, oldVersion, newVersion);
         SongTable.onUpgrade(db, oldVersion, newVersion);
+        SongPartTable.onUpgrade(db, oldVersion, newVersion);
         PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
         PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
-
 	}
-
 }

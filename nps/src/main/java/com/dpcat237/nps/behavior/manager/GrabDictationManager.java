@@ -3,7 +3,6 @@ package com.dpcat237.nps.behavior.manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -17,7 +16,6 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
-import com.dpcat237.nps.helper.StringHelper;
 import com.dpcat237.nps.model.Song;
 
 import java.io.File;
@@ -139,7 +137,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
                     @Override
                     public void onStart(String utteranceId) {
-                        Log.d(TAG, "tut: onStart "+utteranceId);
+                        //Log.d(TAG, "tut: onStart "+utteranceId);
                     }
                 });
         if (listenerResult != TextToSpeech.SUCCESS) {
@@ -158,8 +156,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
        return (dictationTypesCount <= (dictationTypes.length-1));
    }
 
-    private void grabNextSong() {
-        currentSong = songGrabManager.getNextSong();
+    private void grabNextSong(Boolean error) {
+        currentSong = songGrabManager.getNextSong(error);
         if (!songGrabManager.areError()) {
             setDictationLanguage();
             createSongFile();
@@ -173,7 +171,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         grabbedSongs = true;
         Log.d(TAG, "tut: onDone "+currentSong.getId()+" file length: "+soundFile.length()+" file: "+soundFile.getName());
         songGrabManager.setAsGrabbedSong(currentSong.getId());
-        grabNextSong();
+        grabNextSong(false);
     }
 
     public void onError() {
@@ -183,7 +181,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
             deleteSongFile();
         }
 
-        grabNextSong();
+        grabNextSong(true);
     }
 
     private void deleteSongFile() {
@@ -202,16 +200,11 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         HashMap<String, String> myHashRender = new HashMap();
         String utteranceID = "wpta";
         myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
+
+        //Log.d(TAG, "tut: length "+currentSong.getContent().length());
+        //Log.d(TAG, "tut:  grabSong: "+currentSong.getTitle());
+        //Log.d(TAG, "tut: getContent:  "+currentSong.getContent());
         mTts.synthesizeToFile(currentSong.getContent(), myHashRender, songFilename);
-
-        Log.d(TAG, "tut: grabSong "+currentSong.getId()+" title: "+currentSong.getTitle());
-        //Log.d(TAG, "tut: grabSong getContent:  "+currentSong.getContent());
-
-        /* TODO: test for limit content
-        String text = currentSong.getContent();
-        String cnn = text.replace("\n", " ").replace("\r", " ");
-        String tryy = "text"; //text less than 5000 chars
-        mTts.synthesizeToFile(tryy, myHashRender, songFilename);*/
     }
 
     public Boolean isRunning() {

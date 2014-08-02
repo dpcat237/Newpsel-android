@@ -156,6 +156,7 @@
     <string name="button_pause_play">Play / Pause</string>
     <string name="notification_last_track">Player stopped because was last track</string>
     <string name="player_nt_finish_titles">Finished dictation of headlines</string>
+    <string name="player_nt_finish_dictations">Finished dictation of saved articles</string>
     <string name="player_start_problem">Are some problem to play this song</string>
     
     <!-- Settings -->

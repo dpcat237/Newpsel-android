@@ -6,7 +6,7 @@ import android.util.Log;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
 
 public class SongsFactoryManager {
-    private static final String TAG = "NPS:SongsCreator";
+    private static final String TAG = "NPS:SongsFactoryManager";
 
     public Boolean createSongs(String type, Context context) {
         Boolean error = false;

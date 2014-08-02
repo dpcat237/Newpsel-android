@@ -14,6 +14,7 @@ import com.dpcat237.nps.R;
 public class AboutActivity extends Activity {
     private static final String TAG = "NPS:AboutActivity";
 
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

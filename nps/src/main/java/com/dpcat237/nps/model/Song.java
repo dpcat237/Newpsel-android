@@ -1,5 +1,7 @@
 package com.dpcat237.nps.model;
 
+import java.util.ArrayList;
+
 public class Song extends Generic {
     protected Integer list_id;
     protected Integer item_id;
@@ -11,7 +13,7 @@ public class Song extends Generic {
     protected Boolean is_grabbed = false;
     protected Boolean is_played = false;
     protected String type;
-    protected Integer duration;
+    private ArrayList<SongPart> parts;
 
 
     public Integer getListId() {
@@ -94,11 +96,13 @@ public class Song extends Generic {
         this.type = type;
     }
 
-    public Integer getDuration() {
-        return duration;
+    public void addPart(SongPart part) {
+        if (parts == null) {
+            parts = new ArrayList<SongPart>();
+        }
+        parts.add(part);
     }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public ArrayList<SongPart> getParts() {
+        return parts;
     }
 }

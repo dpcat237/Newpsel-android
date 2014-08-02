@@ -14,7 +14,6 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
@@ -40,7 +39,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class PlayerService extends PlayerServiceCommands {
-
+    private static final String TAG = "NPS:PlayerService";
     protected MediaPlayer player;
     private LockscreenManager lockscreenManager = null;
     private PlayerQueueManager queryManager = null;
@@ -54,9 +53,9 @@ public class PlayerService extends PlayerServiceCommands {
     protected Timer updateTimer;
     private Integer currentId;
     private Integer justStarted = 1;
-    private static final String TAG = "NPS:PlayerService";
     private SongsManager songGrabManager;
     private String playType;
+    private Song currentSong;
     private class UpdatePositionTimerTask extends TimerTask {
     protected int lastPosition = 0;
 
@@ -156,7 +155,7 @@ public class PlayerService extends PlayerServiceCommands {
                     String message = String.format(Locale.US, "mediaplayer error - what: %d, extra: %d", what, extra);
                     Log.d(TAG, message);
 
-                    stopUpdateTimer();
+                    //stopUpdateTimer();
                     player.reset();
                     isPlayerPrepared = false;
 
@@ -167,7 +166,7 @@ public class PlayerService extends PlayerServiceCommands {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer player) {
-                    playNextPodcast();
+                    playNext();
                 }
             });
 
@@ -228,7 +227,7 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPTOEND:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPTOEND");
-                playNextPodcast();
+                playNextSong();
                 break;
             case PlayerConstants.PLAYER_COMMAND_RESTART:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_RESTART");
@@ -247,10 +246,7 @@ public class PlayerService extends PlayerServiceCommands {
                     break;
                 }
 
-                if (queryManager.isLast()) {
-                    Toast.makeText(this, R.string.notification_last_track, Toast.LENGTH_SHORT).show();
-                }
-                playNextPodcast();
+                playNextSong();
                 changeNotificationPlayButtonPause();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE:
@@ -364,7 +360,7 @@ public class PlayerService extends PlayerServiceCommands {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         am.abandonAudioFocus(_afChangeListener);
 
-        stopUpdateTimer();
+        //stopUpdateTimer();
         removeNotification();
         lockscreenManager.removeLockscreenControls();
 
@@ -387,6 +383,7 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.STATUS_STOPPED:
                 PreferencesHelper.setPlayerActive(mContext, false);
+                queryManager.finish();
                 break;
             case PlayerConstants.STATUS_PAUSED:
                 break;
@@ -428,16 +425,16 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
 
-        Song song = queryManager.getCurrentSong();
-        prepareMediaPlayer(song);
+        currentSong = queryManager.getCurrentSong();
+        prepareMediaPlayer(currentSong);
 
         lockscreenManager = new LockscreenManager();
-        lockscreenManager.setupLockscreenControls(this, song);
+        lockscreenManager.setupLockscreenControls(this, currentSong);
 
         updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
         showNotification();
-        createUpdateTimer();
+        //createUpdateTimer();
     }
 
     private void playFirstSong() {
@@ -445,16 +442,16 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
 
-        Song song = queryManager.getCurrentSong();
-        prepareMediaPlayer(song);
+        currentSong = queryManager.getCurrentSong();
+        prepareMediaPlayer(currentSong);
 
         lockscreenManager = new LockscreenManager();
-        lockscreenManager.setupLockscreenControls(this, song);
+        lockscreenManager.setupLockscreenControls(this, currentSong);
 
         updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
         showNotification();
-        createUpdateTimer();
+        //createUpdateTimer();
     }
 
     private boolean prepareMediaPlayer(Song song) {
@@ -502,7 +499,7 @@ public class PlayerService extends PlayerServiceCommands {
                 updateActivePodcastPosition(player.getCurrentPosition());
             }*/
         } else {
-            playNextPodcast();
+            playNextSong();
         }
     }
 
@@ -524,33 +521,56 @@ public class PlayerService extends PlayerServiceCommands {
         }
     }
 
-    private void playNextPodcast() {
+    private void playNext() {
         if (player != null) {
             // stop the player and the updating while we do some administrative stuff
             player.pause();
-            stopUpdateTimer();
+            //stopUpdateTimer();
             updateActivePodcastPosition(player.getCurrentPosition());
         }
-        markSongAsRead();
 
+        if (queryManager.areMoreParts()) {
+            grabAudioFocusAndResume();
+
+            return;
+        }
+
+        nextSong();
+    }
+
+    private void playNextSong() {
+        if (player != null) {
+            // stop the player and the updating while we do some administrative stuff
+            player.pause();
+            //stopUpdateTimer();
+            updateActivePodcastPosition(player.getCurrentPosition());
+        }
+
+        nextSong();
+    }
+
+    private void nextSong() {
+        markSongAsRead();
         if (queryManager.isLast()) {
-            Toast.makeText(mContext, getNotificationMessage(), Toast.LENGTH_SHORT).show();
+            NotificationHelper.showSimpleToast(mContext, getNotificationMessage());
             stop();
 
             /* http://stackoverflow.com/questions/3873659/android-how-can-i-get-the-current-foreground-activity-from-a-service
             Intent mainIntent = new Intent(this, MainActivity.class);
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mainIntent);*/
-        } else {
-            queryManager.setNextSong();
-            grabAudioFocusAndResume();
+
+            return;
         }
+
+        queryManager.setNextSong();
+        grabAudioFocusAndResume();
     }
 
     private void markSongAsRead() {
         songGrabManager = SongsFactory.createManager(playType);
         songGrabManager.setup(mContext);
-        songGrabManager.markAsPlayed(queryManager.getCurrentSong());
+        songGrabManager.markAsPlayed(currentSong);
         songGrabManager.finish();
         songGrabManager = null;
     }
@@ -560,6 +580,9 @@ public class PlayerService extends PlayerServiceCommands {
         if (playType.equals(SongConstants.GRABBER_TYPE_TITLE)) {
             message = mContext.getString(R.string.player_nt_finish_titles);
         }
+        if (playType.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+            message = mContext.getString(R.string.player_nt_finish_dictations);
+        }
 
         return message;
     }
@@ -568,7 +591,7 @@ public class PlayerService extends PlayerServiceCommands {
         if (player != null) {
             // stop the player and the updating while we do some administrative stuff
             player.pause();
-            stopUpdateTimer();
+            //stopUpdateTimer();
             updateActivePodcastPosition(player.getCurrentPosition());
         }
 
@@ -579,13 +602,12 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void showNotification() {
-        Song song = queryManager.getCurrentSong();
         notificationView = new RemoteViews(getPackageName(), R.layout.notification_player);
-        notificationView.setTextViewText(R.id.songListTitle, song.getListTitle());
-        notificationView.setTextViewText(R.id.songTitle, song.getTitle());
+        notificationView.setTextViewText(R.id.songListTitle, currentSong.getListTitle());
+        notificationView.setTextViewText(R.id.songTitle, currentSong.getTitle());
 
         //set up details intent
-        Intent detailsIntent = SongsFactory.getActivityIntent(mContext, song.getType());
+        Intent detailsIntent = SongsFactory.getActivityIntent(mContext, currentSong.getType());
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent showItemIntent = PendingIntent.getActivity(mContext, 0, detailsIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.buttonDetails, showItemIntent);
