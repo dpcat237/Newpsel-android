@@ -23,7 +23,7 @@ public class MainFragmentDictateManager extends MainFragmentItemsManager {
     }
 
     protected void getItems() {
-        items = dictateRepo.getUnreadItems();
+        items = dictateRepo.getUnreadGrabbedItems();
     }
 
     protected void showNextPage(ListItem item) {

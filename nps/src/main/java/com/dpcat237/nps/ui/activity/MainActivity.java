@@ -316,7 +316,7 @@ public class MainActivity extends Activity {
             buttonAddFeed.setVisible(false);
             DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
             dictateRepo.open();
-            Integer unreadCount = dictateRepo.countUnreadItems();
+            Integer unreadCount = dictateRepo.countUnreadGrabberItems();
             Log.d(TAG, "tut: drawerUpdateMenuItems unreadCount "+unreadCount);
             if (unreadCount > 0) {
                 buttonDictate.setVisible(true);

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.DictateItemTable;
+import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.model.ListItem;
 
@@ -46,6 +47,14 @@ public class DictateItemRepository extends BaseRepository {
             DictateItemTable.COLUMN_TITLE,
             DictateItemTable.COLUMN_CONTENT,
             DictateItemTable.COLUMN_TEXT
+    };
+    private String[] forListColumns = {
+            DictateItemTable.COLUMN_ID,
+            DictateItemTable.COLUMN_API_ID,
+            DictateItemTable.COLUMN_ITEM_ID,
+            DictateItemTable.COLUMN_FEED_ID,
+            DictateItemTable.COLUMN_IS_UNREAD,
+            DictateItemTable.COLUMN_TITLE,
     };
 
 
@@ -154,6 +163,51 @@ public class DictateItemRepository extends BaseRepository {
         cursor.close();
 
         return items;
+    }
+
+    public ArrayList<ListItem> getUnreadGrabbedItems() {
+        ArrayList<ListItem> items = new ArrayList<ListItem>();
+        String sql = "SELECT" +columnsToString("tb1", forListColumns)+
+                "FROM "+DictateItemTable.TABLE_NAME+" AS tb1 "+
+                "LEFT JOIN "+ SongTable.TABLE_SONG+" AS tb2 ON tb1."+DictateItemTable.COLUMN_ITEM_ID+"=tb2."+SongTable.COLUMN_ITEM_ID+" "+
+                "WHERE tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+";";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            ListItem item = cursorToItemForList(cursor);
+            items.add(item);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return items;
+    }
+
+    public Integer countUnreadGrabberItems() {
+        String sql = "SELECT COUNT(tb1."+DictateItemTable.COLUMN_ID+") AS total "+
+                "FROM "+DictateItemTable.TABLE_NAME+" AS tb1 "+
+                "LEFT JOIN "+ SongTable.TABLE_SONG+" AS tb2 ON tb1."+DictateItemTable.COLUMN_ITEM_ID+"=tb2."+SongTable.COLUMN_ITEM_ID+" "+
+                "WHERE tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+";";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        Integer count = cursor.getInt(0);
+        cursor.close();
+
+        return count;
+    }
+
+    private ListItem cursorToItemForList(Cursor cursor) {
+        ListItem item = new ListItem();
+        item.setId(cursor.getInt(0));
+        item.setApiId(cursor.getInt(1));
+        item.setItemApiId(cursor.getInt(2));
+        item.setListApiId(cursor.getInt(3));
+        item.setIsUnread(cursor.getInt(4)>0);
+        item.setTitle(cursor.getString(5));
+
+        return item;
     }
 
     private ListItem cursorToListItem(Cursor cursor) {
