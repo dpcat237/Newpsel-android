@@ -152,9 +152,27 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         nextDictationType();
     }
 
-   private Boolean areMoreTypes() {
+    private Boolean areMoreTypes() {
        return (dictationTypesCount <= (dictationTypes.length-1));
    }
+
+    private void grabNext() {
+        if (songGrabManager.isLastSongPart()) {
+            songGrabManager.setAsGrabbedSong(currentSong.getId());
+            grabbedSongs = true;
+            grabNextSong(false);
+
+            return;
+        }
+
+        currentSong = songGrabManager.getNextSong(false);
+        if (!songGrabManager.areError()) {
+            createSongFile();
+            grabSong();
+        } else {
+            grabNextSong(true);
+        }
+    }
 
     private void grabNextSong(Boolean error) {
         currentSong = songGrabManager.getNextSong(error);
@@ -168,10 +186,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     public void onDone() {
-        grabbedSongs = true;
         Log.d(TAG, "tut: onDone "+currentSong.getId()+" file length: "+soundFile.length()+" file: "+soundFile.getName());
-        songGrabManager.setAsGrabbedSong(currentSong.getId());
-        grabNextSong(false);
+        grabNext();
     }
 
     public void onError() {

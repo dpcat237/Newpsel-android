@@ -226,6 +226,10 @@ public abstract class SongsManager {
         song.setFilename(songPart.getFilename());
     }
 
+    public Boolean isLastSongPart() {
+        return (partsCount >= parts.size());
+    }
+
     abstract protected void setCreatorType();
     abstract protected void setSongContent(Song song, ListItem listItem);
     abstract protected void getListItem(Integer itemId);
