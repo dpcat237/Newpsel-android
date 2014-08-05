@@ -11,6 +11,16 @@ android {
         versionCode 137
         versionName '0.1.37'
     }
+
+    signingConfigs {
+        release {
+            storeFile file('/home/denys/C.A.T./Programs/Projects/npsKey')
+            storePassword 'D#25c01a1987t#Pnps'
+            keyAlias 'npsKey'
+            keyPassword 'D#25c01a1987t#Pnps'
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -23,18 +33,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-    signingConfigs {
-        release {
-            storeFile file('/home/denys/C.A.T./Programs/Projects/npsKey')
-            storePassword 'D#25c01a1987t#Pnps'
-            keyAlias 'npsKey'
-            keyPassword 'D#25c01a1987t#Pnps'
-        }
-    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile 'com.android.support:support-v4:20.0.0'
-    compile 'com.google.code.gson:gson:2.2.+'
+    compile 'com.google.code.gson:gson:2.+'
 }
