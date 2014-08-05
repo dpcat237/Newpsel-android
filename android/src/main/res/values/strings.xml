@@ -226,14 +226,12 @@
     <string name="st_download_mobile_enable_text">Activate to enable download dictations via mobile data</string>
     <string name="st_notifications">Notifications</string>
     <string name="st_notifications_enable">Enable notifications</string>
-    <string name="st_dictation_label">Dictation label</string>
-    <string name="st_dictation_label_select">Select label which articles you want listen</string>
     <string name="st_services">Services</string>
     <string name="st_items_download">Download news</string>
     <string name="st_items_download_check">Activate to enable news download</string>
     <string name="st_battery_level_title">Min battery level</string>
     <string name="st_battery_level_s">Adjust minimum level of battery to download dictations</string>
-    <string-array name="st_list_st_battery_level_titles">
+    <string-array name="st_list_battery_level_titles">
         <item>30%</item>
         <item>40%</item>
         <item>50%</item>
@@ -245,6 +243,19 @@
         <item>50.0f</item>
         <item>60.0f</item>
     </string-array>
+    <string name="st_later_items_preferences">Preferences of saved to later articles</string>
+    <string name="st_later_items_titles">Saved to later articles</string>
+    <string name="st_later_items_check">Activate to enable later articles download</string>
+    <string name="st_later_items_quantity">Quantity of later articles</string>
+    <string name="st_later_items_quantity_s">Adjust quantity of later articles in device</string>
+    <string-array name="st_list_later_items_quantity">
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+    </string-array>
+    <string name="st_later_items_labels">Labels to sync</string>
+    <string name="st_later_items_labels_s">Select from which download articles</string>
+    <string-array name="empty_array"/>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>
