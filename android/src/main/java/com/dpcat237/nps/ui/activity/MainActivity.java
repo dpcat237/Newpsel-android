@@ -27,7 +27,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.DownloadSongsService;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
-import com.dpcat237.nps.behavior.task.DownloadDataTask;
+import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
@@ -238,7 +238,7 @@ public class MainActivity extends Activity {
             startService(downloadSongsService);
         } else {
             item.setEnabled(false);
-            DownloadDataTask task = new DownloadDataTask(this, mView);
+            SyncNewsTask task = new SyncNewsTask(this, mView);
             task.execute();
 		}
 	}

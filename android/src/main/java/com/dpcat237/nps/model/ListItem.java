@@ -4,6 +4,7 @@ public class ListItem extends Generic {
     protected Integer api_id;
     protected Integer item_id;
     protected Integer list_id;
+    protected String link;
     protected String title;
     protected String text;
     protected String content;
@@ -33,6 +34,14 @@ public class ListItem extends Generic {
 
     public void setListApiId(Integer list_id) {
         this.list_id = list_id;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getTitle() {

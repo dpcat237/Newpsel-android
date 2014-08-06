@@ -7,7 +7,7 @@ import com.dpcat237.nps.model.Label;
 
 import org.apache.http.client.methods.HttpPost;
 
-public class ApiLabelsItemsManager extends ApiPostManager {
+public class ApiLabelsManager extends ApiPostManager {
     private Label[] labels;
 
     protected void setupExtra() {

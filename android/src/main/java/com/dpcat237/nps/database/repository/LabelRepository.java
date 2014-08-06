@@ -226,7 +226,7 @@ public class LabelRepository extends BaseRepository {
 		database.delete(LabelItemTable.TABLE_LABEL_ITEM, where, args);
 	}
 	
-	public void removeLaterItems() {
+	public void removeLabelItems() {
 		String where = LabelItemTable.COLUMN_ID+"!=?";
 		String[] args = new String[] {""+0+""};
 		database.delete(LabelItemTable.TABLE_LABEL_ITEM, where, args);

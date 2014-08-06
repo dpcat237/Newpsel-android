@@ -12,6 +12,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import com.dpcat237.nps.behavior.service.CreateSongsService;
 import com.dpcat237.nps.behavior.service.DownloadSongsService;
 import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
+import com.dpcat237.nps.helper.LoginHelper;
 
 /**
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
@@ -24,6 +25,10 @@ public class AlarmSyncDictationsReceiver extends WakefulBroadcastReceiver {
   
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (!LoginHelper.checkLogged(context)) {
+            cancelAlarm(context);
+        }
+
         Intent createSongsService = new Intent(context, CreateSongsService.class);
         startWakefulService(context, createSongsService);
 

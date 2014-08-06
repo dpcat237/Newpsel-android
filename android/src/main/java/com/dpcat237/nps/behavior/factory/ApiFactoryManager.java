@@ -24,7 +24,7 @@ public class ApiFactoryManager {
         } catch (Exception e) {
             result.put("error", true);
             result.put("errorMessage", e.getMessage());
-            Log.d(TAG, "tut: Exception "+e.getMessage());
+            Log.d(TAG, "tut: Exception "+type+" "+e.getMessage());
         }
 
         return result;

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.dpcat237.nps.behavior.manager.SyncNewsManager;
 import com.dpcat237.nps.behavior.receiver.AlarmSyncNewsReceiver;
 import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.LoginHelper;
 
 public class SyncNewsService extends IntentService {
     private static final String TAG = "NPS:SyncNewsService";
@@ -49,7 +50,7 @@ public class SyncNewsService extends IntentService {
     private Boolean checkCanRun() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        return (pref.getBoolean("pref_items_download_enable", true) && ConnectionHelper.hasConnection(mContext));
+        return (LoginHelper.checkLogged(mContext) && pref.getBoolean("pref_items_download_enable", true) && ConnectionHelper.hasConnection(mContext));
     }
 
     private void startProcess() {

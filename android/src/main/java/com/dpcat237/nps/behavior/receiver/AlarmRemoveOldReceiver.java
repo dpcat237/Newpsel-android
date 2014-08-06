@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.dpcat237.nps.behavior.service.RemoveDictationsService;
+import com.dpcat237.nps.helper.LoginHelper;
 
 /**
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
@@ -22,10 +23,12 @@ public class AlarmRemoveOldReceiver extends WakefulBroadcastReceiver {
   
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (!LoginHelper.checkLogged(context)) {
+            cancelAlarm(context);
+        }
 
         Intent removeDictationsService = new Intent(context, RemoveDictationsService.class);
         startWakefulService(context, removeDictationsService);
-
     }
 
     /**
