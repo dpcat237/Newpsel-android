@@ -33,8 +33,8 @@
         <SwitchPreference
             android:title="@string/st_items_download"
             android:key="pref_items_download_enable"
-            android:summary="@string/st_later_items_check"
-            android:defaultValue="false" />
+            android:summary="@string/st_items_download_check"
+            android:defaultValue="true" />
         <PreferenceScreen android:title="@string/st_dictation_preferences">
             <SwitchPreference
                 android:title="@string/st_dictation_titles"
@@ -92,7 +92,7 @@
             <SwitchPreference
                 android:title="@string/st_later_items_titles"
                 android:key="pref_later_items_enable"
-                android:summary="@string/st_dictation_enable_titles"
+                android:summary="@string/st_later_items_check"
                 android:defaultValue="false"/>
             <ListPreference
                 android:defaultValue="50"
