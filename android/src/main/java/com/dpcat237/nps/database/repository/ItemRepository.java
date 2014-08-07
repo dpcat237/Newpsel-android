@@ -44,6 +44,12 @@ public class ItemRepository extends BaseRepository {
             ItemTable.COLUMN_CONTENT,
             ItemTable.COLUMN_LANGUAGE
     };
+    private String[] syncColumns = {
+            ItemTable.COLUMN_API_ID,
+            ItemTable.COLUMN_UI_ID,
+            ItemTable.COLUMN_IS_STARED,
+            ItemTable.COLUMN_IS_UNREAD,
+    };
 
 
 	public ItemRepository(Context context) {
@@ -113,23 +119,23 @@ public class ItemRepository extends BaseRepository {
 
 	public JSONArray getItemsToSync() {
 		JSONArray items = new JSONArray();
-		Cursor cursor = database.query(ItemTable.TABLE_ITEM, allColumns, null, null, null, null, null);
+		Cursor cursor = database.query(ItemTable.TABLE_ITEM, syncColumns, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			try {
 				JSONObject item = new JSONObject();
-				item.put("id", cursor.getLong(1));
-                item.put("ui_id", cursor.getLong(2));
-				item.put("is_stared", cursor.getInt(7));
-				item.put("is_unread", cursor.getInt(8));
+				item.put("id", cursor.getLong(0));
+                item.put("ui_id", cursor.getLong(1));
+				item.put("is_stared", cursor.getInt(2));
+				item.put("is_unread", cursor.getInt(3));
 				items.put(item);
 			} catch (JSONException e) {
 				Log.e("ItemRepository - getItemsToSync","Error", e);
 			}
 			cursor.moveToNext();
 		}
-
 		cursor.close();
+
 		return items;
 	}
 
