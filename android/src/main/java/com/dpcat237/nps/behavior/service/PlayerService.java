@@ -237,7 +237,7 @@ public class PlayerService extends PlayerServiceCommands {
             case PlayerConstants.PLAYER_COMMAND_SKIPBACK:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_SKIPBACK");
                 if (playerStatus.hasActiveSong()) {
-                    playPreviousPodcast();
+                    playPreviousSong();
                 }
                 break;
             case PlayerConstants.PLAYER_COMMAND_SKIPFORWARD:
@@ -587,7 +587,7 @@ public class PlayerService extends PlayerServiceCommands {
         return message;
     }
 
-    private void playPreviousPodcast() {
+    private void playPreviousSong() {
         if (player != null) {
             // stop the player and the updating while we do some administrative stuff
             player.pause();
@@ -595,7 +595,9 @@ public class PlayerService extends PlayerServiceCommands {
             updateActivePodcastPosition(player.getCurrentPosition());
         }
 
-        if (!queryManager.isFirst()) {
+        if (queryManager.isFirst()) {
+            queryManager.setCurrentPosition(0);
+        } else {
             queryManager.setPreviousSong();
         }
         grabAudioFocusAndResume();

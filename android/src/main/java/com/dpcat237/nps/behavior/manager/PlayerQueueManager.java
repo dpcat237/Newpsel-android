@@ -61,7 +61,7 @@ public class PlayerQueueManager {
         partsCount++;
     }
 
-    private void setCurrentPosition(Integer position) {
+    public void setCurrentPosition(Integer position) {
         currentPosition = position;
         parts = null;
     }
