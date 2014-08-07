@@ -72,8 +72,7 @@ public class PlayerService extends PlayerServiceCommands {
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK) {
+            if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK) {
                 Log.d(TAG, "tut: got a transient audio focus gain event somehow");
             }
 
@@ -83,8 +82,10 @@ public class PlayerService extends PlayerServiceCommands {
 
             if (playerStatus.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 PlayerService.play(PlayerService.this);
+                changeNotificationPlayButton();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                 PlayerService.pause(PlayerService.this);
+                changeNotificationPlayButton();
             }
         }
     };
