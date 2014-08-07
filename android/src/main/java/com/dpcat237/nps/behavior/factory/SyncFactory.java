@@ -1,5 +1,6 @@
 package com.dpcat237.nps.behavior.factory;
 
+import com.dpcat237.nps.behavior.factory.syncManager.SyncDictationItemsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncFeedsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncItemsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncLabelItemsManager;
@@ -14,6 +15,9 @@ public class SyncFactory {
 
         if (type.equals(SyncConstants.SYNC_FEEDS)) {
             syncManager = new SyncFeedsManager();
+        }
+        if (type.equals(SyncConstants.SYNC_DICTATION_ITEMS)) {
+            syncManager = new SyncDictationItemsManager();
         }
         if (type.equals(SyncConstants.SYNC_ITEMS)) {
             syncManager = new SyncItemsManager();

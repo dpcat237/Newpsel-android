@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -63,7 +62,6 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
     }
 	
 	private void syncFeeds() {
-        Log.d(TAG, "tut: syncFeeds a");
         SyncManager syncFeedsManager = SyncFactory.createManager(SyncConstants.SYNC_FEEDS);
         syncFeedsManager.setup(mContext);
         if (syncFeedsManager.areError()) {
@@ -72,7 +70,6 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
 
             return;
         }
-        Log.d(TAG, "tut: syncFeeds b");
 
         syncFeedsManager.makeRequest();
         if (syncFeedsManager.areError()) {
@@ -81,13 +78,11 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
 
             return;
         }
-        Log.d(TAG, "tut: syncFeeds c");
 
         updateProgress(10);
         syncFeedsManager.processData();
         syncFeedsManager.finish();
         updateProgress(20);
-        Log.d(TAG, "tut: syncFeeds d");
 	}
 	
 	private void syncItems() {
