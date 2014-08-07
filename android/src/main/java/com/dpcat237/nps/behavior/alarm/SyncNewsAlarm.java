@@ -1,4 +1,4 @@
-package com.dpcat237.nps.behavior.receiver;
+package com.dpcat237.nps.behavior.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,17 +9,18 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.dpcat237.nps.behavior.service.RemoveDictationsService;
+import com.dpcat237.nps.behavior.receiver.BootReceiver;
+import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.helper.LoginHelper;
 
 /**
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
  * and then starts the IntentService {@code SampleSchedulingService} to do some work.
  */
-public class AlarmRemoveOldReceiver extends WakefulBroadcastReceiver {
+public class SyncNewsAlarm extends WakefulBroadcastReceiver {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
-    private static final String TAG = "NPS:AlarmRemoveOldReceiver";
+    private static final String TAG = "NPS:AlarmSyncNewsReceiver";
   
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,8 +28,8 @@ public class AlarmRemoveOldReceiver extends WakefulBroadcastReceiver {
             cancelAlarm(context);
         }
 
-        Intent removeDictationsService = new Intent(context, RemoveDictationsService.class);
-        startWakefulService(context, removeDictationsService);
+        Intent syncNewsService = new Intent(context, SyncNewsService.class);
+        startWakefulService(context, syncNewsService);
     }
 
     /**
@@ -38,11 +39,12 @@ public class AlarmRemoveOldReceiver extends WakefulBroadcastReceiver {
      */
     public void setAlarm(Context context) {
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmRemoveOldReceiver.class);
+        Intent intent = new Intent(context, SyncNewsAlarm.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-        Integer interval = 7*24*60*60; //7 days
-        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5*1000, interval*1000, alarmIntent);
+        //https://developer.android.com/training/scheduling/alarms.html
+        Integer interval = 10*60; //10 minutes
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, interval * 1000, alarmIntent);
 
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();

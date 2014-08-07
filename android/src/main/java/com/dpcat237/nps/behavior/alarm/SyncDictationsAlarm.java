@@ -1,4 +1,4 @@
-package com.dpcat237.nps.behavior.receiver;
+package com.dpcat237.nps.behavior.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,17 +9,20 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.dpcat237.nps.behavior.service.SyncNewsService;
+import com.dpcat237.nps.behavior.receiver.BootReceiver;
+import com.dpcat237.nps.behavior.service.CreateSongsService;
+import com.dpcat237.nps.behavior.service.DownloadSongsService;
+import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.helper.LoginHelper;
 
 /**
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
  * and then starts the IntentService {@code SampleSchedulingService} to do some work.
  */
-public class AlarmSyncNewsReceiver extends WakefulBroadcastReceiver {
+public class SyncDictationsAlarm extends WakefulBroadcastReceiver {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
-    private static final String TAG = "NPS:AlarmSyncNewsReceiver";
+    private static final String TAG = "NPS:AlarmSyncDictationsReceiver";
   
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,8 +30,14 @@ public class AlarmSyncNewsReceiver extends WakefulBroadcastReceiver {
             cancelAlarm(context);
         }
 
-        Intent syncNewsService = new Intent(context, SyncNewsService.class);
-        startWakefulService(context, syncNewsService);
+        Intent createSongsService = new Intent(context, CreateSongsService.class);
+        startWakefulService(context, createSongsService);
+
+        Intent syncDictationItemsService = new Intent(context, SyncDictationItemsService.class);
+        startWakefulService(context, syncDictationItemsService);
+
+        Intent downloadSongsService = new Intent(context, DownloadSongsService.class);
+        startWakefulService(context, downloadSongsService);
     }
 
     /**
@@ -38,12 +47,12 @@ public class AlarmSyncNewsReceiver extends WakefulBroadcastReceiver {
      */
     public void setAlarm(Context context) {
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmSyncNewsReceiver.class);
+        Intent intent = new Intent(context, SyncDictationsAlarm.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         //https://developer.android.com/training/scheduling/alarms.html
-        Integer interval = 10*60; //10 minutes
-        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, interval * 1000, alarmIntent);
+        Integer interval = 15*60; //15 minutes
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5*1000, interval*1000, alarmIntent);
 
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
