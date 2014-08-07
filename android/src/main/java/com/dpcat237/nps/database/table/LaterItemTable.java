@@ -15,7 +15,6 @@ public class LaterItemTable {
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_LINK = "link";
 	public static final String COLUMN_CONTENT = "content";
-	public static final String COLUMN_IS_STARED = "is_stared";
 	public static final String COLUMN_IS_UNREAD = "is_unread";
 	public static final String COLUMN_DATE_ADD = "date_add";
     public static final String COLUMN_LANGUAGE = "language";
@@ -31,7 +30,6 @@ public class LaterItemTable {
 			+ COLUMN_TITLE + " text not null,"
 			+ COLUMN_LINK + " text not null,"
 			+ COLUMN_CONTENT + " text not null,"
-			+ COLUMN_IS_STARED + " boolean not null,"
 			+ COLUMN_IS_UNREAD + " boolean not null,"
 			+ COLUMN_DATE_ADD + " integer not null,"
             + COLUMN_LANGUAGE + " character(2)"

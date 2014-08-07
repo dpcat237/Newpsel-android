@@ -6,17 +6,12 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.dpcat237.nps.database.NPSDatabase;
-import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.LaterItemTable;
-import com.dpcat237.nps.database.table.SongTable;
-import com.dpcat237.nps.model.DictateItem;
-import com.dpcat237.nps.model.ListItem;
+import com.dpcat237.nps.model.LaterItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class LaterItemRepository extends BaseRepository {
     private static final String TAG = "NPS:LaterItemRepository";
@@ -50,4 +45,82 @@ public class LaterItemRepository extends BaseRepository {
 	public LaterItemRepository(Context context) {
 		dbHelper = new NPSDatabase(context);
 	}
+
+    public void addItem(LaterItem item) {
+        if (!checkItemExists(item.getApiId())) {
+            ContentValues values = new ContentValues();
+            values.put(LaterItemTable.COLUMN_API_ID, item.getApiId());
+            values.put(LaterItemTable.COLUMN_ITEM_ID, item.getItemApiId());
+            values.put(LaterItemTable.COLUMN_FEED_ID, item.getFeedApiId());
+            values.put(LaterItemTable.COLUMN_LATER_ID, item.getLabelApiId());
+            values.put(LaterItemTable.COLUMN_TITLE, item.getTitle());
+            values.put(LaterItemTable.COLUMN_LINK, item.getLink());
+            values.put(LaterItemTable.COLUMN_CONTENT, item.getContent());
+            values.put(LaterItemTable.COLUMN_IS_UNREAD, item.isUnread());
+            values.put(LaterItemTable.COLUMN_DATE_ADD, item.getDateAdd());
+            values.put(LaterItemTable.COLUMN_LANGUAGE, item.getLanguage());
+            database.insert(LaterItemTable.TABLE_NAME, null, values);
+        }
+    }
+
+    public Boolean checkItemExists(long apiId){
+        Boolean result = false;
+        String[] columns = new String[] {LaterItemTable.COLUMN_API_ID};
+        String where = LaterItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+apiId+""};
+
+        Cursor cursor = database.query(LaterItemTable.TABLE_NAME, columns, where, args, null, null, null);
+        if (cursor.getCount() > 0) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    public Integer countUnreadItems() {
+        String sql = "SELECT COUNT(tb."+LaterItemTable.COLUMN_ID+") AS total " +
+                " FROM "+LaterItemTable.TABLE_NAME+" AS tb WHERE tb."+LaterItemTable.COLUMN_IS_UNREAD+"=1;";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        Integer count = cursor.getInt(0);
+        cursor.close();
+
+        return count;
+    }
+
+    public JSONArray getItemsToSync(String labels) {
+        JSONArray items = new JSONArray();
+        String sql = "SELECT tb."+LaterItemTable.COLUMN_API_ID+", tb."+LaterItemTable.COLUMN_IS_UNREAD+
+                " FROM "+LaterItemTable.TABLE_NAME+" AS tb WHERE tb."+LaterItemTable.COLUMN_LATER_ID+" IN("+labels+");";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            try {
+                JSONObject item = new JSONObject();
+                item.put("api_id", cursor.getLong(0));
+                item.put("is_unread", cursor.getInt(1));
+                items.put(item);
+            } catch (JSONException e) {
+                Log.e(TAG, "tut: getItemsToSync ", e);
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return items;
+    }
+
+    public void deleteItem(Integer apiId) {
+        String where = LaterItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+apiId+""};
+        database.delete(LaterItemTable.TABLE_NAME, where, args);
+    }
+
+    public void removeReadItems() {
+        String where = LaterItemTable.COLUMN_IS_UNREAD+"=?";
+        String[] args = new String[] {""+0+""};
+        database.delete(LaterItemTable.TABLE_NAME, where, args);
+    }
 }

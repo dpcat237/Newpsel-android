@@ -42,10 +42,10 @@ public class SettingsActivity extends PreferenceActivity {
             CharSequence[] entryValues = new CharSequence[labels.size()];
             CharSequence[] entries = new CharSequence[labels.size()];
             Integer count = 0;
-            Integer getId;
+            Integer ApiId;
             for (Label label : labels) {
-                getId = label.getId();
-                entryValues[count] = getId.toString();
+                ApiId = label.getApiId();
+                entryValues[count] = ApiId.toString();
                 entries[count] = label.getName();
                 count++;
             }

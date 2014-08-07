@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.manager.SyncDictationItemsManager;
-import com.dpcat237.nps.behavior.receiver.AlarmSyncDictationsReceiver;
+import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -50,7 +50,7 @@ public class SyncDictationItemsService extends IntentService {
             }
         }
 
-        AlarmSyncDictationsReceiver.completeWakefulIntent(intent);
+        SyncDictationsAlarm.completeWakefulIntent(intent);
     }
 
     private Boolean checkCanRun() {

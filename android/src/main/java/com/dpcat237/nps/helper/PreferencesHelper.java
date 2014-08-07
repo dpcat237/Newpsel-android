@@ -205,12 +205,12 @@ public class PreferencesHelper {
     public static Integer getCurrentItemApiId(Context context) {
         @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        Integer itemApiId = userPref.getInt("current_item_api_id", 0);
 
-        return itemApiId;
+        return userPref.getInt("current_item_api_id", 0);
     }
 
     public static void setLastSyncCount(Context context, Integer count) {
+        @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = userPref.edit();
         editor.putInt("sync_dictate_items_last_count", count);
@@ -231,5 +231,20 @@ public class PreferencesHelper {
         }
 
         return result;
+    }
+
+    public static void setLaterItemsSync(Context context, Boolean necessary) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putBoolean("sync_later_items_necessary", necessary);
+        editor.apply();
+    }
+
+    public static Boolean getLaterItemsSync(Context context) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+
+        return userPref.getBoolean("sync_later_items_necessary", true);
     }
 }

@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.receiver.AlarmRemoveOldReceiver;
+import com.dpcat237.nps.behavior.alarm.RemoveOldAlarm;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 
 public class RemoveDictationsService extends IntentService {
@@ -32,7 +32,7 @@ public class RemoveDictationsService extends IntentService {
                 Log.e(TAG, e.getMessage());
             }
         }
-        AlarmRemoveOldReceiver.completeWakefulIntent(mIntent);
+        RemoveOldAlarm.completeWakefulIntent(mIntent);
     }
 
     private Boolean checkCanRun() {

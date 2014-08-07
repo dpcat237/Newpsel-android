@@ -12,6 +12,6 @@ public class ApiConstants {
     public static final String URL_SYNC_ITEMS_UNREAD = API_URL+"sync_unread/";
     public static final String URL_SYNC_LABELS = API_URL+"sync_labels/";
     public static final String URL_SYNC_LABEL_ITEMS = API_URL+"sync_later/";
-    //public static final String URL_SYNC_LATER_ITEMS = API_URL+"sync_later_items/";
+    public static final String URL_SYNC_LATER_ITEMS = API_URL+"sync_later_items/";
     public static final String URL_SYNC_SHARED_ITEMS = API_URL+"sync_shared/";
 }

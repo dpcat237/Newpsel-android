@@ -7,29 +7,27 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
-import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.behavior.manager.SyncLaterManager;
+import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
+import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.LoginHelper;
 
-public class CreateSongsService extends IntentService {
-    private static final String TAG = "NPS:CreateSongsService";
+public class SyncLaterService extends IntentService {
+    private static final String TAG = "NPS:SyncLaterService";
     private volatile static Boolean running = false;
-    private Intent mIntent;
     private Context mContext;
-    private SongsFactoryManager songsFactoryManager;
+    private SyncLaterManager syncManager;
 
 
-    public CreateSongsService() {
+    public SyncLaterService() {
         super("SchedulingService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        this.mIntent = intent;
         this.mContext = getApplicationContext();
-        if (songsFactoryManager == null) {
-            songsFactoryManager = new SongsFactoryManager();
+        if (syncManager == null) {
+            syncManager = new SyncLaterManager(mContext);
         }
 
         if (!running) {
@@ -45,24 +43,18 @@ public class CreateSongsService extends IntentService {
                 }
             }
         }
-        SyncDictationsAlarm.completeWakefulIntent(mIntent);
+
+        SyncNewsAlarm.completeWakefulIntent(intent);
     }
 
     private Boolean checkCanRun() {
-        Log.d(TAG, "tut: check startProcess");
-
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        Boolean dictationEnabled = pref.getBoolean("pref_dictation_title_enable", false);
-        if (!dictationEnabled || !PreferencesHelper.areNewItems(mContext)) {
-            return false;
-        }
 
-        return true;
+        return (LoginHelper.checkLogged(mContext) && pref.getBoolean("pref_later_items_enable", true) && ConnectionHelper.hasConnection(mContext));
     }
 
     private void startProcess() {
-        Log.d(TAG, "tut: startProcess");
-        songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
+        syncManager.startSync();
 
         running = false;
         stopSelf();

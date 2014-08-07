@@ -5,6 +5,7 @@ import com.dpcat237.nps.behavior.factory.syncManager.SyncFeedsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncItemsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncLabelItemsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncLabelsManager;
+import com.dpcat237.nps.behavior.factory.syncManager.SyncLaterItemsManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncSharedItemsManager;
 import com.dpcat237.nps.constant.SyncConstants;
@@ -27,6 +28,9 @@ public class SyncFactory {
         }
         if (type.equals(SyncConstants.SYNC_LABELS)) {
             syncManager = new SyncLabelsManager();
+        }
+        if (type.equals(SyncConstants.SYNC_LATER_ITEMS)) {
+            syncManager = new SyncLaterItemsManager();
         }
         if (type.equals(SyncConstants.SYNC_SHARED_ITEMS)) {
             syncManager = new SyncSharedItemsManager();

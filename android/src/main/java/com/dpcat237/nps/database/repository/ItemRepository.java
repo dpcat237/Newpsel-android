@@ -115,8 +115,6 @@ public class ItemRepository extends BaseRepository {
 		return items;
 	}
 
-
-
 	public JSONArray getItemsToSync() {
 		JSONArray items = new JSONArray();
 		Cursor cursor = database.query(ItemTable.TABLE_ITEM, syncColumns, null, null, null, null, null);

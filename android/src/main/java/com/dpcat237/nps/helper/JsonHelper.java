@@ -4,6 +4,7 @@ import com.dpcat237.nps.model.DictateItem;
 import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.model.LaterItem;
 import com.google.gson.Gson;
 
 public class JsonHelper {
@@ -39,6 +40,17 @@ public class JsonHelper {
 
 		return labels;
 	}
+
+    public static LaterItem[] getLaterItems(String content) {
+        LaterItem[] labels = null;
+        Gson gson = new Gson();
+
+        if (content.length() > 0) {
+            labels = gson.fromJson(content, LaterItem[].class);
+        }
+
+        return labels;
+    }
 
     public static DictateItem[] getDictateItems(String content) {
         DictateItem[] items = null;

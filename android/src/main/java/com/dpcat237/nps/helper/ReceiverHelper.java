@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.alarm.RemoveOldAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
+import com.dpcat237.nps.behavior.alarm.SyncLaterAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
 import com.dpcat237.nps.behavior.receiver.BootReceiver;
 
@@ -32,6 +33,9 @@ public class ReceiverHelper {
         SyncDictationsAlarm syncDictationsAlarm = new SyncDictationsAlarm();
         syncDictationsAlarm.setAlarm(context);
 
+        SyncLaterAlarm syncLaterAlarm = new SyncLaterAlarm();
+        syncLaterAlarm.setAlarm(context);
+
         RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
         removeOldAlarm.setAlarm(context);
     }
@@ -53,6 +57,9 @@ public class ReceiverHelper {
 
         SyncDictationsAlarm syncDictationsAlarm = new SyncDictationsAlarm();
         syncDictationsAlarm.cancelAlarm(context);
+
+        SyncLaterAlarm syncLaterAlarm = new SyncLaterAlarm();
+        syncLaterAlarm.cancelAlarm(context);
 
         RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
         removeOldAlarm.cancelAlarm(context);

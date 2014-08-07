@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.dpcat237.nps.behavior.manager.SyncNewsManager;
-import com.dpcat237.nps.behavior.receiver.AlarmSyncNewsReceiver;
+import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 
@@ -44,7 +44,7 @@ public class SyncNewsService extends IntentService {
             }
         }
 
-        AlarmSyncNewsReceiver.completeWakefulIntent(intent);
+        SyncNewsAlarm.completeWakefulIntent(intent);
     }
 
     private Boolean checkCanRun() {

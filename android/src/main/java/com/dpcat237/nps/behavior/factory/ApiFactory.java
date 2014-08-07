@@ -5,6 +5,7 @@ import com.dpcat237.nps.behavior.factory.apiManager.ApiGetFeedsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelItemsManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiLaterItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSharedItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignInManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignUpManager;
@@ -34,14 +35,17 @@ public class ApiFactory {
         if (type.equals(ApiConstants.URL_SYNC_ITEMS_UNREAD)) {
             apiManager = new ApiItemsManager();
         }
-        if (type.equals(ApiConstants.URL_SYNC_SHARED_ITEMS)) {
-            apiManager = new ApiSharedItemsManager();
-        }
         if (type.equals(ApiConstants.URL_SYNC_LABELS)) {
             apiManager = new ApiLabelsManager();
         }
         if (type.equals(ApiConstants.URL_SYNC_LABEL_ITEMS)) {
             apiManager = new ApiLabelItemsManager();
+        }
+        if (type.equals(ApiConstants.URL_SYNC_LATER_ITEMS)) {
+            apiManager = new ApiLaterItemsManager();
+        }
+        if (type.equals(ApiConstants.URL_SYNC_SHARED_ITEMS)) {
+            apiManager = new ApiSharedItemsManager();
         }
 
         return apiManager;
