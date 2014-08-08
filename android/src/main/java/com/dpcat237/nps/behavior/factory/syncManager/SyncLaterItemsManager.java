@@ -37,20 +37,22 @@ public class SyncLaterItemsManager extends SyncManager {
     }
 
     protected void checkNecessarySync() {
-        if (!preferences.getBoolean("pref_later_items_enable", false) || !PreferencesHelper.getLaterItemsSync(mContext)) {
-            error = true;
-
-            return;
-        }
-
-        if (!getLabels()) {
+        Integer unreadCount = laterItemRepo.countUnreadItems();
+        /*
+        Don't sync if:
+        - service isn't enabled
+        - aren't any label selected
+        - are more than 0 unread items and sync in hold status
+         */
+        if (!preferences.getBoolean("pref_later_items_enable", false) ||
+                !getLabels() ||
+                (unreadCount > 0 && !PreferencesHelper.getLaterItemsSync(mContext))) {
             error = true;
 
             return;
         }
 
         itemsSyncLimit = Integer.parseInt(preferences.getString("pref_later_items_quantity", "50"));
-        Integer unreadCount = laterItemRepo.countUnreadItems();
         if (unreadCount >= itemsSyncLimit) {
             error = true;
 
