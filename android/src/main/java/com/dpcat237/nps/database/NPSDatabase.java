@@ -13,6 +13,7 @@ import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.database.table.SharedTable;
 import com.dpcat237.nps.database.table.SongPartTable;
 import com.dpcat237.nps.database.table.SongTable;
+import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {
@@ -63,6 +64,11 @@ public class NPSDatabase extends SQLiteOpenHelper {
 		SharedTable.onUpgrade(db, oldVersion, newVersion);
         SongTable.onUpgrade(db, oldVersion, newVersion);
         SongPartTable.onUpgrade(db, oldVersion, newVersion);
+
+        //delete folders with user files
+        FileHelper.deleteFolders(FileHelper.getVoicesFolder(mContext));
+
+        //TODO: remove when improve sync
         PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
         PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
 	}
