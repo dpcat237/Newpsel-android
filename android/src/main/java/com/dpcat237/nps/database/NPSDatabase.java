@@ -1,9 +1,13 @@
 package com.dpcat237.nps.database;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
+import com.dpcat237.nps.behavior.service.SyncLaterService;
+import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;
@@ -71,5 +75,19 @@ public class NPSDatabase extends SQLiteOpenHelper {
         //TODO: remove when improve sync
         PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
         PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
+
+        //launch sync services after upgrade
+        launchServices();
 	}
+
+    private void launchServices() {
+        Intent syncNews = new Intent(mContext, SyncNewsService.class);
+        mContext.startService(syncNews);
+
+        Intent syncDictations = new Intent(mContext, SyncDictationItemsService.class);
+        mContext.startService(syncDictations);
+
+        Intent syncLater = new Intent(mContext, SyncLaterService.class);
+        mContext.startService(syncLater);
+    }
 }
