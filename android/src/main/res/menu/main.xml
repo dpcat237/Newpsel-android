@@ -15,7 +15,8 @@
     <item android:id="@+id/buttonSync"
         android:icon="@drawable/actionbar_refresh"
         android:title="@string/button_sync"
-        android:showAsAction="ifRoom|withText"  />
+        android:showAsAction="ifRoom|withText"
+        android:visible="false" />
 
     <item
         android:id="@+id/buttonActionLabels"

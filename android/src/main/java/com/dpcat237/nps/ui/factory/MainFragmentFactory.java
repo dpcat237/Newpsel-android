@@ -1,6 +1,7 @@
 package com.dpcat237.nps.ui.factory;
 
 import android.content.Context;
+import android.view.MenuItem;
 
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
@@ -44,6 +45,15 @@ public class MainFragmentFactory {
             labelRepo.open();
             labelRepo.unreadCountUpdate();
             labelRepo.close();
+        }
+    }
+
+    public static void showSyncButton(int position, MenuItem buttonSync) {
+
+        if (position == MainActivityConstants.DRAWER_ITEM_UNREAD_ITEMS || position == MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
+            buttonSync.setVisible(true);
+        } else {
+            buttonSync.setVisible(false);
         }
     }
 }

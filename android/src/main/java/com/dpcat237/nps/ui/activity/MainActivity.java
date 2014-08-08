@@ -226,17 +226,9 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if (lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
-            Intent syncSongsService = new Intent(mContext, SyncDictationItemsService.class);
-            startService(syncSongsService);
-
-            Intent downloadSongsService = new Intent(mContext, DownloadSongsService.class);
-            startService(downloadSongsService);
-        } else {
-            item.setEnabled(false);
-            SyncNewsTask task = new SyncNewsTask(this, mView);
-            task.execute();
-		}
+        item.setEnabled(false);
+        SyncNewsTask task = new SyncNewsTask(mContext, mView);
+        task.execute();
 	}
 
 	public void reloadList() {
@@ -246,6 +238,7 @@ public class MainActivity extends Activity {
 			if (mainMenu != null) {
                 buttonSync.setEnabled(true);
 			}
+
             updateFragment();
 		}
 	}
@@ -322,6 +315,7 @@ public class MainActivity extends Activity {
             showButtonAddFeed();
             buttonDictate.setVisible(false);
         }
+        MainFragmentFactory.showSyncButton(lastPosition, buttonSync);
     }
 
     public static class UnreadItemsFragment extends Fragment {
