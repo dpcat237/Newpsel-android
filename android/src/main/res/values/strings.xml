@@ -75,9 +75,10 @@
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_new_articles">Aren\'t new articles</string>
-    <string name="drawer_item_unread">Unread articles</string>
-    <string name="drawer_item_all">All articles</string>
-    <string name="drawer_item_dictate">Dictation articles</string>
+    <string name="drawer_item_unread">New articles</string>
+    <string name="drawer_item_all">All feed articles</string>
+    <string name="drawer_dictations_items">Dictation articles</string>
+    <string name="drawer_later_item">Saved articles</string>
 
     <!-- Item -->
     <string name="button_dictate">Dictate</string>
@@ -90,10 +91,11 @@
     <string name="button_pause">Pause</string>
 
     <!-- Drawer -->
-    <string-array name="feeds_list_array">
+    <string-array name="drawer_main_activity">
         <item>@string/drawer_item_unread</item>
         <item>@string/drawer_item_all</item>
-        <item>@string/drawer_item_dictate</item>
+        <item>@string/drawer_dictations_items</item>
+        <item>@string/drawer_later_item</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

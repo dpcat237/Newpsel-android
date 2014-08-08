@@ -32,17 +32,18 @@ import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
+import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.factory.MainFragmentFactory;
 import com.dpcat237.nps.ui.factory.MainFragmentFactoryManager;
 
 public class MainActivity extends Activity {
     private static final String TAG = "NPS:MainActivity";
 	View mView;
 	protected Context mContext;
-	private FeedRepository feedRepo;
 	Boolean logged;
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
@@ -57,7 +58,6 @@ public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String[] mListsTitles;
     Bundle instanceState;
     private int lastPosition;
     private Integer countFragmentView = 0;
@@ -70,8 +70,6 @@ public class MainActivity extends Activity {
 		mContext = this;
 	    mView = this.findViewById(android.R.id.content).getRootView();
 		logged = LoginHelper.checkLogged(this);
-		feedRepo = new FeedRepository(this);
-		feedRepo.open();
         PreferencesHelper.setPlayerActive(mContext, false);
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -93,7 +91,6 @@ public class MainActivity extends Activity {
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
 	    } else {
-	    	feedRepo.open();
 	    	reloadList();
 	    }
 	    
@@ -111,7 +108,6 @@ public class MainActivity extends Activity {
 
 		super.onPause();
 		isInFront = false;
-		feedRepo.close();
 	}
 	
 	private void showWelcome () {
@@ -119,16 +115,16 @@ public class MainActivity extends Activity {
 	}
 	
 	private void showDrawer () {
-        Integer mainList = PreferencesHelper.getFeedsList(this);
+        Integer mainList = PreferencesHelper.getMainDrawerOption(mContext);
 		if (ON_CREATE) {
 			setContentView(R.layout.activity_main);
-			
-			mListsTitles = getResources().getStringArray(R.array.feeds_list_array);
+
+            String[] mListsTitles = getResources().getStringArray(R.array.drawer_main_activity);
 	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 	        
 	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-	        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.fragment_drawer_row, mListsTitles));
+	        mDrawerList.setAdapter(new ArrayAdapter<String>(mContext, R.layout.fragment_drawer_row, mListsTitles));
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	        getActionBar().setDisplayHomeAsUpEnabled(true);
 	        getActionBar().setHomeButtonEnabled(true);
@@ -136,7 +132,7 @@ public class MainActivity extends Activity {
 	        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
 	        mDrawerLayout.setDrawerListener(mDrawerToggle);
 			
-	        selectItem(mainList);
+	        selectDrawerItem(mainList);
 			ON_CREATE = false;
         }
 	}
@@ -245,7 +241,7 @@ public class MainActivity extends Activity {
 
 	public void reloadList() {
 		if (logged) {
-			feedRepo.unreadCountUpdate();
+            MainFragmentFactory.updateItemsCount(mContext, lastPosition);
 
 			if (mainMenu != null) {
                 buttonSync.setEnabled(true);
@@ -253,7 +249,7 @@ public class MainActivity extends Activity {
             updateFragment();
 		}
 	}
-	
+
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -287,11 +283,11 @@ public class MainActivity extends Activity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            selectDrawerItem(position);
         }
     }
     
-    private void selectItem(int position) {
+    private void selectDrawerItem(int position) {
         lastPosition = position;
         updateFragment();
         drawerUpdateMenuItems();

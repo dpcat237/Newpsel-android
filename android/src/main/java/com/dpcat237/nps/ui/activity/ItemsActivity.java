@@ -74,12 +74,12 @@ public class ItemsActivity extends Activity {
         songRepo = new SongRepository(mContext);
         songRepo.open();
 
-	    feedId = PreferencesHelper.getSelectedFeed(mContext);
+	    feedId = PreferencesHelper.getMainListId(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
 
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
-	    feedList = PreferencesHelper.getFeedsList(this);
+	    feedList = PreferencesHelper.getMainDrawerOption(this);
 
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this);
@@ -113,7 +113,7 @@ public class ItemsActivity extends Activity {
         songRepo.open();
 
         //finish activity if main list is different than "all items" and feed doesn't have unread items
-        if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getFeedsList(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
+        if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getMainDrawerOption(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
             finish();
         }
 

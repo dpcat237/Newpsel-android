@@ -13,13 +13,13 @@ import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
-public class MainFragmentDictateManager extends MainFragmentItemsManager {
+public class MainFragmentDictationItemsManager extends MainFragmentItemsManager {
     protected void setCreatorType() {
         managerType = MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS;
     }
 
     protected void setTitle() {
-        mActivity.setTitle(mActivity.getString(R.string.drawer_item_dictate));
+        mActivity.setTitle(mActivity.getString(R.string.drawer_dictations_items));
     }
 
     protected void getItems() {

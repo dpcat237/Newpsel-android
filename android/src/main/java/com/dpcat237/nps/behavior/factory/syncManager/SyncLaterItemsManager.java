@@ -4,6 +4,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 import android.util.Log;
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.LaterItem;
@@ -137,9 +138,17 @@ public class SyncLaterItemsManager extends SyncManager {
             return;
         }
 
+        //remove read items
         if (viewedItems.length() > 0) {
             laterItemRepo.removeReadItems();
         }
+
+        //update feeds items count
+        LabelRepository labelRepo = new LabelRepository(mContext);
+        labelRepo.open();
+        labelRepo.unreadCountUpdate();
+        labelRepo.close();
+
         PreferencesHelper.setLaterItemsSync(mContext, false);
     }
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.LabelItemTable;
 import com.dpcat237.nps.database.table.LabelTable;
+import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.model.Label;
 import com.dpcat237.nps.model.LabelItem;
 
@@ -32,6 +33,12 @@ public class LabelRepository extends BaseRepository {
 			LabelItemTable.COLUMN_LABEL_API_ID,
 			LabelItemTable.COLUMN_ITEM_API_ID,
 		};
+    private String[] unreadListColumns = {
+            LabelTable.COLUMN_ID,
+            LabelTable.COLUMN_API_ID,
+            LabelTable.COLUMN_NAME,
+            LabelTable.COLUMN_UNREAD_COUNT
+    };
 
 
 	public LabelRepository(Context context) {
@@ -231,4 +238,83 @@ public class LabelRepository extends BaseRepository {
 		String[] args = new String[] {""+0+""};
 		database.delete(LabelItemTable.TABLE_LABEL_ITEM, where, args);
 	}
+
+    private ArrayList<Label> getUnreadCount() {
+        ArrayList<Label> labels = new ArrayList<Label>();
+        String sql = "SELECT tb1."+LaterItemTable.COLUMN_LATER_ID+", " +
+                "(SELECT COUNT(tb2."+LaterItemTable.COLUMN_ID+") AS total FROM "+LaterItemTable.TABLE_NAME+" AS tb2 " +
+                "WHERE tb2."+LaterItemTable.COLUMN_LATER_ID+"=tb1."+LaterItemTable.COLUMN_LATER_ID+" AND tb2."+LaterItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread " +
+                " FROM "+LaterItemTable.TABLE_NAME+" AS tb1 GROUP BY tb1."+LaterItemTable.COLUMN_LATER_ID;
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Label label = new Label();
+            label.setApiId(cursor.getInt(0));
+            label.setUnreadCount(cursor.getInt(1));
+            labels.add(label);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return labels;
+    }
+
+    private void updateLabelCounts(Integer feedApiId, Integer countUnreadItems) {
+        ContentValues values = new ContentValues();
+        values.put(LabelTable.COLUMN_UNREAD_COUNT, countUnreadItems);
+        String where = LabelTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+feedApiId+""};
+        database.update(LabelTable.TABLE_LABEL, values, where, args);
+    }
+
+    public void unreadCountUpdate () {
+        ArrayList<Label> labels = getUnreadCount();
+        if (labels.size() < 1) {
+            return;
+        }
+
+        for (Label label : labels) {
+            updateLabelCounts(label.getApiId(), label.getUnreadCount());
+        }
+    }
+
+    public ArrayList<Label> getForListUnread() {
+        ArrayList<Label> labels = new ArrayList<Label>();
+        String where = LabelTable.COLUMN_UNREAD_COUNT+">?";
+        String[] args = new String[] {""+0+""};
+        String orderBy = LabelTable.COLUMN_NAME+" ASC";
+        Cursor cursor = database.query(LabelTable.TABLE_LABEL, unreadListColumns, where, args, null, null, orderBy);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Label label = cursorToListLabel(cursor);
+            labels.add(label);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return labels;
+    }
+
+    private Label cursorToListLabel(Cursor cursor) {
+        Label label = new Label();
+        label.setId(cursor.getInt(0));
+        label.setApiId(cursor.getInt(1));
+        label.setName(cursor.getString(2));
+        label.setUnreadCount(cursor.getInt(3));
+        return label;
+    }
+
+    public Label getLabel(Integer labelApiId) {
+        String where = LabelTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+labelApiId+""};
+
+        Cursor cursor = database.query(LabelTable.TABLE_LABEL, basicColumns, where, args, null, null, null);
+        cursor.moveToFirst();
+        Label label = cursorToBasicLabel(cursor);
+        cursor.close();
+
+        return label;
+    }
 }

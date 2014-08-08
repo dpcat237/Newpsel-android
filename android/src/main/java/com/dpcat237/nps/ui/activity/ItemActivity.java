@@ -150,7 +150,7 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
         Integer itemApiId = getItemApiId();
         item = itemRepo.getItem(itemApiId);
-        Integer feedId = PreferencesHelper.getSelectedFeed(mContext);
+        Integer feedId = PreferencesHelper.getMainListId(mContext);
         feed = feedRepo.getFeed(feedId);
     }
 

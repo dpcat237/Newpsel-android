@@ -88,7 +88,7 @@ public class PreferencesHelper {
 		editor.commit();
 	}
 	
-	public static Integer getFeedsList(Context context) {
+	public static Integer getMainDrawerOption(Context context) {
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 		 Integer list = userPref.getInt("feeds_list", 0);
@@ -104,19 +104,19 @@ public class PreferencesHelper {
 		editor.commit();
 	}
 	
-	public static Integer getSelectedFeed(Context context) {
+	public static Integer getMainListId(Context context) {
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		 Integer feedId = userPref.getInt("selected_feed", 0);
+		 Integer feedId = userPref.getInt("main_selected_list_id", 0);
 		 
 		 return feedId;
 	}
 	
-	public static void setSelectedFeed(Context context, Integer feedId) {
+	public static void setMainListId(Context context, Integer feedId) {
 		@SuppressWarnings("static-access")
 		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = userPref.edit();
-	    editor.putInt("selected_feed", feedId);
+	    editor.putInt("main_selected_list_id", feedId);
 		editor.commit();
 	}
 	

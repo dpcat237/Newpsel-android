@@ -220,10 +220,12 @@ public class FeedRepository extends BaseRepository {
 	
 	public void unreadCountUpdate () {
 		ArrayList<Feed> feeds = getUnreadCount();
-		if (feeds.size() > 0) {
-			for (Feed feed : feeds) {
-                updateFeedCounts(feed.getApiId(), feed.getUnreadCount(), feed.getItemsCount());
-	    	}
+		if (feeds.size() < 1) {
+			return;
 		}
+
+        for (Feed feed : feeds) {
+            updateFeedCounts(feed.getApiId(), feed.getUnreadCount(), feed.getItemsCount());
+        }
 	}
 }

@@ -80,12 +80,27 @@
                 android:value="com.dpcat237.nps.MainActivity" />
         </activity>
         <activity
+            android:name=".ui.activity.LaterItemsActivity"
+            android:parentActivityName=".ui.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.MainActivity" />
+        </activity>
+        <activity
             android:label="@string/activity_articles"
             android:name=".ui.activity.ItemActivity"
             android:parentActivityName=".ui.activity.ItemsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dpcat237.nps.ItemsActivity" />
+        </activity>
+        <activity
+            android:label="@string/activity_articles"
+            android:name=".ui.activity.LaterItemActivity"
+            android:parentActivityName=".ui.activity.LaterItemsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dpcat237.nps.LaterItemsActivity" />
         </activity>
         <activity
             android:name=".ui.activity.DictateItemActivity"

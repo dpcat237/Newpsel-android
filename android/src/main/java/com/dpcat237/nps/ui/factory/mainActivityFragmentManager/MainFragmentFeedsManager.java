@@ -61,7 +61,7 @@ public abstract class MainFragmentFeedsManager extends MainFragmentManager {
     }
 
     public void showItems(Integer feedId) {
-        PreferencesHelper.setSelectedFeed(mActivity, feedId);
+        PreferencesHelper.setMainListId(mActivity, feedId);
         Intent intent = new Intent(mActivity, ItemsActivity.class);
         mActivity.startActivity(intent);
     }
