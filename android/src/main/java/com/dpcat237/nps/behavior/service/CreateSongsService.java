@@ -21,7 +21,7 @@ public class CreateSongsService extends IntentService {
 
 
     public CreateSongsService() {
-        super("SchedulingService");
+        super("CreateSongsService");
     }
 
     @Override

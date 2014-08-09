@@ -20,7 +20,7 @@ public class SyncNewsService extends IntentService {
 
 
     public SyncNewsService() {
-        super("SchedulingService");
+        super("SyncNewsService");
     }
 
     @Override

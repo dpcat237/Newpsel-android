@@ -17,7 +17,7 @@ public class RemoveDictationsService extends IntentService {
 
 
     public RemoveDictationsService() {
-        super("SchedulingService");
+        super("RemoveDictationsService");
     }
 
     @Override

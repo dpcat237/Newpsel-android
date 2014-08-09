@@ -20,7 +20,7 @@ public class SyncLaterService extends IntentService {
 
 
     public SyncLaterService() {
-        super("SchedulingService");
+        super("SyncLaterService");
     }
 
     @Override

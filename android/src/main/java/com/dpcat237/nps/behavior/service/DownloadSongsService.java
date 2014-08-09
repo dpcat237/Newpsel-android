@@ -23,7 +23,7 @@ public class DownloadSongsService extends IntentService {
 
 
     public DownloadSongsService() {
-        super("SchedulingService");
+        super("DownloadSongsService");
     }
 
     @Override

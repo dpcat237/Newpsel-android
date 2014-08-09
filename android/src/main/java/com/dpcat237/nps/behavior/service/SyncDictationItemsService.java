@@ -23,7 +23,7 @@ public class SyncDictationItemsService extends IntentService {
 
 
     public SyncDictationItemsService() {
-        super("SchedulingService");
+        super("SyncDictationItemsService");
     }
 
     @Override
