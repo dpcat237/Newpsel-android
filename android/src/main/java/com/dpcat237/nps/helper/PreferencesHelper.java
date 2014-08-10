@@ -233,18 +233,20 @@ public class PreferencesHelper {
         return result;
     }
 
-    public static void setLaterItemsSync(Context context, Boolean necessary) {
+    public static void setSyncRequired(Context context, String type, Boolean necessary) {
         @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = userPref.edit();
-        editor.putBoolean("sync_later_items_necessary", necessary);
+        editor.putBoolean("sync_"+type+"_required", necessary);
         editor.apply();
     }
 
-    public static Boolean getLaterItemsSync(Context context) {
+    public static Boolean getSyncRequired(Context context, String type) {
         @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 
-        return userPref.getBoolean("sync_later_items_necessary", true);
+        return userPref.getBoolean("sync_"+type+"_required", true);
     }
+
+
 }

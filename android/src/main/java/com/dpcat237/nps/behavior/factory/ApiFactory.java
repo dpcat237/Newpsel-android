@@ -1,6 +1,7 @@
 package com.dpcat237.nps.behavior.factory;
 
 import com.dpcat237.nps.behavior.factory.apiManager.ApiAddFeedManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiAddGcmIdManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiGetFeedsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelsManager;
@@ -19,6 +20,9 @@ public class ApiFactory {
 
         if (type.equals(ApiConstants.URL_ADD_FEED)) {
             apiManager = new ApiAddFeedManager();
+        }
+        if (type.equals(ApiConstants.URL_ADD_GCM_ID)) {
+            apiManager = new ApiAddGcmIdManager();
         }
         if (type.equals(ApiConstants.URL_GET_FEEDS)) {
             apiManager = new ApiGetFeedsManager();

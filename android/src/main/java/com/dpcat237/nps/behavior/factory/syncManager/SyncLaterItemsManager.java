@@ -4,6 +4,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 import android.util.Log;
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -46,7 +47,7 @@ public class SyncLaterItemsManager extends SyncManager {
          */
         if (!preferences.getBoolean("pref_later_items_enable", false) ||
                 !getLabels() ||
-                (unreadCount > 0 && !PreferencesHelper.getLaterItemsSync(mContext))) {
+                (unreadCount > 0 && !PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_LATER_ITEMS))) {
             error = true;
 
             return;
@@ -151,6 +152,6 @@ public class SyncLaterItemsManager extends SyncManager {
         labelRepo.unreadCountUpdate();
         labelRepo.close();
 
-        PreferencesHelper.setLaterItemsSync(mContext, false);
+        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LATER_ITEMS, false);
     }
 }

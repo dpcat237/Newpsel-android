@@ -34,6 +34,8 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.GcmHelper;
+import com.dpcat237.nps.helper.GoogleServicesHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -76,7 +78,9 @@ public class MainActivity extends Activity {
 		if (logged) {
 			ON_CREATE = true;
 			showDrawer();
+            GcmHelper.checkRegId(mContext);
 		} else {
+            GoogleServicesHelper.checkPlayServices(mContext, this);
 			showWelcome();
 		}
 	}

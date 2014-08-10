@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Feed;
@@ -29,7 +30,11 @@ public class SyncFeedsManager extends SyncManager {
         feedRepo.close();
     }
 
-    protected void checkNecessarySync() { }
+    protected void checkNecessarySync() {
+        if (!PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_FEEDS)) {
+            error = true;
+        }
+    }
 
     protected void prepareJSON() {
         jsonData = new JSONObject();
@@ -84,6 +89,7 @@ public class SyncFeedsManager extends SyncManager {
     protected void beforeFinish() {
         if (lastUpdate != 0 && feeds.length > 0) {
             PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
+            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, false);
         }
     }
 }

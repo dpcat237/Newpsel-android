@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Label;
@@ -30,7 +31,11 @@ public class SyncLabelsManager extends SyncManager {
         labelRepo.close();
     }
 
-    protected void checkNecessarySync() { }
+    protected void checkNecessarySync() {
+        if (!PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_LABELS)) {
+            error = true;
+        }
+    }
 
     @SuppressWarnings("unchecked")
     protected void prepareJSON() {
@@ -83,6 +88,7 @@ public class SyncLabelsManager extends SyncManager {
             return;
         }
         PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
+        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, false);
 
         if (changedLabels.size() < 1) {
             return;

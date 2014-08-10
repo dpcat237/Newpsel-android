@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.MainActivityConstants;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.model.Label;
@@ -36,7 +37,7 @@ public class MainFragmentLabelsManager extends MainFragmentManager {
         mAdapter = new LabelsAdapter(mActivity);
 
         //activate sync of later items
-        PreferencesHelper.setLaterItemsSync(mActivity, true);
+        PreferencesHelper.setSyncRequired(mActivity, SyncConstants.SYNC_LATER_ITEMS, true);
     }
 
     protected void setItems() {
