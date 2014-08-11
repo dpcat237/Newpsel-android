@@ -8,8 +8,8 @@ android {
         applicationId "com.dpcat237.nps"
         minSdkVersion 16
         targetSdkVersion 20
-        versionCode 138
-        versionName '0.1.38'
+        versionCode 139
+        versionName '0.1.39'
     }
 
     signingConfigs {
@@ -40,5 +40,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile 'com.android.support:support-v4:20.+'
     compile 'com.google.code.gson:gson:2.+'
-    compile "com.google.android.gms:play-services:5.+"
+    compile 'com.google.android.gms:play-services:5.0.89'
 }

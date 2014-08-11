@@ -1,8 +1,5 @@
 package com.dpcat237.nps.behavior.factory.syncManager;
 
-
-import android.util.Log;
-
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.EntityConstants;
 import com.dpcat237.nps.constant.SyncConstants;
