@@ -26,4 +26,11 @@ public class NumbersHelper {
 
         return true;
     }
+
+    public static Integer getCurrentTimestamp() {
+        Date date= new java.util.Date();
+        Long tmp = date.getTime();
+
+        return Integer.parseInt(tmp.toString().substring(0, 10));
+    }
 }

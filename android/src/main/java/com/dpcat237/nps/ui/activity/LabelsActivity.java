@@ -10,13 +10,14 @@ import android.widget.ArrayAdapter;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.database.repository.LabelRepository;
+import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.model.Label;
 
 import java.util.ArrayList;
 
 public class LabelsActivity extends ListActivity {
 	private LabelRepository labelRepo;
-	Context mContext;
+	private Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,10 @@ public class LabelsActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.label_list, menu);
+        MenuItem createLabelButton = menu.findItem(R.id.buttonCreateLabel);
+        if (!ConnectionHelper.hasConnection(mContext)) {
+            createLabelButton.setVisible(false);
+        }
 
 		return true;
 	}

@@ -18,13 +18,12 @@ import com.dpcat237.nps.database.table.SharedTable;
 import com.dpcat237.nps.database.table.SongPartTable;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,7 +57,6 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Integer lastUpdate = 0;
         DictateItemTable.onUpgrade(db, oldVersion, newVersion);
 		FeedTable.onUpgrade(db, oldVersion, newVersion);
 		ItemTable.onUpgrade(db, oldVersion, newVersion);
@@ -71,10 +69,6 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
         //delete folders with user files
         FileHelper.deleteFolders(FileHelper.getVoicesFolder(mContext));
-
-        //TODO: remove when improve sync
-        PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
-        PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
 
         //launch sync services after upgrade
         launchServices();

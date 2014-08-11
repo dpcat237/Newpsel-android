@@ -65,29 +65,7 @@ public class PreferencesHelper {
 	    editor.putInt("feedsUpdate", feedsUpdate);
 		editor.commit();
 	}
-	
-	public static Integer getLastLabelsUpdate(Context context) {
-		Integer result = 0; 
-		
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-	    Integer labelsUpdate = userPref.getInt("labelsUpdate", 0);
-	    
-	    if (labelsUpdate != null) {
-	    	result = labelsUpdate;
-	    }
-		
-		return result;
-	}
-	
-	public static void setLastLabelsUpdate(Context context, Integer labelsUpdate) {
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = userPref.edit();
-	    editor.putInt("labelsUpdate", labelsUpdate);
-		editor.commit();
-	}
-	
+
 	public static Integer getMainDrawerOption(Context context) {
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
@@ -119,17 +97,17 @@ public class PreferencesHelper {
 	    editor.putInt("main_selected_list_id", feedId);
 		editor.commit();
 	}
-	
+
 	public static Boolean checkLastClearCache(Context context) {
 		 Boolean check = false;
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 		 Long lastClearDate = userPref.getLong("last_clear_cache", 0);
 		 Date current = new Date();
-		 
+
 		 if (lastClearDate != 0) {
 			 Long week = (long) (7 * 24 * 60 * 60 * 1000);
-			 
+
 			 if (current.getTime() > (lastClearDate + week)) {
 				 check = true;
 			 }
@@ -138,7 +116,7 @@ public class PreferencesHelper {
 			 editor.putLong("last_clear_cache", current.getTime());
 			 editor.commit();
 		 }
-		 
+
 		 return check;
 	}
 
@@ -176,14 +154,6 @@ public class PreferencesHelper {
         Boolean areNew = userPref.getBoolean("sync_are_new_dictate_items", false);
 
         return areNew;
-    }
-
-    public static void setNewItems(Context context, Boolean areNew) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putBoolean("sync_are_new_items", areNew);
-        editor.commit();
     }
 
     public static Boolean areNewItems(Context context) {

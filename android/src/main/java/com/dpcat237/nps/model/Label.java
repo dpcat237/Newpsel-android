@@ -1,12 +1,14 @@
 package com.dpcat237.nps.model;
 
+import com.dpcat237.nps.constant.EntityConstants;
+
 public class Label {
     public Integer id;
     public Integer api_id;
     public String name;
-    public Integer lastUpdate;
-    public Integer unreadCount;
-    public Boolean is_changed;
+    public Integer unreadCount = 0;
+    public Integer status = EntityConstants.STATUS_NORMAL;
+    public Integer date_up;
 
     public Integer getId() {
         return id;
@@ -32,12 +34,12 @@ public class Label {
         this.name = name;
     }
 
-    public Integer getLastUpdate() {
-        return lastUpdate;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setLastUpdate(Integer lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getUnreadCount() {
@@ -48,12 +50,12 @@ public class Label {
         this.unreadCount = unreadCount;
     }
 
-    public Boolean isChanged() {
-        return is_changed;
+    public Integer getDateUpdated() {
+        return date_up;
     }
 
-    public void setIsChanged(Boolean is_changed) {
-        this.is_changed = is_changed;
+    public void setDateUpdated(Integer dateUp) {
+        this.date_up = dateUp;
     }
 
     @Override

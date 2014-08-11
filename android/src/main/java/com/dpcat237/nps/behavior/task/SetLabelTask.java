@@ -31,16 +31,14 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		if (labelRepo.checkLabelSet(label.getId(), itemApiId)) {
-			labelRepo.removeLaterItem(label.getId(), itemApiId);
+		if (labelRepo.checkLabelSet(label.getApiId(), itemApiId)) {
+			labelRepo.removeLabelItem(label.getApiId(), itemApiId);
 			set = true;
 		} else {
 			LabelItem labelItem = new LabelItem();
-			labelItem.setLabelId(label.getId());
 			labelItem.setLabelApiId(label.getApiId());
 			labelItem.setItemApiId(itemApiId);
-			labelItem.setIsUnread(true);
-			
+
 			labelRepo.setLabel(labelItem);
 		}
 		

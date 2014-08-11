@@ -9,7 +9,6 @@ public class LabelItemTable {
 	public static final String TABLE_LABEL_ITEM = "label_item";
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_API_ID = "api_id";
-	public static final String COLUMN_LABEL_ID = "label_id";
 	public static final String COLUMN_LABEL_API_ID = "label_api_id";
 	public static final String COLUMN_ITEM_API_ID = "item_api_id";
 	public static final String COLUMN_IS_UNREAD = "is_unread";
@@ -19,7 +18,6 @@ public class LabelItemTable {
 			+ TABLE_LABEL_ITEM
 			+ "(" + COLUMN_ID + " integer primary key autoincrement, " 
 			+ COLUMN_API_ID + " integer default 0,"
-			+ COLUMN_LABEL_ID + " integer not null ,"
 			+ COLUMN_LABEL_API_ID + " integer not null ,"
 			+ COLUMN_ITEM_API_ID + " integer not null ,"
 			+ COLUMN_IS_UNREAD + " boolean not null"

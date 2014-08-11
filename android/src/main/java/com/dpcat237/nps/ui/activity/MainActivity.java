@@ -225,7 +225,7 @@ public class MainActivity extends Activity {
 	
 	public void downloadData(MenuItem item) {
         if (!ConnectionHelper.hasConnection(mContext)) {
-            Toast.makeText(this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_connection));
 
             return;
         }

@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.EntityConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -10,7 +11,6 @@ import com.dpcat237.nps.model.Label;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +18,6 @@ public class SyncLabelsManager extends SyncManager {
     private static final String TAG = "NPS:SyncLabelsManager";
     private LabelRepository labelRepo;
     private Label[] labels;
-    private Integer lastUpdate = 0;
-    private ArrayList<Label> changedLabels;
 
 
     protected void openDB() {
@@ -40,12 +38,9 @@ public class SyncLabelsManager extends SyncManager {
     @SuppressWarnings("unchecked")
     protected void prepareJSON() {
         jsonData = new JSONObject();
-        Map<String, Object> resultChanged = labelRepo.getLabelsToSync();
-        changedLabels = (ArrayList<Label>) resultChanged.get("labelsArray");
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
-            jsonData.put("changedLabels", resultChanged.get("labelsJson"));
-            jsonData.put("lastUpdate", PreferencesHelper.getLastLabelsUpdate(mContext));
+            jsonData.put("labels", labelRepo.getLabelsToSync());
         } catch (JSONException e) {
             error = true;
         }
@@ -73,28 +68,22 @@ public class SyncLabelsManager extends SyncManager {
         }
 
         for (Label label : labels) {
-            if (label.getId() > 0) {
-                labelRepo.setApiId(label.getId(), label.getApiId());
-                labelRepo.setApiId(label.getId(), label.getApiId());
-            } else {
-                labelRepo.addLabel(label, false);
+            if (label.getStatus().equals(EntityConstants.STATUS_NEW)) {
+                labelRepo.addLabel(label);
             }
-            lastUpdate = label.getLastUpdate();
+            if (label.getStatus().equals(EntityConstants.STATUS_CHANGED)) {
+                labelRepo.updateLabel(label);
+            }
+            if (label.getStatus().equals(EntityConstants.STATUS_DELETED)) {
+                labelRepo.deleteLabel(label.getApiId());
+            }
         }
     }
 
     protected void beforeFinish() {
-        if (lastUpdate.equals(0)) {
+        if (error) {
             return;
         }
-        PreferencesHelper.setLastLabelsUpdate(mContext, lastUpdate);
         PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, false);
-
-        if (changedLabels.size() < 1) {
-            return;
-        }
-        for (Label changedLabel : changedLabels) {
-            labelRepo.setChanged(changedLabel.getId(), false);
-        }
     }
 }

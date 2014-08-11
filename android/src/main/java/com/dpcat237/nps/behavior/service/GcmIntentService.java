@@ -57,6 +57,7 @@ public class GcmIntentService extends IntentService {
     }
 
     private void selectCommand(String command, String type) {
+        Log.d(TAG, "tut: "+command+" - "+type);
         if (command.equals(GcmConstants.COMMAND_SYNC_REQUIRED)) {
             syncCommand(type);
         }
