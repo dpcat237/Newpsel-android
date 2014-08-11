@@ -43,28 +43,6 @@ public class PreferencesHelper {
 
 		return result;
 	}
-	
-	public static Integer getLastFeedsUpdate(Context context) {
-		Integer result = 0; 
-		
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-	    Integer feedsUpdate = userPref.getInt("feedsUpdate", 0);
-	    
-	    if (feedsUpdate != null) {
-	    	result = feedsUpdate;
-	    }
-		
-		return result;
-	}
-	
-	public static void setLastFeedsUpdate(Context context, Integer feedsUpdate) {
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = userPref.edit();
-	    editor.putInt("feedsUpdate", feedsUpdate);
-		editor.commit();
-	}
 
 	public static Integer getMainDrawerOption(Context context) {
 		 @SuppressWarnings("static-access")

@@ -14,7 +14,6 @@ import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Feed;
 import com.dpcat237.nps.model.Item;
 
 import org.json.JSONException;
@@ -73,8 +72,6 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 
         Item[] items = (Item[]) result.get("items");
 		if (items != null) {
-			syncFeeds();
-
 			for (Item item : items) {
 				itemRepo.addItem(item);
 		    }
@@ -84,34 +81,6 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 		}
 
 		return null;
-	}
-
-	private void syncFeeds () {
-        JSONObject jsonData = new JSONObject();
-        Map<String, Object> result = new HashMap<String, Object>();
-
-        try {
-            jsonData.put("appKey", appKey);
-            jsonData.put("lastUpdate", PreferencesHelper.getLastFeedsUpdate(mContext));
-            result = apiFactoryManager.makeRequest(ApiConstants.URL_GET_FEEDS, jsonData);
-        } catch (JSONException e) {
-            result.put("error", true);
-        }
-		Feed[] feeds = (Feed[]) result.get("feeds");
-        Boolean error = (Boolean) result.get("error");
-
-		if (feeds != null && !error) {
-			Integer lastUpdate = 0;
-
-			for (Feed feed : feeds) {
-				feedRepo.addFeed(feed);
-				lastUpdate = feed.getLastUpdate();
-		    }
-			if (lastUpdate != 0) {
-				PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
-			}
-
-		}
 	}
 
 	@Override

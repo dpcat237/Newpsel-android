@@ -159,7 +159,7 @@ public class MainActivity extends Activity {
 	}
 
     private void showButtonAddFeed() {
-        if (itemsActivated) {
+        if (itemsActivated && ConnectionHelper.hasConnection(mContext)) {
             buttonAddFeed.setVisible(true);
         } else {
             buttonAddFeed.setVisible(false);

@@ -1,7 +1,10 @@
 package com.dpcat237.nps.behavior.factory.syncManager;
 
 
+import android.util.Log;
+
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.EntityConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -10,7 +13,6 @@ import com.dpcat237.nps.model.Feed;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +20,6 @@ public class SyncFeedsManager extends SyncManager {
     private static final String TAG = "NPS:SyncFeedsManager";
     private FeedRepository feedRepo;
     private Feed[] feeds;
-    private Integer lastUpdate = 0;
 
 
     protected void openDB() {
@@ -38,15 +39,9 @@ public class SyncFeedsManager extends SyncManager {
 
     protected void prepareJSON() {
         jsonData = new JSONObject();
-        ArrayList<Feed> feedsNow = feedRepo.getAllFeeds();
-        Integer feedsUpdate = 0;
-        if (feedsNow.size() > 0) {
-            feedsUpdate = PreferencesHelper.getLastFeedsUpdate(mContext);
-        }
-
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
-            jsonData.put("lastUpdate", feedsUpdate);
+            jsonData.put("feeds", feedRepo.getFeedsToSync());
         } catch (JSONException e) {
             error = true;
         }
@@ -74,22 +69,22 @@ public class SyncFeedsManager extends SyncManager {
         }
 
         for (Feed feed : feeds) {
-            if (feedRepo.checkFeedExists(feed.getApiId())) {
-                feedRepo.updateFeed(feed);
-            } else {
+            if (feed.getStatus().equals(EntityConstants.STATUS_NEW)) {
                 feedRepo.addFeed(feed);
             }
-
-            if (feed.getLastUpdate() > lastUpdate) {
-                lastUpdate = feed.getLastUpdate();
+            if (feed.getStatus().equals(EntityConstants.STATUS_CHANGED)) {
+                feedRepo.updateFeed(feed);
+            }
+            if (feed.getStatus().equals(EntityConstants.STATUS_DELETED)) {
+                feedRepo.deleteFeed(feed.getApiId());
             }
         }
     }
 
     protected void beforeFinish() {
-        if (lastUpdate != 0 && feeds.length > 0) {
-            PreferencesHelper.setLastFeedsUpdate(mContext, lastUpdate);
-            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, false);
+        if (error) {
+            return;
         }
+        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, false);
     }
 }
