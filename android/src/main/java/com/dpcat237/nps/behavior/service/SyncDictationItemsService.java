@@ -58,18 +58,7 @@ public class SyncDictationItemsService extends IntentService {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         Boolean dictationEnabled = pref.getBoolean("pref_dictation_later_enable", false);
 
-        if (!dictationEnabled || !ConnectionHelper.hasConnection(mContext)) {
-            return false;
-        }
-
-        Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
-        if (wifiEnabled && ConnectionHelper.hasWifiConnection(mContext)) {
-            return true;
-        }
-
-        Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
-
-        return (mobileEnabled && ConnectionHelper.hasMobileConnection(mContext));
+        return (dictationEnabled && ConnectionHelper.hasConnection(mContext));
     }
 
     private void startProcess() {

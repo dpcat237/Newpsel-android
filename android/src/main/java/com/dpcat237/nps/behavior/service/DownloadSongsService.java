@@ -61,14 +61,14 @@ public class DownloadSongsService extends IntentService {
             return false;
         }
 
-        if (!ConnectionHelper.hasConnection(mContext)) {
+        Boolean enoughBattery = BatteryHelper.isEnoughtBattery(mContext);
+        if (!ConnectionHelper.hasConnection(mContext) || !enoughBattery) {
             return false;
         }
 
         Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
         Boolean wifiConnection = ConnectionHelper.hasWifiConnection(mContext);
-        Boolean enoughBattery = BatteryHelper.isEnoughtBattery(mContext);
-        if (wifiEnabled && wifiConnection && enoughBattery) {
+        if (wifiEnabled && wifiConnection) {
             return true;
         }
 
