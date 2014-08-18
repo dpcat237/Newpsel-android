@@ -4,16 +4,54 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dip">
-     
-    <Button android:id="@+id/btnSignin"
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_sign_in"
-        android:onClick="goSignIn"/>
-    
-    <Button android:id="@+id/btnSignup"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        >
+
+        <Button android:id="@+id/btnSignin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_sign_in"
+            android:layout_weight="1"
+            android:onClick="goSignIn"/>
+
+        <Button android:id="@+id/btnSignup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_sign_up"
+            android:layout_weight="1"
+            android:onClick="goSignUp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_sign_up"
-        android:onClick="goSignUp"/>
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        >
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/buttonGoogleSignIn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.facebook.widget.LoginButton
+            android:id="@+id/buttonFacebookSignIn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
 </LinearLayout>

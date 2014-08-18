@@ -2,17 +2,22 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
-
+    buildToolsVersion '20.0.0'
     defaultConfig {
-        applicationId "com.dpcat237.nps"
+        applicationId 'com.dpcat237.nps'
         minSdkVersion 16
         targetSdkVersion 20
         versionCode 139
         versionName '0.1.39'
     }
-
     signingConfigs {
+        debug {
+            storeFile file('/home/denys/C.A.T./Programs/Projects/debug-npsKey')
+            storePassword 'debug-nps#'
+            keyAlias 'debug-npsKey'
+            keyPassword 'debug-nps#'
+        }
+
         release {
             storeFile file('/home/denys/C.A.T./Programs/Projects/npsKey')
             storePassword 'D#25c01a1987t#Pnps'
@@ -20,7 +25,6 @@ android {
             keyPassword 'D#25c01a1987t#Pnps'
         }
     }
-
     buildTypes {
         debug {
             debuggable true
@@ -28,17 +32,19 @@ android {
             runProguard false
         }
         release {
-            debuggable  false
+            debuggable false
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     compile 'com.android.support:support-v4:20.+'
     compile 'com.google.code.gson:gson:2.+'
     compile 'com.google.android.gms:play-services:5.0.89'
+    compile project(':libs:facebook') //v3.17.1
 }

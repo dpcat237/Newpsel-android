@@ -2,12 +2,10 @@
 <resources>
     <!-- Application -->
     <string name="app_name">Newpsel</string>
-
-    <!-- Sign up -->
+    <string name="facebook_app_id">149114668611897</string>
     <string name="label_signup">Sign up</string>
-    
-    <!-- Sign in -->
     <string name="label_signin">Sign in</string>
+    <string name="label_welcome">Welcome</string>
     
     <!-- Add feed -->
     <string name="label_add_feed">Add feed</string>
@@ -30,11 +28,9 @@
     <string name="ts_successfully_saved">Page successfully saved to </string>
     
     <!-- Error -->
-    <string name="error_304">Username already exists</string>
-    <string name="error_305">Email already exists</string>
+    <string name="error_305">Wrong password</string>
     <string name="error_306">Wrong feed url</string>
     <string name="error_310">Try again later</string>
-    <string name="error_311">Username is required!</string>
     <string name="error_312">Email is required!</string>
     <string name="error_313">Password is required!</string>
     
@@ -103,7 +99,6 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     
     <!-- Forms -->
-    <string name="hint_username">Username</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_url">Url</string>

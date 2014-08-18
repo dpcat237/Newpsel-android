@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LoginHelper {
+    public static final String NSECK = "newpsel_key201306";
+
 	public static Boolean checkLogged(Context context) {
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
@@ -74,7 +76,7 @@ public class LoginHelper {
 	}
 	
 	public static String sha1SignUpPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String appPwd = sha1("sc_"+text);
+		String appPwd = sha1(NSECK+"_"+text);
 		return appPwd;
 	}
 

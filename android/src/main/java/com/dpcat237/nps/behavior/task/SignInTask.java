@@ -25,26 +25,26 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginTask extends AsyncTask<Void, Integer, Void>{
+public class SignInTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;
 	private View mView;
-    private String username;
+    private String email;
     private String password;
     private String appKey;
     private Boolean checkLogin = false;
     private ProgressDialog dialog;
     private ApiFactoryManager apiFactoryManager;
 	
-	public LoginTask(Context context, View view) {
+	public SignInTask(Context context, View view) {
         mContext = context;
         mView = view;
         getData();
     }
 	
 	private void getData() {
-		EditText usernameText = (EditText) mView.findViewById(R.id.txtUsername);
+		EditText emailText = (EditText) mView.findViewById(R.id.txtEmail);
 		EditText passwordText = (EditText) mView.findViewById(R.id.txtPassword);
-		username = usernameText.getText().toString();
+		email = emailText.getText().toString();
 		String pwd = passwordText.getText().toString();
 		try {
 			password = LoginHelper.sha1LoginPassword(pwd);
@@ -72,7 +72,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Void>{
 
         try {
             jsonData.put("appKey", appKey);
-            jsonData.put("username", username);
+            jsonData.put("email", email);
             jsonData.put("password", password);
             result = apiFactoryManager.makeRequest(ApiConstants.URL_SIGN_IN, jsonData);
         } catch (JSONException e) {

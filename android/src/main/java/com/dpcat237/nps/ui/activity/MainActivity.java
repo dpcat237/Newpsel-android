@@ -21,18 +21,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.behavior.service.DownloadSongsService;
 import com.dpcat237.nps.behavior.service.PlayerService;
-import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
-import com.dpcat237.nps.database.repository.FeedRepository;
-import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.GcmHelper;
 import com.dpcat237.nps.helper.GoogleServicesHelper;
@@ -115,7 +110,9 @@ public class MainActivity extends Activity {
 	}
 	
 	private void showWelcome () {
-		setContentView(R.layout.activity_welcome);
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
 	}
 	
 	private void showDrawer () {
@@ -209,18 +206,6 @@ public class MainActivity extends Activity {
 	public void showAbout() {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
-	}
-	
-	public void goSignIn(View view) {
-		Intent intent = new Intent(this, SignInActivity.class);
-		startActivity(intent);
-		finish();
-	}
-	
-	public void goSignUp(View view) {
-		Intent intent = new Intent(this, SignUpActivity.class);
-		startActivity(intent);
-		finish();
 	}
 	
 	public void downloadData(MenuItem item) {
