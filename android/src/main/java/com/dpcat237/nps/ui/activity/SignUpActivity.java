@@ -1,6 +1,7 @@
 package com.dpcat237.nps.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -70,4 +71,11 @@ public class SignUpActivity extends Activity {
 		
 		return check;
 	}
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

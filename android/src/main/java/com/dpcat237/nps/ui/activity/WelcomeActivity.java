@@ -79,11 +79,13 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     public void goSignIn(View view) {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void goSignUp(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

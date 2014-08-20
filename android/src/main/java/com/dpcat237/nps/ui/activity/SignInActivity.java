@@ -39,4 +39,11 @@ public class SignInActivity extends Activity {
         Intent intent = new Intent(this, RecoverPasswordActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
