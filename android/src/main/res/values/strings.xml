@@ -5,6 +5,7 @@
     <string name="facebook_app_id">149114668611897</string>
     <string name="label_signup">Sign up</string>
     <string name="label_signin">Sign in</string>
+    <string name="label_recovery_password">Recovery password</string>
     <string name="label_welcome">Welcome</string>
     
     <!-- Add feed -->
@@ -62,6 +63,7 @@
     <string name="error_network_unavailable">Error: network unavailable</string>
     <string name="error_language_tts">Sorry! Your device doesn\'t have %1$s language installed.</string>
     <string name="label_s">label</string>
+    <string name="sent_change_password">We sent to you an email with link to create new password.</string>
 
     <!-- VIEWS -->
     <!-- Main -->
@@ -105,6 +107,7 @@
     <string name="button_sign_in">Sign in</string>
     <string name="button_sign_up">Sign up</string>
     <string name="button_submit">Submit</string>
+    <string name="button_recovery_password">Recovery password</string>
     
     <!-- Feed's items -->
     <string name="color_read">#d3d3d3</string>

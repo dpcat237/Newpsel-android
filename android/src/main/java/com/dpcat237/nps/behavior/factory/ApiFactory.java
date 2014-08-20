@@ -7,6 +7,7 @@ import com.dpcat237.nps.behavior.factory.apiManager.ApiItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLaterItemsManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiRecoveryPasswordManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSharedItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignInManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignUpManager;
@@ -26,6 +27,9 @@ public class ApiFactory {
         }
         if (type.equals(ApiConstants.URL_GET_FEEDS)) {
             apiManager = new ApiGetFeedsManager();
+        }
+        if (type.equals(ApiConstants.URL_RECOVERY_PASSWORD)) {
+            apiManager = new ApiRecoveryPasswordManager();
         }
         if (type.equals(ApiConstants.TYPE_SYNC_DICTATE_ITEMS)) {
             apiManager = new ApiDictateItemsManager();

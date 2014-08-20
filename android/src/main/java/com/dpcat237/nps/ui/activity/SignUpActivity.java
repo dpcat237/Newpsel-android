@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.task.SignUpTask;
+import com.dpcat237.nps.helper.AccountHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 
@@ -24,6 +25,9 @@ public class SignUpActivity extends Activity {
 		mView = this.findViewById(android.R.id.content).getRootView();
 		
 		setContentView(R.layout.activity_sign_up);
+
+        EditText textEmail = (EditText) mView.findViewById(R.id.txtEmail);
+        textEmail.setText(AccountHelper.getEmail(this));
 	}
 	
 	public void doSignUp(View view) {
