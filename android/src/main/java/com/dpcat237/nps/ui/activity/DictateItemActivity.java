@@ -190,7 +190,7 @@ public class DictateItemActivity extends Activity {
         readButton.setVisible(true);
         unreadButton.setVisible(false);
         itemRepo.readItem(item.getItemApiId(), false);
-        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
+        songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
     }
 
     private void markUnread() {
@@ -198,6 +198,6 @@ public class DictateItemActivity extends Activity {
         readButton.setVisible(false);
         unreadButton.setVisible(true);
         itemRepo.readItem(item.getItemApiId(), true);
-        songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, false);
+        songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, false);
     }
 }
