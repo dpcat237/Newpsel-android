@@ -16,6 +16,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
+import com.dpcat237.nps.helper.WidgetHelper;
 import com.dpcat237.nps.model.Song;
 
 import java.io.File;
@@ -160,6 +161,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         if (songGrabManager.isLastSongPart()) {
             songGrabManager.setAsGrabbedSong(currentSong.getId());
             grabbedSongs = true;
+            WidgetHelper.updateWidgets(mContext);
             grabNextSong(false);
 
             return;
