@@ -57,6 +57,8 @@ public class DictateItemActivity extends Activity {
         }
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
         ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
+
+
 	}
 
     private void openDB() {
@@ -110,6 +112,9 @@ public class DictateItemActivity extends Activity {
 
         prepareDictateButton();
         prepareShareButton(buttonShare);
+
+        //when come from player
+        markRead();
 
         return true;
     }
@@ -185,18 +190,26 @@ public class DictateItemActivity extends Activity {
         super.onPause();
     }
 
+    private void updateReadButton() {
+        if (item.isUnread()) {
+            readButton.setVisible(false);
+            unreadButton.setVisible(true);
+        } else {
+            readButton.setVisible(true);
+            unreadButton.setVisible(false);
+        }
+    }
+
     private void markRead() {
         item.setIsUnread(false);
-        readButton.setVisible(true);
-        unreadButton.setVisible(false);
+        updateReadButton();
         itemRepo.readItem(item.getItemApiId(), false);
         songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
     }
 
     private void markUnread() {
         item.setIsUnread(true);
-        readButton.setVisible(false);
-        unreadButton.setVisible(true);
+        updateReadButton();
         itemRepo.readItem(item.getItemApiId(), true);
         songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, false);
     }
