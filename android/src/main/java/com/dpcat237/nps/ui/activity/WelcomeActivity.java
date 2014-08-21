@@ -1,5 +1,6 @@
 package com.dpcat237.nps.ui.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +66,10 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         mContext = this;
 		mView = this.findViewById(android.R.id.content).getRootView();
 		setContentView(R.layout.activity_welcome);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
 
         setFacebookButton((LoginButton) mView.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
         setGoogleButton((SignInButton) findViewById(R.id.buttonGoogleSignIn));
