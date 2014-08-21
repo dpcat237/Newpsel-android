@@ -10,6 +10,7 @@ public class Song extends Generic {
     protected String content;
     protected String language;
     protected String file;
+    protected String part_file;
     protected Boolean is_grabbed = false;
     protected Boolean is_played = false;
     protected String type;
@@ -70,6 +71,14 @@ public class Song extends Generic {
 
     public void setFilename(String file) {
         this.file = file;
+    }
+
+    public String getPartFilename() {
+        return part_file;
+    }
+
+    public void setPartFilename(String partFile) {
+        this.part_file = partFile;
     }
 
     public Boolean isGrabbed() {

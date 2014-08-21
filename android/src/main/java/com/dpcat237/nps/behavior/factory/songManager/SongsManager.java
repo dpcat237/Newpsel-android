@@ -4,12 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.dpcat237.nps.database.repository.SongPartRepository;
+import com.dpcat237.nps.constant.FileConstants;
+import com.dpcat237.nps.database.repository.FeedRepository;
+import com.dpcat237.nps.database.repository.SongRepository;
+import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.model.List;
 import com.dpcat237.nps.model.ListItem;
 import com.dpcat237.nps.model.Song;
-import com.dpcat237.nps.database.repository.FeedRepository;
-import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.model.SongPart;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public abstract class SongsManager {
     protected Boolean error = false;
     private Integer ttsStringLimit = 3900;
     private String filenamePrefix;
-    private SongPartRepository partRepo;
     private ArrayList<SongPart> parts = null;
     private Integer partsCount;
 
@@ -51,6 +51,8 @@ public abstract class SongsManager {
         song.setListTitle(list.getTitle());
         song.setTitle(listItem.getTitle());
         song.setType(grabberType);
+        String filename = grabberType+"_"+list.getApiId()+"_"+listItem.getId();
+        song.setFilename(filename + ".wav");
 
         return song;
     }
@@ -109,17 +111,17 @@ public abstract class SongsManager {
         song.setLanguage(songListItem.getLanguage());
 
         if (parts == null) {
-            setFilenamePrefix(song.getType(), song.getItemApiId(), song.getListId());
+            setFilenamePrefix(song.getItemApiId(), song.getListId());
             createSongParts(song, song.getContent());
         }
         setSongPart(song);
-        //Log.d(TAG, "tut: parts "+parts.size());
 
         return song;
     }
 
-    private void setFilenamePrefix(String type, Integer itemApiId, Integer listApiId) {
-        filenamePrefix = type+"_"+itemApiId+"_"+listApiId;
+    private void setFilenamePrefix(Integer itemApiId, Integer listApiId) {
+        filenamePrefix = FileConstants.FILE_TEMP_SONG_PART+"_"+itemApiId+"_"+listApiId;
+
     }
 
     public Song getNextSong(Boolean previousError) {
@@ -150,8 +152,15 @@ public abstract class SongsManager {
         return error;
     }
 
-    public void setAsGrabbedSong(Integer songId) {
-        songRepo.setGrabbedSong(songId);
+    public void setAsGrabbedSong(Integer songId, String songFileName, String voicesFolderPath) {
+        Boolean merged = FileHelper.mergeSongParts(mContext, parts, voicesFolderPath+songFileName);
+        //Log.d(TAG, "tut: setAsGrabbedSong a");
+        if (merged) {
+            //Log.d(TAG, "tut: setAsGrabbedSong b");
+            songRepo.setGrabbedSong(songId);
+        }
+
+        FileHelper.removeSongParts(parts, voicesFolderPath);
     }
 
     public void markAsPlayed(Song song) {
@@ -165,21 +174,17 @@ public abstract class SongsManager {
     }
 
     private void createSongParts(Song song, String completeText) {
-        partRepo = new SongPartRepository(mContext);
-        partRepo.open();
         parts = null;
         partsCount = 0;
 
         Integer textLength = completeText.length();
         if (textLength <= ttsStringLimit) {
             createSongPart(song, completeText, 1);
-            partRepo.close();
 
             return;
         }
 
         cutDictation(song, completeText, textLength, 0, 0);
-        partRepo.close();
     }
 
     private void cutDictation(Song song, String completeText, Integer textLength, Integer subInt, Integer count) {
@@ -208,10 +213,8 @@ public abstract class SongsManager {
         SongPart songPart = new SongPart();
         songPart.setSongId(song.getId());
         songPart.setContent(content);
-        songPart.setFilename(filenamePrefix+"_"+count+".wav");
+        songPart.setFilename(filenamePrefix + "_" + count + ".wav");
         song.addPart(songPart);
-
-        partRepo.addSongPart(songPart);
     }
 
     private void setSongPart(Song song) {
@@ -223,7 +226,7 @@ public abstract class SongsManager {
         partsCount++;
 
         song.setContent(songPart.getContent());
-        song.setFilename(songPart.getFilename());
+        song.setPartFilename(songPart.getFilename());
     }
 
     public Boolean isLastSongPart() {

@@ -94,16 +94,24 @@ public class SyncDictationItemsManager extends SyncManager {
         newCount = 0;
         Log.d(TAG, "tut: downloaded items "+items.length);
         for (DictateItem item : items) {
-            if (item.isUnread()) {
-                if (!dictationRepo.checkItemExists(item.getApiId())) {
+            addRemoveItem(item);
+        }
+    }
+
+    private void addRemoveItem(DictateItem item) {
+        if (item.isUnread()) {
+            if (!dictationRepo.checkItemExists(item.getApiId())) {
+                try {
                     dictationRepo.addItem(item);
                     newCount++;
                     //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
+                } catch (Exception e) {
+                    Log.d(TAG, "tut: Error "+e.getMessage());
                 }
-            } else {
-                //Log.d(TAG, "tut: removeItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
-                removeItem(item.getApiId());
             }
+        } else {
+            //Log.d(TAG, "tut: removeItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
+            removeItem(item.getApiId());
         }
     }
 

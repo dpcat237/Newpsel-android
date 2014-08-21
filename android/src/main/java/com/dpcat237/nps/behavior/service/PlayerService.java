@@ -167,7 +167,7 @@ public class PlayerService extends PlayerServiceCommands {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer player) {
-                    playNext();
+                    playNextSong();
                 }
             });
 
@@ -415,7 +415,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void grabAudioFocusAndResume() {
-        if (!grabAudioFocus() || this == null) {
+        if (!grabAudioFocus()) {
             return;
         }
 
@@ -439,7 +439,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void playFirstSong() {
-        if (!grabAudioFocus() || this == null) {
+        if (!grabAudioFocus()) {
             return;
         }
 
@@ -522,50 +522,22 @@ public class PlayerService extends PlayerServiceCommands {
         }
     }
 
-    private void playNext() {
-        if (player != null) {
-            // stop the player and the updating while we do some administrative stuff
-            player.pause();
-            //stopUpdateTimer();
-            updateActivePodcastPosition(player.getCurrentPosition());
-        }
-
-        if (queryManager.areMoreParts()) {
-            grabAudioFocusAndResume();
-
-            return;
-        }
-
-        nextSong();
-    }
-
     private void playNextSong() {
         if (player != null) {
             // stop the player and the updating while we do some administrative stuff
             player.pause();
             //stopUpdateTimer();
-            updateActivePodcastPosition(player.getCurrentPosition());
         }
 
-        nextSong();
-    }
-
-    private void nextSong() {
         markSongAsRead();
+
         if (queryManager.isLast()) {
             NotificationHelper.showSimpleToast(mContext, getNotificationMessage());
             stop();
-
-            /* http://stackoverflow.com/questions/3873659/android-how-can-i-get-the-current-foreground-activity-from-a-service
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(mainIntent);*/
-
-            return;
+        } else {
+            queryManager.setNextSong();
+            grabAudioFocusAndResume();
         }
-
-        queryManager.setNextSong();
-        grabAudioFocusAndResume();
     }
 
     private void markSongAsRead() {
@@ -596,9 +568,7 @@ public class PlayerService extends PlayerServiceCommands {
             updateActivePodcastPosition(player.getCurrentPosition());
         }
 
-        if (queryManager.isFirst()) {
-            queryManager.setCurrentPosition(0);
-        } else {
+        if (!queryManager.isFirst()) {
             queryManager.setPreviousSong();
         }
         grabAudioFocusAndResume();

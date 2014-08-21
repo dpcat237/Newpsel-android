@@ -15,7 +15,6 @@ import com.dpcat237.nps.database.table.LabelItemTable;
 import com.dpcat237.nps.database.table.LabelTable;
 import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.database.table.SharedTable;
-import com.dpcat237.nps.database.table.SongPartTable;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.FileHelper;
 
@@ -23,7 +22,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 11;
 	
 	public NPSDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +39,6 @@ public class NPSDatabase extends SQLiteOpenHelper {
         LaterItemTable.onCreate(db);
 		SharedTable.onCreate(db);
         SongTable.onCreate(db);
-        SongPartTable.onCreate(db);
 	}
 	
 	public void onDelete(SQLiteDatabase db) {
@@ -52,7 +50,6 @@ public class NPSDatabase extends SQLiteOpenHelper {
         LaterItemTable.onDelete(db);
 		SharedTable.onDelete(db);
         SongTable.onDelete(db);
-        SongPartTable.onDelete(db);
 	}
 
 	@Override
@@ -65,7 +62,6 @@ public class NPSDatabase extends SQLiteOpenHelper {
         LaterItemTable.onUpgrade(db, oldVersion, newVersion);
 		SharedTable.onUpgrade(db, oldVersion, newVersion);
         SongTable.onUpgrade(db, oldVersion, newVersion);
-        SongPartTable.onUpgrade(db, oldVersion, newVersion);
 
         //delete folders with user files
         FileHelper.deleteFolders(FileHelper.getVoicesFolder(mContext));

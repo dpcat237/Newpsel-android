@@ -3,6 +3,7 @@ package com.dpcat237.nps.database.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.SongTable;
@@ -18,12 +19,14 @@ public class SongRepository extends  BaseRepository {
             SongTable.COLUMN_ITEM_ID,
             SongTable.COLUMN_LIST_TITLE,
             SongTable.COLUMN_TITLE,
+            SongTable.COLUMN_FILE,
             SongTable.COLUMN_IS_GRABBED,
             SongTable.COLUMN_IS_PLAYED,
             SongTable.COLUMN_TYPE
 			};
     private String[] filesColumns = {
             SongTable.COLUMN_ID,
+            SongTable.COLUMN_FILE,
     };
 
 
@@ -37,6 +40,7 @@ public class SongRepository extends  BaseRepository {
         values.put(SongTable.COLUMN_ITEM_ID, song.getItemApiId());
         values.put(SongTable.COLUMN_LIST_TITLE, song.getListTitle());
         values.put(SongTable.COLUMN_TITLE, song.getTitle());
+        values.put(SongTable.COLUMN_FILE, song.getFilename());
         values.put(SongTable.COLUMN_IS_GRABBED, song.isGrabbed());
         values.put(SongTable.COLUMN_IS_PLAYED, song.isPlayed());
         values.put(SongTable.COLUMN_TYPE, song.getType());
@@ -44,6 +48,7 @@ public class SongRepository extends  BaseRepository {
 	}
 
     public Cursor getSongsCursor(String type, Integer listId) {
+        Log.d(TAG, "tut: "+type+" - "+listId);
         String where = "";
         String[] args = null;
         if (listId == 0) {
@@ -66,9 +71,10 @@ public class SongRepository extends  BaseRepository {
         song.setItemApiId(cursor.getInt(2));
         song.setListTitle(cursor.getString(3));
         song.setTitle(cursor.getString(4));
-        song.setGrabbed(cursor.getInt(5)>0);
-        song.setPlayed(cursor.getInt(6)>0);
-        song.setType(cursor.getString(7));
+        song.setFilename(cursor.getString(5));
+        song.setGrabbed(cursor.getInt(6)>0);
+        song.setPlayed(cursor.getInt(7)>0);
+        song.setType(cursor.getString(8));
 
 		return song;
 	}
@@ -76,6 +82,7 @@ public class SongRepository extends  BaseRepository {
     public Song cursorToFile(Cursor cursor) {
         Song song = new Song();
         song.setId(cursor.getInt(0));
+        song.setFilename(cursor.getString(1));
 
         return song;
     }

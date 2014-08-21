@@ -30,11 +30,11 @@ public class SyncDictationsAlarm extends WakefulBroadcastReceiver {
             cancelAlarm(context);
         }
 
-        Intent createSongsService = new Intent(context, CreateSongsService.class);
-        startWakefulService(context, createSongsService);
-
         Intent syncDictationItemsService = new Intent(context, SyncDictationItemsService.class);
         startWakefulService(context, syncDictationItemsService);
+
+        Intent createSongsService = new Intent(context, CreateSongsService.class);
+        startWakefulService(context, createSongsService);
 
         Intent downloadSongsService = new Intent(context, DownloadSongsService.class);
         startWakefulService(context, downloadSongsService);
