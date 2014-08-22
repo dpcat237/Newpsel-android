@@ -67,25 +67,23 @@
                     android:title="@string/st_dictation_speed"
                     android:summary="@string/st_dictation_speed_s" />
                 <ListPreference
-                    android:defaultValue="25"
-                    android:entries="@array/st_list_dictation_quantity"
-                    android:entryValues="@array/st_list_dictation_quantity"
-                    android:key="pref_dictation_quantity"
-                    android:dependency="pref_dictation_later_enable"
-                    android:negativeButtonText="@null"
-                    android:positiveButtonText="@null"
-                    android:title="@string/st_dictation_quantity"
-                    android:summary="@string/st_dictation_quantity_s" />
-                <ListPreference
                     android:defaultValue="40.0f"
                     android:entries="@array/st_list_battery_level_titles"
                     android:entryValues="@array/st_list_st_battery_level_values"
                     android:key="pref_battery_level"
-                    android:dependency="pref_dictation_later_enable"
                     android:negativeButtonText="@null"
                     android:positiveButtonText="@null"
                     android:title="@string/st_battery_level_title"
                     android:summary="@string/st_battery_level_s" />
+                <ListPreference
+                    android:defaultValue="25"
+                    android:entries="@array/st_list_dictation_quantity"
+                    android:entryValues="@array/st_list_dictation_quantity"
+                    android:key="pref_dictation_quantity"
+                    android:negativeButtonText="@null"
+                    android:positiveButtonText="@null"
+                    android:title="@string/st_dictation_quantity"
+                    android:summary="@string/st_dictation_quantity_s" />
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/st_later_items_preferences">
@@ -94,6 +92,12 @@
                 android:key="pref_later_items_enable"
                 android:summary="@string/st_later_items_check"
                 android:defaultValue="false"/>
+            <MultiSelectListPreference
+                android:key="pref_later_items_labels"
+                android:dependency="pref_later_items_enable"
+                android:title="@string/st_later_items_labels"
+                android:summary="@string/st_later_items_labels_s"
+                android:defaultValue="@array/empty_array" />
             <ListPreference
                 android:defaultValue="50"
                 android:entries="@array/st_list_later_items_quantity"
@@ -104,12 +108,6 @@
                 android:positiveButtonText="@null"
                 android:title="@string/st_later_items_quantity"
                 android:summary="@string/st_later_items_quantity_s" />
-            <MultiSelectListPreference
-                android:key="pref_later_items_labels"
-                android:dependency="pref_later_items_enable"
-                android:title="@string/st_later_items_labels"
-                android:summary="@string/st_later_items_labels_s"
-                android:defaultValue="@array/empty_array" />
         </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

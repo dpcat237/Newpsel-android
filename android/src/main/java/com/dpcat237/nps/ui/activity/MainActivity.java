@@ -194,6 +194,9 @@ public class MainActivity extends Activity {
             case R.id.buttonDictate:
                 PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, 0);
                 return true;
+            case R.id.buttonManual:
+                showManual();
+                return true;
 	    }
 		return false;
 	}
@@ -207,6 +210,11 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
 	}
+
+    public void showManual() {
+        Intent intent = new Intent(this, ManualActivity.class);
+        startActivity(intent);
+    }
 	
 	public void downloadData(MenuItem item) {
         if (!ConnectionHelper.hasConnection(mContext)) {

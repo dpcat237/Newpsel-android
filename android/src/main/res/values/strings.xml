@@ -22,6 +22,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_drop_db">Drop DB</string>
     <string name="action_check">Check this</string>
+    <string name="action_manual">Manual</string>
     <string name="action_speech">Speech</string>
     <string name="activity_articles">New articles</string>
 
@@ -73,8 +74,8 @@
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_new_articles">Aren\'t new articles</string>
-    <string name="drawer_item_unread">New articles</string>
-    <string name="drawer_item_all">All feed articles</string>
+    <string name="drawer_item_unread">News</string>
+    <string name="drawer_item_all">All new articles</string>
     <string name="drawer_dictations_items">Dictation articles</string>
     <string name="drawer_later_item">Saved articles</string>
 
@@ -92,8 +93,8 @@
     <string-array name="drawer_main_activity">
         <item>@string/drawer_item_unread</item>
         <item>@string/drawer_item_all</item>
-        <item>@string/drawer_dictations_items</item>
         <item>@string/drawer_later_item</item>
+        <item>@string/drawer_dictations_items</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -123,18 +124,6 @@
     <string name="cm_add_star">Add star</string>
     <string name="cm_remove_star">Remove star</string>
     <string name="cm_share">Share</string>
-    
-    <!-- About -->
-    <string name="about_label">About</string>
-    <string name="about_nps">Newpsle is under development and currently it\'s in alpha version. It will have different futures with which you will spend less time selecting preferred news and save/share them. So for now Newpsel is simple RSS feeds reader but soon will come future functionality.</string>
-    <string name="about_version">Current version: </string>
-    <string name="about_status">(alpha)</string>
-    <string name="about_web">Web:</string>
-    <string name="app_web_url">www.newpsel.com</string>
-    <string name="about_author">Author:</string>
-    <string name="about_author_name">Denys Pasishnyi (@dpcat237)</string>
-    <string name="about_write">Email:</string>
-    <string name="about_email">newpsel@gmail.com</string>
     
     <!-- Labels -->
     <string name="button_create_label">create label</string>
@@ -220,9 +209,9 @@
     <string name="st_dictation_enable_titles">Activate to enable dictation of news titles</string>
     <string name="st_dictation_later">Later articles dictation</string>
     <string name="st_dictation_enable_later">Activate to enable dictation of saved articles</string>
-    <string name="st_download_wifi_enable">Enable download via WIFI</string>
+    <string name="st_download_wifi_enable">Via WIFI</string>
     <string name="st_download_wifi_enable_text">Activate to enable download dictations via WIFI</string>
-    <string name="st_download_mobile_enable">Enable download via mobile data</string>
+    <string name="st_download_mobile_enable">Via mobile data</string>
     <string name="st_download_mobile_enable_text">Activate to enable download dictations via mobile data</string>
     <string name="st_notifications">Notifications</string>
     <string name="st_notifications_enable">Enable notifications</string>
@@ -263,4 +252,37 @@
     <!-- Player widget -->
     <string name="widget_title">Newpsel - Dictations widget</string>
     <string name="widget_title_query_empty">Newpsel - Dictations widget</string>
+
+    <!-- Manual -->
+    <string name="manual_section_general">General</string>
+    <string name="manual_section_articles">Articles</string>
+    <string name="manual_section_dictations">Dictations</string>
+    <string name="manual_section_saved">Saved to later</string>
+    <string name="manual_general_txt1">Newpsel is personal project created with idea to help spend less time possible to be informed from your preferred sources.</string>
+    <string name="manual_general_txt2">This application integrate several related functionalities as: reads feed news as basic functionality, save articles to later and listen dictation of articles. All data is stored in the device to be possible consume it offline.</string>
+    <string name="manual_articles_txt1">In this section you will see feeds to which you subscribed with respective articles. This section is separated to:</string>
+    <string name="manual_articles_title1">News:</string>
+    <string name="manual_articles_txt2">are unread articles.</string>
+    <string name="manual_articles_title2">All new articles:</string>
+    <string name="manual_articles_txt3">are all feeds articles in the device.</string>
+    <string name="manual_articles_txt4">Dictation: Application dictation of each article. Also if you activate dictations of titles you will be able listen titles of articles by feed as music player.</string>
+    <string name="manual_articles_txt5">Labels: You can assign labels to articles to read or listen them later.</string>
+    <string name="manual_articles_txt6">Settings: In settings you can deactivate synchronization of feed articles, for example if in tablet you use only Saved articles to specific label.</string>
+    <string name="manual_saved_txt1">In this section are articles or webs saved to later and ordered by labels.</string>
+    <string name="manual_saved_txt2">This functionality is deactivated by default. To activate it you have to go to Preferences of saved to later articles in Settings. There you can activate this functionality, specify from which label do you want the articles and the maximum quantity of articles in your device.</string>
+    <string name="manual_dictations_txt1">In this section are articles saved to label Read later (default name).</string>
+    <string name="manual_dictations_txt2">This functionality is deactivated by default. To activate it you have to go to Dictation preferences in application Settings. Also there you can adjust another related preferences. The voice is downloaded or generated in your device (in case you have required language offline in Google Translator application). Voice generation, depend of device performance, can notably consume energy that why you can specify the minimum level of batter for the process.</string>
+    <string name="manual_dictations_txt3">Application play articles as usual music player and you can control this from: provided widget, notification, lock screen and in the future devices with Google Wear.</string>
+
+    <!-- About -->
+    <string name="about_label">About</string>
+    <string name="about_nps">Newpsel (News Personal Selector) is personal project created with idea to help spend less time possible to be informed from your preferred sources.</string>
+    <string name="about_write_us">Any opinion, suggestion, issue report will be very appreciated!</string>
+    <string name="about_version">Current version: </string>
+    <string name="about_web">Web:</string>
+    <string name="app_web_url">www.newpsel.com</string>
+    <string name="about_author">Author:</string>
+    <string name="about_author_name">Denys Pasishnyi (@dpcat237)</string>
+    <string name="about_write">Email:</string>
+    <string name="about_email">newpsel@gmail.com</string>
 </resources>
