@@ -16,8 +16,7 @@ public class SongsFactory {
 
         if (type.equals(SongConstants.GRABBER_TYPE_TITLE)) {
             songsManager = new SongsTitleManager();
-        }
-        if (type.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+        } else if (type.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
             songsManager = new SongsDictateItemManager();
         }
 
@@ -29,8 +28,7 @@ public class SongsFactory {
 
         if (type.equals(SongConstants.GRABBER_TYPE_TITLE)) {
             intent = new Intent(context, ItemActivity.class);
-        }
-        if (type.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+        } else if (type.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
             intent = new Intent(context, DictateItemActivity.class);
         }
 

@@ -21,38 +21,27 @@ public class ApiFactory {
 
         if (type.equals(ApiConstants.URL_ADD_FEED)) {
             apiManager = new ApiAddFeedManager();
-        }
-        if (type.equals(ApiConstants.URL_ADD_GCM_ID)) {
+        } else if (type.equals(ApiConstants.URL_ADD_GCM_ID)) {
             apiManager = new ApiAddGcmIdManager();
-        }
-        if (type.equals(ApiConstants.URL_GET_FEEDS)) {
+        } else if (type.equals(ApiConstants.URL_GET_FEEDS)) {
             apiManager = new ApiGetFeedsManager();
-        }
-        if (type.equals(ApiConstants.URL_RECOVERY_PASSWORD)) {
+        } else if (type.equals(ApiConstants.URL_RECOVERY_PASSWORD)) {
             apiManager = new ApiRecoveryPasswordManager();
-        }
-        if (type.equals(ApiConstants.TYPE_SYNC_DICTATE_ITEMS)) {
+        } else if (type.equals(ApiConstants.TYPE_SYNC_DICTATE_ITEMS)) {
             apiManager = new ApiDictateItemsManager();
-        }
-        if (type.equals(ApiConstants.URL_SIGN_IN)) {
+        } else if (type.equals(ApiConstants.URL_SIGN_IN)) {
             apiManager = new ApiSignInManager();
-        }
-        if (type.equals(ApiConstants.URL_SIGN_UP)) {
+        } else if (type.equals(ApiConstants.URL_SIGN_UP)) {
             apiManager = new ApiSignUpManager();
-        }
-        if (type.equals(ApiConstants.URL_SYNC_ITEMS_UNREAD)) {
+        } else if (type.equals(ApiConstants.URL_SYNC_ITEMS_UNREAD)) {
             apiManager = new ApiItemsManager();
-        }
-        if (type.equals(ApiConstants.URL_SYNC_LABELS)) {
+        } else if (type.equals(ApiConstants.URL_SYNC_LABELS)) {
             apiManager = new ApiLabelsManager();
-        }
-        if (type.equals(ApiConstants.URL_SYNC_LABEL_ITEMS)) {
+        } else if (type.equals(ApiConstants.URL_SYNC_LABEL_ITEMS)) {
             apiManager = new ApiLabelItemsManager();
-        }
-        if (type.equals(ApiConstants.URL_SYNC_LATER_ITEMS)) {
+        } else if (type.equals(ApiConstants.URL_SYNC_LATER_ITEMS)) {
             apiManager = new ApiLaterItemsManager();
-        }
-        if (type.equals(ApiConstants.URL_SYNC_SHARED_ITEMS)) {
+        } else if (type.equals(ApiConstants.URL_SYNC_SHARED_ITEMS)) {
             apiManager = new ApiSharedItemsManager();
         }
 

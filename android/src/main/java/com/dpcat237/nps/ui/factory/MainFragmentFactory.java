@@ -18,14 +18,11 @@ public class MainFragmentFactory {
 
         if (item == MainActivityConstants.DRAWER_ITEM_UNREAD_ITEMS) {
             fragmentManager = new MainFragmentUnreadManager();
-        }
-        if (item == MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
+        } else if (item == MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
             fragmentManager = new MainFragmentAllManager();
-        }
-        if (item == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+        } else if (item == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
             fragmentManager = new MainFragmentDictationItemsManager();
-        }
-        if (item == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS) {
+        } else if (item == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS) {
             fragmentManager = new MainFragmentLabelsManager();
         }
 

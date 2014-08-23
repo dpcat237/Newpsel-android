@@ -17,26 +17,19 @@ public class SyncFactory {
 
         if (type.equals(SyncConstants.SYNC_FEEDS)) {
             syncManager = new SyncFeedsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_DICTATION_ITEMS)) {
+        } else if (type.equals(SyncConstants.SYNC_DICTATION_ITEMS)) {
             syncManager = new SyncDictationItemsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_GCM_ID)) {
+        } else if (type.equals(SyncConstants.SYNC_GCM_ID)) {
             syncManager = new SyncGcmIdManager();
-        }
-        if (type.equals(SyncConstants.SYNC_ITEMS)) {
+        } else if (type.equals(SyncConstants.SYNC_ITEMS)) {
             syncManager = new SyncItemsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_LABEL_ITEMS)) {
+        } else if (type.equals(SyncConstants.SYNC_LABEL_ITEMS)) {
             syncManager = new SyncLabelItemsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_LABELS)) {
+        } else if (type.equals(SyncConstants.SYNC_LABELS)) {
             syncManager = new SyncLabelsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_LATER_ITEMS)) {
+        } else if (type.equals(SyncConstants.SYNC_LATER_ITEMS)) {
             syncManager = new SyncLaterItemsManager();
-        }
-        if (type.equals(SyncConstants.SYNC_SHARED_ITEMS)) {
+        } else if (type.equals(SyncConstants.SYNC_SHARED_ITEMS)) {
             syncManager = new SyncSharedItemsManager();
         }
 
