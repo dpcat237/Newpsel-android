@@ -20,7 +20,11 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/status_bar_button_info_container_padding_left" >
+        android:paddingStart="@dimen/status_bar_button_info_container_padding_left"
+        android:paddingLeft="@dimen/status_bar_button_info_container_padding_left"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        >
 
         <TextView
             android:id="@+id/songListTitle"
@@ -30,8 +34,17 @@
 
         <TextView
             android:id="@+id/songTitle"
-            style="@style/StatusBarText"
-            android:textColor="@color/grey_dark" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_dark"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:maxLines="1"
+            />
     </LinearLayout>
 
     <ImageButton

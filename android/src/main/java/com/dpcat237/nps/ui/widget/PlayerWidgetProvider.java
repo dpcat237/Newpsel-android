@@ -12,10 +12,10 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
-import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.ui.activity.MainActivity;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
@@ -88,7 +88,7 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 
     private void updateSongDetails(PlayerServiceStatus playerStatus, Song song, RemoteViews views) {
         if (playerStatus.hasActiveSong()) {
-            views.setTextViewText(R.id.songTitle, getTitleText(song.getTitle()));
+            views.setTextViewText(R.id.songTitle, song.getTitle());
 
             int imageRes = playerStatus.isPlaying() ? R.drawable.ic_activity_pause : R.drawable.av_play_white;
             views.setImageViewResource(R.id.buttonPausePlay, imageRes);
@@ -96,14 +96,6 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
             views.setTextViewText(R.id.songTitle, "Newpsel - Dictations widget");
             views.setImageViewResource(R.id.buttonPausePlay, R.drawable.av_play_white);
         }
-    }
-
-    private String getTitleText(String text) {
-        if (text.length() < 35) {
-            return text;
-        }
-
-        return text.substring(0, 35)+"...";
     }
 
     private void setClickIntent(RemoteViews views, int resourceId, String data, int command) {
