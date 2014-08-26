@@ -3,6 +3,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
@@ -23,12 +24,15 @@ public class SyncDictationItemsManager extends SyncManager {
     private Integer downloadQuantity;
     private DictateItem[] items;
     private Integer newCount = 0;
+    private PlayerServiceStatus playerStatus;
+
 
     protected void openDB() {
         dictationRepo = new DictateItemRepository(mContext);
         songRepo = new SongRepository(mContext);
         dictationRepo.open();
         songRepo.open();
+        playerStatus = PlayerServiceStatus.getInstance();
     }
 
     protected void closeDB() {
@@ -116,6 +120,10 @@ public class SyncDictationItemsManager extends SyncManager {
     }
 
     private void removeItem(Integer apiId) {
+        if (playerStatus.hasActiveSong()) {
+            return;
+        }
+
         DictateItem item = dictationRepo.getItemByApiId(apiId);
         dictationRepo.deleteItem(item.getItemApiId());
         songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
