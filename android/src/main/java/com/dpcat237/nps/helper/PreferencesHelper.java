@@ -196,5 +196,18 @@ public class PreferencesHelper {
         return userPref.getBoolean("sync_"+type+"_required", true);
     }
 
+    public static void setBooleanPreference(Context context, String key, Boolean value) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
 
+    public static Boolean getBooleanPreference(Context context, String key) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+
+        return userPref.getBoolean(key, false);
+    }
 }

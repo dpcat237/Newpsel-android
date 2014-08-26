@@ -17,7 +17,7 @@ import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.WidgetHelper;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Song;
 
 import java.io.File;
 import java.util.HashMap;

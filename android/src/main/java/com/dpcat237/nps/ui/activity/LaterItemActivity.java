@@ -18,8 +18,8 @@ import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Label;
-import com.dpcat237.nps.model.LaterItem;
+import com.dpcat237.nps.common.model.Label;
+import com.dpcat237.nps.common.model.LaterItem;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 

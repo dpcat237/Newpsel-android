@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
 
 import java.util.ArrayList;
 import java.util.List;

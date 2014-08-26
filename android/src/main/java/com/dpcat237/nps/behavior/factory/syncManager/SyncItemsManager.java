@@ -7,7 +7,7 @@ import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.common.model.Item;
 
 import org.json.JSONArray;
 import org.json.JSONException;

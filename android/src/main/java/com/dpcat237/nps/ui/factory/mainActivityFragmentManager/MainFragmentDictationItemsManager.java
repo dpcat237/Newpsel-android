@@ -10,7 +10,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.ListItem;
+import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
 public class MainFragmentDictationItemsManager extends MainFragmentItemsManager {

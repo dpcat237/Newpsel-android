@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.dpcat237.nps"
+        minSdkVersion 20
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    signingConfigs {
+        debug {
+            storeFile file('/home/denys/C.A.T./Programs/Projects/debug-npsKey')
+            storePassword 'debug-nps#'
+            keyAlias 'debug-npsKey'
+            keyPassword 'debug-nps#'
+        }
+        release {
+            storeFile file('/home/denys/C.A.T./Programs/Projects/npsKey')
+            storePassword 'D#25c01a1987t#Pnps'
+            keyAlias 'npsKey'
+            keyPassword 'D#25c01a1987t#Pnps'
+        }
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            applicationIdSuffix '.debug'
+            runProguard false
+        }
+        release {
+            debuggable false
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.support:wearable:+'
+    compile 'com.google.android.gms:play-services-wearable:5.0.77'
+    compile project(':common')
+}

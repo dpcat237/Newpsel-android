@@ -46,9 +46,10 @@ android {
 }
 
 dependencies {
+    wearApp project(':wear')
     compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     compile 'com.android.support:support-v4:20.+'
-    compile 'com.google.code.gson:gson:2.+'
     compile 'com.google.android.gms:play-services:5.0.89'
     compile project(':libs:facebook') //v3.17.1
+    compile project(':common')
 }

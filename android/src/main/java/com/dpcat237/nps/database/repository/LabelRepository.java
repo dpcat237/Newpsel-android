@@ -10,7 +10,7 @@ import com.dpcat237.nps.database.table.LabelItemTable;
 import com.dpcat237.nps.database.table.LabelTable;
 import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.helper.NumbersHelper;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.model.LabelItem;
 
 import org.json.JSONArray;
@@ -120,7 +120,8 @@ public class LabelRepository extends BaseRepository {
 
 	public JSONArray getLabelsToSync() {
 		JSONArray labels = new JSONArray();
-        Cursor cursor = database.query(LabelTable.TABLE_NAME, syncColumns, null, null, null, null, null);
+        String orderBy = LabelTable.COLUMN_NAME+" ASC";
+        Cursor cursor = database.query(LabelTable.TABLE_NAME, syncColumns, null, null, null, null, orderBy);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

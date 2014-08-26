@@ -5,7 +5,8 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
+import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.model.LabelItem;
 import com.dpcat237.nps.database.repository.LabelRepository;
 
@@ -33,13 +34,13 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void> {
 	protected Void doInBackground(Void... params) {
 		if (labelRepo.checkLabelSet(label.getApiId(), itemApiId)) {
 			labelRepo.removeLabelItem(label.getApiId(), itemApiId);
-			set = true;
 		} else {
 			LabelItem labelItem = new LabelItem();
 			labelItem.setLabelApiId(label.getApiId());
 			labelItem.setItemApiId(itemApiId);
 
 			labelRepo.setLabel(labelItem);
+            set = true;
 		}
 		
 		return null;
@@ -50,9 +51,9 @@ public class SetLabelTask extends AsyncTask<Void, Integer, Void> {
 		labelRepo.close();
 		
 		if (set) {
-			Toast.makeText(mContext, mContext.getString(R.string.txt_label)+" "+label + " " + mContext.getString(R.string.txt_removed) + ".", Toast.LENGTH_SHORT).show();
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.txt_set_label, label.getName()));
 		} else {
-			Toast.makeText(mContext, mContext.getString(R.string.txt_successful_set_label)+" "+label + ".", Toast.LENGTH_SHORT).show();
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.txt_label_removed, label.getName()));
 		}
 	}
 }

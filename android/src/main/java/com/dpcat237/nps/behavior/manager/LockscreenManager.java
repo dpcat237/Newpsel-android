@@ -10,7 +10,7 @@ import android.media.RemoteControlClient;
 import android.util.Log;
 
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Song;
 
 public class LockscreenManager {
     private static final String TAG = "NPS:LockscreenManager";

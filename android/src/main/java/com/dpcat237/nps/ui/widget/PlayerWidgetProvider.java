@@ -15,7 +15,7 @@ import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.ui.activity.MainActivity;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 

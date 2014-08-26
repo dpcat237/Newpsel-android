@@ -1,5 +1,7 @@
 package com.dpcat237.nps.model;
 
+import com.dpcat237.nps.common.model.Generic;
+
 public class Shared extends Generic {
 	public String title;
 	public String text;

@@ -1,15 +1,12 @@
 package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-import com.dpcat237.nps.R;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.ui.activity.ItemsActivity;
 import com.dpcat237.nps.ui.adapter.FeedsAdapter;
 

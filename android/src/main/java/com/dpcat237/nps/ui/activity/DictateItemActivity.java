@@ -21,8 +21,8 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.DictateItem;
-import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.common.model.DictateItem;
+import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 

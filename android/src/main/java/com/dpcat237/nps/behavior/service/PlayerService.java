@@ -22,14 +22,17 @@ import com.dpcat237.nps.behavior.manager.LockscreenManager;
 import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
 import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.common.constant.MessageConstants;
 import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.helper.WearHelper;
 import com.dpcat237.nps.helper.WidgetHelper;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
 import java.io.File;
@@ -66,7 +69,7 @@ public class PlayerService extends PlayerServiceCommands {
             int oldPosition = lastPosition;
             lastPosition = player.getCurrentPosition();
             if (oldPosition / 1000 != lastPosition / 1000)
-                updateActivePodcastPosition(lastPosition);
+                updateActiveSongPosition(lastPosition);
         }
     };
 
@@ -143,6 +146,7 @@ public class PlayerService extends PlayerServiceCommands {
         }
         if (playerStatus == null) {
             playerStatus = PlayerServiceStatus.getInstance();
+            playerStatus.setup(mContext);
         }
 
         if (player == null) {
@@ -271,9 +275,11 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY:
                 grabAudioFocusAndResume();
+                changeNotificationPlayButtonPause();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PAUSE:
                 pause();
+                changeNotificationPlayButton();
                 break;
             case PlayerConstants.PLAYER_COMMAND_STOP:
                 stop();
@@ -352,7 +358,7 @@ public class PlayerService extends PlayerServiceCommands {
 
     private void pause() {
         player.pause();
-        updateActivePodcastPosition(player.getCurrentPosition());
+        updateActiveSongPosition(player.getCurrentPosition());
         updatePlayerStatus(PlayerConstants.STATUS_PAUSED);
         lockscreenManager.setLockscreenPaused();
     }
@@ -367,7 +373,7 @@ public class PlayerService extends PlayerServiceCommands {
 
         if (player != null && player.isPlaying()) {
             player.pause();
-            updateActivePodcastPosition(player.getCurrentPosition());
+            updateActiveSongPosition(player.getCurrentPosition());
             player.stop();
         }
 
@@ -497,7 +503,7 @@ public class PlayerService extends PlayerServiceCommands {
             /*Integer newPosition = player.getCurrentPosition() + secs * 1000;
             if (player.getDuration() > newPosition) {
                 player.seekTo(player.getCurrentPosition() + secs * 1000);
-                updateActivePodcastPosition(player.getCurrentPosition());
+                updateActiveSongPosition(player.getCurrentPosition());
             }*/
         } else {
             playNextSong();
@@ -507,18 +513,18 @@ public class PlayerService extends PlayerServiceCommands {
     private void skipTo(int secs) {
         if (player.isPlaying()) {
             player.seekTo(secs * 1000);
-            updateActivePodcastPosition(player.getCurrentPosition());
+            updateActiveSongPosition(player.getCurrentPosition());
         } else {
-            updateActivePodcastPosition(secs * 1000);
+            updateActiveSongPosition(secs * 1000);
         }
     }
 
     private void restart() {
         if (player.isPlaying()) {
             player.seekTo(0);
-            updateActivePodcastPosition(player.getCurrentPosition());
+            updateActiveSongPosition(player.getCurrentPosition());
         } else {
-            updateActivePodcastPosition(0);
+            updateActiveSongPosition(0);
         }
     }
 
@@ -565,7 +571,7 @@ public class PlayerService extends PlayerServiceCommands {
             // stop the player and the updating while we do some administrative stuff
             player.pause();
             //stopUpdateTimer();
-            updateActivePodcastPosition(player.getCurrentPosition());
+            updateActiveSongPosition(player.getCurrentPosition());
         }
 
         if (!queryManager.isFirst()) {
@@ -575,6 +581,13 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void showNotification() {
+        //notify wear device about current playing song
+        if (PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.WEAR_LABELS_SENT)) {
+            playerStatus.sendWearMessage(MessageConstants.PLAYING_SONG, WearHelper.prepareSongData(currentSong));
+        } else {
+            playerStatus.sendWearMessage(MessageConstants.PLAYING_SONG, WearHelper.preparePlayerData(mContext, currentSong));
+        }
+
         notificationView = new RemoteViews(getPackageName(), R.layout.notification_player);
         notificationView.setTextViewText(R.id.songListTitle, currentSong.getListTitle());
         notificationView.setTextViewText(R.id.songTitle, currentSong.getTitle());
@@ -626,8 +639,10 @@ public class PlayerService extends PlayerServiceCommands {
 
         if (player.isPlaying()) {
             notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.ic_activity_pause);
+            playerStatus.sendWearMessage(MessageConstants.PLAYER_PLAYING, "");
         } else {
             notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.av_play_white);
+            playerStatus.sendWearMessage(MessageConstants.PLAYER_PAUSED, "");
         }
         startNotification();
     }
@@ -637,6 +652,7 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
         notificationView.setImageViewResource(R.id.buttonPausePlay, R.drawable.ic_activity_pause);
+        playerStatus.sendWearMessage(MessageConstants.PLAYER_PLAYING, "");
         startNotification();
     }
 
@@ -661,7 +677,7 @@ public class PlayerService extends PlayerServiceCommands {
         notificationManager.cancelAll();
     }
 
-    private void updateActivePodcastPosition(int position) {
+    private void updateActiveSongPosition(int position) {
         queryManager.setLastPosition(position);
     }
 }

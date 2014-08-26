@@ -127,9 +127,8 @@
     
     <!-- Labels -->
     <string name="button_create_label">create label</string>
-    <string name="txt_label">Label</string>
-    <string name="txt_removed">removed</string>
-    <string name="txt_successful_set_label">Set label</string>
+    <string name="txt_set_label">Set label %1$s.</string>
+    <string name="txt_label_removed">Label %1$s removed.</string>
 
     <!-- Notifications -->
     <string name="nt_download">Download notification</string>
@@ -272,7 +271,7 @@
     <string name="manual_saved_txt2">This functionality is deactivated by default. To activate it you have to go to Preferences of saved to later articles in Settings. There you can activate this functionality, specify from which label do you want the articles and the maximum quantity of articles in your device.</string>
     <string name="manual_dictations_txt1">In this section are articles saved to label Read later (default name).</string>
     <string name="manual_dictations_txt2">This functionality is deactivated by default. To activate it you have to go to Dictation preferences in application Settings. Also there you can adjust another related preferences. The voice is downloaded or generated in your device (in case you have required language offline in Google Translator application). Voice generation, depend of device performance, can notably consume energy that why you can specify the minimum level of batter for the process.</string>
-    <string name="manual_dictations_txt3">Application play articles as usual music player and you can control this from: provided widget, notification, lock screen and in the future devices with Google Wear.</string>
+    <string name="manual_dictations_txt3">Application play articles as usual music player and you can control this from: provided widget, notification, lock screen and Android Wear device.</string>
 
     <!-- About -->
     <string name="about_label">About</string>

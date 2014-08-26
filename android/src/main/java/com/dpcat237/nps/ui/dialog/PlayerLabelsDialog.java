@@ -17,7 +17,7 @@ import com.dpcat237.nps.behavior.task.SetLabelTask;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.DisplayHelper;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,7 @@ import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.LaterItem;
+import com.dpcat237.nps.common.model.LaterItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -8,10 +8,10 @@ import com.dpcat237.nps.constant.FileConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.FileHelper;
-import com.dpcat237.nps.model.List;
-import com.dpcat237.nps.model.ListItem;
-import com.dpcat237.nps.model.Song;
-import com.dpcat237.nps.model.SongPart;
+import com.dpcat237.nps.common.model.List;
+import com.dpcat237.nps.common.model.ListItem;
+import com.dpcat237.nps.common.model.Song;
+import com.dpcat237.nps.common.model.SongPart;
 
 import java.util.ArrayList;
 

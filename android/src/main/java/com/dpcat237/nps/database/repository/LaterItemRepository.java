@@ -7,9 +7,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.LaterItemTable;
-import com.dpcat237.nps.model.Item;
-import com.dpcat237.nps.model.LaterItem;
-import com.dpcat237.nps.model.ListItem;
+import com.dpcat237.nps.common.model.LaterItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

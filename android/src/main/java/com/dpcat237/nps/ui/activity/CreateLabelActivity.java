@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
@@ -43,6 +44,7 @@ public class CreateLabelActivity extends Activity {
 
         //notify to sync labels to server
         PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, true);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.WEAR_LABELS_SENT, false);
 
 		finish();
 	}

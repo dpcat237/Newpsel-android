@@ -1,0 +1,17 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="pager_counter_text_size">12sp</dimen>
+    <dimen name="question_large_text_size">35sp</dimen>
+    <dimen name="question_medium_text_size">29sp</dimen>
+    <dimen name="question_small_text_size">20sp</dimen>
+    <dimen name="submit_btn_text_size">20sp</dimen>
+    <dimen name="notification_title_size">18sp</dimen>
+    <dimen name="notification_rate_size">20sp</dimen>
+    <dimen name="notification_speaker_size">14sp</dimen>
+    <dimen name="half_height">60dp</dimen>
+
+    <dimen name="default_settings_circle_radius">18dp</dimen>
+    <dimen name="selected_settings_circle_radius">24dp</dimen>
+</resources>

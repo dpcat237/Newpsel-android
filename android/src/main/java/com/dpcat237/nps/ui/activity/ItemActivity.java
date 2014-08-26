@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -26,8 +25,8 @@ import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 

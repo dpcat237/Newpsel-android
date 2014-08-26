@@ -17,7 +17,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
-import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.ui.activity.MainActivity;
 
 import java.util.Map;

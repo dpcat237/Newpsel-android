@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.task.StarItemTask;
-import com.dpcat237.nps.model.Item;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
 import java.util.ArrayList;

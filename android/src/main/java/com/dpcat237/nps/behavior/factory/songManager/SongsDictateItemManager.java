@@ -3,9 +3,9 @@ package com.dpcat237.nps.behavior.factory.songManager;
 
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.ListItem;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.ListItem;
+import com.dpcat237.nps.common.model.Song;
 
 public class SongsDictateItemManager extends SongsManager {
     protected DictateItemRepository itemRepo;

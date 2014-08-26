@@ -8,7 +8,7 @@ import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.DictateItem;
+import com.dpcat237.nps.common.model.DictateItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;

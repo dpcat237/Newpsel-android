@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
-import com.dpcat237.nps.model.Feed;
+import com.dpcat237.nps.common.model.Feed;
 
 import java.util.ArrayList;
 import java.util.List;

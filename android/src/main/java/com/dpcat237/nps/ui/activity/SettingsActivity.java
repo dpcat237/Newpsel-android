@@ -7,7 +7,7 @@ import android.preference.PreferenceFragment;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.database.repository.LabelRepository;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
 
 import java.util.ArrayList;
 

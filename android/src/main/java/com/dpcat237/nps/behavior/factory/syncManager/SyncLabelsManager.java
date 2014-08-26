@@ -2,11 +2,12 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 
 import com.dpcat237.nps.constant.ApiConstants;
-import com.dpcat237.nps.constant.EntityConstants;
+import com.dpcat237.nps.common.constant.EntityConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.model.Label;
+import com.dpcat237.nps.common.model.Label;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +79,7 @@ public class SyncLabelsManager extends SyncManager {
                 labelRepo.deleteLabel(label.getApiId());
             }
         }
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.WEAR_LABELS_SENT, false);
     }
 
     protected void beforeFinish() {

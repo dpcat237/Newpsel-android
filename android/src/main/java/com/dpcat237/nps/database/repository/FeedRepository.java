@@ -8,8 +8,8 @@ import android.util.Log;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;
-import com.dpcat237.nps.model.Feed;
-import com.dpcat237.nps.model.List;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,5 +1,7 @@
 package com.dpcat237.nps.model;
 
+import com.dpcat237.nps.common.model.Generic;
+
 public class LabelItem extends Generic {
 	public long label_api_id;
 	public long item_api_id;

@@ -2,9 +2,9 @@ package com.dpcat237.nps.behavior.factory.songManager;
 
 
 import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.model.List;
-import com.dpcat237.nps.model.ListItem;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.List;
+import com.dpcat237.nps.common.model.ListItem;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.database.repository.ItemRepository;
 
 public class SongsTitleManager extends SongsManager {

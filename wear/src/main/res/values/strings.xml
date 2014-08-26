@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Newpsel</string>
+
+    <!-- Player -->
+    <string name="label_player">Newpsel - dictations</string>
+    <string name="label_labels">Labels</string>
+
+    <string name="player_activity_empty_list_title">Play dictations</string>
+
+    <string name="toast_set_label">Set label %1$s.</string>
+    <string name="toast_label_removed">Label %1$s removed.</string>
+</resources>

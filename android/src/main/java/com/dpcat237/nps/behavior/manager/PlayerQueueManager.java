@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.dpcat237.nps.database.repository.SongRepository;
-import com.dpcat237.nps.model.Song;
+import com.dpcat237.nps.common.model.Song;
 
 public class PlayerQueueManager {
     private static final String TAG = "NPS:PlayerQueueManager";
