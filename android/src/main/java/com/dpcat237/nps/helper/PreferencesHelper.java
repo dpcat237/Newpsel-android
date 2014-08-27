@@ -134,14 +134,6 @@ public class PreferencesHelper {
         return areNew;
     }
 
-    public static Boolean areNewItems(Context context) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        Boolean areNew = userPref.getBoolean("sync_are_new_items", false);
-
-        return areNew;
-    }
-
     public static void setCurrentItemApiId(Context context, Integer itemApiId) {
         @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);

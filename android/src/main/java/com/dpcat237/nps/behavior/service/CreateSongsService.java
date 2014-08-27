@@ -9,13 +9,13 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class CreateSongsService extends IntentService {
     private static final String TAG = "NPS:CreateSongsService";
     private volatile static Boolean running = false;
-    private Intent mIntent;
     private Context mContext;
     private SongsFactoryManager songsFactoryManager;
 
@@ -26,8 +26,7 @@ public class CreateSongsService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        this.mIntent = intent;
-        this.mContext = getApplicationContext();
+        mContext = getApplicationContext();
         if (songsFactoryManager == null) {
             songsFactoryManager = new SongsFactoryManager();
         }
@@ -45,7 +44,7 @@ public class CreateSongsService extends IntentService {
                 }
             }
         }
-        SyncDictationsAlarm.completeWakefulIntent(mIntent);
+        SyncDictationsAlarm.completeWakefulIntent(intent);
     }
 
     private Boolean checkCanRun() {
@@ -53,16 +52,14 @@ public class CreateSongsService extends IntentService {
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         Boolean dictationEnabled = pref.getBoolean("pref_dictation_title_enable", false);
-        if (!dictationEnabled || !PreferencesHelper.areNewItems(mContext)) {
-            return false;
-        }
 
-        return true;
+        return (!dictationEnabled || !PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW));
     }
 
     private void startProcess() {
         Log.d(TAG, "tut: startProcess");
         songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW, false);
 
         running = false;
         stopSelf();

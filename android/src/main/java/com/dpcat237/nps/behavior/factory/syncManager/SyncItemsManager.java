@@ -2,6 +2,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -97,17 +98,23 @@ public class SyncItemsManager extends SyncManager {
     }
 
     protected void beforeFinish() {
+        if (error) {
+            return;
+        }
+
         //remove read items
-        if (!error && viewedItems.length() > 0) {
+        if (viewedItems.length() > 0) {
             itemRepo.removeReadItems();
         }
 
-        //update feeds items count
-        if (!error) {
-            FeedRepository feedRepo = new FeedRepository(mContext);
-            feedRepo.open();
-            feedRepo.unreadCountUpdate();
-            feedRepo.close();
+        if (items.length > 1) {
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW, true);
         }
+
+        //update feeds items count
+        FeedRepository feedRepo = new FeedRepository(mContext);
+        feedRepo.open();
+        feedRepo.unreadCountUpdate();
+        feedRepo.close();
     }
 }
