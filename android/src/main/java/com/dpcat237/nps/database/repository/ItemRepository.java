@@ -159,10 +159,10 @@ public class ItemRepository extends BaseRepository {
         return items;
     }
 
-    public ListItem getListItem(Integer itemId) {
+    public ListItem getListItem(Integer itemApiId) {
         ListItem listItem = null;
-        String where = ItemTable.COLUMN_ID+"=?";
-        String[] args = new String[] {""+itemId+""};
+        String where = ItemTable.COLUMN_API_ID+"=?";
+        String[] args = new String[] {""+itemApiId+""};
         Cursor cursor = database.query(ItemTable.TABLE_ITEM, listItemContentColumns, where, args, null, null, null);
 
         cursor.moveToFirst();
@@ -199,6 +199,7 @@ public class ItemRepository extends BaseRepository {
         Item item = new Item();
         item.setId(cursor.getInt(0));
         item.setApiId(cursor.getInt(1));
+        item.setItemApiId(cursor.getInt(1));
         item.setFeedId(cursor.getInt(2));
         item.setTitle(cursor.getString(3));
         item.setLanguage(cursor.getString(4));

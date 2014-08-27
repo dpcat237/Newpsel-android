@@ -35,7 +35,7 @@ public class SyncItemsManager extends SyncManager {
     }
 
     protected void checkNecessarySync() {
-        if (!preferences.getBoolean("pref_items_download_enable", false)) {
+        if (!preferences.getBoolean("pref_items_download_enable", true)) {
             error = true;
 
             return;

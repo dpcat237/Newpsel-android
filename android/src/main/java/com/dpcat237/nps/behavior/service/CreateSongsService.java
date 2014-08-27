@@ -61,6 +61,7 @@ public class CreateSongsService extends IntentService {
         songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_TITLE, mContext);
         PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW, false);
 
+        Log.d(TAG, "tut: finish");
         running = false;
         stopSelf();
     }
