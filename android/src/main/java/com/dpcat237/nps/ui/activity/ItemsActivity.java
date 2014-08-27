@@ -111,9 +111,10 @@ public class ItemsActivity extends Activity {
 	    feedRepo.open();
 	    itemRepo.open();
         songRepo.open();
+        Feed feed = feedRepo.getFeed(feedId);
 
         //finish activity if main list is different than "all items" and feed doesn't have unread items
-        if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getMainDrawerOption(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
+        if (feed.getUnreadCount() < 1 && PreferencesHelper.getMainDrawerOption(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
             finish();
         }
 

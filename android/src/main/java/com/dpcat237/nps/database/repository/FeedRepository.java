@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.List;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;
-import com.dpcat237.nps.common.model.Feed;
-import com.dpcat237.nps.common.model.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -169,39 +169,40 @@ public class FeedRepository extends BaseRepository {
     }
 
     public Integer getFeedUnreadCount(Integer feedApiId) {
-        String sql = "SELECT (SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
-                    "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread " +
-                " FROM "+ItemTable.TABLE_ITEM+" AS tb1 WHERE tb1."+ItemTable.COLUMN_FEED_ID+"="+feedApiId+";";
+        String sql = "SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
+            "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"="+feedApiId+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1;";
         Cursor cursor = database.rawQuery(sql, null);
+        if (cursor.getCount() < 1) {
+            return 0;
+        }
         cursor.moveToFirst();
 
         return cursor.getInt(0);
     }
-	
-	private ArrayList<Feed> getUnreadCount() {
-		ArrayList<Feed> feeds = new ArrayList<Feed>();
-		String sql = "SELECT tb1."+ItemTable.COLUMN_FEED_ID + ", " +
-				"(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
-						"WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread, " +
-                "(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
-                    "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+ItemTable.COLUMN_FEED_ID+") AS countItems " +
-				" FROM "+ItemTable.TABLE_ITEM+" AS tb1 GROUP BY tb1."+ItemTable.COLUMN_FEED_ID;
-		Cursor cursor = database.rawQuery(sql, null);
-		
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Feed feed = new Feed();
-			feed.setApiId(cursor.getInt(0));
-			feed.setUnreadCount(cursor.getInt(1));
+
+    private ArrayList<Feed> getFeedsCounts() {
+        ArrayList<Feed> feeds = new ArrayList<Feed>();
+        String sql = "SELECT tb1."+FeedTable.COLUMN_API_ID+", "+"(SELECT COUNT(tb2."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb2 " +
+                "WHERE tb2."+ItemTable.COLUMN_FEED_ID+"=tb1."+FeedTable.COLUMN_API_ID+" AND tb2."+ItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread, " +
+            "(SELECT COUNT(tb3."+ItemTable.COLUMN_ID+") AS total FROM "+ItemTable.TABLE_ITEM+" AS tb3 " +
+                "WHERE tb3."+ItemTable.COLUMN_FEED_ID+"=tb1."+FeedTable.COLUMN_API_ID+") AS countItems " +
+            " FROM "+FeedTable.TABLE_NAME+" AS tb1 ORDER BY tb1."+FeedTable.COLUMN_API_ID+" ASC;";
+        Cursor cursor = database.rawQuery(sql, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Feed feed = new Feed();
+            feed.setApiId(cursor.getInt(0));
+            feed.setUnreadCount(cursor.getInt(1));
             feed.setItemsCount(cursor.getInt(2));
-			feeds.add(feed);
-			cursor.moveToNext();
-		}
+            feeds.add(feed);
+            cursor.moveToNext();
+        }
         cursor.close();
-		
-		return feeds;
-	}
-	
+
+        return feeds;
+    }
+
 	public void updateFeedCounts(Integer feedApiId, Integer countUnreadItems, Integer countItems) {
 		ContentValues values = new ContentValues();
 		values.put(FeedTable.COLUMN_UNREAD_COUNT, countUnreadItems);
@@ -212,7 +213,7 @@ public class FeedRepository extends BaseRepository {
 	}
 	
 	public void unreadCountUpdate () {
-		ArrayList<Feed> feeds = getUnreadCount();
+		ArrayList<Feed> feeds = getFeedsCounts();
 		if (feeds.size() < 1) {
 			return;
 		}
