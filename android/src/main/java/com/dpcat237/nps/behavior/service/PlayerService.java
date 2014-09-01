@@ -75,18 +75,22 @@ public class PlayerService extends PlayerServiceCommands {
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
+            Log.d(TAG, "tut: onAudioFocusChange ");
             if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK) {
                 Log.d(TAG, "tut: got a transient audio focus gain event somehow");
             }
 
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                Log.d(TAG, "tut: onAudioFocusChange b");
                 PlayerService.stop(PlayerService.this);
             }
 
             if (playerStatus.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                Log.d(TAG, "tut: onAudioFocusChange c");
                 PlayerService.play(PlayerService.this);
                 changeNotificationPlayButton();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                Log.d(TAG, "tut: onAudioFocusChange d");
                 PlayerService.pause(PlayerService.this);
                 changeNotificationPlayButton();
             }
@@ -105,6 +109,8 @@ public class PlayerService extends PlayerServiceCommands {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG, "tut: onBind");
+
         return null;
     }
 
@@ -136,6 +142,7 @@ public class PlayerService extends PlayerServiceCommands {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "tut: onDestroy");
         super.onDestroy();
         safeUnregisterReceiver(noisyReceiver);
     }
@@ -222,6 +229,7 @@ public class PlayerService extends PlayerServiceCommands {
         }
 
         setup();
+        Log.d(TAG, "tut:  intent "+intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1));
         switch (intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1)) {
             case -1:
                 return;
@@ -255,10 +263,15 @@ public class PlayerService extends PlayerServiceCommands {
                 changeNotificationPlayButtonPause();
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE:
+                Log.d(TAG, "tut:  PLAYER_COMMAND_PLAYPAUSE a");
                 if (player.isPlaying()) {
+                    Log.d(TAG, "tut:  PLAYER_COMMAND_PLAYPAUSE b");
                     pause();
                 } else if (playerStatus.hasActiveSong()) {
+                    Log.d(TAG, "tut:  PLAYER_COMMAND_PLAYPAUSE c");
                     grabAudioFocusAndResume();
+                } else {
+                    Log.d(TAG, "tut:  PLAYER_COMMAND_PLAYPAUSE d");
                 }
                 changeNotificationPlayButton();
                 break;
@@ -384,6 +397,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void updatePlayerStatus(int status) {
+        Log.d(TAG, "tut: updatePlayerStatus "+status);
         playerStatus.updateStatus(status);
         switch (status) {
             case PlayerConstants.STATUS_QUEUEEMPTY:
