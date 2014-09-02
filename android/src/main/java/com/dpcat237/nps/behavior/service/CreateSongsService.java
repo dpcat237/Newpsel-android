@@ -53,7 +53,7 @@ public class CreateSongsService extends IntentService {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         Boolean dictationEnabled = pref.getBoolean("pref_dictation_title_enable", false);
 
-        return (!dictationEnabled || !PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW));
+        return (dictationEnabled && PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.ITEMS_ARE_NEW));
     }
 
     private void startProcess() {
