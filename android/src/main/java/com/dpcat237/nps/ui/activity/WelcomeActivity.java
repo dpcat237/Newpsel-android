@@ -67,10 +67,6 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 		mView = this.findViewById(android.R.id.content).getRootView();
 		setContentView(R.layout.activity_welcome);
 
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
-
         setFacebookButton((LoginButton) mView.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
         setGoogleButton((SignInButton) findViewById(R.id.buttonGoogleSignIn));
 	}

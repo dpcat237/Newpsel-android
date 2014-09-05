@@ -55,9 +55,9 @@
             android:parentActivityName=".ui.activity.WelcomeActivity" >
         </activity>
         <activity
-            android:label="@string/label_welcome"
             android:name=".ui.activity.WelcomeActivity"
-            android:parentActivityName=".ui.activity.MainActivity" >
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
             android:label="@string/label_add_feed"
