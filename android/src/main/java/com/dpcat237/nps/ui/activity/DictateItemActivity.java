@@ -88,7 +88,13 @@ public class DictateItemActivity extends Activity {
         if (item == null) {
             return;
         }
-        feed = feedRepo.getFeed(item.getFeedApiId());
+
+        if (item.getFeedApiId() > 0) {
+            feed = feedRepo.getFeed(item.getFeedApiId());
+        } else {
+            feed = new Feed();
+            feed.setTitle("Shared");
+        }
     }
 
     private Integer getItemApiId() {

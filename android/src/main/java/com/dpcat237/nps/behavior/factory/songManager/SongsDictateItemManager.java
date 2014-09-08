@@ -1,6 +1,8 @@
 package com.dpcat237.nps.behavior.factory.songManager;
 
 
+import android.util.Log;
+
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.common.model.Feed;
@@ -58,7 +60,15 @@ public class SongsDictateItemManager extends SongsManager {
     }
 
     protected void createListSong(ListItem listItem) {
-        Feed list = feedRepo.getFeed(listItem.getListApiId());
+        Feed list;
+        if (listItem.getListApiId() > 0) {
+            list = feedRepo.getFeed(listItem.getListApiId());
+        } else {
+            list = new Feed();
+            list.setApiId(999999999);
+            list.setTitle("Shared");
+        }
+
         Song song = createSong(list, listItem);
         songRepo.addSong(song);
     }

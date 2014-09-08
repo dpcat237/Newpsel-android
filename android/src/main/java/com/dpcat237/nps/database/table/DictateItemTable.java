@@ -28,7 +28,7 @@ public class DictateItemTable {
 			+ "(" + COLUMN_ID + " integer primary key autoincrement, " 
 			+ COLUMN_API_ID + " integer not null,"
             + COLUMN_ITEM_ID + " integer not null,"
-			+ COLUMN_FEED_ID + " integer not null,"
+			+ COLUMN_FEED_ID + " integer,"
             + COLUMN_LATER_ID + " integer not null,"
             + COLUMN_IS_UNREAD + " boolean not null,"
             + COLUMN_LANGUAGE + " character(2),"

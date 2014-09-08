@@ -1,7 +1,5 @@
 package com.dpcat237.nps.common.model;
 
-import com.dpcat237.nps.common.model.Generic;
-
 public abstract class List extends Generic {
     protected Integer api_id;
     protected String title;
