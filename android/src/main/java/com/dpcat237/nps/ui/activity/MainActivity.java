@@ -298,7 +298,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if (lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+        if (lastPosition == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS || lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
             buttonAddFeed.setVisible(false);
             DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
             dictateRepo.open();

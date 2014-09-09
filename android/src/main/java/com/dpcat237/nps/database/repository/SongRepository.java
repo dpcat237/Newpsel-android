@@ -103,7 +103,7 @@ public class SongRepository extends  BaseRepository {
         return cursor;
     }
 
-    public Boolean 5checkListSongExists(Integer itemApiId, String type){
+    public Boolean checkListSongExists(Integer itemApiId, String type){
         Boolean result = false;
         String[] columns = new String[] {SongTable.COLUMN_ID};
         String where = SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
