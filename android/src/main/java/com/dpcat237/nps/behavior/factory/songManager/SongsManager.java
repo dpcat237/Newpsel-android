@@ -38,7 +38,7 @@ public abstract class SongsManager {
         }
 
         for (ListItem listItem : listItems) {
-            if (!isSongExists(listItem.getListApiId(), listItem.getItemApiId())) {
+            if (!isSongExists(listItem.getItemApiId())) {
                 createListSong(listItem);
             }
         }
@@ -66,8 +66,8 @@ public abstract class SongsManager {
         createSongsProcess();
     }
 
-    protected Boolean isSongExists(Integer listApiId, Integer itemApiId) {
-        return songRepo.checkListSongExists(listApiId, itemApiId, grabberType);
+    protected Boolean isSongExists(Integer itemApiId) {
+        return songRepo.checkListSongExists(itemApiId, grabberType);
     }
 
     protected void openDB() {

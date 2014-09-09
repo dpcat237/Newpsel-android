@@ -103,11 +103,11 @@ public class SongRepository extends  BaseRepository {
         return cursor;
     }
 
-    public Boolean checkListSongExists(Integer listApiId, Integer itemApiId, String type){
+    public Boolean 5checkListSongExists(Integer itemApiId, String type){
         Boolean result = false;
         String[] columns = new String[] {SongTable.COLUMN_ID};
-        String where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
-        String[] args = new String[] {""+listApiId+"", ""+itemApiId+"", ""+type+""};
+        String where = SongTable.COLUMN_ITEM_ID+"=? AND "+SongTable.COLUMN_TYPE+"=?";
+        String[] args = new String[] {""+itemApiId+"", ""+type+""};
 
         Cursor cursor = database.query(SongTable.TABLE_SONG, columns, where, args, null, null, null);
         if (cursor.getCount() > 0) {
