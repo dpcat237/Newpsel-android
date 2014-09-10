@@ -7,6 +7,10 @@
     <string name="label_signin">Sign in</string>
     <string name="label_recovery_password">Recovery password</string>
     <string name="label_welcome">Welcome</string>
+
+    <!-- General -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     
     <!-- Add feed -->
     <string name="label_add_feed">Add feed</string>
@@ -118,6 +122,8 @@
     <string name="is_stared">is stared</string>
     <string name="is_unread">is unread</string>
     <string name="has_label">has label</string>
+    <string name="cm_mark_all_read">Mark all as read</string>
+    <string name="cm_mark_all_read_confirm">Are you sure you want to mark all articles as read?</string>
     <!-- Context menu -->
     <string name="cm_mark_read">Mark as read</string>
     <string name="cm_mark_unread">Mark as unread</string>
@@ -201,7 +207,6 @@
         <item>100</item>
         <item>150</item>
     </string-array>
-    <string name="st_other">Other</string>
     <string name="st_dictation_preferences">Dictation preferences</string>
     <string name="st_dictations_download_title">Configure dictations download</string>
     <string name="st_dictation_titles">Titles dictation</string>
@@ -245,6 +250,9 @@
     <string name="st_later_items_labels">Labels to sync</string>
     <string name="st_later_items_labels_s">Select from which download articles</string>
     <string-array name="empty_array"/>
+    <string name="st_other">Other</string>
+    <string name="st_mark_all_confirmation">Mark all confirmation</string>
+    <string name="st_mark_all_confirmation_check">Activate to show confirmation before mark all articles as read</string>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>

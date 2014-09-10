@@ -1,10 +1,14 @@
 package com.dpcat237.nps.ui.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -21,6 +25,8 @@ import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.ReadItemTask;
 import com.dpcat237.nps.behavior.task.StarItemTask;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
@@ -28,8 +34,6 @@ import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Feed;
-import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.ui.adapter.ItemsAdapter;
 
 import java.util.ArrayList;
@@ -56,6 +60,7 @@ public class ItemsActivity extends Activity {
 	private final Integer CM_OPTION_5 = 5;
 	private final Integer CM_OPTION_6 = 6;
     private Integer feedList;
+    private SharedPreferences preferences;
 
 
 	@Override
@@ -67,6 +72,8 @@ public class ItemsActivity extends Activity {
         setTitle(mContext.getString(R.string.activity_articles));
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
+        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
 	    feedRepo = new FeedRepository(this);
 	    feedRepo.open();
 	    itemRepo = new ItemRepository(this);
@@ -297,6 +304,26 @@ public class ItemsActivity extends Activity {
 	}
 
 	public void markAllRead() {
+        if (preferences.getBoolean("pref_mark_all_confirmation", true)) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(mContext.getString(R.string.cm_mark_all_read))
+                    .setMessage(mContext.getString(R.string.cm_mark_all_read_confirm))
+                    .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ReadFeedItemsTask task = new ReadFeedItemsTask(mContext, MainActivity.class, feedId);
+                            task.execute();
+                        }
+
+                    })
+                    .setNegativeButton(mContext.getString(R.string.no), null)
+                    .show();
+
+            return;
+        }
+
 		ReadFeedItemsTask task = new ReadFeedItemsTask(this, MainActivity.class, feedId);
 		task.execute();
 	}

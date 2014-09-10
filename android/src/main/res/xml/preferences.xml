@@ -110,4 +110,12 @@
                 android:summary="@string/st_later_items_quantity_s" />
         </PreferenceScreen>
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/st_other">
+        <SwitchPreference
+            android:title="@string/st_mark_all_confirmation"
+            android:key="pref_mark_all_confirmation"
+            android:summary="@string/st_mark_all_confirmation_check"
+            android:defaultValue="true" />
+    </PreferenceCategory>
 </PreferenceScreen>
