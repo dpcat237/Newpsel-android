@@ -1,6 +1,7 @@
 package com.dpcat237.nps.behavior.factory.syncManager;
 
 
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
@@ -8,7 +9,6 @@ import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,8 +88,10 @@ public class SyncItemsManager extends SyncManager {
         songRepo.open();
         for (Item item : items) {
             if (item.isUnread()) {
+                //Log.d(TAG, "tut: addItem "+item.getApiId()+" - "+item.getTitle());
                 itemRepo.addItem(item);
             } else {
+                //Log.d(TAG, "tut: deleteItem "+item.getApiId()+" - "+item.getTitle());
                 itemRepo.deleteItem(item.getApiId());
                 songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
             }

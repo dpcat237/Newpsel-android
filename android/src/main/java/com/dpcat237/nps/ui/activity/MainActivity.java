@@ -3,13 +3,16 @@ package com.dpcat237.nps.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -25,6 +28,7 @@ import android.widget.ListView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
@@ -44,7 +48,7 @@ public class MainActivity extends Activity {
 	Boolean logged;
 	public static Boolean UNREAD_NO_FIRST = false;
 	Boolean ON_CREATE = false;
-	public boolean isInFront;
+	public Boolean isInFront;
     private SharedPreferences pref;
     private Menu mainMenu = null;
     private MenuItem buttonAddFeed;
@@ -58,6 +62,7 @@ public class MainActivity extends Activity {
     Bundle instanceState;
     private int lastPosition;
     private Integer countFragmentView = 0;
+    private BroadcastReceiver receiver;
 
     
 	@Override
@@ -78,7 +83,38 @@ public class MainActivity extends Activity {
             GoogleServicesHelper.checkPlayServices(mContext, this);
 			showWelcome();
 		}
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                broadcastUpdate(intent.getStringExtra(BroadcastConstants.MAIN_ACTIVITY_MESSAGE));
+            }
+        };
 	}
+
+    public void broadcastUpdate(String command) {
+        Log.d(TAG, "tut: broadcastUpdate a");
+        if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS)
+                && (lastPosition == MainActivityConstants.DRAWER_ITEM_UNREAD_ITEMS
+                || lastPosition == MainActivityConstants.DRAWER_ITEM_ALL_ITEMS)) {
+            Log.d(TAG, "tut: broadcastUpdate b 1");
+            reloadList();
+        } else if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_LATER)
+            && lastPosition == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS) {
+            Log.d(TAG, "tut: broadcastUpdate b 2");
+            reloadList();
+        } else if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_DICTATIONS)
+                && lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+            Log.d(TAG, "tut: broadcastUpdate b 3");
+            reloadList();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(BroadcastConstants.MAIN_ACTIVITY));
+    }
 
 	@SuppressLint("UseValueOf")
 	@Override
@@ -108,6 +144,12 @@ public class MainActivity extends Activity {
 		super.onPause();
 		isInFront = false;
 	}
+
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
+    }
 	
 	private void showWelcome () {
         Intent intent = new Intent(this, WelcomeActivity.class);

@@ -10,7 +10,9 @@ import android.util.Log;
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.manager.SyncDictationItemsManager;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
@@ -68,6 +70,7 @@ public class SyncDictationItemsService extends IntentService {
             songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_DICTATE_ITEM, mContext);
             PreferencesHelper.setNewDictationItems(mContext, false);
             Log.d(TAG, "tut: createSongs done");
+            BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_DICTATIONS);
         }
 
         running = false;

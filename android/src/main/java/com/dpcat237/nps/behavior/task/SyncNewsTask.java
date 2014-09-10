@@ -13,11 +13,13 @@ import com.dpcat237.nps.behavior.factory.SyncFactory;
 import com.dpcat237.nps.behavior.factory.SyncFactoryManager;
 import com.dpcat237.nps.behavior.factory.syncManager.SyncManager;
 import com.dpcat237.nps.behavior.service.DownloadSongsService;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
-import com.dpcat237.nps.common.model.Item;
+import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.ui.activity.MainActivity;
 
 import java.util.Map;
@@ -121,8 +123,10 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
         Integer total = items.length;
         for (Item item : items) {
             if (item.isUnread()) {
+                //Log.d(TAG, "tut: addItem " + item.getApiId() + " - " + item.getTitle());
                 itemRepo.addItem(item);
             } else {
+                //Log.d(TAG, "tut: deleteItem "+item.getApiId()+" - "+item.getTitle());
                 itemRepo.deleteItem(item.getApiId());
                 songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
             }
@@ -166,9 +170,8 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
         publishProgress(0);
 
         if (((MainActivity) mContext).isInFront) {
-          ((MainActivity) mContext).reloadList();
-
-          Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
+            BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS);
+            Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
         }
 
         Intent mServiceIntent = new Intent((mContext), DownloadSongsService.class);

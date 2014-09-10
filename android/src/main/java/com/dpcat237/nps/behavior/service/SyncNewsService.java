@@ -5,12 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.manager.SyncNewsManager;
 import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
+import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
+import com.dpcat237.nps.ui.activity.MainActivity;
 
 public class SyncNewsService extends IntentService {
     private static final String TAG = "NPS:SyncNewsService";
@@ -55,6 +61,7 @@ public class SyncNewsService extends IntentService {
 
     private void startProcess() {
         syncManager.startSync();
+        BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS);
 
         running = false;
         stopSelf();

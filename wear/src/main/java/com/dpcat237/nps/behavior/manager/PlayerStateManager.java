@@ -12,7 +12,7 @@ import com.dpcat237.nps.common.constant.MessageConstants;
 import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.common.model.Song;
-import com.dpcat237.nps.constant.BroadcastConstants;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.helper.NotificationWearHelper;
 import com.dpcat237.nps.ui.activity.PlayerWearActivity;
 
@@ -91,7 +91,7 @@ public class PlayerStateManager {
 
         Log.d(TAG, "tut: playSong started "+started.toString());
         if (started) {
-            sendResult(BroadcastConstants.COMMAND_UPDATE_STATE);
+            sendResult(BroadcastConstants.COMMAND_W_UPDATE_STATE);
         } else {
             Intent startIntent = new Intent(mContext, PlayerWearActivity.class);
             startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -123,17 +123,17 @@ public class PlayerStateManager {
     }
 
     public void onPlay() {
-        sendResult(BroadcastConstants.COMMAND_PLAYING);
+        sendResult(BroadcastConstants.COMMAND_W_PLAYING);
         isPlaying = true;
     }
 
     public void onPause() {
-        sendResult(BroadcastConstants.COMMAND_PAUSED);
+        sendResult(BroadcastConstants.COMMAND_W_PAUSED);
         isPlaying = false;
     }
 
     public void onStop() {
-        sendResult(BroadcastConstants.COMMAND_STOP);
+        sendResult(BroadcastConstants.COMMAND_W_STOP);
     }
 
     public void sendPause() {

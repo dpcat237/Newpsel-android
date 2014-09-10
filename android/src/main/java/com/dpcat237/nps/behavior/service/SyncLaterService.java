@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.manager.SyncLaterManager;
 import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
+import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 
@@ -55,6 +57,7 @@ public class SyncLaterService extends IntentService {
 
     private void startProcess() {
         syncManager.startSync();
+        BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_LATER);
 
         running = false;
         stopSelf();

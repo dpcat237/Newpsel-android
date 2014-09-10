@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.manager.PlayerStateManager;
-import com.dpcat237.nps.constant.BroadcastConstants;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 
 public class PlayerWearActivity extends Activity {
     private static final String TAG = "NPSW:PlayerWearActivity";
@@ -108,13 +108,13 @@ public class PlayerWearActivity extends Activity {
     }
 
     public void broadcastUpdate(String command) {
-        if (command.equals(BroadcastConstants.COMMAND_UPDATE_STATE)) {
+        if (command.equals(BroadcastConstants.COMMAND_W_UPDATE_STATE)) {
             updateCurrentSong();
-        } else if (command.equals(BroadcastConstants.COMMAND_PLAYING)) {
+        } else if (command.equals(BroadcastConstants.COMMAND_W_PLAYING)) {
             playPauseBtn.setImageResource(R.drawable.activity_button_pause);
-        } else if (command.equals(BroadcastConstants.COMMAND_PAUSED)) {
+        } else if (command.equals(BroadcastConstants.COMMAND_W_PAUSED)) {
             playPauseBtn.setImageResource(R.drawable.activity_button_play);
-        } else if (command.equals(BroadcastConstants.COMMAND_STOP)) {
+        } else if (command.equals(BroadcastConstants.COMMAND_W_STOP)) {
             updateCurrentSong();
             stateManager.stop();
             finish();
