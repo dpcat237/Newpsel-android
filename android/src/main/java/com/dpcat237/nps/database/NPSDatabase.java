@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.behavior.service.SyncLaterService;
 import com.dpcat237.nps.behavior.service.SyncNewsService;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;
@@ -17,9 +18,10 @@ import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.database.table.SharedTable;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.FileHelper;
+import com.dpcat237.nps.helper.PreferencesHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {
-
+    private static final String TAG = "NPS:NPSDatabase";
     private Context mContext;
 	private static final String DATABASE_NAME = "nps.db";
 	private static final int DATABASE_VERSION = 12;
@@ -71,6 +73,10 @@ public class NPSDatabase extends SQLiteOpenHelper {
 	}
 
     private void launchServices() {
+        //activate sync of feeds and labels
+        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, true);
+        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, true);
+
         Intent syncNews = new Intent(mContext, SyncNewsService.class);
         mContext.startService(syncNews);
 
