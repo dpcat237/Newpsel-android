@@ -11,6 +11,7 @@ import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.DisplayHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 
@@ -35,6 +36,7 @@ public class CreateLabelActivity extends Activity {
             return;
         }
 
+        DisplayHelper.hideKeyboard(mContext, mView);
 		LabelRepository labelRepo = new LabelRepository(this);
 		labelRepo.open();
 		

@@ -3,6 +3,8 @@ package com.dpcat237.nps.helper;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 public class DisplayHelper {
     private static final String TAG = "NPS:DisplayHelper";
@@ -22,5 +24,10 @@ public class DisplayHelper {
 
             return false;
         }
+    }
+
+    public static void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

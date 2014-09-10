@@ -12,6 +12,7 @@ import com.dpcat237.nps.behavior.task.ChangePasswordTask;
 import com.dpcat237.nps.behavior.task.SignInTask;
 import com.dpcat237.nps.helper.AccountHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
+import com.dpcat237.nps.helper.DisplayHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 
 public class RecoverPasswordActivity extends Activity {
@@ -32,6 +33,7 @@ public class RecoverPasswordActivity extends Activity {
 	
 	public void requireChangePassword(View view) {
 		if (ConnectionHelper.hasConnection(this)) {
+            DisplayHelper.hideKeyboard(mContext, mView);
             ChangePasswordTask task = new ChangePasswordTask(this, mView);
 			task.execute();
 		} else {
