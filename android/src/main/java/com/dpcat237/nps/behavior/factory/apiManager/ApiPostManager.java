@@ -21,8 +21,9 @@ public abstract class ApiPostManager extends ApiManager {
         try {
             response = httpClient.execute(post);
             httpResponse = EntityUtils.toString(response.getEntity());
+            //Log.d(TAG, "tut: httpResponse: "+httpResponse);
         } catch(Exception e) {
-            Log.e(TAG, "Error", e);
+            Log.d(TAG, "Error", e);
             error = true;
         }
     }

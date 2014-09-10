@@ -70,14 +70,12 @@ public class LoginHelper {
 	}
 	 
 	public static String sha1LoginPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String pwd = sha1("sc_"+text);
-		String appPwd = sha1("checkPwd_"+pwd);
-		return appPwd;
+		String pwd = sha1(NSECK+"_"+text);
+		return sha1("checkPwd_"+pwd);
 	}
 	
 	public static String sha1SignUpPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String appPwd = sha1(NSECK+"_"+text);
-		return appPwd;
+		return sha1(NSECK+"_"+text);
 	}
 
 	public static String sha1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {

@@ -3,6 +3,7 @@ package com.dpcat237.nps.constant;
 public class ApiConstants {
     public static final String TYPE_SYNC_DICTATE_ITEMS = "sync_dictate_items";
 
+    /* URLs */
     public static final String API_URL = "http://www.newpsel.com/api/";
     public static final String URL_ADD_FEED = API_URL+"add_feed/";
     public static final String URL_ADD_GCM_ID = API_URL+"gcm/add_id/";
@@ -16,4 +17,8 @@ public class ApiConstants {
     public static final String URL_SYNC_LABEL_ITEMS = API_URL+"sync_later/";
     public static final String URL_SYNC_LATER_ITEMS = API_URL+"sync_later_items/";
     public static final String URL_SYNC_SHARED_ITEMS = API_URL+"sync_shared/";
+
+    /* ERRORS */
+    public static final int ERROR_LOGIN_DATA = 301;
+    public static final int ERROR_NO_LOGGED = 303;
 }

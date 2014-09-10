@@ -63,6 +63,7 @@
     <string name="error_api_unknown_method">Error: unknown API method</string>
     <string name="error_network_unavailable">Error: network unavailable</string>
     <string name="error_language_tts">Sorry! Your device doesn\'t have %1$s language installed.</string>
+    <string name="error_login_data">Error: wrong login data</string>
     <string name="label_s">label</string>
     <string name="sent_change_password">We sent to you an email with link to create new password.</string>
 

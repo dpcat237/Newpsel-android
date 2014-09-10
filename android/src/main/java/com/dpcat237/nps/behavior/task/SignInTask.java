@@ -8,12 +8,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.helper.LoginHelper;
+import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.ui.activity.MainActivity;
 
@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignInTask extends AsyncTask<Void, Integer, Void>{
+    private static final String TAG = "NPS:SignInTask";
 	private Context mContext;
 	private View mView;
     private String email;
@@ -34,7 +35,8 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
     private Boolean checkLogin = false;
     private ProgressDialog dialog;
     private ApiFactoryManager apiFactoryManager;
-	
+	private String errorMessage;
+
 	public SignInTask(Context context, View view) {
         mContext = context;
         mView = view;
@@ -67,6 +69,7 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
      
 	@Override
 	protected Void doInBackground(Void... params) {
+        checkLogin = false;
         JSONObject jsonData = new JSONObject();
         Map<String, Object> result = new HashMap<String, Object>();
 
@@ -78,8 +81,9 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
         } catch (JSONException e) {
             result.put("error", true);
         }
+
         Boolean error = (Boolean) result.get("error");
-		
+        errorMessage = (String) result.get("errorMessage");
 		if (!error) {
 			checkLogin = true;
 		}
@@ -95,16 +99,23 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
 	@Override
  	protected void onPostExecute(Void result) {
 		dialog.cancel();
-		
+
 		if (checkLogin) {
 			LoginHelper.doLogin(mContext);
 			mContext.startActivity(new Intent(mContext, MainActivity.class));
-
-
-
 			((Activity) mContext).finish();
-		} else {
-			Toast.makeText(mContext, R.string.try_later, Toast.LENGTH_SHORT).show();
+
+            return;
 		}
+
+        Integer code = Integer.parseInt(errorMessage);
+        if (code == ApiConstants.ERROR_LOGIN_DATA) {
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_login_data));
+        } else {
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.try_later));
+        }
+
+
+
 	}
 }

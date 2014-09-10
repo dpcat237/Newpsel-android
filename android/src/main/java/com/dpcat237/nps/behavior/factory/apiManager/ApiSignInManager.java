@@ -5,6 +5,7 @@ import com.dpcat237.nps.constant.ApiConstants;
 import org.apache.http.client.methods.HttpPost;
 
 public class ApiSignInManager extends ApiPostManager {
+    private static final String TAG = "NPS:ApiSignInManager";
 
     protected void setupExtra() {
         post = new HttpPost(ApiConstants.URL_SIGN_IN);
@@ -12,7 +13,8 @@ public class ApiSignInManager extends ApiPostManager {
 
     protected void getRequestResult() {
         if (!httpResponse.equals("100")) {
-            result.put("error", true);
+            error = true;
+            errorMessage = httpResponse;
         }
     }
 }
