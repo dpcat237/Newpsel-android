@@ -3,6 +3,7 @@ package com.dpcat237.nps.behavior.task;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.EditText;
@@ -10,7 +11,9 @@ import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
+import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -70,15 +73,13 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
             result.put("error", true);
         }
 
-        Item[] items = (Item[]) result.get("items");
-		if (items != null) {
-			for (Item item : items) {
-				itemRepo.addItem(item);
-		    }
-
-			feedRepo.unreadCountUpdate();
-			checkApi = true;
-		}
+        Boolean error = (Boolean) result.get("error");
+        if (!error) {
+            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, true);
+            Intent syncNews = new Intent(mContext, SyncNewsService.class);
+            mContext.startService(syncNews);
+            checkApi = true;
+        }
 
 		return null;
 	}

@@ -1,11 +1,11 @@
 package com.dpcat237.nps.behavior.factory.syncManager;
 
-import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.common.constant.EntityConstants;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Feed;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,12 +67,15 @@ public class SyncFeedsManager extends SyncManager {
 
         for (Feed feed : feeds) {
             if (feed.getStatus().equals(EntityConstants.STATUS_NEW)) {
+                //Log.d(TAG, "tut: addFeed " + feed.getApiId() + " - " + feed.getTitle());
                 feedRepo.addFeed(feed);
             }
             if (feed.getStatus().equals(EntityConstants.STATUS_CHANGED)) {
+                //Log.d(TAG, "tut: updateFeed " + feed.getApiId() + " - " + feed.getTitle());
                 feedRepo.updateFeed(feed);
             }
             if (feed.getStatus().equals(EntityConstants.STATUS_DELETED)) {
+                //Log.d(TAG, "tut: deleteFeed " + feed.getApiId() + " - " + feed.getTitle());
                 feedRepo.deleteFeed(feed.getApiId());
             }
         }
