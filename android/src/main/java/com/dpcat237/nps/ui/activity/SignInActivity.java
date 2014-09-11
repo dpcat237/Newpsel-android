@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.dpcat237.nps.R;
@@ -20,6 +23,8 @@ public class SignInActivity extends Activity {
     private static final String TAG = "NPS:SignInActivity";
     private Context mContext;
     private View mView;
+    private EditText textEmail;
+    private EditText txtPassword;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,8 +34,20 @@ public class SignInActivity extends Activity {
 
 		setContentView(R.layout.activity_sign_in);
 
-        EditText textEmail = (EditText) mView.findViewById(R.id.txtEmail);
+        textEmail = (EditText) mView.findViewById(R.id.txtEmail);
         textEmail.setText(AccountHelper.getEmail(mContext));
+        txtPassword = (EditText) mView.findViewById(R.id.txtPassword);
+        CheckBox showPassword = (CheckBox) mView.findViewById(R.id.showPassword);
+        showPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    txtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                } else {
+                    txtPassword.setInputType(129);
+                }
+            }
+        });
 	}
 
 	public void doLogin(View view) {
@@ -45,8 +62,8 @@ public class SignInActivity extends Activity {
             return;
         }
 
-        String email = ((EditText) mView.findViewById(R.id.txtEmail)).getText().toString();
-        String password = ((EditText) mView.findViewById(R.id.txtPassword)).getText().toString();
+        String email = textEmail.getText().toString();
+        String password = txtPassword.getText().toString();
         password = StringHelper.getPassword(password);
 
         SignInTask task = new SignInTask(mContext, email, password);

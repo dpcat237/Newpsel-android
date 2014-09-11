@@ -19,6 +19,14 @@
         android:inputType="textPassword"
         android:singleLine="true"
         android:hint="@string/hint_password" />
+    <CheckBox
+        android:id="@+id/showPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/show_password"
+        android:layout_marginBottom="20dp"
+        />
     <Button android:id="@+id/btnLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

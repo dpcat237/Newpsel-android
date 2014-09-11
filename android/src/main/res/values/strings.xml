@@ -110,6 +110,7 @@
     <!-- Forms -->
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="show_password">Show password</string>
     <string name="hint_url">Url</string>
     <string name="button_sign_in">Sign in</string>
     <string name="button_sign_up">Sign up</string>
