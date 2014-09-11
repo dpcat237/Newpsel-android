@@ -13,6 +13,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringHelper {
+    /**
+     * Convert string from UTF8
+     *
+     * @param s String
+     *
+     * @return String
+     */
     public static String convertFromUTF8(String s) {
         String out = null;
         try {
@@ -23,6 +30,13 @@ public class StringHelper {
         return out;
     }
 
+    /**
+     * Convert string to UTF8
+     *
+     * @param s String
+     *
+     * @return String
+     */
     public static String convertToUTF8(String s) {
         String out = null;
         try {
@@ -63,17 +77,30 @@ public class StringHelper {
      * @return boolean
      */
     public static Boolean isUserDataValid(Context context, View view) {
-        Boolean check = true;
-        EditText email = (EditText) view.findViewById(R.id.txtEmail);
+        Boolean check = isEmailValid(context, view);
         EditText password = (EditText) view.findViewById(R.id.txtPassword);
-
-        if (!StringHelper.isEmailValid(email.getText().toString())) {
-            email.setError(context.getString(R.string.error_email));
+        if (password.getText().toString().matches("")) {
+            password.setError(context.getString(R.string.error_password_empty));
             check = false;
         }
 
-        if (password.getText().toString().matches("")) {
-            password.setError(context.getString(R.string.error_password_empty));
+        return check;
+    }
+
+    /**
+     * Valid email from form
+     *
+     * @param context Context
+     * @param view    View
+     *
+     * @return boolean
+     */
+    public static Boolean isEmailValid(Context context, View view) {
+        Boolean check = true;
+        EditText email = (EditText) view.findViewById(R.id.txtEmail);
+
+        if (!StringHelper.isEmailValid(email.getText().toString())) {
+            email.setError(context.getString(R.string.error_email));
             check = false;
         }
 
