@@ -4,22 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.task.SignUpTask;
 import com.dpcat237.nps.helper.AccountHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.DisplayHelper;
-import com.dpcat237.nps.helper.LoginHelper;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
+import com.dpcat237.nps.helper.NotificationHelper;
+import com.dpcat237.nps.helper.StringHelper;
 
 public class SignUpActivity extends Activity {
+    private static final String TAG = "NPS:SignUpActivity";
     private Context mContext;
     private View mView;
 	
@@ -36,47 +34,35 @@ public class SignUpActivity extends Activity {
 	}
 	
 	public void doSignUp(View view) {
-		if (checkInputs()) {
-			if (ConnectionHelper.hasConnection(mContext)) {
-                DisplayHelper.hideKeyboard(mContext, mView);
+        DisplayHelper.hideKeyboard(mContext, mView);
+        if (!StringHelper.isUserDataValid(mContext, mView)) {
+            return;
+        }
 
-                String email = view.findViewById(R.id.txtEmail).toString();
-                String password = view.findViewById(R.id.txtPassword).toString();
-                try {
-                    password = LoginHelper.sha1SignUpPassword(password);
-                } catch (NoSuchAlgorithmException e) {
-                    Log.e("LoginTask - getData", "Error", e);
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    Log.e("LoginTask - getData","Error", e);
-                    e.printStackTrace();
-                }
+        if (!ConnectionHelper.hasConnection(mContext)) {
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_connection));
 
-				SignUpTask task = new SignUpTask(mContext, mView, email, password);
-				task.execute();
-			} else {
-				Toast.makeText(mContext, R.string.error_connection, Toast.LENGTH_SHORT).show();
-			}
-		}
+            return;
+        }
+
+        String email = ((EditText) mView.findViewById(R.id.txtEmail)).getText().toString();
+        String password = ((EditText) mView.findViewById(R.id.txtPassword)).getText().toString();
+        password = StringHelper.getPassword(password);
+
+        SignUpTask task = new SignUpTask(mContext, email, password);
+        task.execute();
 	}
-	
-	public Boolean checkInputs() {
-		Boolean check = true;
-		EditText email = (EditText) mView.findViewById(R.id.txtEmail);
-		EditText password = (EditText) mView.findViewById(R.id.txtPassword);
-		
-		if( email.getText().toString().trim().equals("")) {
-			email.setError(getString(R.string.error_312));
-			check = false;
-		}
-		
-		if( password.getText().toString().trim().equals("")) {
-			password.setError(getString(R.string.error_313));
-		   check = false;
-		}
-		
-		return check;
-	}
+
+    @Override
+    public boolean onKeyUp (int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            doSignUp(mView);
+
+            return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
 
     @Override
     public void onBackPressed() {

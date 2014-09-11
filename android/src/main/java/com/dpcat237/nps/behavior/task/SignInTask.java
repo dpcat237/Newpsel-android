@@ -5,9 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
@@ -20,15 +17,12 @@ import com.dpcat237.nps.ui.activity.MainActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignInTask extends AsyncTask<Void, Integer, Void>{
     private static final String TAG = "NPS:SignInTask";
 	private Context mContext;
-	private View mView;
     private String email;
     private String password;
     private String appKey;
@@ -37,34 +31,18 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
     private ApiFactoryManager apiFactoryManager;
 	private String errorMessage;
 
-	public SignInTask(Context context, View view) {
+	public SignInTask(Context context, String email, String password) {
         mContext = context;
-        mView = view;
-        getData();
+        this.email = email;
+        this.password = password;
     }
-	
-	private void getData() {
-		EditText emailText = (EditText) mView.findViewById(R.id.txtEmail);
-		EditText passwordText = (EditText) mView.findViewById(R.id.txtPassword);
-		email = emailText.getText().toString();
-		String pwd = passwordText.getText().toString();
-		try {
-			password = LoginHelper.sha1LoginPassword(pwd);
-		} catch (NoSuchAlgorithmException e) {
-			Log.e("LoginTask - getData","Error", e);
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			Log.e("LoginTask - getData","Error", e);
-			e.printStackTrace();
-		}
-		appKey = PreferencesHelper.generateKey(mContext);
-	}
-    
+
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 		dialog = ProgressDialog.show(mContext, "Loading", "Please wait...", true);
         apiFactoryManager = new ApiFactoryManager();
+        appKey = PreferencesHelper.generateKey(mContext);
 	}
      
 	@Override
@@ -114,8 +92,5 @@ public class SignInTask extends AsyncTask<Void, Integer, Void>{
         } else {
             NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.try_later));
         }
-
-
-
 	}
 }

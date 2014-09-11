@@ -1,6 +1,5 @@
 package com.dpcat237.nps.ui.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 public class WelcomeActivity extends Activity implements OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
     private static final String TAG = "NPS:WelcomeActivity";
 	private Context mContext;
-    private View mView;
 
     private static final int RC_SIGN_IN = 0;
 
@@ -64,16 +62,16 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         mContext = this;
-		mView = this.findViewById(android.R.id.content).getRootView();
+        View view = this.findViewById(android.R.id.content).getRootView();
 		setContentView(R.layout.activity_welcome);
 
-        setFacebookButton((LoginButton) mView.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
+        setFacebookButton((LoginButton) view.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
         setGoogleButton((SignInButton) findViewById(R.id.buttonGoogleSignIn));
 	}
 
     private void signUp(String email) {
-        Log.d(TAG, "tut: signUp");
-        SignUpTask task = new SignUpTask(this, mView, email, "");
+        //Log.d(TAG, "tut: signUp");
+        SignUpTask task = new SignUpTask(this, email, "");
         task.execute();
     }
 
@@ -168,8 +166,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
         uiHelper.onActivityResult(requestCode, responseCode, intent);
-        Log.d(TAG, "tut: onActivityResult");
-
+        //Log.d(TAG, "tut: onActivityResult");
 
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != RESULT_OK) {
@@ -186,7 +183,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
     @Override
     public void onConnected(Bundle arg) {
-        Log.d(TAG, "tut: G User is connected! gSignInClicked: "+gSignInClicked);
+        //Log.d(TAG, "tut: G User is connected! gSignInClicked: "+gSignInClicked);
         if (!gSignInClicked) {
             signOutFromGplus();
 
@@ -260,7 +257,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
      * Sign-out from google
      * */
     private void signOutFromGplus() {
-        Log.d(TAG, "tut: signOutFromGplus");
+        //Log.d(TAG, "tut: signOutFromGplus");
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
@@ -297,7 +294,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         facebookButton.setOnErrorListener(new LoginButton.OnErrorListener() {
             @Override
             public void onError(FacebookException error) {
-                Log.i(TAG, "Error " + error.getMessage());
+                Log.d(TAG, "Error " + error.getMessage());
             }
         });
 
@@ -312,7 +309,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
                 }
 
                 if (user == null) {
-                    Log.d(TAG, "tut: You are not logged ");
+                    //Log.d(TAG, "tut: You are not logged ");
 
                     return;
                 }
@@ -329,11 +326,11 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (state.isOpened()) {
+        /*if (state.isOpened()) {
             Log.d(TAG, "tut: Logged in...");
         } else if (state.isClosed()) {
             Log.d(TAG, "tut: Logged out...");
-        }
+        }*/
 
         if (state.isOpened() && !fSignInClicked) {
             signOutFromFacebook();
@@ -341,7 +338,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     }
 
     private void signOutFromFacebook() {
-        Log.d(TAG, "tut: signOutFromFacebook");
+        //Log.d(TAG, "tut: signOutFromFacebook");
         Session session = Session.getActiveSession();
         if (session != null) {
             session.closeAndClearTokenInformation();
@@ -354,7 +351,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     }
 
     private void checkFacebookLogged() {
-        Log.d(TAG, "tut: checkFacebookLogged");
+        //Log.d(TAG, "tut: checkFacebookLogged");
         if (!fSignInClicked) {
             signOutFromFacebook();
         }

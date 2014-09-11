@@ -5,11 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
@@ -22,15 +17,12 @@ import com.dpcat237.nps.ui.activity.MainActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpTask extends AsyncTask<Void, Integer, Void> {
     private static final String TAG = "NPS:SignUpTask";
     private Context mContext;
-    private View mView;
     private String email;
     private String password;
     private String appKey;
@@ -38,9 +30,8 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void> {
     private ProgressDialog dialog;
     private ApiFactoryManager apiFactoryManager;
         
-    public SignUpTask(Context context, View view, String email, String password) {
+    public SignUpTask(Context context, String email, String password) {
         mContext = context;
-        mView = view;
         this.email = email;
         this.password = password;
         appKey = PreferencesHelper.generateKey(mContext);
@@ -85,9 +76,7 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void> {
             mContext.startActivity(new Intent(mContext, MainActivity.class));
             ((Activity) mContext).finish();
         } else if (checkApi.equals("305")) {
-            EditText passwordButton = (EditText) mView.findViewById(R.id.txtPassword);
-            passwordButton.setError(mContext.getString(R.string.error_305));
-            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_305));
+            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_user_exists));
         } else if (checkApi.equals("99") || checkApi.equals("310")) {
             NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_310));
         }
