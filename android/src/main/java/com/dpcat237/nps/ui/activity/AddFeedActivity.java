@@ -3,6 +3,7 @@ package com.dpcat237.nps.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -37,4 +38,15 @@ public class AddFeedActivity extends Activity {
 			Toast.makeText(mContext, R.string.error_connection, Toast.LENGTH_SHORT).show();
 		}
 	}
+
+    @Override
+    public boolean onKeyUp (int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            addFeed(mView);
+
+            return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
 }

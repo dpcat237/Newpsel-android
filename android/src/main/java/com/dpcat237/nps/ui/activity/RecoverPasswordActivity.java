@@ -3,6 +3,7 @@ package com.dpcat237.nps.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,4 +41,15 @@ public class RecoverPasswordActivity extends Activity {
             NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_connection));
 		}
 	}
+
+    @Override
+    public boolean onKeyUp (int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            requireChangePassword(mView);
+
+            return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
 }
