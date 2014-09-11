@@ -63,18 +63,13 @@ public class LoginHelper {
         ReceiverHelper.disableBootReceiver(context);
 
         /**
-         * from API 19 only with:
+         * TODO: from API 19 only with:
          * ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
          * Boolean result = activityManager.clearApplicationUserData();
          */
 	}
-	 
+
 	public static String sha1LoginPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String pwd = sha1(NSECK+"_"+text);
-		return sha1("checkPwd_"+pwd);
-	}
-	
-	public static String sha1SignUpPassword(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		return sha1(NSECK+"_"+text);
 	}
 

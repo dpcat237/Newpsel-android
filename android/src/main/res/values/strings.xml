@@ -46,7 +46,7 @@
     <string name="feed_list_empty">You do not have feeds</string>
     <string name="Title">Title</string>
     <string name="try_later">Try again in few minutes</string>
-    <string name="error_connection">No connection to Internet</string>
+    <string name="error_connection">Aren\'t connection to the Internet</string>
     <string name="error_unknown">Error: Unknown error (see log)</string>
     <string name="error_http_unauthorized">Error: 401 unauthorized</string>
     <string name="error_http_forbidden">Error: 403 forbidden</string>
