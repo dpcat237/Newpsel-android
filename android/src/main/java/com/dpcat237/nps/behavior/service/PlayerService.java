@@ -323,11 +323,6 @@ public class PlayerService extends PlayerServiceCommands {
                 }
                 break;
         }
-
-        if (justStarted == 1) {
-            PreferencesHelper.setPlayerActive(mContext, true);
-        }
-
         justStarted ++;
     }
 
@@ -403,7 +398,6 @@ public class PlayerService extends PlayerServiceCommands {
             case PlayerConstants.STATUS_QUEUEEMPTY:
                 break;
             case PlayerConstants.STATUS_STOPPED:
-                PreferencesHelper.setPlayerActive(mContext, false);
                 queryManager.finish();
                 break;
             case PlayerConstants.STATUS_PAUSED:

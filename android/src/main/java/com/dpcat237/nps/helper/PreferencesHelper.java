@@ -98,22 +98,6 @@ public class PreferencesHelper {
 		 return check;
 	}
 
-    public static Boolean isPlayerActive(Context context) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        Boolean active = userPref.getBoolean("player_active", false);
-
-        return active;
-    }
-
-    public static void setPlayerActive(Context context, Boolean active) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putBoolean("player_active", active);
-        editor.commit();
-    }
-
     public static String stripHtml(String html) {
         return Html.fromHtml(html).toString();
     }

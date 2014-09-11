@@ -27,6 +27,7 @@ import android.widget.ListView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
     private int lastPosition;
     private Integer countFragmentView = 0;
     private BroadcastReceiver receiver;
+    private PlayerServiceStatus playerStatus;
 
     
 	@Override
@@ -72,7 +74,6 @@ public class MainActivity extends Activity {
 		mContext = this;
 	    mView = this.findViewById(android.R.id.content).getRootView();
 		logged = LoginHelper.checkLogged(this);
-        PreferencesHelper.setPlayerActive(mContext, false);
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
 		if (logged) {
@@ -90,6 +91,7 @@ public class MainActivity extends Activity {
                 broadcastUpdate(intent.getStringExtra(BroadcastConstants.MAIN_ACTIVITY_MESSAGE));
             }
         };
+        playerStatus = PlayerServiceStatus.getInstance();
 	}
 
     public void broadcastUpdate(String command) {
@@ -137,7 +139,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-        if (PreferencesHelper.isPlayerActive(mContext)) {
+        if (playerStatus.hasActiveSong()) {
             finish();
         }
 

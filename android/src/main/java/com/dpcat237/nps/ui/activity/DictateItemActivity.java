@@ -15,6 +15,7 @@ import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
@@ -39,6 +40,8 @@ public class DictateItemActivity extends Activity {
     private DictateItemRepository itemRepo;
     private FeedRepository feedRepo;
     private SongRepository songRepo;
+    private PlayerServiceStatus playerStatus;
+
 
 	@SuppressLint("NewApi")
 	@Override
@@ -57,8 +60,7 @@ public class DictateItemActivity extends Activity {
         }
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
         ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
-
-
+        playerStatus = PlayerServiceStatus.getInstance();
 	}
 
     private void openDB() {
@@ -190,7 +192,7 @@ public class DictateItemActivity extends Activity {
     @Override
     protected void onPause() {
         closeDB();
-        if (PreferencesHelper.isPlayerActive(mContext)) {
+        if (playerStatus.hasActiveSong()) {
             finish();
         }
         super.onPause();
