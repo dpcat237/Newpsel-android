@@ -108,13 +108,13 @@ public class SyncDictationItemsManager extends SyncManager {
                 try {
                     dictationRepo.addItem(item);
                     newCount++;
-                    //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
+                    //Log.d(TAG, "tut: addItem: "+item.getApiId()+" - "+item.getItemApiId()+" - "+item.getTitle()+" - "+item.getText().length());
                 } catch (Exception e) {
                     Log.d(TAG, "tut: Error "+e.getMessage());
                 }
             }
         } else {
-            //Log.d(TAG, "tut: removeItem: "+item.getApiId()+" - "+item.getTitle()+" - "+item.getText().length());
+            //Log.d(TAG, "tut: removeItem: "+item.getApiId()+" - "+item.getItemApiId()+" - "+item.getTitle()+" - "+item.getText().length());
             removeItem(item.getApiId());
         }
     }
@@ -134,7 +134,8 @@ public class SyncDictationItemsManager extends SyncManager {
             PreferencesHelper.setLastSyncCount(mContext, newCount);
         }
 
-        if (!error) {
+        if (!error && !playerStatus.hasActiveSong()) {
+            //Log.d(TAG, "tut: deleteReadItems");
             dictationRepo.deleteReadItems();
         }
     }
