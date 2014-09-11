@@ -66,16 +66,10 @@ public class DownloadSongsService extends IntentService {
             return false;
         }
 
-        Boolean wifiEnabled = pref.getBoolean("pref_dictation_wifi_enable", false);
+        Boolean onlyWifi = pref.getBoolean("pref_dictation_wifi_enable", true);
         Boolean wifiConnection = ConnectionHelper.hasWifiConnection(mContext);
-        if (wifiEnabled && wifiConnection) {
-            return true;
-        }
 
-        Boolean mobileEnabled = pref.getBoolean("pref_dictation_mobile_enable", false);
-        Boolean mobileConnection = ConnectionHelper.hasMobileConnection(mContext);
-
-        return (mobileEnabled && mobileConnection);
+        return (!onlyWifi || wifiConnection);
     }
 
     private void startProcess() {

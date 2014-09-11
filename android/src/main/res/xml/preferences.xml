@@ -52,11 +52,6 @@
                     android:key="pref_dictation_wifi_enable"
                     android:summary="@string/st_download_wifi_enable_text"
                     android:defaultValue="true" />
-                <SwitchPreference
-                    android:title="@string/st_download_mobile_enable"
-                    android:key="pref_dictation_mobile_enable"
-                    android:summary="@string/st_download_mobile_enable_text"
-                    android:defaultValue="false" />
                 <ListPreference
                     android:defaultValue="1.5f"
                     android:entries="@array/st_list_dictation_speed_titles"
