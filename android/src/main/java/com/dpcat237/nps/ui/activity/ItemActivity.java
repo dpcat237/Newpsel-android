@@ -1,16 +1,16 @@
 package com.dpcat237.nps.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,41 +18,37 @@ import android.webkit.WebView;
 import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.behavior.manager.ItemTtsManager;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
+import com.dpcat237.nps.common.model.Feed;
+import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
-import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Feed;
-import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
-import java.util.HashMap;
-import java.util.Locale;
-
 @SuppressLint("SimpleDateFormat")
-public class ItemActivity extends Activity implements TextToSpeech.OnInitListener {
+public class ItemActivity extends Activity {
     private static final String TAG = "NPS:ItemActivity";
     private Context mContext;
 	private Feed feed;
     private Item item;
 	private ShareActionProvider mShareActionProvider;
-    private TextToSpeech mTts;
     private MenuItem dictateButton;
     private MenuItem readButton;
     private MenuItem unreadButton;
-    private MenuItem startDictateButton;
     private MenuItem stopButton;
-    private Boolean dictateActive = false;
     private SharedPreferences pref;
     private ItemRepository itemRepo;
     private FeedRepository feedRepo;
     private SongRepository songRepo;
+    private ItemTtsManager ttsManager;
+    private BroadcastReceiver receiver;
 
-    private int CHECK_TTS_INSTALLED = 0;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -67,63 +63,27 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
         ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                broadcastUpdate(intent.getStringExtra(BroadcastConstants.ITEM_ACTIVITY_MESSAGE));
+            }
+        };
+
+        launchTts();
 	}
 
     @Override
-    @TargetApi(15)
-    public void onInit(int initStatus) {
-        if (dictateActive) {
-            Locale localeTTs = LanguageHelper.getLocaleFromLanguageTTS(item.getLanguage(), mTts);
-            if (localeTTs != null && LanguageHelper.isLanguageAvailable(mContext, mTts, localeTTs)) {
-                startDictateButton.setVisible(false);
-                dictateButton.setVisible(true);
-                mTts.setLanguage(localeTTs);
-            }
-
-            setTtsListener();
-        }
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(BroadcastConstants.ITEM_ACTIVITY));
     }
 
-    @SuppressLint("NewApi")
-    private void setTtsListener()
-    {
-        final ItemActivity callWithResult = this;
-        int listenerResult =
-                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onDone(String utteranceId) { callWithResult.onDone(); }
-
-                    @Override
-                    public void onError(String utteranceId) { }
-
-                    @Override
-                    public void onStart(String utteranceId) { }
-                });
-        if (listenerResult != TextToSpeech.SUCCESS) {
-            Log.e(TAG, "failed to add utterance progress listener");
-        }
-    }
-
-    public void onDone()
-    {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopDictation();
-            }
-        });
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CHECK_TTS_INSTALLED) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                mTts = new TextToSpeech(mContext, this);
-            } else {
-                Intent installTTSIntent = new Intent();
-                installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installTTSIntent);
-            }
-        }
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
     }
 
     private void openDB() {
@@ -139,6 +99,24 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
         itemRepo.close();
         feedRepo.close();
         songRepo.close();
+    }
+
+    private void launchTts() {
+        if (item.getLanguage() == null) {
+            return;
+        }
+
+        ttsManager = new ItemTtsManager();
+        ttsManager.prepareTts(mContext, item.getLanguage());
+    }
+
+    public void broadcastUpdate(String command) {
+        if (command.equals(BroadcastConstants.COMMAND_A_ITEM_TTS_ACTIVE)) {
+            dictateButton.setVisible(true);
+        } else if (command.equals(BroadcastConstants.COMMAND_A_ITEM_TTS_FINISHED)) {
+            stopButton.setVisible(false);
+            dictateButton.setVisible(true);
+        }
     }
 
     /**
@@ -170,15 +148,10 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
         //get menu items
         MenuItem shareItem = menu.findItem(R.id.buttonShare);
-        startDictateButton = menu.findItem(R.id.buttonStartDictate);
+        dictateButton = menu.findItem(R.id.buttonDictate);
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
-        dictateButton = menu.findItem(R.id.buttonDictate);
         stopButton = menu.findItem(R.id.buttonStop);
-
-        if (item.getLanguage() != null) {
-            startDictateButton.setVisible(true);
-        }
 
         //prepare share button
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -230,10 +203,6 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
             case R.id.buttonShare:
                 setShareIntent(createShareIntent());
                 return true;
-            case R.id.buttonStartDictate:
-                startDictateButton.setEnabled(false);
-                startDictate();
-                return true;
             case R.id.buttonStop:
                 stopDictate();
                 return true;
@@ -260,9 +229,8 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
     @Override
     public void onDestroy() {
-        if (mTts != null) {
-            mTts.stop();
-            mTts.shutdown();
+        if (ttsManager != null) {
+            ttsManager.stop();
         }
         closeDB();
         super.onDestroy();
@@ -270,33 +238,13 @@ public class ItemActivity extends Activity implements TextToSpeech.OnInitListene
 
     /** Dictate methods **/
     private void dictate() {
-        String speech = PreferencesHelper.stripHtml(item.getContent());
-
-        HashMap<String, String> myHashRender = new HashMap();
-        String utteranceID = "item_dictate_"+item.getId();
-        myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
-        Float speechRate = Float.parseFloat(pref.getString("pref_dictation_speed", "1.0f"));
-        mTts.setSpeechRate(speechRate);
-        mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashRender);
-
+        ttsManager.dictate(item.getContent(), Float.parseFloat(pref.getString("pref_dictation_speed", "1.5f")));
         dictateButton.setVisible(false);
         stopButton.setVisible(true);
     }
 
     private void stopDictate() {
-        mTts.stop();
-        stopButton.setVisible(false);
-        dictateButton.setVisible(true);
-    }
-
-    private void startDictate() {
-        Intent checkTTSIntent = new Intent();
-        checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkTTSIntent, CHECK_TTS_INSTALLED);
-        dictateActive = true;
-    }
-
-    public void stopDictation() {
+        ttsManager.stopDictation();
         stopButton.setVisible(false);
         dictateButton.setVisible(true);
     }

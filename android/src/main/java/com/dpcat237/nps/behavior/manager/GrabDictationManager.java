@@ -250,6 +250,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         Log.d(TAG, "tut: finishProcess");
         running = false;
         dictationTypesCount=0;
+        mTts.shutdown();
     }
 
     private void setSpeechSpeed() {

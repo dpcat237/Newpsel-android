@@ -113,7 +113,7 @@ public class DictateItemActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.item, menu);
-        buttonDictate = menu.findItem(R.id.buttonStartDictate);
+        buttonDictate = menu.findItem(R.id.buttonDictate);
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
         MenuItem buttonShare = menu.findItem(R.id.buttonShare);
@@ -181,7 +181,7 @@ public class DictateItemActivity extends Activity {
             case R.id.buttonShare:
                 setShareIntent(createShareIntent());
                 return true;
-            case R.id.buttonStartDictate:
+            case R.id.buttonDictate:
                 PlayerService.playPauseSong(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, item.getItemApiId());
                 return true;
         }
