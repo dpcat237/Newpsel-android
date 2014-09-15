@@ -30,11 +30,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/st_services">
-        <SwitchPreference
-            android:title="@string/st_items_download"
-            android:key="pref_items_download_enable"
-            android:summary="@string/st_items_download_check"
-            android:defaultValue="true" />
+        <PreferenceScreen android:title="@string/st_items_preferences">
+            <SwitchPreference
+                android:title="@string/st_items_download"
+                android:key="pref_items_download_enable"
+                android:summary="@string/st_items_download_check"
+                android:defaultValue="true" />
+            <SwitchPreference
+                android:title="@string/st_only_unread_feeds"
+                android:key="pref_feeds_only_unread"
+                android:dependency="pref_items_download_enable"
+                android:summary="@string/st_only_unread_feeds_check"
+                android:defaultValue="true" />
+        </PreferenceScreen>
         <PreferenceScreen android:title="@string/st_dictation_preferences">
             <SwitchPreference
                 android:title="@string/st_dictation_titles"

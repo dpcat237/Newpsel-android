@@ -71,9 +71,8 @@ public class MainFragmentLabelsManager extends MainFragmentManager {
         return mAdapter.getCount();
     }
 
-
     protected void setCreatorType() {
-        managerType = MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS;
+        managerType = MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS;
     }
 
     protected void setTitle() {

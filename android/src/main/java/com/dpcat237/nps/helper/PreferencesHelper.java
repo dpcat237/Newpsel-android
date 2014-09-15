@@ -44,22 +44,6 @@ public class PreferencesHelper {
 		return result;
 	}
 
-	public static Integer getMainDrawerOption(Context context) {
-		 @SuppressWarnings("static-access")
-		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		 Integer list = userPref.getInt("feeds_list", 0);
-		 
-		 return list;
-	}
-	
-	public static void setFeedsList(Context context, Integer list) {
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = userPref.edit();
-	    editor.putInt("feeds_list", list);
-		editor.commit();
-	}
-	
 	public static Integer getMainListId(Context context) {
 		 @SuppressWarnings("static-access")
 		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
@@ -185,5 +169,20 @@ public class PreferencesHelper {
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 
         return userPref.getBoolean(key, false);
+    }
+
+    public static void setIntPreference(Context context, String key, Integer value) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putInt(key, value);
+        editor.apply();
+    }
+
+    public static Integer getIntPreference(Context context, String key) {
+        @SuppressWarnings("static-access")
+        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
+
+        return userPref.getInt(key, 0);
     }
 }

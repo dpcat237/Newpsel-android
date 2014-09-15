@@ -80,8 +80,7 @@
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_new_articles">Aren\'t new articles</string>
-    <string name="drawer_item_unread">News</string>
-    <string name="drawer_item_all">All new articles</string>
+    <string name="drawer_item">New articles</string>
     <string name="drawer_dictations_items">Dictation articles</string>
     <string name="drawer_later_item">Saved articles</string>
 
@@ -97,8 +96,7 @@
 
     <!-- Drawer -->
     <string-array name="drawer_main_activity">
-        <item>@string/drawer_item_unread</item>
-        <item>@string/drawer_item_all</item>
+        <item>@string/drawer_item</item>
         <item>@string/drawer_later_item</item>
         <item>@string/drawer_dictations_items</item>
     </string-array>
@@ -210,7 +208,7 @@
         <item>100</item>
         <item>150</item>
     </string-array>
-    <string name="st_dictation_preferences">Dictation preferences</string>
+    <string name="st_dictation_preferences">Dictations preferences</string>
     <string name="st_dictations_download_title">Configure dictations download</string>
     <string name="st_dictation_titles">Titles dictation</string>
     <string name="st_download_preferences">Download preferences</string>
@@ -240,7 +238,7 @@
         <item>50.0f</item>
         <item>60.0f</item>
     </string-array>
-    <string name="st_later_items_preferences">Preferences of saved to later articles</string>
+    <string name="st_later_items_preferences">Saved to later preferences</string>
     <string name="st_later_items_titles">Saved to later articles</string>
     <string name="st_later_items_check">Activate to enable later articles download</string>
     <string name="st_later_items_quantity">Quantity of later articles</string>
@@ -256,6 +254,9 @@
     <string name="st_other">Other</string>
     <string name="st_mark_all_confirmation">Mark all confirmation</string>
     <string name="st_mark_all_confirmation_check">Activate to show confirmation before mark all articles as read</string>
+    <string name="st_items_preferences">New articles preferences</string>
+    <string name="st_only_unread_feeds">Only new</string>
+    <string name="st_only_unread_feeds_check">Activate to show only feeds with unread articles</string>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>
@@ -266,17 +267,13 @@
 
     <!-- Manual -->
     <string name="manual_section_general">General</string>
-    <string name="manual_section_articles">Articles</string>
+    <string name="manual_section_articles">New articles</string>
     <string name="manual_section_dictations">Dictations</string>
     <string name="manual_section_saved">Saved to later</string>
     <string name="manual_general_txt1">Newpsel is personal project created with idea to help spend less time possible to be informed from your preferred sources.</string>
     <string name="manual_general_txt2">This application integrate several related functionalities as: reads feed news as basic functionality, save articles to later and listen dictation of articles. All data is stored in the device to be possible consume it offline.</string>
-    <string name="manual_articles_txt1">In this section you will see feeds to which you subscribed with respective articles. This section is separated to:</string>
-    <string name="manual_articles_title1">News:</string>
-    <string name="manual_articles_txt2">are unread articles.</string>
-    <string name="manual_articles_title2">All new articles:</string>
-    <string name="manual_articles_txt3">are all feeds articles in the device.</string>
-    <string name="manual_articles_txt4">Dictation: Application dictation of each article. Also if you activate dictations of titles you will be able listen titles of articles by feed as music player.</string>
+    <string name="manual_articles_txt1">In this section you will see feeds to which you subscribed with respective articles.</string>
+    <string name="manual_articles_txt4">Dictation: Application dictate each article individually. Also if you activate dictations of titles you will be able listen titles of articles by feed as music player.</string>
     <string name="manual_articles_txt5">Labels: You can assign labels to articles to read or listen them later.</string>
     <string name="manual_articles_txt6">Settings: In settings you can deactivate synchronization of feed articles, for example if in tablet you use only Saved articles to specific label.</string>
     <string name="manual_saved_txt1">In this section are articles or webs saved to later and ordered by labels.</string>

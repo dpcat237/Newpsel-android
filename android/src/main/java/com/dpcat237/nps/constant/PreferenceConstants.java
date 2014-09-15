@@ -1,6 +1,9 @@
 package com.dpcat237.nps.constant;
 
 public class PreferenceConstants {
+    /* Main activity */
+    public static final String MAIN_DRAWER_ITEM = "main_activity_drawer_item";
+
     /* Items */
     public static final String ITEMS_ARE_NEW = "items_are_new";
 

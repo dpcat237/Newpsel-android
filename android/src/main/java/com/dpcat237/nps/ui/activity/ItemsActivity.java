@@ -28,7 +28,6 @@ import com.dpcat237.nps.behavior.task.StarItemTask;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
-import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -59,7 +58,6 @@ public class ItemsActivity extends Activity {
 	private final Integer CM_OPTION_4 = 4;
 	private final Integer CM_OPTION_5 = 5;
 	private final Integer CM_OPTION_6 = 6;
-    private Integer feedList;
     private SharedPreferences preferences;
 
 
@@ -86,7 +84,6 @@ public class ItemsActivity extends Activity {
 
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
 	    txtFeedTitle.setText(feed.getTitle());
-	    feedList = PreferencesHelper.getMainDrawerOption(this);
 
 	    listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new ItemsAdapter(this);
@@ -119,8 +116,8 @@ public class ItemsActivity extends Activity {
 	    itemRepo.open();
         songRepo.open();
 
-        //finish activity if main list is different than "all items" and feed doesn't have unread items
-        if (feedRepo.getFeedUnreadCount(feedId) < 1 && PreferencesHelper.getMainDrawerOption(mContext) != MainActivityConstants.DRAWER_ITEM_ALL_ITEMS) {
+        //finish activity if feed doesn't have unread items and active only unread feeds
+        if (feedRepo.getFeedUnreadCount(feedId) < 1 && preferences.getBoolean("pref_feeds_only_unread", true)) {
             finish();
         }
 
@@ -235,9 +232,9 @@ public class ItemsActivity extends Activity {
 
     private ArrayList<Item> getItems() {
         ArrayList<Item> items = null;
-        if (feedList == 0) {
+        if (preferences.getBoolean("pref_feeds_only_unread", true)) {
             items = itemRepo.getIsUnreadItems(feedId, true);
-        } else if (feedList == 1) {
+        } else {
             items = itemRepo.getIsUnreadItems(feedId, false);
         }
 

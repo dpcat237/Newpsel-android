@@ -15,7 +15,7 @@ import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
 public class MainFragmentDictationItemsManager extends MainFragmentItemsManager {
     protected void setCreatorType() {
-        managerType = MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS;
+        managerType = MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS;
     }
 
     protected void setTitle() {

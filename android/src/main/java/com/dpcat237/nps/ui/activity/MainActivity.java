@@ -31,6 +31,7 @@ import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
     private BroadcastReceiver receiver;
     private PlayerServiceStatus playerStatus;
 
-    
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,16 +98,15 @@ public class MainActivity extends Activity {
     public void broadcastUpdate(String command) {
         Log.d(TAG, "tut: broadcastUpdate a");
         if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS)
-                && (lastPosition == MainActivityConstants.DRAWER_ITEM_UNREAD_ITEMS
-                || lastPosition == MainActivityConstants.DRAWER_ITEM_ALL_ITEMS)) {
+                && (lastPosition == MainActivityConstants.DRAWER_MAIN_ITEMS)) {
             Log.d(TAG, "tut: broadcastUpdate b 1");
             reloadList();
         } else if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_LATER)
-            && lastPosition == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS) {
+            && lastPosition == MainActivityConstants.DRAWER_MAIN_LATER_ITEMS) {
             Log.d(TAG, "tut: broadcastUpdate b 2");
             reloadList();
         } else if (command.equals(BroadcastConstants.COMMAND_A_MAIN_RELOAD_DICTATIONS)
-                && lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+                && lastPosition == MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS) {
             Log.d(TAG, "tut: broadcastUpdate b 3");
             reloadList();
         }
@@ -124,13 +124,13 @@ public class MainActivity extends Activity {
 	    super.onResume();
 	    isInFront = true;
 	    logged = LoginHelper.checkLogged(this);
-	    
+
 	    if (!UNREAD_NO_FIRST) {
 			UNREAD_NO_FIRST = true;
 	    } else {
 	    	reloadList();
 	    }
-	    
+
         if (logged) {
             itemsActivated = pref.getBoolean("pref_items_download_enable", true);
             drawerUpdateMenuItems();
@@ -152,36 +152,36 @@ public class MainActivity extends Activity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         super.onStop();
     }
-	
+
 	private void showWelcome () {
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
         finish();
 	}
-	
+
 	private void showDrawer () {
-        Integer mainList = PreferencesHelper.getMainDrawerOption(mContext);
+        Integer mainList = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM);
 		if (ON_CREATE) {
 			setContentView(R.layout.activity_main);
 
             String[] mListsTitles = getResources().getStringArray(R.array.drawer_main_activity);
 	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-	        
+
 	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 	        mDrawerList.setAdapter(new ArrayAdapter<String>(mContext, R.layout.fragment_drawer_row, mListsTitles));
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	        getActionBar().setDisplayHomeAsUpEnabled(true);
 	        getActionBar().setHomeButtonEnabled(true);
-	        
+
 	        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
 	        mDrawerLayout.setDrawerListener(mDrawerToggle);
-			
+
 	        selectDrawerItem(mainList);
 			ON_CREATE = false;
         }
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (logged) {
@@ -195,7 +195,7 @@ public class MainActivity extends Activity {
 
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -206,13 +206,13 @@ public class MainActivity extends Activity {
             buttonAddFeed.setVisible(false);
         }
     }
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-		
+
 	    switch (item.getItemId()) {
 		    case R.id.buttonSync:
 		    	downloadData(item);
@@ -249,7 +249,7 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void showAbout() {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
@@ -259,7 +259,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, ManualActivity.class);
         startActivity(intent);
     }
-	
+
 	public void downloadData(MenuItem item) {
         if (!ConnectionHelper.hasConnection(mContext)) {
             NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_connection));
@@ -287,17 +287,17 @@ public class MainActivity extends Activity {
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        
+
         if (logged) {
         	// Sync the toggle state after onRestoreInstanceState has occurred.
         	mDrawerToggle.syncState();
         }
     }
-	
+
 	@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        
+
         if (logged) {
         	// Pass any configuration change to the drawer toggles
         	mDrawerToggle.onConfigurationChanged(newConfig);
@@ -313,14 +313,14 @@ public class MainActivity extends Activity {
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.content_fragment_main, fragment).commit();
     }
-	
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectDrawerItem(position);
         }
     }
-    
+
     private void selectDrawerItem(int position) {
         lastPosition = position;
         updateFragment();
@@ -328,9 +328,9 @@ public class MainActivity extends Activity {
 
     	mDrawerList.setItemChecked(position, true);
     	mDrawerLayout.closeDrawer(mDrawerList);
-    	
+
     	if (UNREAD_NO_FIRST && !ON_CREATE) {
-    		PreferencesHelper.setFeedsList(this, position);
+            PreferencesHelper.setIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM, position);
             reloadList();
         }
         lastPosition = position;
@@ -342,7 +342,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if (lastPosition == MainActivityConstants.DRAWER_ITEM_LATER_ITEMS || lastPosition == MainActivityConstants.DRAWER_ITEM_DICTATE_ITEMS) {
+        if (lastPosition == MainActivityConstants.DRAWER_MAIN_LATER_ITEMS || lastPosition == MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS) {
             buttonAddFeed.setVisible(false);
             DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
             dictateRepo.open();
