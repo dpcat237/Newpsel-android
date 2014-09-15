@@ -44,6 +44,7 @@ public class SongRepository extends  BaseRepository {
         values.put(SongTable.COLUMN_IS_GRABBED, song.isGrabbed());
         values.put(SongTable.COLUMN_IS_PLAYED, song.isPlayed());
         values.put(SongTable.COLUMN_TYPE, song.getType());
+        values.put(SongTable.COLUMN_DATE_ADD, song.getDateAdd());
         database.insert(SongTable.TABLE_SONG, null, values);
 	}
 
@@ -58,10 +59,9 @@ public class SongRepository extends  BaseRepository {
             where = SongTable.COLUMN_LIST_ID+"=? AND "+SongTable.COLUMN_TYPE+"=? AND "+SongTable.COLUMN_IS_GRABBED+"=? AND "+SongTable.COLUMN_IS_PLAYED+"=?";
             args = new String[] {""+listId+"", ""+type+"", ""+1+"", ""+0+""};
         }
-        String orderBy = SongTable.COLUMN_ID+" ASC";
-        Cursor cursor = database.query(SongTable.TABLE_SONG, allColumns, where, args, null, null, orderBy);
+        String orderBy = SongTable.COLUMN_DATE_ADD+" DESC";
 
-        return cursor;
+        return database.query(SongTable.TABLE_SONG, allColumns, where, args, null, null, orderBy);
     }
 
 	public Song cursorToSong(Cursor cursor) {

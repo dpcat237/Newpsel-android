@@ -35,7 +35,8 @@ public class ItemRepository extends BaseRepository {
             ItemTable.COLUMN_API_ID,
             ItemTable.COLUMN_FEED_ID,
             ItemTable.COLUMN_TITLE,
-            ItemTable.COLUMN_LANGUAGE
+            ItemTable.COLUMN_LANGUAGE,
+            ItemTable.COLUMN_DATE_ADD
     };
     private String[] listItemContentColumns = {
             ItemTable.COLUMN_ID,
@@ -203,6 +204,7 @@ public class ItemRepository extends BaseRepository {
         item.setFeedId(cursor.getInt(2));
         item.setTitle(cursor.getString(3));
         item.setLanguage(cursor.getString(4));
+        item.setDateAdd(cursor.getInt(5));
 
         return item;
     }

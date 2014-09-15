@@ -53,6 +53,7 @@ public abstract class SongsManager {
         song.setType(grabberType);
         String filename = grabberType+"_"+list.getApiId()+"_"+listItem.getId();
         song.setFilename(filename + ".wav");
+        song.setDateAdd(listItem.getDateAdd());
 
         return song;
     }

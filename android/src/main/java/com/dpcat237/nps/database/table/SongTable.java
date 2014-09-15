@@ -16,6 +16,7 @@ public class SongTable {
     public static final String COLUMN_IS_GRABBED = "is_grabbed";
     public static final String COLUMN_IS_PLAYED = "is_played";
 	public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_DATE_ADD = "date_add";
 
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "CREATE TABLE IF NOT EXISTS " 
@@ -28,7 +29,8 @@ public class SongTable {
             + COLUMN_FILE + " varchar(255) not null ,"
             + COLUMN_IS_GRABBED + " boolean not null,"
             + COLUMN_IS_PLAYED + " boolean not null,"
-			+ COLUMN_TYPE + " varchar(50) not null"
+			+ COLUMN_TYPE + " varchar(50) not null,"
+            + COLUMN_DATE_ADD + " integer not null"
 			+ ");";
 
 	public static void onCreate(SQLiteDatabase database) {

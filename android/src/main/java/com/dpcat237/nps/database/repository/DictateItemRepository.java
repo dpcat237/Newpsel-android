@@ -46,7 +46,8 @@ public class DictateItemRepository extends BaseRepository {
             DictateItemTable.COLUMN_LANGUAGE,
             DictateItemTable.COLUMN_TITLE,
             DictateItemTable.COLUMN_CONTENT,
-            DictateItemTable.COLUMN_TEXT
+            DictateItemTable.COLUMN_TEXT,
+            DictateItemTable.COLUMN_DATE_ADD,
     };
     private String[] forListColumns = {
             DictateItemTable.COLUMN_ID,
@@ -170,7 +171,7 @@ public class DictateItemRepository extends BaseRepository {
         String sql = "SELECT" +columnsToString("tb1", forListColumns)+
                 "FROM "+DictateItemTable.TABLE_NAME+" AS tb1 "+
                 "LEFT JOIN "+ SongTable.TABLE_SONG+" AS tb2 ON tb1."+DictateItemTable.COLUMN_ITEM_ID+"=tb2."+SongTable.COLUMN_ITEM_ID+" "+
-                "WHERE tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+";";
+                "WHERE tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+" ORDER BY tb1."+DictateItemTable.COLUMN_DATE_ADD+" DESC;";
         Cursor cursor = database.rawQuery(sql, null);
 
         cursor.moveToFirst();
@@ -221,6 +222,7 @@ public class DictateItemRepository extends BaseRepository {
         item.setTitle(cursor.getString(6));
         item.setContent(cursor.getString(7));
         item.setText(cursor.getString(8));
+        item.setDateAdd(cursor.getInt(9));
 
         return item;
     }
