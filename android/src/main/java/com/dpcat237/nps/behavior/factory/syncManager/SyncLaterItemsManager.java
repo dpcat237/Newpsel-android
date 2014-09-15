@@ -3,10 +3,13 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 import android.util.Log;
 
+import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
+import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.common.model.LaterItem;
 
@@ -39,15 +42,21 @@ public class SyncLaterItemsManager extends SyncManager {
 
     protected void checkNecessarySync() {
         Integer unreadCount = laterItemRepo.countUnreadItems();
+
         /*
-        Don't sync if:
         - service isn't enabled
-        - aren't any label selected
         - are more than 0 unread items and sync in hold status
          */
         if (!preferences.getBoolean("pref_later_items_enable", false) ||
-                !getLabels() ||
                 (unreadCount > 0 && !PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_LATER_ITEMS))) {
+            error = true;
+
+            return;
+        }
+
+        //- aren't any label selected
+        if (!getLabels()) {
+            NotificationHelper.showSimpleNotification(mContext, NotificationConstants.ID_ANY_LABEL, mContext.getString(R.string.nt_any_label));
             error = true;
 
             return;

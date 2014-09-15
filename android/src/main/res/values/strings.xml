@@ -142,7 +142,8 @@
     <!-- Notifications -->
     <string name="nt_download">Download notification</string>
     <string name="nt_download_items_title_finished">Downloaded new dictations of headlines</string>
-    <string name="nt_download_dictation_items_finished">Downloaded new dictations of saved articles</string>
+    <string name="nt_download_dictation_items_finished">Downloaded new dictations of saved articles.</string>
+    <string name="nt_any_label">Select in preferences at less one label to sync saved articles.</string>
 
     <!-- Player -->
     <string name="button_details">Show details</string>
