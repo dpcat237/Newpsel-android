@@ -99,7 +99,7 @@ public class ItemTtsManager implements TextToSpeech.OnInitListener {
     }
 
     private void notifyFinished() {
-        BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.ITEM_ACTIVITY, BroadcastConstants.ITEM_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_ITEM_TTS_ACTIVE);
+        BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.ITEM_ACTIVITY, BroadcastConstants.ITEM_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_ITEM_TTS_FINISHED);
     }
 
     public void dictate(String text, Float speechRate) {
