@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.ui.activity.LaterItemsActivity;
 import com.dpcat237.nps.ui.adapter.LabelsAdapter;
 

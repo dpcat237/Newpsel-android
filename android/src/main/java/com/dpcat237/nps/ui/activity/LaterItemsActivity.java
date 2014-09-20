@@ -3,7 +3,9 @@ package com.dpcat237.nps.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -26,6 +28,7 @@ public class LaterItemsActivity extends Activity {
     private LabelRepository labelRepo;
 	private Integer labelId;
     private LaterItemsAdapter mAdapter;
+    private Boolean unreadItems;
 
 
 	@Override
@@ -36,6 +39,8 @@ public class LaterItemsActivity extends Activity {
         setTitle(mContext.getString(R.string.drawer_later_item));
 
         openDB();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        unreadItems = preferences.getBoolean("pref_later_items_only_unread", true);
         labelId = PreferencesHelper.getMainListId(mContext);
 	    Label label = labelRepo.getLabel(labelId);
 
@@ -44,7 +49,7 @@ public class LaterItemsActivity extends Activity {
 
         ListView listView = (ListView) findViewById(R.id.itemsList);
 	    mAdapter = new LaterItemsAdapter(mContext);
-        mAdapter.addToDataset(laterItemRepo.getForList(labelId));
+        mAdapter.addToDataset(laterItemRepo.getForList(labelId, unreadItems));
 	    listView.setAdapter(mAdapter);
 	    registerForContextMenu(listView);
 
@@ -80,7 +85,7 @@ public class LaterItemsActivity extends Activity {
 	    super.onResume();
 
         openDB();
-        mAdapter.updateList(laterItemRepo.getForList(labelId));
+        mAdapter.updateList(laterItemRepo.getForList(labelId, unreadItems));
 	}
 
 	@Override

@@ -4,16 +4,19 @@ package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 import android.content.Intent;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
 public class MainFragmentDictationItemsManager extends MainFragmentItemsManager {
+    private static final String TAG = "NPS:MainFragmentDictationItemsManager";
+
+
     protected void setCreatorType() {
         managerType = MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS;
     }
@@ -23,7 +26,7 @@ public class MainFragmentDictationItemsManager extends MainFragmentItemsManager 
     }
 
     protected void getItems() {
-        items = dictateRepo.getUnreadGrabbedItems();
+        items = dictateRepo.getGrabbedItems(preferences.getBoolean("pref_dictations_only_unread", true));
     }
 
     protected void showNextPage(ListItem item) {

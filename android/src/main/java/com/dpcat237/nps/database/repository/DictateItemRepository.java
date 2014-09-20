@@ -166,12 +166,16 @@ public class DictateItemRepository extends BaseRepository {
         return items;
     }
 
-    public ArrayList<ListItem> getUnreadGrabbedItems() {
+    public ArrayList<ListItem> getGrabbedItems(Boolean unread) {
+        String isUnread = "";
+        if (unread) {
+            isUnread = "tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND";
+        }
         ArrayList<ListItem> items = new ArrayList<ListItem>();
         String sql = "SELECT" +columnsToString("tb1", forListColumns)+
                 "FROM "+DictateItemTable.TABLE_NAME+" AS tb1 "+
                 "LEFT JOIN "+ SongTable.TABLE_SONG+" AS tb2 ON tb1."+DictateItemTable.COLUMN_ITEM_ID+"=tb2."+SongTable.COLUMN_ITEM_ID+" "+
-                "WHERE tb1."+DictateItemTable.COLUMN_IS_UNREAD+"=1 AND tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+" ORDER BY tb1."+DictateItemTable.COLUMN_DATE_ADD+" DESC;";
+                "WHERE "+isUnread+" tb2."+SongTable.COLUMN_IS_GRABBED+"=1"+" ORDER BY tb1."+DictateItemTable.COLUMN_DATE_ADD+" DESC;";
         Cursor cursor = database.rawQuery(sql, null);
 
         cursor.moveToFirst();

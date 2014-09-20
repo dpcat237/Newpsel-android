@@ -42,6 +42,41 @@
                 android:dependency="pref_items_download_enable"
                 android:summary="@string/st_only_unread_feeds_check"
                 android:defaultValue="true" />
+            <SwitchPreference
+                android:title="@string/st_mark_all_confirmation"
+                android:key="pref_mark_all_confirmation"
+                android:dependency="pref_items_download_enable"
+                android:summary="@string/st_mark_all_confirmation_check"
+                android:defaultValue="true" />
+        </PreferenceScreen>
+        <PreferenceScreen android:title="@string/st_later_items_preferences">
+            <SwitchPreference
+                android:title="@string/st_later_items_titles"
+                android:key="pref_later_items_enable"
+                android:summary="@string/st_later_items_check"
+                android:defaultValue="false"/>
+            <MultiSelectListPreference
+                android:key="pref_later_items_labels"
+                android:dependency="pref_later_items_enable"
+                android:title="@string/st_later_items_labels"
+                android:summary="@string/st_later_items_labels_s"
+                android:defaultValue="@array/empty_array" />
+            <ListPreference
+                android:defaultValue="50"
+                android:entries="@array/st_list_later_items_quantity"
+                android:entryValues="@array/st_list_later_items_quantity"
+                android:key="pref_later_items_quantity"
+                android:dependency="pref_later_items_enable"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"
+                android:title="@string/st_later_items_quantity"
+                android:summary="@string/st_later_items_quantity_s" />
+            <SwitchPreference
+                android:title="@string/st_only_unread_feeds"
+                android:key="pref_later_items_only_unread"
+                android:dependency="pref_later_items_enable"
+                android:summary="@string/st_only_unread_later_items_check"
+                android:defaultValue="true" />
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/st_dictation_preferences">
             <SwitchPreference
@@ -87,38 +122,12 @@
                     android:positiveButtonText="@null"
                     android:title="@string/st_dictation_quantity"
                     android:summary="@string/st_dictation_quantity_s" />
+                <SwitchPreference
+                    android:title="@string/st_only_unread_feeds"
+                    android:key="pref_dictations_only_unread"
+                    android:summary="@string/st_only_unread_dictations_check"
+                    android:defaultValue="true" />
             </PreferenceCategory>
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/st_later_items_preferences">
-            <SwitchPreference
-                android:title="@string/st_later_items_titles"
-                android:key="pref_later_items_enable"
-                android:summary="@string/st_later_items_check"
-                android:defaultValue="false"/>
-            <MultiSelectListPreference
-                android:key="pref_later_items_labels"
-                android:dependency="pref_later_items_enable"
-                android:title="@string/st_later_items_labels"
-                android:summary="@string/st_later_items_labels_s"
-                android:defaultValue="@array/empty_array" />
-            <ListPreference
-                android:defaultValue="50"
-                android:entries="@array/st_list_later_items_quantity"
-                android:entryValues="@array/st_list_later_items_quantity"
-                android:key="pref_later_items_quantity"
-                android:dependency="pref_later_items_enable"
-                android:negativeButtonText="@null"
-                android:positiveButtonText="@null"
-                android:title="@string/st_later_items_quantity"
-                android:summary="@string/st_later_items_quantity_s" />
-        </PreferenceScreen>
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/st_other">
-        <SwitchPreference
-            android:title="@string/st_mark_all_confirmation"
-            android:key="pref_mark_all_confirmation"
-            android:summary="@string/st_mark_all_confirmation_check"
-            android:defaultValue="true" />
     </PreferenceCategory>
 </PreferenceScreen>

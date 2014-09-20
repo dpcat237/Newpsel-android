@@ -120,10 +120,17 @@ public class LaterItemRepository extends BaseRepository {
         database.delete(LaterItemTable.TABLE_NAME, where, args);
     }
 
-    public ArrayList<LaterItem> getForList(Integer labelApiId) {
+    public ArrayList<LaterItem> getForList(Integer labelApiId, Boolean unread) {
         ArrayList<LaterItem> items = new ArrayList<LaterItem>();
-        String where = LaterItemTable.COLUMN_LATER_ID+"=? AND "+LaterItemTable.COLUMN_IS_UNREAD+"=?";
-        String[] args = new String[] {""+labelApiId+"", ""+1+""};
+        String where;
+        String[] args;
+        if (unread) {
+            where = LaterItemTable.COLUMN_LATER_ID+"=? AND "+LaterItemTable.COLUMN_IS_UNREAD+"=?";
+            args = new String[] {labelApiId.toString(), ""+1+""};
+        } else {
+            where = LaterItemTable.COLUMN_LATER_ID+"=?";
+            args = new String[] {labelApiId.toString()};
+        }
         String orderBy = LaterItemTable.COLUMN_DATE_ADD+" DESC";
         Cursor cursor = database.query(LaterItemTable.TABLE_NAME, forListColumns, where, args, null, null, orderBy);
 

@@ -1,6 +1,8 @@
 package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.ListView;
 
 public abstract class MainFragmentManager {
@@ -8,6 +10,7 @@ public abstract class MainFragmentManager {
     protected Activity mActivity;
     protected ListView listView;
     protected int managerType;
+    protected SharedPreferences preferences;
 
 
     public void finish() { }
@@ -16,6 +19,7 @@ public abstract class MainFragmentManager {
         this.mActivity = activity;
         this.listView = listView;
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         setCreatorType();
         openDB();
         initializeAdapter();
