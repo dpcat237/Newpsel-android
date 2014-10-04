@@ -20,6 +20,7 @@ import android.widget.ShareActionProvider;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.manager.ItemTtsManager;
 import com.dpcat237.nps.behavior.task.StarItemTask;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
@@ -52,6 +53,7 @@ public class ItemActivity extends Activity {
     private SongRepository songRepo;
     private ItemTtsManager ttsManager;
     private BroadcastReceiver receiver;
+    private PlayerServiceStatus playerStatus;
 
 
 	@SuppressLint("NewApi")
@@ -75,6 +77,7 @@ public class ItemActivity extends Activity {
             }
         };
 
+        playerStatus = PlayerServiceStatus.getInstance();
         launchTts();
 	}
 
@@ -85,17 +88,51 @@ public class ItemActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        openDB();
+    }
+
+    @Override
+    protected void onPause() {
+        closeDB();
+        if (playerStatus.hasActiveSong()) {
+            finish();
+        }
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        if (ttsManager != null) {
+            ttsManager.stop();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (playerStatus.hasActiveSong()) {
+            launchItemsActivity();
+        }
+        super.onBackPressed();
+    }
+
     private void openDB() {
-        itemRepo = new ItemRepository(mContext);
+        if (itemRepo == null) {
+            itemRepo = new ItemRepository(mContext);
+            feedRepo = new FeedRepository(mContext);
+            songRepo = new SongRepository(mContext);
+        }
+
         itemRepo.open();
-        feedRepo = new FeedRepository(mContext);
         feedRepo.open();
-        songRepo = new SongRepository(mContext);
         songRepo.open();
     }
 
@@ -129,7 +166,6 @@ public class ItemActivity extends Activity {
      */
     private void getNecessaryData() {
         openDB();
-
         Integer itemApiId = getItemApiId();
         item = itemRepo.getItem(itemApiId);
         Integer feedId = PreferencesHelper.getMainListId(mContext);
@@ -225,6 +261,12 @@ public class ItemActivity extends Activity {
             case R.id.buttonStop:
                 stopDictate();
                 return true;
+            case android.R.id.home:
+                if (playerStatus.hasActiveSong()) {
+                    launchItemsActivity();
+                }
+
+                return super.onOptionsItemSelected(item);
         }
 
         return false;
@@ -262,15 +304,6 @@ public class ItemActivity extends Activity {
         task.execute();
     }
 
-    @Override
-    public void onDestroy() {
-        if (ttsManager != null) {
-            ttsManager.stop();
-        }
-        closeDB();
-        super.onDestroy();
-    }
-
     /** Dictate methods **/
     private void dictate() {
         ttsManager.dictate(item.getContent(), Float.parseFloat(pref.getString("pref_dictation_speed", "1.5f")));
@@ -282,5 +315,11 @@ public class ItemActivity extends Activity {
         ttsManager.stopDictation();
         stopButton.setVisible(false);
         dictateButton.setVisible(true);
+    }
+
+    private void launchItemsActivity() {
+        PreferencesHelper.setMainListId(mContext, item.getFeedId());
+        Intent intent = new Intent(this, ItemsActivity.class);
+        startActivity(intent);
     }
 }

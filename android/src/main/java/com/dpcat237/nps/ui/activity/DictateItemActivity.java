@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -83,7 +84,6 @@ public class DictateItemActivity extends Activity {
      */
     private void getNecessaryData() {
         openDB();
-
         //Get passed item Id and them his and feed data
         Integer itemApiId = getItemApiId();
         item = itemRepo.getItem(itemApiId);
@@ -184,9 +184,21 @@ public class DictateItemActivity extends Activity {
             case R.id.buttonDictate:
                 PlayerService.playPauseSong(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, item.getItemApiId());
                 return true;
+            case android.R.id.home:
+                if (playerStatus.hasActiveSong()) {
+                    launchMainActivity();
+                }
+
+                return super.onOptionsItemSelected(menuItem);
         }
 
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        openDB();
     }
 
     @Override
@@ -196,6 +208,14 @@ public class DictateItemActivity extends Activity {
             finish();
         }
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (playerStatus.hasActiveSong()) {
+            launchMainActivity();
+        }
+        super.onBackPressed();
     }
 
     private void updateReadButton() {
@@ -220,5 +240,10 @@ public class DictateItemActivity extends Activity {
         updateReadButton();
         itemRepo.readItem(item.getItemApiId(), true);
         songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, false);
+    }
+
+    private void launchMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

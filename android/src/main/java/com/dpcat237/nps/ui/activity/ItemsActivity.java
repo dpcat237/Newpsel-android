@@ -24,6 +24,7 @@ import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.ReadItemTask;
 import com.dpcat237.nps.behavior.task.StarItemTask;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
@@ -58,6 +59,7 @@ public class ItemsActivity extends Activity {
 	private final Integer CM_OPTION_5 = 5;
 	private final Integer CM_OPTION_6 = 6;
     private SharedPreferences preferences;
+    private PlayerServiceStatus playerStatus;
 
 
 	@Override
@@ -99,6 +101,7 @@ public class ItemsActivity extends Activity {
                 }
             }
         });
+        playerStatus = PlayerServiceStatus.getInstance();
 	}
 
     private void openDB() {
@@ -111,6 +114,12 @@ public class ItemsActivity extends Activity {
         feedRepo.open();
         itemRepo.open();
         songRepo.open();
+    }
+
+    private void closeDB() {
+        feedRepo.close();
+        itemRepo.close();
+        songRepo.close();
     }
 
 	@Override
@@ -128,11 +137,20 @@ public class ItemsActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		super.onPause();
-		feedRepo.close();
-		itemRepo.close();
-        songRepo.close();
+        closeDB();
+        if (playerStatus.hasActiveSong()) {
+            finish();
+        }
+        super.onPause();
 	}
+
+    @Override
+    public void onBackPressed() {
+        if (playerStatus.hasActiveSong()) {
+            launchMainActivity();
+        }
+        super.onBackPressed();
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,6 +173,12 @@ public class ItemsActivity extends Activity {
             case R.id.buttonDictate:
                 PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_TITLE, feedId);
                 return true;
+            case android.R.id.home:
+                if (playerStatus.hasActiveSong()) {
+                    launchMainActivity();
+                }
+
+                return super.onOptionsItemSelected(item);
 	    }
 		return false;
 	}
@@ -316,4 +340,9 @@ public class ItemsActivity extends Activity {
 		ReadFeedItemsTask task = new ReadFeedItemsTask(this, MainActivity.class, feedId);
 		task.execute();
 	}
+
+    private void launchMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }
