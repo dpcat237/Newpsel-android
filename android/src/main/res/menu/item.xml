@@ -21,6 +21,11 @@
         android:icon="@drawable/collections_labels"
         android:showAsAction="ifRoom"
         android:title="@string/button_read_label" />
+    <item android:id="@+id/buttonDictateDisabled"
+        android:icon="@drawable/volume_on_disabled"
+        android:showAsAction="ifRoom"
+        android:title="@string/button_dictate_disabled"
+        android:enabled="false" />
     <item android:id="@+id/buttonDictate"
         android:icon="@drawable/ic_actionbar_dictate"
         android:showAsAction="ifRoom"

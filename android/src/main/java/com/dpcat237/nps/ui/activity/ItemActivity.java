@@ -40,6 +40,7 @@ public class ItemActivity extends Activity {
     private Item item;
 	private ShareActionProvider mShareActionProvider;
     private MenuItem dictateButton;
+    private MenuItem dictateDisabledButton;
     private MenuItem readButton;
     private MenuItem unreadButton;
     private MenuItem favoriteButton;
@@ -115,6 +116,7 @@ public class ItemActivity extends Activity {
 
     public void broadcastUpdate(String command) {
         if (command.equals(BroadcastConstants.COMMAND_A_ITEM_TTS_ACTIVE)) {
+            dictateDisabledButton.setVisible(false);
             dictateButton.setVisible(true);
         } else if (command.equals(BroadcastConstants.COMMAND_A_ITEM_TTS_FINISHED)) {
             stopButton.setVisible(false);
@@ -152,6 +154,7 @@ public class ItemActivity extends Activity {
         //get menu items
         MenuItem shareItem = menu.findItem(R.id.buttonShare);
         dictateButton = menu.findItem(R.id.buttonDictate);
+        dictateDisabledButton = menu.findItem(R.id.buttonDictateDisabled);
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
         favoriteButton = menu.findItem(R.id.buttonFavorite);

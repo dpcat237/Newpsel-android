@@ -96,6 +96,7 @@
     <string name="button_read_dictate">Dictate</string>
     <string name="button_read_stop">Stop</string>
     <string name="button_pause">Pause</string>
+    <string name="button_dictate_disabled">Dictation disabled</string>
 
     <!-- Drawer -->
     <string-array name="drawer_main_activity">
