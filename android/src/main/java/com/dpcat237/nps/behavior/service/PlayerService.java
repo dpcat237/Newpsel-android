@@ -21,7 +21,7 @@ import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
 import com.dpcat237.nps.behavior.manager.LockscreenManager;
 import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
-import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.constant.MessageConstants;
 import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
@@ -59,19 +59,19 @@ public class PlayerService extends PlayerServiceCommands {
     private SongsManager songGrabManager;
     private String playType;
     private Song currentSong;
+
     private class UpdatePositionTimerTask extends TimerTask {
-    protected int lastPosition = 0;
-
-
-    public void run() {
-            if (player != null && !player.isPlaying())
-                return;
-            int oldPosition = lastPosition;
-            lastPosition = player.getCurrentPosition();
-            if (oldPosition / 1000 != lastPosition / 1000)
-                updateActiveSongPosition(lastPosition);
-        }
+        protected int lastPosition = 0;
+        public void run() {
+                if (player != null && !player.isPlaying())
+                    return;
+                int oldPosition = lastPosition;
+                lastPosition = player.getCurrentPosition();
+                if (oldPosition / 1000 != lastPosition / 1000)
+                    updateActiveSongPosition(lastPosition);
+            }
     };
+
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
@@ -213,6 +213,7 @@ public class PlayerService extends PlayerServiceCommands {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleIntent(intent);
+
         return START_STICKY;
     }
 

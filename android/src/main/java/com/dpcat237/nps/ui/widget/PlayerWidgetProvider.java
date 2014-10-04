@@ -11,7 +11,7 @@ import android.widget.RemoteViews;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.service.PlayerService;
-import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.SongConstants;

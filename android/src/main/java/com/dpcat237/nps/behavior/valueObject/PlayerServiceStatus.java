@@ -1,4 +1,4 @@
-package com.dpcat237.nps.behavior.service.valueObject;
+package com.dpcat237.nps.behavior.valueObject;
 
 import android.content.Context;
 import android.os.Handler;

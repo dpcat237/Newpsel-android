@@ -3,7 +3,7 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;

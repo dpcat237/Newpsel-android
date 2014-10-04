@@ -2,7 +2,7 @@ package com.dpcat237.nps.behavior.manager;
 
 import android.content.Context;
 
-import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.FileHelper;
