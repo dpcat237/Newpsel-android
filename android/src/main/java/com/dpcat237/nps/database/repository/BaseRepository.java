@@ -8,15 +8,18 @@ import com.dpcat237.nps.database.NPSDatabase;
 public abstract class BaseRepository {
 	protected SQLiteDatabase database;
     protected NPSDatabase dbHelper;
+    protected Boolean isOpen = false;
 
 
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
 		dbHelper.onCreate(database);
+        setOpen(true);
 	}
 
 	public void close() {
 		dbHelper.close();
+        setOpen(false);
 	}
 	
 	public void create(){
@@ -41,5 +44,13 @@ public abstract class BaseRepository {
         }
 
         return all;
+    }
+
+    public Boolean isOpen() {
+        return isOpen;
+    }
+
+    private void setOpen(Boolean status) {
+        isOpen = status;
     }
 }

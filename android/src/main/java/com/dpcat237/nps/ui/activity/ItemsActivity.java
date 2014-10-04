@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -71,13 +70,7 @@ public class ItemsActivity extends Activity {
 		ITEM_COLOR_READ = mContext.getString(R.string.color_read);
 		ITEM_COLOR_UNREAD = mContext.getString(R.string.color_unread);
         preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-	    feedRepo = new FeedRepository(this);
-	    feedRepo.open();
-	    itemRepo = new ItemRepository(this);
-	    itemRepo.open();
-        songRepo = new SongRepository(mContext);
-        songRepo.open();
+        openDB();
 
 	    feedId = PreferencesHelper.getMainListId(mContext);
 	    Feed feed = feedRepo.getFeed(feedId);
@@ -92,29 +85,38 @@ public class ItemsActivity extends Activity {
 	    registerForContextMenu(listView);
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (mAdapter.getCount() > 0) {
-					Item item = mAdapter.getItem(position);
-					showItem(item.getApiId());
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mAdapter.getCount() > 0) {
+                    Item item = mAdapter.getItem(position);
+                    showItem(item.getApiId());
 
-					if (item.isUnread()) {
-						markReadItem(item.getApiId(), view);
-						item.setIsUnread(false);
+                    if (item.isUnread()) {
+                        markReadItem(item.getApiId(), view);
+                        item.setIsUnread(false);
                         songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
-					}
-				}
-			}
-		});
+                    }
+                }
+            }
+        });
 	}
+
+    private void openDB() {
+        if (feedRepo == null) {
+            feedRepo = new FeedRepository(mContext);
+            itemRepo = new ItemRepository(mContext);
+            songRepo = new SongRepository(mContext);
+        }
+
+        feedRepo.open();
+        itemRepo.open();
+        songRepo.open();
+    }
 
 	@Override
 	public void onResume() {
 	    super.onResume();
-
-	    feedRepo.open();
-	    itemRepo.open();
-        songRepo.open();
+        openDB();
 
         //finish activity if feed doesn't have unread items and active only unread feeds
         if (feedRepo.getFeedUnreadCount(feedId) < 1 && preferences.getBoolean("pref_feeds_only_unread", true)) {
@@ -132,12 +134,11 @@ public class ItemsActivity extends Activity {
         songRepo.close();
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.item_list, menu);
 
-        if (songRepo.checkListHasGrabbedSongs(feedId, SongConstants.GRABBER_TYPE_TITLE)) {
+        if (songRepo.isOpen() && songRepo.checkListHasGrabbedSongs(feedId, SongConstants.GRABBER_TYPE_TITLE)) {
             MenuItem dictateItem = menu.findItem(R.id.buttonDictate);
             dictateItem.setVisible(true);
         }
