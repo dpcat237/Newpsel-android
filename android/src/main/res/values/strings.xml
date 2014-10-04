@@ -12,11 +12,14 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     
-    <!-- Add feed -->
+    <!-- Feed -->
     <string name="label_add_feed">Add feed</string>
     <string name="label_labels_list">Labels</string>
     <string name="label_labels_create">Create Label</string>
-    
+
+    <!-- Label -->
+    <string name="label_dialog_title">Save to later</string>
+
     <!-- Action -->
     <string name="action_about">About</string>
     <string name="action_create_feed">Create Feed</string>

@@ -37,7 +37,7 @@ public class LabelsDialog extends DialogFragment{
 		adapter = new ArrayAdapter<Label>(mContext, R.layout.fragment_simple_row, values);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("Labels");
+		builder.setTitle(mContext.getString(R.string.label_dialog_title));
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int position) {
 		    	Label label = adapter.getItem(position);
