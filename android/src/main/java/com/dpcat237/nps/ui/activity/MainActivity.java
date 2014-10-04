@@ -27,8 +27,9 @@ import android.widget.ListView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
-import com.dpcat237.nps.behavior.service.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.behavior.task.SyncLauncherTask;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
@@ -161,6 +162,7 @@ public class MainActivity extends Activity {
 
 	private void showDrawer () {
         Integer mainList = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM);
+        lastPosition = mainList;
 		if (ON_CREATE) {
 			setContentView(R.layout.activity_main);
 
@@ -322,6 +324,7 @@ public class MainActivity extends Activity {
     }
 
     private void selectDrawerItem(int position) {
+        Boolean changed = (lastPosition != position);
         lastPosition = position;
         updateFragment();
         drawerUpdateMenuItems();
@@ -333,8 +336,11 @@ public class MainActivity extends Activity {
             PreferencesHelper.setIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM, position);
             reloadList();
         }
-        lastPosition = position;
 
+        if (changed) {
+            SyncLauncherTask requireSync = new SyncLauncherTask(mContext, lastPosition);
+            requireSync.execute();
+        }
     }
 
     private void drawerUpdateMenuItems() {
