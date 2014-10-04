@@ -212,12 +212,10 @@ public class ItemsActivity extends Activity {
 		        	}
 		        	return true;
 		        case 4:
-		        	starItem(item.getId(), line);
-		        	item.setIsStared(true);
+		        	changeStarStatus(item, true);
 		        	return true;
 		        case 5:
-		        	unstarItem(item.getId(), line);
-		        	item.setIsStared(false);
+                    changeStarStatus(item, false);
 		        	return true;
 		        case 6:
 		        	shareItem(item.getLink());
@@ -271,19 +269,12 @@ public class ItemsActivity extends Activity {
 		line.setBackgroundColor(Color.parseColor(ITEM_COLOR_UNREAD));
 	}
 
-	public void starItem(Integer itemId, View line) {
-		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
-		stared.setBackgroundResource(R.drawable.is_stared);
-		StarItemTask task = new StarItemTask(mContext, itemId, true);
-		task.execute();
-	}
-
-	public void unstarItem(Integer itemId, View line) {
-		ImageView stared = (ImageView) line.findViewById(R.id.itemStared);
-		stared.setBackgroundResource(R.drawable.isnt_stared);
-		StarItemTask task = new StarItemTask(mContext, itemId, false);
-		task.execute();
-	}
+    private void changeStarStatus(Item item, Boolean starStatus) {
+        item.setIsStared(starStatus);
+        StarItemTask task = new StarItemTask(mContext, item.getId(), starStatus);
+        task.execute();
+        mAdapter.notifyDataSetChanged();
+    }
 
 	public void shareItem(String link) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
