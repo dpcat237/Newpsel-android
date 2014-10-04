@@ -131,8 +131,8 @@
     <string name="cm_mark_read">Mark as read</string>
     <string name="cm_mark_unread">Mark as unread</string>
     <string name="cm_mark_previous">Mark previous as read</string>
-    <string name="cm_add_star">Add star</string>
-    <string name="cm_remove_star">Remove star</string>
+    <string name="cm_add_star">Favorite</string>
+    <string name="cm_remove_star">Remove favorite</string>
     <string name="cm_share">Share</string>
     
     <!-- Labels -->

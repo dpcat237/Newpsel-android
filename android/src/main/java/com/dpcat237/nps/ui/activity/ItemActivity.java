@@ -19,6 +19,7 @@ import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.manager.ItemTtsManager;
+import com.dpcat237.nps.behavior.task.StarItemTask;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
@@ -41,6 +42,8 @@ public class ItemActivity extends Activity {
     private MenuItem dictateButton;
     private MenuItem readButton;
     private MenuItem unreadButton;
+    private MenuItem favoriteButton;
+    private MenuItem notFavoriteButton;
     private MenuItem stopButton;
     private SharedPreferences pref;
     private ItemRepository itemRepo;
@@ -151,7 +154,14 @@ public class ItemActivity extends Activity {
         dictateButton = menu.findItem(R.id.buttonDictate);
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
+        favoriteButton = menu.findItem(R.id.buttonFavorite);
+        notFavoriteButton = menu.findItem(R.id.buttonNotFavorite);
         stopButton = menu.findItem(R.id.buttonStop);
+
+        if (item.isStared()) {
+            notFavoriteButton.setVisible(false);
+            favoriteButton.setVisible(true);
+        }
 
         //prepare share button
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -200,6 +210,12 @@ public class ItemActivity extends Activity {
             case R.id.buttonUnread:
                 markRead();
                 return true;
+            case R.id.buttonFavorite:
+                markNotFavorite();
+                return true;
+            case R.id.buttonNotFavorite:
+                markFavorite();
+                return true;
             case R.id.buttonShare:
                 setShareIntent(createShareIntent());
                 return true;
@@ -225,6 +241,22 @@ public class ItemActivity extends Activity {
         unreadButton.setVisible(true);
         itemRepo.readItem(item.getApiId(), true);
         songRepo.markAsPlayed(item.getApiId(), SongConstants.GRABBER_TYPE_TITLE, false);
+    }
+
+    private void markFavorite() {
+        item.setIsStared(true);
+        notFavoriteButton.setVisible(false);
+        favoriteButton.setVisible(true);
+        StarItemTask task = new StarItemTask(mContext, item.getId(), true);
+        task.execute();
+    }
+
+    private void markNotFavorite() {
+        item.setIsStared(false);
+        favoriteButton.setVisible(false);
+        notFavoriteButton.setVisible(true);
+        StarItemTask task = new StarItemTask(mContext, item.getId(), false);
+        task.execute();
     }
 
     @Override
