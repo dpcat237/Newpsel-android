@@ -82,9 +82,9 @@ public class PlayerService extends PlayerServiceCommands {
 
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 Log.d(TAG, "tut: onAudioFocusChange b");
-                PlayerService.stop(PlayerService.this);
+                PlayerService.pause(PlayerService.this);
+                changeNotificationPlayButton();
             }
-
             if (playerStatus.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 Log.d(TAG, "tut: onAudioFocusChange c");
                 PlayerService.play(PlayerService.this);
@@ -102,6 +102,7 @@ public class PlayerService extends PlayerServiceCommands {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "tut: BroadcastReceiver onReceive");
             if (player.isPlaying()) {
+                Log.d(TAG, "tut: BroadcastReceiver stop");
                 PlayerService.stop(context);
             }
         }
