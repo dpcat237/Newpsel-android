@@ -2,6 +2,8 @@ package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -80,7 +82,7 @@ public class MainFragmentLabelsManager extends MainFragmentManager {
     }
 
     protected void getItems() {
-        labels = labelRepo.getForListUnread();
+        labels = labelRepo.getForListUnread(preferences.getBoolean("pref_later_items_only_unread", true));
     }
 
     protected void showNextPage(Label label) {

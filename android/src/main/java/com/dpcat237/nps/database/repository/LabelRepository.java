@@ -202,6 +202,8 @@ public class LabelRepository extends BaseRepository {
         ArrayList<Label> labels = new ArrayList<Label>();
         String sql = "SELECT tb1."+LaterItemTable.COLUMN_LATER_ID+", " +
                 "(SELECT COUNT(tb2."+LaterItemTable.COLUMN_ID+") AS total FROM "+LaterItemTable.TABLE_NAME+" AS tb2 " +
+                "WHERE tb2."+LaterItemTable.COLUMN_LATER_ID+"=tb1."+LaterItemTable.COLUMN_LATER_ID+") AS count, " +
+                "(SELECT COUNT(tb2."+LaterItemTable.COLUMN_ID+") AS total FROM "+LaterItemTable.TABLE_NAME+" AS tb2 " +
                 "WHERE tb2."+LaterItemTable.COLUMN_LATER_ID+"=tb1."+LaterItemTable.COLUMN_LATER_ID+" AND tb2."+LaterItemTable.COLUMN_IS_UNREAD+"=1) AS countUnread " +
                 " FROM "+LaterItemTable.TABLE_NAME+" AS tb1 GROUP BY tb1."+LaterItemTable.COLUMN_LATER_ID;
         Cursor cursor = database.rawQuery(sql, null);
@@ -210,7 +212,8 @@ public class LabelRepository extends BaseRepository {
         while (!cursor.isAfterLast()) {
             Label label = new Label();
             label.setApiId(cursor.getInt(0));
-            label.setUnreadCount(cursor.getInt(1));
+            label.setItemsCount(cursor.getInt(1));
+            label.setUnreadCount(cursor.getInt(2));
             labels.add(label);
             cursor.moveToNext();
         }
@@ -219,11 +222,12 @@ public class LabelRepository extends BaseRepository {
         return labels;
     }
 
-    private void updateLabelCounts(Integer feedApiId, Integer countUnreadItems) {
+    private void updateLabelCounts(Integer labelApiId, Integer countItems, Integer countUnreadItems) {
         ContentValues values = new ContentValues();
+        values.put(LabelTable.COLUMN_ITEMS_COUNT, countItems);
         values.put(LabelTable.COLUMN_UNREAD_COUNT, countUnreadItems);
         String where = LabelTable.COLUMN_API_ID+"=?";
-        String[] args = new String[] {""+feedApiId+""};
+        String[] args = new String[] {""+labelApiId+""};
         database.update(LabelTable.TABLE_NAME, values, where, args);
     }
 
@@ -234,13 +238,18 @@ public class LabelRepository extends BaseRepository {
         }
 
         for (Label label : labels) {
-            updateLabelCounts(label.getApiId(), label.getUnreadCount());
+            updateLabelCounts(label.getApiId(), label.getItemsCount(), label.getUnreadCount());
         }
     }
 
-    public ArrayList<Label> getForListUnread() {
+    public ArrayList<Label> getForListUnread(Boolean onlyUnread) {
         ArrayList<Label> labels = new ArrayList<Label>();
-        String where = LabelTable.COLUMN_UNREAD_COUNT+">?";
+        String where;
+        if (onlyUnread) {
+            where = LabelTable.COLUMN_UNREAD_COUNT+">?";
+        } else {
+            where = LabelTable.COLUMN_ITEMS_COUNT+">?";
+        }
         String[] args = new String[] {""+0+""};
         String orderBy = LabelTable.COLUMN_NAME+" ASC";
         Cursor cursor = database.query(LabelTable.TABLE_NAME, unreadListColumns, where, args, null, null, orderBy);

@@ -7,6 +7,7 @@ public class Label {
     private Integer id;
     private Integer api_id;
     private String name;
+    private Integer itemsCount = 0;
     private Integer unreadCount = 0;
     private Integer status = EntityConstants.STATUS_NORMAL;
     private Integer date_up;
@@ -33,6 +34,14 @@ public class Label {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getItemsCount() {
+        return itemsCount;
+    }
+
+    public void setItemsCount(Integer itemsCount) {
+        this.itemsCount = itemsCount;
     }
 
     public Integer getUnreadCount() {

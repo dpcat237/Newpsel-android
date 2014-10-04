@@ -9,6 +9,7 @@ public class LabelTable {
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_API_ID = "api_id";
 	public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_ITEMS_COUNT = "items_count";
 	public static final String COLUMN_UNREAD_COUNT = "unread_count";
 	public static final String COLUMN_DATE_UP = "date_up";
 
@@ -18,6 +19,7 @@ public class LabelTable {
 			+ "(" + COLUMN_ID + " integer primary key autoincrement, " 
 			+ COLUMN_API_ID + " integer,"
 			+ COLUMN_NAME + " text not null,"
+            + COLUMN_ITEMS_COUNT + " integer,"
 			+ COLUMN_UNREAD_COUNT + " integer, "
 			+ COLUMN_DATE_UP + " integer not null"
 			+ ");";
