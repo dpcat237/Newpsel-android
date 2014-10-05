@@ -18,7 +18,9 @@ import com.dpcat237.nps.database.table.LaterItemTable;
 import com.dpcat237.nps.database.table.SharedTable;
 import com.dpcat237.nps.database.table.SongTable;
 import com.dpcat237.nps.helper.FileHelper;
+import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.helper.ReceiverHelper;
 
 public class NPSDatabase extends SQLiteOpenHelper {
     private static final String TAG = "NPS:NPSDatabase";
@@ -69,7 +71,9 @@ public class NPSDatabase extends SQLiteOpenHelper {
         FileHelper.deleteFolders(FileHelper.getVoicesFolder(mContext));
 
         //launch sync services after upgrade
-        launchServices();
+        if (LoginHelper.checkLogged(mContext)) {
+            launchServices();
+        }
 	}
 
     private void launchServices() {
@@ -85,5 +89,7 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
         Intent syncLater = new Intent(mContext, SyncLaterService.class);
         mContext.startService(syncLater);
+
+        ReceiverHelper.enableBootReceiver(mContext);
     }
 }
