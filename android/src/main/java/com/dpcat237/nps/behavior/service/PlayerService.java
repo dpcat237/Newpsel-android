@@ -1,5 +1,6 @@
 package com.dpcat237.nps.behavior.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -41,6 +42,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 public class PlayerService extends PlayerServiceCommands {
     private static final String TAG = "NPS:PlayerService";
     protected MediaPlayer player;
@@ -50,7 +52,6 @@ public class PlayerService extends PlayerServiceCommands {
     private Context mContext;
     private RemoteViews notificationView = null;
     private NotificationCompat.Builder bld = null;
-    private NotificationManager notificationManager = null;
     private boolean isPlayerPrepared;
     protected boolean onPhone;
     protected Timer updateTimer;
@@ -59,6 +60,7 @@ public class PlayerService extends PlayerServiceCommands {
     private SongsManager songGrabManager;
     private String playType;
     private Song currentSong;
+    private Boolean notificationCreated = false;
 
     private class UpdatePositionTimerTask extends TimerTask {
         protected int lastPosition = 0;
@@ -71,7 +73,6 @@ public class PlayerService extends PlayerServiceCommands {
                     updateActiveSongPosition(lastPosition);
             }
     };
-
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
@@ -107,6 +108,7 @@ public class PlayerService extends PlayerServiceCommands {
             }
         }
     };
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -673,18 +675,23 @@ public class PlayerService extends PlayerServiceCommands {
                     .setOngoing(true);
         }
         bld.setContent(notificationView);
+        Notification notification = bld.build();
+        notification.flags = Notification.FLAG_FOREGROUND_SERVICE |
+                Notification.FLAG_NO_CLEAR |
+                Notification.FLAG_ONGOING_EVENT;
 
-        if (notificationManager == null) {
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (!notificationCreated) {
+            startForeground(NotificationConstants.ID_PLAYER_MANAGER, notification);
+            notificationCreated = true;
+        } else {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(NotificationConstants.ID_PLAYER_MANAGER, notification);
         }
-        notificationManager.notify(NotificationConstants.ID_PLAYER_MANAGER, bld.build());
     }
 
     private void removeNotification() {
-        if (notificationManager == null) {
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        }
-        notificationManager.cancelAll();
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(NotificationConstants.ID_PLAYER_MANAGER);
     }
 
     private void updateActiveSongPosition(int position) {
