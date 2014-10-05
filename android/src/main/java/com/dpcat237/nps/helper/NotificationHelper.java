@@ -1,5 +1,6 @@
 package com.dpcat237.nps.helper;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -38,7 +39,9 @@ public class NotificationHelper {
                         .setContentText(message);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(notificationId, mBuilder.build());
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        mNotificationManager.notify(notificationId, notification);
     }
 
     public static void showSimpleToast(Context context, String message) {
