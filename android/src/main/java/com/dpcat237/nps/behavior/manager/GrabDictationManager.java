@@ -11,8 +11,10 @@ import android.util.Log;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.SongsFactory;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.FileHelper;
 import com.dpcat237.nps.helper.LanguageHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
@@ -182,6 +184,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     private void grabNextSong(Boolean error) {
+        notifyView();
         currentSong = songGrabManager.getNextSong(error);
         if (!songGrabManager.areError()) {
             setDictationLanguage();
@@ -189,6 +192,12 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
             grabSong();
         } else {
             endListProcess();
+        }
+    }
+
+    private void notifyView() {
+        if (songsType.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+            BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_DICTATIONS);
         }
     }
 

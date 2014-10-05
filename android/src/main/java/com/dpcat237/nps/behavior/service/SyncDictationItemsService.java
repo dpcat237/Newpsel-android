@@ -70,7 +70,6 @@ public class SyncDictationItemsService extends IntentService {
             songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_DICTATE_ITEM, mContext);
             PreferencesHelper.setNewDictationItems(mContext, false);
             Log.d(TAG, "tut: createSongs done");
-            BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_DICTATIONS);
         }
 
         running = false;
