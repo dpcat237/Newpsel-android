@@ -127,7 +127,7 @@ public abstract class SongsManager {
 
     public Song getNextSong(Boolean previousError) {
         Song song;
-        if (songsCursor.isLast()) {
+        if (songsCursor.isLast() && partsCount >= parts.size()) {
             error = true;
 
             return null;
