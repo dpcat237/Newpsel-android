@@ -127,20 +127,34 @@ public abstract class SongsManager {
 
     public Song getNextSong(Boolean previousError) {
         Song song;
+        //Log.d(TAG, "tut:  getNextSong a1 ");
         if (songsCursor.isLast() && partsCount >= parts.size()) {
+            /*if (parts == null) {
+                Log.d(TAG, "tut:  getNextSong a2 "+partsCount+" - null");
+            } else {
+                Log.d(TAG, "tut:  getNextSong a2 "+partsCount+" - "+parts.size());
+            }*/
+
             error = true;
 
             return null;
         }
 
         try {
+            //Log.d(TAG, "tut:  getNextSong b1");
             if (previousError || partsCount >= parts.size()) {
+                /*if (parts == null) {
+                    Log.d(TAG, "tut:  getNextSong b2 "+partsCount+" - null");
+                } else {
+                    Log.d(TAG, "tut:  getNextSong b2 "+partsCount+" - "+parts.size());
+                }*/
                 songsCursor.moveToNext();
                 parts = null;
             }
             song = songRepo.cursorToSong(songsCursor);
             song = setSongExtraData(song);
         } catch (Exception e) {
+            //Log.d(TAG, "tut:  getNextSong c");
             error = true;
 
             return null;
