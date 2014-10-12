@@ -3,20 +3,14 @@ package com.dpcat237.nps.behavior.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.dpcat237.nps.R;
-import com.dpcat237.nps.behavior.manager.SyncNewsManager;
 import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
+import com.dpcat237.nps.behavior.manager.SyncNewsManager;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.LoginHelper;
-import com.dpcat237.nps.ui.activity.MainActivity;
 
 public class SyncNewsService extends IntentService {
     private static final String TAG = "NPS:SyncNewsService";
@@ -54,9 +48,7 @@ public class SyncNewsService extends IntentService {
     }
 
     private Boolean checkCanRun() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-        return (LoginHelper.checkLogged(mContext) && pref.getBoolean("pref_items_download_enable", true) && ConnectionHelper.hasConnection(mContext));
+        return (LoginHelper.checkLogged(mContext) && ConnectionHelper.hasConnection(mContext));
     }
 
     private void startProcess() {
