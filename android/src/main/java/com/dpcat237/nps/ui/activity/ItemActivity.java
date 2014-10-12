@@ -24,6 +24,7 @@ import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
@@ -321,6 +322,7 @@ public class ItemActivity extends Activity {
 
     private void launchItemsActivity() {
         PreferencesHelper.setMainListId(mContext, item.getFeedId());
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM, MainActivityConstants.DRAWER_MAIN_ITEMS);
         Intent intent = new Intent(this, ItemsActivity.class);
         startActivity(intent);
     }

@@ -18,6 +18,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
@@ -251,6 +252,7 @@ public class DictateItemActivity extends Activity {
     }
 
     private void launchMainActivity() {
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM, MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
