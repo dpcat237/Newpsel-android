@@ -3,8 +3,8 @@ package com.dpcat237.nps.helper;
 import android.content.Context;
 import android.util.Log;
 
-import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.common.model.Song;
+import com.dpcat237.nps.database.repository.LabelRepository;
 
 import org.json.JSONArray;
 import org.json.JSONException;

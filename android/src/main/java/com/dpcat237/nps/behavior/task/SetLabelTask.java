@@ -2,13 +2,12 @@ package com.dpcat237.nps.behavior.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.common.model.Label;
+import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.model.LabelItem;
-import com.dpcat237.nps.database.repository.LabelRepository;
 
 public class SetLabelTask extends AsyncTask<Void, Integer, Void> {
 	private Context mContext;

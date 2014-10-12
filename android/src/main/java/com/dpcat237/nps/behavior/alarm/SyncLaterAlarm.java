@@ -11,7 +11,6 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.dpcat237.nps.behavior.receiver.BootReceiver;
 import com.dpcat237.nps.behavior.service.SyncLaterService;
-import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.helper.LoginHelper;
 
 /**

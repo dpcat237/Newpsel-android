@@ -14,11 +14,9 @@ import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
 import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Item;
 
 import org.json.JSONException;
 import org.json.JSONObject;

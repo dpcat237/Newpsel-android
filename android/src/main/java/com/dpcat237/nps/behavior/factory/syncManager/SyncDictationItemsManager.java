@@ -4,13 +4,13 @@ package com.dpcat237.nps.behavior.factory.syncManager;
 import android.util.Log;
 
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
+import com.dpcat237.nps.common.model.DictateItem;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.DictateItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;

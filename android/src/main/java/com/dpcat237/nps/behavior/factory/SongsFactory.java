@@ -3,10 +3,10 @@ package com.dpcat237.nps.behavior.factory;
 import android.content.Context;
 import android.content.Intent;
 
-import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.behavior.factory.songManager.SongsDictateItemManager;
 import com.dpcat237.nps.behavior.factory.songManager.SongsManager;
 import com.dpcat237.nps.behavior.factory.songManager.SongsTitleManager;
+import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 import com.dpcat237.nps.ui.activity.ItemActivity;
 

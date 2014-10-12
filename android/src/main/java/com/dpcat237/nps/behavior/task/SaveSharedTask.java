@@ -3,8 +3,8 @@ package com.dpcat237.nps.behavior.task;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.dpcat237.nps.model.Shared;
 import com.dpcat237.nps.database.repository.SharedRepository;
+import com.dpcat237.nps.model.Shared;
 
 public class SaveSharedTask extends AsyncTask<Void, Integer, Void>{
 	private Context mContext;

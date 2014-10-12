@@ -3,8 +3,8 @@ package com.dpcat237.nps.behavior.manager;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.common.model.Song;
+import com.dpcat237.nps.database.repository.SongRepository;
 
 public class PlayerQueueManager {
     private static final String TAG = "NPS:PlayerQueueManager";

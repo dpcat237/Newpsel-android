@@ -3,8 +3,8 @@ package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.common.model.ListItem;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.ui.adapter.SavedItemsAdapter;
 
 import java.util.ArrayList;

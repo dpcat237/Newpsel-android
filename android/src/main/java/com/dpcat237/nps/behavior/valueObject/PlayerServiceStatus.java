@@ -6,10 +6,10 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.manager.WearConnectionManager;
 import com.dpcat237.nps.common.constant.MessageConstants;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Song;
 
 import java.io.UnsupportedEncodingException;
 

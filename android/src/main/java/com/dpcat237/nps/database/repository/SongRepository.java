@@ -5,9 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.SongTable;
-import com.dpcat237.nps.common.model.Song;
 
 import java.util.ArrayList;
 

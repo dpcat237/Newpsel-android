@@ -6,7 +6,6 @@ import android.text.Html;
 import android.util.Log;
 
 import java.security.SecureRandom;
-import java.util.Date;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;

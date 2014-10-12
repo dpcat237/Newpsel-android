@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.dpcat237.nps.common.model.DictateItem;
+import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.database.NPSDatabase;
 import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.SongTable;
-import com.dpcat237.nps.common.model.DictateItem;
-import com.dpcat237.nps.common.model.ListItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

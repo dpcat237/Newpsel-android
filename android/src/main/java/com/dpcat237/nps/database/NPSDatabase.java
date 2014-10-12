@@ -9,7 +9,6 @@ import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.behavior.service.SyncLaterService;
 import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.FeedTable;
 import com.dpcat237.nps.database.table.ItemTable;

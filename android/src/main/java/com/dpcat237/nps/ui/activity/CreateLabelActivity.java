@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.DisplayHelper;

@@ -2,18 +2,18 @@ package com.dpcat237.nps.behavior.factory;
 
 import com.dpcat237.nps.behavior.factory.apiManager.ApiAddFeedManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiAddGcmIdManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiDictateItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiGetFeedsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiItemsManager;
-import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelItemsManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiLabelsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiLaterItemsManager;
+import com.dpcat237.nps.behavior.factory.apiManager.ApiManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiRecoveryPasswordManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSharedItemsManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignInManager;
 import com.dpcat237.nps.behavior.factory.apiManager.ApiSignUpManager;
 import com.dpcat237.nps.constant.ApiConstants;
-import com.dpcat237.nps.behavior.factory.apiManager.ApiDictateItemsManager;
-import com.dpcat237.nps.behavior.factory.apiManager.ApiManager;
 
 public class ApiFactory {
     public static ApiManager createManager(String type) {

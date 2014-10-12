@@ -4,7 +4,6 @@ import com.dpcat237.nps.common.constant.EntityConstants;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 

@@ -24,6 +24,7 @@ import com.dpcat237.nps.behavior.manager.PlayerQueueManager;
 import com.dpcat237.nps.behavior.receiver.LockscreenReceiver;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.constant.MessageConstants;
+import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.constant.NotificationConstants;
 import com.dpcat237.nps.constant.PlayerConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
@@ -33,7 +34,6 @@ import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.helper.WearHelper;
 import com.dpcat237.nps.helper.WidgetHelper;
-import com.dpcat237.nps.common.model.Song;
 import com.dpcat237.nps.ui.dialog.PlayerLabelsDialog;
 
 import java.io.File;

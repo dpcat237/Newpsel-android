@@ -2,7 +2,6 @@ package com.dpcat237.nps.behavior.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
 import com.dpcat237.nps.constant.ApiConstants;

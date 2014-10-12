@@ -1,9 +1,9 @@
 package com.dpcat237.nps.behavior.factory.apiManager;
 
 
-import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.DictateItem;
+import com.dpcat237.nps.constant.ApiConstants;
 
 import org.apache.http.client.methods.HttpPost;
 

@@ -7,13 +7,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
 import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.manager.SyncDictationItemsManager;
-import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
-import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
 

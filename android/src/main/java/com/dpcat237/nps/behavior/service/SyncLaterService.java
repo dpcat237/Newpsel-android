@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.manager.SyncLaterManager;
 import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
+import com.dpcat237.nps.behavior.manager.SyncLaterManager;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;

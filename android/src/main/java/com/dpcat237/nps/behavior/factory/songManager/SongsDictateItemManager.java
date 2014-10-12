@@ -1,13 +1,11 @@
 package com.dpcat237.nps.behavior.factory.songManager;
 
 
-import android.util.Log;
-
-import com.dpcat237.nps.constant.SongConstants;
-import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.common.model.Song;
+import com.dpcat237.nps.constant.SongConstants;
+import com.dpcat237.nps.database.repository.DictateItemRepository;
 
 public class SongsDictateItemManager extends SongsManager {
     protected DictateItemRepository itemRepo;

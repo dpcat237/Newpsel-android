@@ -13,13 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.common.model.Label;
+import com.dpcat237.nps.common.model.LaterItem;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
-import com.dpcat237.nps.common.model.Label;
-import com.dpcat237.nps.common.model.LaterItem;
 import com.dpcat237.nps.ui.adapter.LaterItemsAdapter;
 
 public class LaterItemsActivity extends Activity {
