@@ -169,10 +169,8 @@ public class SyncNewsTask extends AsyncTask<Void, Integer, Void> {
         progressBar.setVisibility(View.GONE);
         publishProgress(0);
 
-        if (((MainActivity) mContext).isInFront) {
-            BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS);
-            Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
-        }
+        BroadcastHelper.launchBroadcast(mContext, BroadcastConstants.MAIN_ACTIVITY, BroadcastConstants.MAIN_ACTIVITY_MESSAGE, BroadcastConstants.COMMAND_A_MAIN_RELOAD_ITEMS);
+        Toast.makeText(mContext, R.string.sync_finished, Toast.LENGTH_SHORT).show();
 
         Intent mServiceIntent = new Intent((mContext), DownloadSongsService.class);
         (mContext).startService(mServiceIntent);
