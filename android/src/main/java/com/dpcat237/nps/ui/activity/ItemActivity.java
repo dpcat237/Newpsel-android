@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -25,6 +24,7 @@ import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -113,6 +113,7 @@ public class ItemActivity extends Activity {
         if (ttsManager != null) {
             ttsManager.stop();
         }
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.ITEM_NOW_OPENED, 0);
         super.onDestroy();
     }
 
@@ -167,6 +168,7 @@ public class ItemActivity extends Activity {
     private void getNecessaryData() {
         openDB();
         Integer itemApiId = getItemApiId();
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.ITEM_NOW_OPENED, itemApiId);
         item = itemRepo.getItem(itemApiId);
         Integer feedId = PreferencesHelper.getMainListId(mContext);
         feed = feedRepo.getFeed(feedId);

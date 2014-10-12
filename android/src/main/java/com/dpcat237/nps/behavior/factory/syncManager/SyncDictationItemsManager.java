@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
@@ -125,6 +126,10 @@ public class SyncDictationItemsManager extends SyncManager {
         }
 
         DictateItem item = dictationRepo.getItemByApiId(apiId);
+        if (item.getItemApiId().equals(PreferencesHelper.getIntPreference(mContext, PreferenceConstants.DICTATION_NOW_OPENED))) {
+            return;
+        }
+
         dictationRepo.deleteItem(item.getItemApiId());
         songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_DICTATE_ITEM, true);
     }

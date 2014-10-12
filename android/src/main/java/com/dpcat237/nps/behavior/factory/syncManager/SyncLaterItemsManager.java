@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ApiConstants;
 import com.dpcat237.nps.constant.NotificationConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
@@ -139,7 +140,7 @@ public class SyncLaterItemsManager extends SyncManager {
         for (LaterItem item : items) {
             if (item.isUnread()) {
                 laterItemRepo.addItem(item);
-            } else {
+            } else if (!item.getApiId().equals(PreferencesHelper.getIntPreference(mContext, PreferenceConstants.SAVED_ITEM_NOW_OPENED))) {
                 laterItemRepo.deleteItem(item.getApiId());
             }
         }

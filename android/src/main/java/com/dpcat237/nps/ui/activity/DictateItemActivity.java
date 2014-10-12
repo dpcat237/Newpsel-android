@@ -18,6 +18,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
@@ -86,6 +87,7 @@ public class DictateItemActivity extends Activity {
         openDB();
         //Get passed item Id and them his and feed data
         Integer itemApiId = getItemApiId();
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.DICTATION_NOW_OPENED, itemApiId);
         item = itemRepo.getItem(itemApiId);
         if (item == null) {
             return;
@@ -208,6 +210,12 @@ public class DictateItemActivity extends Activity {
             finish();
         }
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.DICTATION_NOW_OPENED, 0);
+        super.onDestroy();
     }
 
     @Override

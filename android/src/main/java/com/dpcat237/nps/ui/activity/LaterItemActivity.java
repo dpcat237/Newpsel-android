@@ -15,6 +15,7 @@ import android.widget.ShareActionProvider;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -68,8 +69,9 @@ public class LaterItemActivity extends Activity {
      */
     private void getNecessaryData() {
         openDB();
-
-        item = itemRepo.getItem(getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0));
+        Integer itemApiId = getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.SAVED_ITEM_NOW_OPENED, itemApiId);
+        item = itemRepo.getItem(itemApiId);
         label = labelRepo.getLabel(PreferencesHelper.getMainListId(mContext));
     }
 
@@ -150,6 +152,7 @@ public class LaterItemActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.SAVED_ITEM_NOW_OPENED, 0);
         closeDB();
         super.onDestroy();
     }

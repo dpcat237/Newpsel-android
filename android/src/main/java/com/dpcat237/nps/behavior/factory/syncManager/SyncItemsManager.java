@@ -91,12 +91,20 @@ public class SyncItemsManager extends SyncManager {
                 //Log.d(TAG, "tut: addItem "+item.getApiId()+" - "+item.getTitle());
                 itemRepo.addItem(item);
             } else {
-                //Log.d(TAG, "tut: deleteItem "+item.getApiId()+" - "+item.getTitle());
-                itemRepo.deleteItem(item.getApiId());
-                songRepo.markAsPlayed(item.getItemApiId(), SongConstants.GRABBER_TYPE_TITLE, true);
+                deleteItem(songRepo, item.getApiId(), item.getItemApiId());
             }
         }
         songRepo.close();
+    }
+
+    private void deleteItem(SongRepository songRepo, Integer apiId, Integer itemApiId) {
+        if (itemApiId.equals(PreferencesHelper.getIntPreference(mContext, PreferenceConstants.ITEM_NOW_OPENED))) {
+            return;
+        }
+
+        //Log.d(TAG, "tut: deleteItem "+item.getApiId()+" - "+item.getTitle());
+        itemRepo.deleteItem(apiId);
+        songRepo.markAsPlayed(itemApiId, SongConstants.GRABBER_TYPE_TITLE, true);
     }
 
     protected void beforeFinish() {
