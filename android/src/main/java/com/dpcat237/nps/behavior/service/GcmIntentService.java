@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.dpcat237.nps.behavior.receiver.GcmBroadcastReceiver;
 import com.dpcat237.nps.constant.GcmConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -49,10 +50,10 @@ public class GcmIntentService extends IntentService {
 
     private void syncCommand(String type) {
         if (type.equals(SyncConstants.SYNC_FEEDS)) {
-            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, true);
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.FEEDS_SYNC_REQUIRED, true);
         }
         if (type.equals(SyncConstants.SYNC_LABELS)) {
-            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, true);
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.LABELS_SYNC_REQUIRED, true);
         }
     }
 

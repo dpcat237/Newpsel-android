@@ -72,7 +72,7 @@ public class LaterItemActivity extends Activity {
         Integer itemApiId = getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
         PreferencesHelper.setIntPreference(mContext, PreferenceConstants.SAVED_ITEM_NOW_OPENED, itemApiId);
         item = itemRepo.getItem(itemApiId);
-        label = labelRepo.getLabel(PreferencesHelper.getMainListId(mContext));
+        label = labelRepo.getLabel(PreferencesHelper.getIntPreference(mContext, PreferenceConstants.LABEL_ID_ITEMS_LIST));
     }
 
     @Override

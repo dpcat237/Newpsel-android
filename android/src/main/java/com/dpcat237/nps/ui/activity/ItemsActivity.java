@@ -28,6 +28,7 @@ import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.common.model.Item;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -74,7 +75,7 @@ public class ItemsActivity extends Activity {
         preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         openDB();
 
-	    feedId = PreferencesHelper.getMainListId(mContext);
+	    feedId = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.FEED_ID_ITEMS_LIST);
 	    Feed feed = feedRepo.getFeed(feedId);
 
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
@@ -312,7 +313,6 @@ public class ItemsActivity extends Activity {
 	public void showItem(Integer itemApiId) {
 		Intent intent = new Intent(this, ItemActivity.class);
 		intent.putExtra(ItemConstants.ITEM_API_ID, itemApiId);
-        PreferencesHelper.setCurrentItemApiId(mContext, 0);
 		startActivity(intent);
 	}
 

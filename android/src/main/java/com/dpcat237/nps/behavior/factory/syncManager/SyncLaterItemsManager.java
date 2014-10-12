@@ -49,7 +49,7 @@ public class SyncLaterItemsManager extends SyncManager {
         - are more than 0 unread items and sync in hold status
          */
         if (!preferences.getBoolean("pref_later_items_enable", false) ||
-                (unreadCount > 0 && !PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_LATER_ITEMS))) {
+                (unreadCount > 0 && !PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.SAVED_ITEMS_SYNC_REQUIRED))) {
             error = true;
 
             return;
@@ -162,6 +162,6 @@ public class SyncLaterItemsManager extends SyncManager {
         labelRepo.unreadCountUpdate();
         labelRepo.close();
 
-        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LATER_ITEMS, false);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.SAVED_ITEMS_SYNC_REQUIRED, false);
     }
 }

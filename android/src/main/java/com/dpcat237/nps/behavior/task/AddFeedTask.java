@@ -13,6 +13,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
 import com.dpcat237.nps.behavior.service.SyncNewsService;
 import com.dpcat237.nps.constant.ApiConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
@@ -75,7 +76,7 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
 
         Boolean error = (Boolean) result.get("error");
         if (!error) {
-            PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, true);
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.FEEDS_SYNC_REQUIRED, true);
             Intent syncNews = new Intent(mContext, SyncNewsService.class);
             mContext.startService(syncNews);
             checkApi = true;

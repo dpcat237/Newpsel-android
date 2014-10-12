@@ -23,6 +23,7 @@ public class PlayerServiceStatus {
     private Integer trySend;
     private String sendPath;
     private String sendMessage;
+    private Integer itemApiId = 0;
 
 
     private PlayerServiceStatus() {
@@ -47,6 +48,14 @@ public class PlayerServiceStatus {
 
     public Song getCurrentSong() {
         return currentSong;
+    }
+
+    public Integer getItemApiId() {
+        return itemApiId;
+    }
+
+    public void setItemApiId(Integer itemApiId) {
+        this.itemApiId = itemApiId;
     }
 
     public void updateStatus(int status) {

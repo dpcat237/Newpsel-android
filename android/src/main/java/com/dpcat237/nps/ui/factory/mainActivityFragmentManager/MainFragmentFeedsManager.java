@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.common.model.Feed;
@@ -58,7 +59,7 @@ public abstract class MainFragmentFeedsManager extends MainFragmentManager {
     }
 
     public void showItems(Integer feedId) {
-        PreferencesHelper.setMainListId(mActivity, feedId);
+        PreferencesHelper.setIntPreference(mActivity, PreferenceConstants.FEED_ID_ITEMS_LIST, feedId);
         Intent intent = new Intent(mActivity, ItemsActivity.class);
         mActivity.startActivity(intent);
     }

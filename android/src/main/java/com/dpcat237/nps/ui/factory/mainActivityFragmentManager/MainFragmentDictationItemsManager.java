@@ -7,6 +7,7 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.common.model.ListItem;
 import com.dpcat237.nps.constant.ItemConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
@@ -43,7 +44,6 @@ public class MainFragmentDictationItemsManager extends MainFragmentItemsManager 
 
         Intent intent = new Intent(mActivity, DictateItemActivity.class);
         intent.putExtra(ItemConstants.ITEM_API_ID, item.getItemApiId());
-        PreferencesHelper.setCurrentItemApiId(mActivity, 0);
         mActivity.startActivity(intent);
     }
 }

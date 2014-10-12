@@ -489,7 +489,7 @@ public class PlayerService extends PlayerServiceCommands {
             //player.seekTo(song.getLastPosition());
             playerStatus.setCurrentSong(song);
             isPlayerPrepared = true;
-            PreferencesHelper.setCurrentItemApiId(mContext, song.getItemApiId());
+            playerStatus.setItemApiId(song.getItemApiId());
 
             return true;
         } catch (IllegalStateException e) {

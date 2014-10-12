@@ -31,7 +31,7 @@ public class SyncLabelsManager extends SyncManager {
     }
 
     protected void checkNecessarySync() {
-        if (!PreferencesHelper.getSyncRequired(mContext, SyncConstants.SYNC_LABELS)) {
+        if (!PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.LABELS_SYNC_REQUIRED)) {
             error = true;
         }
     }
@@ -86,6 +86,6 @@ public class SyncLabelsManager extends SyncManager {
         if (error) {
             return;
         }
-        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, false);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.LABELS_SYNC_REQUIRED, false);
     }
 }

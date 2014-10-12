@@ -46,7 +46,7 @@ public class CreateLabelActivity extends Activity {
 		labelRepo.createLabel(name);
 
         //notify to sync labels to server
-        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, true);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.LABELS_SYNC_REQUIRED, true);
         PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.WEAR_LABELS_SENT, false);
 
 		finish();

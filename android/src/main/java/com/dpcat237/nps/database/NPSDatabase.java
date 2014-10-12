@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.dpcat237.nps.behavior.service.SyncDictationItemsService;
 import com.dpcat237.nps.behavior.service.SyncLaterService;
 import com.dpcat237.nps.behavior.service.SyncNewsService;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.table.DictateItemTable;
 import com.dpcat237.nps.database.table.FeedTable;
@@ -78,8 +79,8 @@ public class NPSDatabase extends SQLiteOpenHelper {
 
     private void launchServices() {
         //activate sync of feeds and labels
-        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_FEEDS, true);
-        PreferencesHelper.setSyncRequired(mContext, SyncConstants.SYNC_LABELS, true);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.FEEDS_SYNC_REQUIRED, true);
+        PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.LABELS_SYNC_REQUIRED, true);
 
         Intent syncNews = new Intent(mContext, SyncNewsService.class);
         mContext.startService(syncNews);

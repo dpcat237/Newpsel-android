@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.constant.MainActivityConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SyncConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -39,7 +40,7 @@ public class MainFragmentLabelsManager extends MainFragmentManager {
         mAdapter = new LabelsAdapter(mActivity);
 
         //activate sync of later items
-        PreferencesHelper.setSyncRequired(mActivity, SyncConstants.SYNC_LATER_ITEMS, true);
+        PreferencesHelper.setBooleanPreference(mActivity, PreferenceConstants.SAVED_ITEMS_SYNC_REQUIRED, true);
     }
 
     protected void setItems() {
@@ -86,7 +87,7 @@ public class MainFragmentLabelsManager extends MainFragmentManager {
     }
 
     protected void showNextPage(Label label) {
-        PreferencesHelper.setMainListId(mActivity, label.getApiId());
+        PreferencesHelper.setIntPreference(mActivity, PreferenceConstants.LABEL_ID_ITEMS_LIST, label.getApiId());
         Intent intent = new Intent(mActivity, LaterItemsActivity.class);
         mActivity.startActivity(intent);
     }

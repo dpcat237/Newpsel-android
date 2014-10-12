@@ -45,7 +45,7 @@ public class SyncDictationItemsManager extends SyncManager {
         downloadQuantity = Integer.parseInt(preferences.getString("pref_dictation_quantity", "25"));
         Boolean sync = false;
         Integer unreadCount = dictationRepo.countUnreadItems();
-        Integer lastSyncCount = PreferencesHelper.getLastSyncCount(mContext);
+        Integer lastSyncCount = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.DICTATIONS_LAST_SYNC_COUNT);
 
         if (unreadCount < downloadQuantity) {
             sync = true;
@@ -136,7 +136,8 @@ public class SyncDictationItemsManager extends SyncManager {
 
     protected void beforeFinish() {
         if (newCount > 0) {
-            PreferencesHelper.setLastSyncCount(mContext, newCount);
+            PreferencesHelper.setIntPreference(mContext, PreferenceConstants.DICTATIONS_LAST_SYNC_COUNT, newCount);
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.DICTATIONS_ARE_NEW, true);
         }
 
         if (!error && !playerStatus.hasActiveSong()) {

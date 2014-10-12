@@ -11,6 +11,7 @@ import com.dpcat237.nps.behavior.factory.SongsFactoryManager;
 import com.dpcat237.nps.behavior.manager.SyncDictationItemsManager;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.helper.BroadcastHelper;
 import com.dpcat237.nps.helper.ConnectionHelper;
@@ -66,9 +67,9 @@ public class SyncDictationItemsService extends IntentService {
     private void startProcess() {
         Log.d(TAG, "tut: startProcess");
         syncManager.syncDictations();
-        if (PreferencesHelper.areNewDictationItems(mContext)) {
+        if (PreferencesHelper.getBooleanPreference(mContext, PreferenceConstants.DICTATIONS_ARE_NEW)) {
             songsFactoryManager.createSongs(SongConstants.GRABBER_TYPE_DICTATE_ITEM, mContext);
-            PreferencesHelper.setNewDictationItems(mContext, false);
+            PreferencesHelper.setBooleanPreference(mContext, PreferenceConstants.DICTATIONS_ARE_NEW, false);
             Log.d(TAG, "tut: createSongs done");
         }
 

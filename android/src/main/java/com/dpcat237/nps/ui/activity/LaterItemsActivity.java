@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.ItemConstants;
+import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
@@ -41,7 +42,7 @@ public class LaterItemsActivity extends Activity {
         openDB();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         unreadItems = preferences.getBoolean("pref_later_items_only_unread", true);
-        labelId = PreferencesHelper.getMainListId(mContext);
+        labelId = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.LABEL_ID_ITEMS_LIST);
 	    Label label = labelRepo.getLabel(labelId);
 
 	    TextView txtFeedTitle= (TextView) this.findViewById(R.id.feedTitle);
@@ -112,7 +113,6 @@ public class LaterItemsActivity extends Activity {
 	public void showItem(Integer apiId) {
 		Intent intent = new Intent(this, LaterItemActivity.class);
 		intent.putExtra(ItemConstants.ITEM_API_ID, apiId);
-        PreferencesHelper.setCurrentItemApiId(mContext, 0);
 		startActivity(intent);
 	}
 }

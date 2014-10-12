@@ -44,116 +44,8 @@ public class PreferencesHelper {
 		return result;
 	}
 
-	public static Integer getMainListId(Context context) {
-		 @SuppressWarnings("static-access")
-		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		 Integer feedId = userPref.getInt("main_selected_list_id", 0);
-		 
-		 return feedId;
-	}
-	
-	public static void setMainListId(Context context, Integer feedId) {
-		@SuppressWarnings("static-access")
-		SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = userPref.edit();
-	    editor.putInt("main_selected_list_id", feedId);
-		editor.commit();
-	}
-
-	public static Boolean checkLastClearCache(Context context) {
-		 Boolean check = false;
-		 @SuppressWarnings("static-access")
-		 SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-		 Long lastClearDate = userPref.getLong("last_clear_cache", 0);
-		 Date current = new Date();
-
-		 if (lastClearDate != 0) {
-			 Long week = (long) (7 * 24 * 60 * 60 * 1000);
-
-			 if (current.getTime() > (lastClearDate + week)) {
-				 check = true;
-			 }
-		 } else {
-			 SharedPreferences.Editor editor = userPref.edit();
-			 editor.putLong("last_clear_cache", current.getTime());
-			 editor.commit();
-		 }
-
-		 return check;
-	}
-
     public static String stripHtml(String html) {
         return Html.fromHtml(html).toString();
-    }
-
-    public static void setNewDictationItems(Context context, Boolean areNew) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putBoolean("sync_are_new_dictate_items", areNew);
-        editor.commit();
-    }
-
-    public static Boolean areNewDictationItems(Context context) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        Boolean areNew = userPref.getBoolean("sync_are_new_dictate_items", false);
-
-        return areNew;
-    }
-
-    public static void setCurrentItemApiId(Context context, Integer itemApiId) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putInt("current_item_api_id", itemApiId);
-        editor.commit();
-    }
-
-    public static Integer getCurrentItemApiId(Context context) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-
-        return userPref.getInt("current_item_api_id", 0);
-    }
-
-    public static void setLastSyncCount(Context context, Integer count) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putInt("sync_dictate_items_last_count", count);
-        editor.apply();
-
-        PreferencesHelper.setNewDictationItems(context, true);
-    }
-
-    public static Integer getLastSyncCount(Context context) {
-        Integer result = 0;
-
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        Integer labelsUpdate = userPref.getInt("sync_dictate_items_last_count", 0);
-
-        if (labelsUpdate != 0) {
-            result = labelsUpdate;
-        }
-
-        return result;
-    }
-
-    public static void setSyncRequired(Context context, String type, Boolean necessary) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putBoolean("sync_"+type+"_required", necessary);
-        editor.apply();
-    }
-
-    public static Boolean getSyncRequired(Context context, String type) {
-        @SuppressWarnings("static-access")
-        SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
-
-        return userPref.getBoolean("sync_"+type+"_required", true);
     }
 
     public static void setBooleanPreference(Context context, String key, Boolean value) {
@@ -168,7 +60,7 @@ public class PreferencesHelper {
         @SuppressWarnings("static-access")
         SharedPreferences userPref = context.getSharedPreferences("UserPreference", context.MODE_PRIVATE);
 
-        return userPref.getBoolean(key, false);
+        return userPref.getBoolean(key, true);
     }
 
     public static void setIntPreference(Context context, String key, Integer value) {

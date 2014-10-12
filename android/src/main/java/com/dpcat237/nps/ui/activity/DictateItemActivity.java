@@ -55,6 +55,7 @@ public class DictateItemActivity extends Activity {
         setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
+        playerStatus = PlayerServiceStatus.getInstance();
         getNecessaryData();
 
         if (item == null) {
@@ -63,7 +64,6 @@ public class DictateItemActivity extends Activity {
         }
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
         ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
-        playerStatus = PlayerServiceStatus.getInstance();
 	}
 
     private void openDB() {
@@ -103,11 +103,10 @@ public class DictateItemActivity extends Activity {
     }
 
     private Integer getItemApiId() {
-        Integer itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
-        if (itemApiId > 1) {
-            itemRepo.readItem(itemApiId, false);
+        if (playerStatus.isPlaying() && playerStatus.getItemApiId() > 0) {
+            itemRepo.readItem(playerStatus.getItemApiId(), false);
 
-            return itemApiId;
+            return playerStatus.getItemApiId();
         }
 
         return getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);

@@ -66,6 +66,7 @@ public class ItemActivity extends Activity {
         setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
+        playerStatus = PlayerServiceStatus.getInstance();
         getNecessaryData();
 
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
@@ -78,7 +79,6 @@ public class ItemActivity extends Activity {
             }
         };
 
-        playerStatus = PlayerServiceStatus.getInstance();
         launchTts();
 	}
 
@@ -171,16 +171,15 @@ public class ItemActivity extends Activity {
         Integer itemApiId = getItemApiId();
         PreferencesHelper.setIntPreference(mContext, PreferenceConstants.ITEM_NOW_OPENED, itemApiId);
         item = itemRepo.getItem(itemApiId);
-        Integer feedId = PreferencesHelper.getMainListId(mContext);
+        Integer feedId = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.FEED_ID_ITEMS_LIST);
         feed = feedRepo.getFeed(feedId);
     }
 
     private Integer getItemApiId() {
-        Integer itemApiId = PreferencesHelper.getCurrentItemApiId(mContext);
-        if (itemApiId > 1) {
-            itemRepo.readItem(itemApiId, false);
+        if (playerStatus.isPlaying() && playerStatus.getItemApiId() > 0) {
+            itemRepo.readItem(playerStatus.getItemApiId(), false);
 
-            return itemApiId;
+            return playerStatus.getItemApiId();
         }
 
         return getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
@@ -321,7 +320,7 @@ public class ItemActivity extends Activity {
     }
 
     private void launchItemsActivity() {
-        PreferencesHelper.setMainListId(mContext, item.getFeedId());
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.FEED_ID_ITEMS_LIST, item.getFeedId());
         PreferencesHelper.setIntPreference(mContext, PreferenceConstants.MAIN_DRAWER_ITEM, MainActivityConstants.DRAWER_MAIN_ITEMS);
         Intent intent = new Intent(this, ItemsActivity.class);
         startActivity(intent);
