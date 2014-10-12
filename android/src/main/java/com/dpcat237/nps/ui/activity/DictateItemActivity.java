@@ -108,7 +108,13 @@ public class DictateItemActivity extends Activity {
             return playerStatus.getItemApiId();
         }
 
-        return getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
+        //because some times getIntExtra has old data
+        Integer itemApiId = getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
+        if (itemApiId.equals(0) && playerStatus.isPaused()) {
+            itemApiId = playerStatus.getItemApiId();
+        }
+
+        return itemApiId;
     }
 
     @Override
