@@ -48,7 +48,7 @@ public class ItemActivity extends Activity {
     private MenuItem favoriteButton;
     private MenuItem notFavoriteButton;
     private MenuItem stopButton;
-    private SharedPreferences pref;
+    private SharedPreferences preferences;
     private ItemRepository itemRepo;
     private FeedRepository feedRepo;
     private SongRepository songRepo;
@@ -62,7 +62,7 @@ public class ItemActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-        pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
@@ -70,7 +70,7 @@ public class ItemActivity extends Activity {
         getNecessaryData();
 
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
-        ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
+        ItemBlock.prepareWebView(mWebView, preferences.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
 
         receiver = new BroadcastReceiver() {
             @Override
@@ -120,7 +120,7 @@ public class ItemActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (playerStatus.hasActiveSong()) {
+        if (playerStatus.hasActiveSong() && !preferences.getBoolean("pref_dictations_only_article", false)) {
             launchItemsActivity();
         }
         super.onBackPressed();
@@ -263,7 +263,7 @@ public class ItemActivity extends Activity {
                 stopDictate();
                 return true;
             case android.R.id.home:
-                if (playerStatus.hasActiveSong()) {
+                if (playerStatus.hasActiveSong() && !preferences.getBoolean("pref_dictations_only_article", false)) {
                     launchItemsActivity();
                 }
 
@@ -307,7 +307,7 @@ public class ItemActivity extends Activity {
 
     /** Dictate methods **/
     private void dictate() {
-        ttsManager.dictate(item.getContent(), Float.parseFloat(pref.getString("pref_dictation_speed", "1.5f")));
+        ttsManager.dictate(item.getContent(), Float.parseFloat(preferences.getString("pref_dictation_speed", "1.5f")));
         dictateButton.setVisible(false);
         stopButton.setVisible(true);
     }

@@ -127,6 +127,11 @@
                     android:key="pref_dictations_only_unread"
                     android:summary="@string/st_only_unread_dictations_check"
                     android:defaultValue="true" />
+                <SwitchPreference
+                    android:key="pref_dictations_only_article"
+                    android:title="@string/st_dictation_only_article"
+                    android:summary="@string/st_dictation_only_article_summary"
+                    android:defaultValue="false" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>

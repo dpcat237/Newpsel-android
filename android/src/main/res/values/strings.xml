@@ -263,6 +263,8 @@
     <string name="st_only_unread_feeds_check">Activate to show only feeds with unread articles</string>
     <string name="st_only_unread_dictations_check">Activate to show only unread dictations</string>
     <string name="st_only_unread_later_items_check">Activate to show only unread saved to later articles</string>
+    <string name="st_dictation_only_article">Only article</string>
+    <string name="st_dictation_only_article_summary">Activate to when player is active close app when close article</string>
 
     <string name="hello_world">Now Playing:</string>
     <string name="inital_Time">0 min, 0 sec</string>

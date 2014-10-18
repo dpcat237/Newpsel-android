@@ -43,6 +43,7 @@ public class DictateItemActivity extends Activity {
     private FeedRepository feedRepo;
     private SongRepository songRepo;
     private PlayerServiceStatus playerStatus;
+    private SharedPreferences preferences;
 
 
 	@SuppressLint("NewApi")
@@ -50,7 +51,7 @@ public class DictateItemActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         setTitle("");
 
 	    setContentView(R.layout.activity_item_view);
@@ -62,7 +63,7 @@ public class DictateItemActivity extends Activity {
             return;
         }
         WebView mWebView = (WebView) findViewById(R.id.itemContent);
-        ItemBlock.prepareWebView(mWebView, pref.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
+        ItemBlock.prepareWebView(mWebView, preferences.getString("pref_text_size", "100"), item.getLink(), item.getTitle(), feed.getTitle(), item.getContent(), item.getDateAdd());
 	}
 
     private void openDB() {
@@ -187,7 +188,7 @@ public class DictateItemActivity extends Activity {
                 PlayerService.playPauseSong(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, item.getItemApiId());
                 return true;
             case android.R.id.home:
-                if (playerStatus.hasActiveSong()) {
+                if (playerStatus.hasActiveSong() && !preferences.getBoolean("pref_dictations_only_article", false)) {
                     launchMainActivity();
                 }
 
@@ -220,7 +221,7 @@ public class DictateItemActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (playerStatus.hasActiveSong()) {
+        if (playerStatus.hasActiveSong() && !preferences.getBoolean("pref_dictations_only_article", false)) {
             launchMainActivity();
         }
         super.onBackPressed();
