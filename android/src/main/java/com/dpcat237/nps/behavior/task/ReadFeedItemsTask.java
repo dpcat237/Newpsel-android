@@ -2,8 +2,10 @@ package com.dpcat237.nps.behavior.task;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
@@ -14,8 +16,10 @@ public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{
 	private Integer feedId;
     private ItemRepository itemRepo;
     private SongRepository songRepo;
+    private PlayerServiceStatus playerStatus;
 
-	public ReadFeedItemsTask(Context context, Class<MainActivity> mainActivity, Integer feedInternId) {
+
+	public ReadFeedItemsTask(Context context, Integer feedInternId) {
         mContext = context;
         feedId = feedInternId;
         itemRepo = new ItemRepository(mContext);
@@ -23,7 +27,13 @@ public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{
         songRepo = new SongRepository(mContext);
         songRepo.open();
     }
-    
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        playerStatus = PlayerServiceStatus.getInstance();
+    }
+
 	@Override
 	protected Void doInBackground(Void... params) {
 		itemRepo.readFeedItems(feedId);
@@ -37,6 +47,10 @@ public class ReadFeedItemsTask extends AsyncTask<Void, Integer, Void>{
         itemRepo.close();
         songRepo.close();
 
-		((Activity) mContext).finish();
+        if (playerStatus.hasActiveSong()) {
+            Intent intent = new Intent(mContext, MainActivity.class);
+            mContext.startActivity(intent);
+        }
+        ((Activity) mContext).finish();
 	}
 }

@@ -326,7 +326,7 @@ public class ItemsActivity extends Activity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ReadFeedItemsTask task = new ReadFeedItemsTask(mContext, MainActivity.class, feedId);
+                            ReadFeedItemsTask task = new ReadFeedItemsTask(mContext, feedId);
                             task.execute();
                         }
 
@@ -337,7 +337,7 @@ public class ItemsActivity extends Activity {
             return;
         }
 
-		ReadFeedItemsTask task = new ReadFeedItemsTask(this, MainActivity.class, feedId);
+		ReadFeedItemsTask task = new ReadFeedItemsTask(this, feedId);
 		task.execute();
 	}
 
