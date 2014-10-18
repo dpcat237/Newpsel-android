@@ -9,7 +9,7 @@ as music player. More info in [web](https://www.newpsel.com/).
 Related repositories
 -------------
 
-* [Android web](https://github.com/dpcat237/Newpsel-web)
+* [Website](https://github.com/dpcat237/Newpsel-web)
 * [Chrome extension](https://github.com/dpcat237/Newpsel-chrome-extension)
 * [Chrome app](https://github.com/dpcat237/Newpsel-chrome-app)
 
