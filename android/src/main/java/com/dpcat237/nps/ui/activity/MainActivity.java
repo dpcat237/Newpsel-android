@@ -114,6 +114,14 @@ public class MainActivity extends Activity {
                 && lastPosition == MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS) {
             Log.d(TAG, "tut: broadcastUpdate b 3");
             reloadList();
+
+            DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
+            dictateRepo.open();
+            Integer unreadCount = dictateRepo.countUnreadGrabberItems();
+            if (unreadCount > 0) {
+                buttonDictate.setVisible(true);
+            }
+            dictateRepo.close();
         }
     }
 
