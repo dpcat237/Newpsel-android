@@ -176,19 +176,12 @@ public class ItemActivity extends Activity {
     }
 
     private Integer getItemApiId() {
-        if (playerStatus.isPlaying() && playerStatus.getItemApiId() > 0) {
-            itemRepo.readItem(playerStatus.getItemApiId(), false);
-
-            return playerStatus.getItemApiId();
-        }
-
-        //because some times getIntExtra has old data
         Integer itemApiId = getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
-        if (itemApiId.equals(0) && playerStatus.isPaused()) {
-            itemApiId = playerStatus.getItemApiId();
+        if (!itemApiId.equals(0)) {
+            return itemApiId;
         }
 
-        return itemApiId;
+        return playerStatus.getItemApiId();
     }
 
     @Override
