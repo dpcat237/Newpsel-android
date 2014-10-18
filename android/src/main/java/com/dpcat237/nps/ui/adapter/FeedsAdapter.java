@@ -77,14 +77,14 @@ public class FeedsAdapter extends BaseAdapter {
         }
 
         //set data
-        Feed feed =getItem(position);
+        Feed feed = getItem(position);
 
         holder.title.setText(feed.getTitle());
         Integer unread = feed.getUnreadCount();
         if (unread > 0) {
             holder.count.setText(unread.toString());
         } else {
-            holder.count.setVisibility(View.GONE);
+            holder.count.setText("");
         }
 
         setDimensions(holder.image, holder.title, holder.count);
