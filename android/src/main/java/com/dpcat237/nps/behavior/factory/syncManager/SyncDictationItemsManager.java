@@ -121,9 +121,11 @@ public class SyncDictationItemsManager extends SyncManager {
     }
 
     private void removeItem(Integer apiId) {
+        //Log.d(TAG, "tut: removeItem: a");
         if (playerStatus.hasActiveSong()) {
             return;
         }
+        //Log.d(TAG, "tut: removeItem: b");
 
         DictateItem item = dictationRepo.getItemByApiId(apiId);
         if (item.getItemApiId().equals(PreferencesHelper.getIntPreference(mContext, PreferenceConstants.DICTATION_NOW_OPENED))) {
