@@ -130,6 +130,7 @@
             android:name=".behavior.receiver.LockscreenReceiver"
             android:exported="false" >
         </receiver>
+        <receiver android:name=".behavior.alarm.AlarmsControlAlarm" />
         <receiver android:name=".behavior.alarm.RemoveOldAlarm" />
         <receiver android:name=".behavior.alarm.SyncDictationsAlarm" />
         <receiver android:name=".behavior.alarm.SyncLaterAlarm" />

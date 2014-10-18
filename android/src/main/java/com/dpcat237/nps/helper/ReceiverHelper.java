@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
 import com.dpcat237.nps.behavior.alarm.RemoveOldAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncLaterAlarm;
@@ -26,7 +27,8 @@ public class ReceiverHelper {
         enableAlarms(context);
     }
 
-    private static void enableAlarms(Context context) {
+    public static void enableAlarms(Context context) {
+        Log.d(TAG, "tut: enableAlarms");
         SyncNewsAlarm syncNewsAlarm = new SyncNewsAlarm();
         syncNewsAlarm.setAlarm(context);
 
@@ -63,5 +65,8 @@ public class ReceiverHelper {
 
         RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
         removeOldAlarm.cancelAlarm(context);
+
+        AlarmsControlAlarm alarmsControlAlarm = new AlarmsControlAlarm();
+        alarmsControlAlarm.cancelAlarm(context);
     }
 }

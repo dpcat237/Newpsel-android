@@ -4,11 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.dpcat237.nps.behavior.alarm.RemoveOldAlarm;
-import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
-import com.dpcat237.nps.behavior.alarm.SyncLaterAlarm;
-import com.dpcat237.nps.behavior.alarm.SyncNewsAlarm;
 import com.dpcat237.nps.helper.LoginHelper;
+import com.dpcat237.nps.helper.ReceiverHelper;
 
 /**
  * This BroadcastReceiver automatically (re)starts the alarm when the device is
@@ -18,11 +15,6 @@ import com.dpcat237.nps.helper.LoginHelper;
  * device will not trigger this receiver.
  */
 public class BootReceiver extends BroadcastReceiver {
-    private SyncNewsAlarm syncNewsAlarm = new SyncNewsAlarm();
-    private SyncDictationsAlarm syncDictationsAlarm = new SyncDictationsAlarm();
-    private SyncLaterAlarm syncLaterAlarm = new SyncLaterAlarm();
-    private RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
-
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
@@ -30,10 +22,7 @@ public class BootReceiver extends BroadcastReceiver {
                 return;
             }
 
-            syncNewsAlarm.setAlarm(context);
-            syncDictationsAlarm.setAlarm(context);
-            syncLaterAlarm.setAlarm(context);
-            removeOldAlarm.setAlarm(context);
+            ReceiverHelper.enableAlarms(context);
         }
     }
 }

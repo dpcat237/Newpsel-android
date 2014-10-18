@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dpcat237.nps.R;
+import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
 import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.SyncLauncherTask;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
@@ -94,6 +95,9 @@ public class MainActivity extends Activity {
             }
         };
         playerStatus = PlayerServiceStatus.getInstance();
+
+        AlarmsControlAlarm alarmsControlAlarm = new AlarmsControlAlarm();
+        alarmsControlAlarm.setAlarm(mContext);
 	}
 
     public void broadcastUpdate(String command) {
