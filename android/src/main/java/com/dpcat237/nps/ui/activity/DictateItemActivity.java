@@ -124,9 +124,11 @@ public class DictateItemActivity extends Activity {
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
         MenuItem buttonShare = menu.findItem(R.id.buttonShare);
+        MenuItem buttonDictateDisabled = menu.findItem(R.id.buttonDictateDisabled);
 
         prepareDictateButton();
         prepareShareButton(buttonShare);
+        buttonDictateDisabled.setVisible(false);
 
         //when come from player
         markRead();
