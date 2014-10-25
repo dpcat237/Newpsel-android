@@ -83,6 +83,8 @@ public class LaterItemActivity extends Activity {
         MenuItem shareItem = menu.findItem(R.id.buttonShare);
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
+        MenuItem buttonDictateDisabled = menu.findItem(R.id.buttonDictateDisabled);
+        buttonDictateDisabled.setVisible(false);
 
         //prepare share button
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
