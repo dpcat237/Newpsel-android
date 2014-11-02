@@ -26,6 +26,7 @@ public class PlayerLabelsDialog extends Activity {
 	private Context mContext;
     private Integer itemApiId;
     private ArrayAdapter<Label> mAdapter;
+    private Boolean paused;
 
 
 	/** Called when the activity is first created. */
@@ -33,12 +34,16 @@ public class PlayerLabelsDialog extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
+        paused = false;
         PlayerServiceStatus playerStatus = PlayerServiceStatus.getInstance();
         if (!playerStatus.hasActiveSong()) {
             finish();
         }
 
-        PlayerService.playpause(mContext);
+        if (!playerStatus.isPaused()) {
+            PlayerService.playpause(mContext);
+            paused = true;
+        }
         if (DisplayHelper.isTablet(mContext)) {
             setContentView(R.layout.dialog_shared_labels_tablet);
         } else {
@@ -76,7 +81,9 @@ public class PlayerLabelsDialog extends Activity {
 
     @Override
     protected void onStop() {
-        PlayerService.playpause(mContext);
+        if (paused) {
+            PlayerService.playpause(mContext);
+        }
         super.onStop();
     }
 }
