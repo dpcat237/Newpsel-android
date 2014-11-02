@@ -297,6 +297,8 @@
     <string name="about_version">Current version: </string>
     <string name="about_web">Web:</string>
     <string name="app_web_url">www.newpsel.com</string>
+    <string name="about_github">Github:</string>
+    <string name="about_github_url">github.com/dpcat237/Newpsel-android</string>
     <string name="about_privacy_policy">Privacy policy:</string>
     <string name="about_privacy_policy_url">www.newpsel.com/privacypolicy</string>
     <string name="about_author">Author:</string>
