@@ -61,6 +61,7 @@ public class PlayerService extends PlayerServiceCommands {
     private String playType;
     private Song currentSong;
     private Boolean notificationCreated = false;
+    private Boolean isPausedFocusLost = false;
 
     private class UpdatePositionTimerTask extends TimerTask {
         protected int lastPosition = 0;
@@ -76,7 +77,6 @@ public class PlayerService extends PlayerServiceCommands {
 
     private final AudioManager.OnAudioFocusChangeListener _afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            Log.d(TAG, "tut: onAudioFocusChange ");
             if (focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK) {
                 Log.d(TAG, "tut: got a transient audio focus gain event somehow");
             }
@@ -85,6 +85,7 @@ public class PlayerService extends PlayerServiceCommands {
                 Log.d(TAG, "tut: onAudioFocusChange b");
                 PlayerService.pause(PlayerService.this);
                 changeNotificationPlayButton();
+                isPausedFocusLost = playerStatus.isPaused();
             }
             if (playerStatus.isPaused() && focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 Log.d(TAG, "tut: onAudioFocusChange c");
@@ -290,6 +291,9 @@ public class PlayerService extends PlayerServiceCommands {
                 }
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY:
+                if (isPausedFocusLost) {
+                    return;
+                }
                 grabAudioFocusAndResume();
                 changeNotificationPlayButtonPause();
                 break;
@@ -436,6 +440,7 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
 
+        isPausedFocusLost = false;
         if (playerStatus.isPaused() && isPlayerPrepared) {
             player.start();
             updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
