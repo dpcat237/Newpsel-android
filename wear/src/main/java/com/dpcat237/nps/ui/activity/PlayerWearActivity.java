@@ -60,9 +60,14 @@ public class PlayerWearActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateCurrentSong();
+    }
+
+    @Override
     protected void onStop() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-        stateManager.stop();
         super.onStop();
     }
 
@@ -73,7 +78,7 @@ public class PlayerWearActivity extends Activity {
     }
 
     private void updateCurrentSong() {
-        Log.d(TAG, "tut: updateCurrentSong "+stateManager.hasData().toString());
+        Log.d(TAG, "tut: updateCurrentSong "+stateManager.hasData().toString()+" - "+stateManager.isPlaying().toString());
         if (stateManager.hasData()) {
             listTitleTxt.setText(stateManager.getCurrentSong().getListTitle());
             titleTxt.setText(stateManager.getCurrentSong().getTitle());

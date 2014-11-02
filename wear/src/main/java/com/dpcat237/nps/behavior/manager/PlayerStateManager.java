@@ -1,5 +1,8 @@
 package com.dpcat237.nps.behavior.manager;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationManagerCompat;
@@ -8,11 +11,11 @@ import android.util.Log;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.PhoneConnection;
+import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.common.constant.MessageConstants;
 import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.common.model.Song;
-import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.helper.NotificationWearHelper;
 import com.dpcat237.nps.ui.activity.PlayerWearActivity;
 
@@ -34,6 +37,8 @@ public class PlayerStateManager {
     private ArrayList<Label> labels;
     private LocalBroadcastManager broadcaster;
     private PhoneConnection phoneConnection;
+    public static final int ID_PLAYER_MANAGER = 0;
+
 
     private PlayerStateManager() {
         broadcaster = LocalBroadcastManager.getInstance(mContext);
@@ -68,7 +73,9 @@ public class PlayerStateManager {
     }
 
     public void destroy() {
+        sendStop();
         started = false;
+        stop();
     }
 
     public void sendResult(String message) {
@@ -83,22 +90,22 @@ public class PlayerStateManager {
         try {
             currentSong = JsonHelper.getSong(json.getString("song"));
             setLabels(json.getString("labels"));
+            hasData = true;
         } catch (JSONException e) {
-            Log.e(TAG, "tut:  playSong Error "+e.getMessage());
-
             return;
         }
+        buildWearableOnlyNotification();
 
         Log.d(TAG, "tut: playSong started "+started.toString());
         if (started) {
+            isPlaying = true;
             sendResult(BroadcastConstants.COMMAND_W_UPDATE_STATE);
         } else {
             Intent startIntent = new Intent(mContext, PlayerWearActivity.class);
             startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(startIntent);
+            isPlaying = true;
         }
-        isPlaying = true;
-        hasData = true;
     }
 
     private void setLabels(String labelsData) {
@@ -134,6 +141,9 @@ public class PlayerStateManager {
 
     public void onStop() {
         sendResult(BroadcastConstants.COMMAND_W_STOP);
+        hideNotification();
+        hasData = false;
+        isPlaying = false;
     }
 
     public void sendPause() {
@@ -142,6 +152,13 @@ public class PlayerStateManager {
         }
         phoneConnection.sendMessage(new PhoneConnection.Message(MessageConstants.PLAYER_PAUSED, null));
         isPlaying = false;
+    }
+
+    public void sendStop() {
+        if (!started) {
+            return;
+        }
+        phoneConnection.sendMessage(new PhoneConnection.Message(MessageConstants.PLAYER_STOP, null));
     }
 
     public void sendPlay() {
@@ -203,11 +220,27 @@ public class PlayerStateManager {
 
     private Label getLabel(Integer labelApiId) {
         for(Label label : labels) {
-            if (labelApiId == label.getApiId()) {
+            if (labelApiId.equals(label.getApiId())) {
                 return label;
             }
         }
 
         return null;
+    }
+
+    private void buildWearableOnlyNotification() {
+        PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext, PlayerWearActivity.class), 0);
+        Notification.Builder builder = new Notification.Builder(mContext)
+                .setContentTitle(currentSong.getListTitle())
+                .setContentText(currentSong.getTitle())
+                .setContentIntent(contentIntent)
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setPriority(Notification.PRIORITY_MAX);
+        ((NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE)).notify(ID_PLAYER_MANAGER, builder.build());
+    }
+
+    private void hideNotification() {
+        NotificationManagerCompat.from(mContext).cancelAll();
     }
 }

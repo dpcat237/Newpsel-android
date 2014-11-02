@@ -42,6 +42,8 @@ public class MessageListenerService extends WearableListenerService {
             } else {
                 PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, 0);
             }
+        } else if (msgEvent.getPath().equals(MessageConstants.PLAYER_STOP)) {
+            PlayerService.stop(mContext);
         } else if (msgEvent.getPath().equals(MessageConstants.PLAYER_BACKWARD)) {
             PlayerService.skipBack(mContext);
         } else if (msgEvent.getPath().equals(MessageConstants.PLAYER_FORWARD)) {

@@ -262,7 +262,6 @@ public class PlayerService extends PlayerServiceCommands {
                 if (!playerStatus.hasActiveSong()) {
                     break;
                 }
-
                 playNextSong();
                 changeNotificationPlayButtonPause();
                 break;
@@ -672,6 +671,7 @@ public class PlayerService extends PlayerServiceCommands {
         if (bld == null) {
             bld = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_launcher)
+                    .setLocalOnly(true)
                     .setOngoing(true);
         }
         bld.setContent(notificationView);

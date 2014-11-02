@@ -15,7 +15,7 @@ import com.google.android.gms.wearable.Wearable;
  * Class that represents our connection to the phone.
  */
 public class PhoneConnection {
-    private static final String TAG = "PhoneConnection";
+    private static final String TAG = "NPSW:PhoneConnection";
     private GoogleApiClient googleApiClient;
     private boolean isConnected;
     private String phoneNode;
