@@ -130,6 +130,9 @@ public class ItemsActivity extends Activity {
 
         //finish activity if feed doesn't have unread items and active only unread feeds
         if (feedRepo.getFeedUnreadCount(feedId) < 1 && preferences.getBoolean("pref_feeds_only_unread", true)) {
+            if (playerStatus.hasActiveSong()) {
+                launchMainActivity();
+            }
             finish();
         }
 
