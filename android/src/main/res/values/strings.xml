@@ -34,7 +34,7 @@
     <string name="activity_articles">New articles</string>
 
     <!-- Toast -->
-    <string name="ts_successfully_saved">Page successfully saved to </string>
+    <string name="ts_successfully_saved">Successfully saved to </string>
     
     <!-- Error -->
     <string name="error_password_wrong">Wrong password</string>
