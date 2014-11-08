@@ -7,8 +7,8 @@ android {
         applicationId 'com.dpcat237.nps'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 104018
-        versionName '1.4.18'
+        versionCode 104019
+        versionName '1.4.19'
     }
     signingConfigs {
         debug {
