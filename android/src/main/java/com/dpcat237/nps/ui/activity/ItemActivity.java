@@ -75,7 +75,9 @@ public class ItemActivity extends Activity {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                broadcastUpdate(intent.getStringExtra(BroadcastConstants.ITEM_ACTIVITY_MESSAGE));
+                if (intent.getStringExtra(BroadcastConstants.ITEM_ACTIVITY_MESSAGE) != null) {
+                    broadcastUpdate(intent.getStringExtra(BroadcastConstants.ITEM_ACTIVITY_MESSAGE));
+                }
             }
         };
 
