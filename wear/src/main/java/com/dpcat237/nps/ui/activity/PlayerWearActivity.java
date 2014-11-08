@@ -82,7 +82,7 @@ public class PlayerWearActivity extends Activity {
         if (stateManager.hasData()) {
             listTitleTxt.setText(stateManager.getCurrentSong().getListTitle());
             titleTxt.setText(stateManager.getCurrentSong().getTitle());
-            playPauseBtn.setImageResource(R.drawable.activity_button_pause);
+            updatePlayPauseButton();
         } else {
             listTitleTxt.setText(mContext.getString(R.string.player_activity_empty_list_title));
             titleTxt.setText("");
@@ -123,6 +123,14 @@ public class PlayerWearActivity extends Activity {
             updateCurrentSong();
             stateManager.stop();
             finish();
+        }
+    }
+
+    private void updatePlayPauseButton() {
+        if (stateManager.isPlaying()) {
+            playPauseBtn.setImageResource(R.drawable.activity_button_pause);
+        } else {
+            playPauseBtn.setImageResource(R.drawable.activity_button_play);
         }
     }
 }
