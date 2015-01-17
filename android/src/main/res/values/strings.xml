@@ -244,8 +244,8 @@
         <item>50.0f</item>
         <item>60.0f</item>
     </string-array>
-    <string name="st_later_items_preferences">Saved to later preferences</string>
-    <string name="st_later_items_titles">Saved to later articles</string>
+    <string name="st_later_items_preferences">Saved articles preferences</string>
+    <string name="st_later_items_titles">Saved articles</string>
     <string name="st_later_items_check">Activate to enable later articles download</string>
     <string name="st_later_items_quantity">Quantity of later articles</string>
     <string name="st_later_items_quantity_s">Adjust quantity of later articles in device</string>
@@ -264,7 +264,7 @@
     <string name="st_only_unread_feeds">Only new</string>
     <string name="st_only_unread_feeds_check">Activate to show only feeds with unread articles</string>
     <string name="st_only_unread_dictations_check">Activate to show only unread dictations</string>
-    <string name="st_only_unread_later_items_check">Activate to show only unread saved to later articles</string>
+    <string name="st_only_unread_later_items_check">Activate to show only unread saved articles</string>
     <string name="st_dictation_only_article">Only article</string>
     <string name="st_dictation_only_article_summary">Activate to when player is active close app when close article</string>
 
@@ -279,7 +279,7 @@
     <string name="manual_section_general">General</string>
     <string name="manual_section_articles">New articles</string>
     <string name="manual_section_dictations">Dictations</string>
-    <string name="manual_section_saved">Saved to later</string>
+    <string name="manual_section_saved">Saved articles</string>
     <string name="manual_general_txt1">Newpsel is personal project created with idea to help spend less time possible to be informed from your preferred sources.</string>
     <string name="manual_general_txt2">This application integrate several related functionalities as: reads feed news as basic functionality, save articles to later and listen dictation of articles. All data is stored in the device to be possible consume it offline.</string>
     <string name="manual_articles_txt1">In this section you will see feeds to which you subscribed with respective articles.</string>
@@ -287,7 +287,7 @@
     <string name="manual_articles_txt5">Labels: You can assign labels to articles to read or listen them later.</string>
     <string name="manual_articles_txt6">Settings: In settings you can deactivate synchronization of feed articles, for example if in tablet you use only Saved articles to specific label.</string>
     <string name="manual_saved_txt1">In this section are articles or webs saved to later and ordered by labels.</string>
-    <string name="manual_saved_txt2">This functionality is deactivated by default. To activate it you have to go to Preferences of saved to later articles in Settings. There you can activate this functionality, specify from which label do you want the articles and the maximum quantity of articles in your device.</string>
+    <string name="manual_saved_txt2">This functionality is deactivated by default. To activate it you have to go to Preferences of saved articles in Settings. There you can activate this functionality, specify from which label do you want the articles and the maximum quantity of articles in your device.</string>
     <string name="manual_dictations_txt1">In this section are articles saved to label Read later (default name).</string>
     <string name="manual_dictations_txt2">This functionality is deactivated by default. To activate it you have to go to Dictation preferences in application Settings. Also there you can adjust another related preferences. The voice is downloaded or generated in your device (in case you have required language offline in Google Translator application). Voice generation, depend of device performance, can notably consume battery that why you can specify the minimum level of batter for the process. \n This process filter articles with at less 250 characters.</string>
     <string name="manual_dictations_txt3">Application play articles as usual music player and you can control this from: provided widget, notification, lock screen and Android Wear device.</string>
