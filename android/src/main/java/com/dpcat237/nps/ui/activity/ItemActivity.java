@@ -177,8 +177,10 @@ public class ItemActivity extends ItemAbstractActivity {
     }
 
     private Integer getItemApiId() {
-        Integer itemApiId = getIntent().getIntExtra(ItemConstants.ITEM_API_ID, 0);
+        Integer itemApiId = PreferencesHelper.getIntPreference(mContext, PreferenceConstants.ITEM_SHOW_ID);
         if (!itemApiId.equals(0)) {
+            PreferencesHelper.setIntPreference(mContext, PreferenceConstants.ITEM_SHOW_ID, 0);
+
             return itemApiId;
         }
 

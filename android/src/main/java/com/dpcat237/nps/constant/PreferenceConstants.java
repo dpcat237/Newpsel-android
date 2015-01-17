@@ -11,6 +11,7 @@ public class PreferenceConstants {
     public static final String DICTATIONS_ARE_NEW = "sync_are_new_dictate_items";
 
     /* Item */
+    public static final String ITEM_SHOW_ID = "item_show_id";
     public static final String ITEMS_ARE_NEW = "items_are_new";
     public static final String ITEM_NOW_OPENED = "item_now_opened";
 

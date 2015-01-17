@@ -316,6 +316,7 @@ public class ItemsActivity extends Activity {
 	public void showItem(Integer itemApiId) {
 		Intent intent = new Intent(this, ItemActivity.class);
 		intent.putExtra(ItemConstants.ITEM_API_ID, itemApiId);
+        PreferencesHelper.setIntPreference(mContext, PreferenceConstants.ITEM_SHOW_ID, itemApiId);
 		startActivity(intent);
 	}
 
