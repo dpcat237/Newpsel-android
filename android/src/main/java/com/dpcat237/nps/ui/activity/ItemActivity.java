@@ -31,16 +31,15 @@ import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.ItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.activity.Abstract.ItemAbstractActivity;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
 @SuppressLint("SimpleDateFormat")
-public class ItemActivity extends Activity {
+public class ItemActivity extends ItemAbstractActivity {
     private static final String TAG = "NPS:ItemActivity";
-    private Context mContext;
 	private Feed feed;
     private Item item;
-	private ShareActionProvider mShareActionProvider;
     private MenuItem dictateButton;
     private MenuItem dictateDisabledButton;
     private MenuItem readButton;

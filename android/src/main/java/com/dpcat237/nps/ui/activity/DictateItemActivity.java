@@ -3,7 +3,6 @@ package com.dpcat237.nps.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,16 +25,15 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.FeedRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.activity.Abstract.ItemAbstractActivity;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
 @SuppressLint("SimpleDateFormat")
-public class DictateItemActivity extends Activity {
+public class DictateItemActivity extends ItemAbstractActivity {
     private static final String TAG = "NPS:DictateItemActivity";
-    private Context mContext;
 	private Feed feed;
     private DictateItem item;
-	private ShareActionProvider mShareActionProvider;
     private MenuItem buttonDictate;
     private MenuItem readButton;
     private MenuItem unreadButton;

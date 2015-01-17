@@ -3,7 +3,6 @@ package com.dpcat237.nps.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,16 +20,15 @@ import com.dpcat237.nps.constant.PreferenceConstants;
 import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.database.repository.LaterItemRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.activity.Abstract.ItemAbstractActivity;
 import com.dpcat237.nps.ui.block.ItemBlock;
 import com.dpcat237.nps.ui.dialog.LabelsDialog;
 
 @SuppressLint("SimpleDateFormat")
-public class LaterItemActivity extends Activity {
+public class LaterItemActivity extends ItemAbstractActivity {
     private static final String TAG = "NPS:LaterItemActivity";
-    private Context mContext;
 	private Label label;
     private LaterItem item;
-	private ShareActionProvider mShareActionProvider;
     private MenuItem readButton;
     private MenuItem unreadButton;
     private LaterItemRepository itemRepo;
