@@ -93,45 +93,14 @@ public class LabelsWearActivity extends Activity implements WearableListView.Cli
         }
     }
 
-    private final class LabelItemView extends FrameLayout implements WearableListView.Item {
+    private final class LabelItemView extends FrameLayout {
 
         final TextView txtView;
-        private float mScale;
 
         public LabelItemView(Context context) {
             super(context);
             View.inflate(context, R.layout.fragment_label_row, this);
             txtView = (TextView) findViewById(R.id.textView);
-        }
-
-        @Override
-        public float getProximityMinValue() {
-            return mDefaultCircleRadius;
-        }
-
-        @Override
-        public float getProximityMaxValue() {
-            return mSelectedCircleRadius;
-        }
-
-        @Override
-        public float getCurrentProximityValue() {
-            return mScale;
-        }
-
-        @Override
-        public void setScalingAnimatorValue(float value) {
-            mScale = value;
-        }
-
-        @Override
-        public void onScaleUpStart() {
-            txtView.setAlpha(1f);
-        }
-
-        @Override
-        public void onScaleDownStart() {
-            txtView.setAlpha(0.5f);
         }
     }
 }
