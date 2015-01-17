@@ -82,7 +82,9 @@ public class LaterItemActivity extends ItemAbstractActivity {
         readButton = menu.findItem(R.id.buttonRead);
         unreadButton = menu.findItem(R.id.buttonUnread);
         MenuItem buttonDictateDisabled = menu.findItem(R.id.buttonDictateDisabled);
+        MenuItem notFavoriteButton = menu.findItem(R.id.buttonNotFavorite);
         buttonDictateDisabled.setVisible(false);
+        notFavoriteButton.setVisible(false);
 
         //prepare share button
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
