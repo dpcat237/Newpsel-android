@@ -2,9 +2,11 @@ package com.dpcat237.nps.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -28,6 +30,7 @@ import android.widget.ListView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
 import com.dpcat237.nps.behavior.service.PlayerService;
+import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.SyncLauncherTask;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
@@ -236,8 +239,7 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 		        return true;
 		    case R.id.actionLogout:
-		    	LoginHelper.doLogout(this);
-		    	finish();
+                logoutConfirmation();
 		        return true;
 		    case R.id.buttonActionLabels:
 		    	Intent labelIntent = new Intent(this, LabelsActivity.class);
@@ -258,6 +260,27 @@ public class MainActivity extends Activity {
 	    }
 		return false;
 	}
+
+    public void doLogout() {
+        LoginHelper.doLogout(this);
+        finish();
+    }
+
+    private void logoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(mContext.getString(R.string.cm_logout))
+                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doLogout();
+                    }
+
+                })
+                .setNegativeButton(mContext.getString(R.string.no), null)
+                .show();
+    }
 
 	public void showSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);

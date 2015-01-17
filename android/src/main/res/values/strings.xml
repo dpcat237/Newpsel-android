@@ -86,6 +86,8 @@
     <string name="drawer_item">New articles</string>
     <string name="drawer_dictations_items">Dictation articles</string>
     <string name="drawer_later_item">Saved articles</string>
+    <string name="cm_logout">Log Out</string>
+    <string name="cm_logout_confirm">Confirm log out.</string>
 
     <!-- Item -->
     <string name="button_dictate">Dictate</string>
