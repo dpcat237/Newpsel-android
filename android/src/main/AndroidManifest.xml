@@ -131,6 +131,7 @@
             android:exported="false" >
         </receiver>
         <receiver android:name=".behavior.alarm.AlarmsControlAlarm" />
+        <receiver android:name=".behavior.alarm.GcmUpdateIdAlarm" />
         <receiver android:name=".behavior.alarm.RemoveOldAlarm" />
         <receiver android:name=".behavior.alarm.SyncDictationsAlarm" />
         <receiver android:name=".behavior.alarm.SyncLaterAlarm" />
@@ -147,7 +148,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="com.dpcat237.nps" />
-            </intent-filter>ook_
+            </intent-filter>
         </receiver>
         <receiver
             android:name=".ui.widget.PlayerWidgetProvider"
@@ -165,6 +166,7 @@
         <service android:name=".behavior.service.CreateSongsService" />
         <service android:name=".behavior.service.DownloadSongsService" />
         <service android:name=".behavior.service.GcmIntentService" />
+        <service android:name=".behavior.service.GcmUpdateIdService" />
         <service android:name=".behavior.service.PlayerService" />
         <service android:name=".behavior.service.SyncDictationItemsService" />
         <service android:name=".behavior.service.SyncLaterService" />

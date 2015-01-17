@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
+import com.dpcat237.nps.behavior.alarm.GcmUpdateIdAlarm;
 import com.dpcat237.nps.behavior.alarm.RemoveOldAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncDictationsAlarm;
 import com.dpcat237.nps.behavior.alarm.SyncLaterAlarm;
@@ -40,6 +41,9 @@ public class ReceiverHelper {
 
         RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
         removeOldAlarm.setAlarm(context);
+
+        GcmUpdateIdAlarm updateGcmIdAlarm = new GcmUpdateIdAlarm();
+        updateGcmIdAlarm.setAlarm(context);
     }
 
     public static void disableBootReceiver(Context context) {
@@ -65,6 +69,9 @@ public class ReceiverHelper {
 
         RemoveOldAlarm removeOldAlarm = new RemoveOldAlarm();
         removeOldAlarm.cancelAlarm(context);
+
+        GcmUpdateIdAlarm updateGcmIdAlarm = new GcmUpdateIdAlarm();
+        updateGcmIdAlarm.cancelAlarm(context);
 
         AlarmsControlAlarm alarmsControlAlarm = new AlarmsControlAlarm();
         alarmsControlAlarm.cancelAlarm(context);
