@@ -12,8 +12,8 @@ import com.dpcat237.nps.database.repository.DictateItemRepository;
 import com.dpcat237.nps.database.repository.SongRepository;
 import com.dpcat237.nps.ui.activity.DictateItemActivity;
 
-public class MainFragmentDictationItemsManager extends MainFragmentItemsManager {
-    private static final String TAG = "NPS:MainFragmentDictationItemsManager";
+public class MainFragmentDictationItems extends MainFragmentItems {
+    private static final String TAG = "NPS:MainFragmentDictationItems";
 
 
     protected void setCreatorType() {

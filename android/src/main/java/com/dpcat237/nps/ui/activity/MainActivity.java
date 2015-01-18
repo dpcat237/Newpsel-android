@@ -30,7 +30,6 @@ import android.widget.ListView;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
 import com.dpcat237.nps.behavior.service.PlayerService;
-import com.dpcat237.nps.behavior.task.ReadFeedItemsTask;
 import com.dpcat237.nps.behavior.task.SyncLauncherTask;
 import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
@@ -186,7 +185,7 @@ public class MainActivity extends Activity {
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-	        mDrawerList.setAdapter(new ArrayAdapter<String>(mContext, R.layout.fragment_drawer_row, mListsTitles));
+	        mDrawerList.setAdapter(new ArrayAdapter<>(mContext, R.layout.fragment_drawer_row, mListsTitles));
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	        getActionBar().setDisplayHomeAsUpEnabled(true);
 	        getActionBar().setHomeButtonEnabled(true);
@@ -372,7 +371,7 @@ public class MainActivity extends Activity {
             reloadList();
         }
 
-        if (changed) {
+        if (changed && MainFragmentFactory.necessarySync(lastPosition)) {
             SyncLauncherTask requireSync = new SyncLauncherTask(mContext, lastPosition);
             requireSync.execute();
         }

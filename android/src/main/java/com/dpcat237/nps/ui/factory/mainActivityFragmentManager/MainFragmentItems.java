@@ -9,8 +9,8 @@ import com.dpcat237.nps.ui.adapter.SavedItemsAdapter;
 
 import java.util.ArrayList;
 
-public abstract class MainFragmentItemsManager extends MainFragmentManager {
-    private static final String TAG = "NPS:MainFragmentItemsManager";
+public abstract class MainFragmentItems extends MainFragmentManager {
+    private static final String TAG = "NPS:MainFragmentItems";
     protected DictateItemRepository dictateRepo;
     private SavedItemsAdapter mAdapter;
     protected ArrayList<ListItem> items;

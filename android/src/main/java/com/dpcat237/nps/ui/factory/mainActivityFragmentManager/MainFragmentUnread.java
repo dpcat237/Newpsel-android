@@ -4,7 +4,7 @@ package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.constant.MainActivityConstants;
 
-public class MainFragmentUnreadManager extends MainFragmentFeedsManager {
+public class MainFragmentUnread extends MainFragmentFeeds {
     protected void setCreatorType() {
         managerType = MainActivityConstants.DRAWER_MAIN_ITEMS;
     }

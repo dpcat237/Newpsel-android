@@ -19,7 +19,12 @@ import java.util.ArrayList;
 
 public class FeedRepository extends BaseRepository {
     private static final String TAG = "NPS:FeedRepository";
-	private String[] allColumns = {
+    private String[] basicColumns = {
+            FeedTable.COLUMN_ID,
+            FeedTable.COLUMN_API_ID,
+            FeedTable.COLUMN_TITLE,
+    };
+    private String[] allColumns = {
 				FeedTable.COLUMN_ID,
 				FeedTable.COLUMN_API_ID,
 				FeedTable.COLUMN_TITLE,
@@ -77,6 +82,31 @@ public class FeedRepository extends BaseRepository {
 
 		return (cursor.getCount() > 0);
 	}
+
+    public ArrayList<Feed> getAllFeeds() {
+        ArrayList<Feed> feeds = new ArrayList<>();
+        String orderBy = FeedTable.COLUMN_TITLE+" ASC";
+        Cursor cursor = database.query(FeedTable.TABLE_NAME, basicColumns, null, null, null, null, orderBy);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Feed feed = cursorToBasicFeed(cursor);
+            feeds.add(feed);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return feeds;
+    }
+
+    private Feed cursorToBasicFeed(Cursor cursor) {
+        Feed feed = new Feed();
+        feed.setId(cursor.getInt(0));
+        feed.setApiId(cursor.getInt(1));
+        feed.setTitle(cursor.getString(2));
+
+        return feed;
+    }
 
 	public ArrayList<Feed> getAllFeedsUnread() {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
