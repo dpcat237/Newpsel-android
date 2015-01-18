@@ -2,11 +2,9 @@ package com.dpcat237.nps.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -29,21 +27,18 @@ import android.widget.ListView;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.alarm.AlarmsControlAlarm;
-import com.dpcat237.nps.behavior.service.PlayerService;
 import com.dpcat237.nps.behavior.task.SyncLauncherTask;
-import com.dpcat237.nps.behavior.task.SyncNewsTask;
 import com.dpcat237.nps.behavior.valueObject.PlayerServiceStatus;
 import com.dpcat237.nps.common.constant.BroadcastConstants;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.constant.SongConstants;
 import com.dpcat237.nps.database.repository.DictateItemRepository;
-import com.dpcat237.nps.helper.ConnectionHelper;
 import com.dpcat237.nps.helper.GcmHelper;
 import com.dpcat237.nps.helper.GoogleServicesHelper;
 import com.dpcat237.nps.helper.LoginHelper;
 import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.helper.PreferencesHelper;
+import com.dpcat237.nps.ui.activity.Related.MainHelper;
 import com.dpcat237.nps.ui.factory.MainFragmentFactory;
 import com.dpcat237.nps.ui.factory.MainFragmentFactoryManager;
 
@@ -57,7 +52,6 @@ public class MainActivity extends Activity {
 	public Boolean isInFront;
     private SharedPreferences pref;
     private Menu mainMenu = null;
-    private MenuItem buttonAddFeed;
     private MenuItem buttonSync;
     private MenuItem buttonDictate;
     private Boolean itemsActivated;
@@ -119,8 +113,7 @@ public class MainActivity extends Activity {
 
             DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
             dictateRepo.open();
-            Integer unreadCount = dictateRepo.countUnreadGrabberItems();
-            if (unreadCount > 0) {
+            if (dictateRepo.countUnreadGrabberItems() > 0) {
                 buttonDictate.setVisible(true);
             }
             dictateRepo.close();
@@ -203,7 +196,6 @@ public class MainActivity extends Activity {
 		if (logged) {
 			mainMenu = menu;
 			getMenuInflater().inflate(R.menu.main, menu);
-            buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
             buttonSync = menu.findItem(R.id.buttonSync);
             buttonDictate = menu.findItem(R.id.buttonDictate);
             itemsActivated = pref.getBoolean("pref_items_download_enable", true);
@@ -215,97 +207,13 @@ public class MainActivity extends Activity {
 		return false;
 	}
 
-    private void showButtonAddFeed() {
-        if (itemsActivated && ConnectionHelper.hasConnection(mContext)) {
-            buttonAddFeed.setVisible(true);
-        } else {
-            buttonAddFeed.setVisible(false);
-        }
-    }
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
-	    switch (item.getItemId()) {
-		    case R.id.buttonSync:
-		    	downloadData(item);
-		        return true;
-		    case R.id.buttonAddFeed:
-		    	Intent intent = new Intent(this, AddFeedActivity.class);
-				startActivity(intent);
-		        return true;
-		    case R.id.actionLogout:
-                logoutConfirmation();
-		        return true;
-		    case R.id.buttonActionLabels:
-		    	Intent labelIntent = new Intent(this, LabelsActivity.class);
-				startActivity(labelIntent);
-		        return true;
-		    case R.id.buttonActionSettings:
-		    	showSettings();
-		        return true;
-		    case R.id.buttonAbout:
-		    	showAbout();
-		        return true;
-            case R.id.buttonDictate:
-                PlayerService.playpause(mContext, SongConstants.GRABBER_TYPE_DICTATE_ITEM, 0);
-                return true;
-            case R.id.buttonManual:
-                showManual();
-                return true;
-	    }
-		return false;
-	}
-
-    public void doLogout() {
-        LoginHelper.doLogout(this);
-        finish();
-    }
-
-    private void logoutConfirmation() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(mContext.getString(R.string.cm_logout))
-                .setPositiveButton(mContext.getString(R.string.yes), new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doLogout();
-                    }
-
-                })
-                .setNegativeButton(mContext.getString(R.string.no), null)
-                .show();
-    }
-
-	public void showSettings() {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivity(intent);
-	}
-
-	public void showAbout() {
-		Intent intent = new Intent(this, AboutActivity.class);
-		startActivity(intent);
-	}
-
-    public void showManual() {
-        Intent intent = new Intent(this, ManualActivity.class);
-        startActivity(intent);
-    }
-
-	public void downloadData(MenuItem item) {
-        if (!ConnectionHelper.hasConnection(mContext)) {
-            NotificationHelper.showSimpleToast(mContext, mContext.getString(R.string.error_connection));
-
-            return;
-        }
-
-        item.setEnabled(false);
-        SyncNewsTask task = new SyncNewsTask(mContext, mView);
-        task.execute();
+        return MainHelper.OptionsItemSelector(mContext, this, mView, item);
 	}
 
 	public void reloadList() {
@@ -382,21 +290,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if (lastPosition == MainActivityConstants.DRAWER_MAIN_LATER_ITEMS || lastPosition == MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS) {
-            buttonAddFeed.setVisible(false);
-            DictateItemRepository dictateRepo = new DictateItemRepository(mContext);
-            dictateRepo.open();
-            Integer unreadCount = dictateRepo.countUnreadGrabberItems();
-            //Log.d(TAG, "tut: drawerUpdateMenuItems unreadCount "+unreadCount);
-            if (unreadCount > 0) {
-                buttonDictate.setVisible(true);
-            }
-            dictateRepo.close();
-        } else {
-            showButtonAddFeed();
-            buttonDictate.setVisible(false);
-        }
-        MainFragmentFactory.showSyncButton(lastPosition, buttonSync);
+        MainFragmentFactory.showRequiredMenuItems(mContext, mainMenu, lastPosition, itemsActivated);
     }
 
     public static class UnreadItemsFragment extends Fragment {

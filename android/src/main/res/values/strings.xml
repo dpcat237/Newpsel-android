@@ -87,6 +87,7 @@
     <string name="drawer_dictations_items">Dictation articles</string>
     <string name="drawer_later_item">Saved articles</string>
     <string name="drawer_manage_feeds">Manage feeds</string>
+    <string name="drawer_manage_labels">Manage labels</string>
     <string name="cm_logout">Log Out</string>
     <string name="cm_logout_confirm">Confirm log out.</string>
 
@@ -107,6 +108,7 @@
         <item>@string/drawer_later_item</item>
         <item>@string/drawer_dictations_items</item>
         <item>@string/drawer_manage_feeds</item>
+        <item>@string/drawer_manage_labels</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

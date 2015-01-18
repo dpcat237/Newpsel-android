@@ -12,8 +12,7 @@ public class MainFragmentFeedsManager extends MainFragmentFeeds {
     private ArrayAdapter<Feed> mAdapter;
 
 
-    protected void initializeAdapter() {
-    }
+    protected void initializeAdapter() { }
 
     protected void setItems() {
         getItems();
