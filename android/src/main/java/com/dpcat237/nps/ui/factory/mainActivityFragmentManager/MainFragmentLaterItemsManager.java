@@ -9,7 +9,6 @@ import com.dpcat237.nps.R;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.constant.MainActivityConstants;
 import com.dpcat237.nps.constant.PreferenceConstants;
-import com.dpcat237.nps.database.repository.LabelRepository;
 import com.dpcat237.nps.helper.PreferencesHelper;
 import com.dpcat237.nps.ui.activity.LaterItemsActivity;
 import com.dpcat237.nps.ui.adapter.LabelsAdapter;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 public class MainFragmentLaterItemsManager extends MainFragmentLabels {
     private static final String TAG = "NPS:MainFragmentLabelsManager";
-    protected LabelRepository labelRepo;
     private LabelsAdapter mAdapter;
     protected ArrayList<Label> labels;
 

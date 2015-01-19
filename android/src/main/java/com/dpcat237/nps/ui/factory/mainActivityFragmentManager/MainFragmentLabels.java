@@ -16,7 +16,7 @@ abstract public class MainFragmentLabels extends MainFragmentManager {
         labelRepo.close();
     }
 
-    protected void openDB() {
+    public void openDB() {
         labelRepo = new LabelRepository(mActivity);
         labelRepo.open();
     }
