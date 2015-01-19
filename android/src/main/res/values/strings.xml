@@ -223,7 +223,7 @@
     <string name="st_dictation_titles">Titles dictation</string>
     <string name="st_download_preferences">Download preferences</string>
     <string name="st_dictation_enable_titles">Activate to enable dictation of news titles</string>
-    <string name="st_dictation_later">Later articles dictation</string>
+    <string name="st_dictation_later">Saved articles dictation</string>
     <string name="st_dictation_enable_later">Activate to enable dictation of saved articles</string>
     <string name="st_download_wifi_enable">Via WIFI</string>
     <string name="st_download_wifi_enable_text">Activate to download dictations only via WIFI</string>
