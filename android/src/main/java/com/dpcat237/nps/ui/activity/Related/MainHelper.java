@@ -18,6 +18,7 @@ import com.dpcat237.nps.helper.NotificationHelper;
 import com.dpcat237.nps.ui.activity.AboutActivity;
 import com.dpcat237.nps.ui.activity.AddFeedActivity;
 import com.dpcat237.nps.ui.activity.CreateLabelActivity;
+import com.dpcat237.nps.ui.activity.FeedsCategoriesActivity;
 import com.dpcat237.nps.ui.activity.ManualActivity;
 import com.dpcat237.nps.ui.activity.SettingsActivity;
 
@@ -35,6 +36,10 @@ public class MainHelper {
             case R.id.buttonAddFeed:
                 Intent intentFeed = new Intent(activity, AddFeedActivity.class);
                 activity.startActivity(intentFeed);
+                return true;
+            case R.id.buttonSelectFeed:
+                Intent intentFeedsCategories = new Intent(activity, FeedsCategoriesActivity.class);
+                activity.startActivity(intentFeedsCategories);
                 return true;
             case R.id.buttonCreateLabel:
                 Intent intentLabel = new Intent(activity, CreateLabelActivity.class);

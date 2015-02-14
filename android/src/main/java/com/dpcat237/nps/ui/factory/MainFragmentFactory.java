@@ -58,18 +58,20 @@ public class MainFragmentFactory {
 
     public static void showRequiredMenuItems(Context context, Menu menu, int position, Boolean itemsActivated) {
         MenuItem buttonAddFeed = menu.findItem(R.id.buttonAddFeed);
+        MenuItem buttonSelectFeed = menu.findItem(R.id.buttonSelectFeed);
         MenuItem buttonSync = menu.findItem(R.id.buttonSync);
         MenuItem buttonDictate = menu.findItem(R.id.buttonDictate);
         MenuItem buttonCreateLabel = menu.findItem(R.id.buttonCreateLabel);
 
         buttonAddFeed.setVisible(false);
+        buttonSelectFeed.setVisible(false);
         buttonSync.setVisible(false);
         buttonDictate.setVisible(false);
         buttonCreateLabel.setVisible(false);
 
         switch (position) {
             case MainActivityConstants.DRAWER_MAIN_ITEMS:
-                showAddFeedButton(context, buttonAddFeed, itemsActivated);
+                showAddFeedButton(buttonAddFeed, buttonSelectFeed, itemsActivated);
                 buttonSync.setVisible(true);
                 break;
             case MainActivityConstants.DRAWER_MAIN_DICTATE_ITEMS:
@@ -82,7 +84,7 @@ public class MainFragmentFactory {
                 dictateRepo.close();
                 break;
             case MainActivityConstants.DRAWER_MAIN_MANAGE_FEEDS:
-                showAddFeedButton(context, buttonAddFeed, itemsActivated);
+                showAddFeedButton(buttonAddFeed, buttonSelectFeed, itemsActivated);
                 break;
             case MainActivityConstants.DRAWER_MAIN_MANAGE_LABELS:
                 buttonCreateLabel.setVisible(true);
@@ -90,9 +92,12 @@ public class MainFragmentFactory {
         }
     }
 
-    private static void showAddFeedButton(Context context, MenuItem buttonAddFeed, Boolean itemsActivated) {
-        if (itemsActivated && ConnectionHelper.hasConnection(context)) {
+    private static void showAddFeedButton(MenuItem buttonAddFeed,
+                                          MenuItem buttonSelectFeed,
+                                          Boolean itemsActivated) {
+        if (itemsActivated) {
             buttonAddFeed.setVisible(true);
+            buttonSelectFeed.setVisible(true);
         }
     }
 

@@ -66,6 +66,16 @@
             android:parentActivityName=".ui.activity.MainActivity" >
         </activity>
         <activity
+            android:label="@string/label_feeds_categories"
+            android:name=".ui.activity.FeedsCategoriesActivity"
+            android:parentActivityName=".ui.activity.AddFeedActivity" >
+        </activity>
+        <activity
+            android:label="@string/label_feeds_selection"
+            android:name=".ui.activity.FeedsSelectionActivity"
+            android:parentActivityName=".ui.activity.AddFeedActivity" >
+        </activity>
+        <activity
             android:label="@string/label_labels_create"
             android:name=".ui.activity.CreateLabelActivity"
             android:parentActivityName=".ui.activity.MainActivity" >

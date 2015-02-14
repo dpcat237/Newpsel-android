@@ -1,6 +1,5 @@
 package com.dpcat237.nps.ui.factory.mainActivityFragmentManager;
 
-
 import android.widget.ArrayAdapter;
 
 import com.dpcat237.nps.R;

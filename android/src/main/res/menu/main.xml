@@ -7,6 +7,12 @@
         android:title="@string/button_read_dictate"
         android:visible="false" />
 
+    <item android:id="@+id/buttonSelectFeed"
+        android:icon="@drawable/actionbar_icon_world"
+        android:title="@string/button_select_feed"
+        android:showAsAction="ifRoom|withText"
+        android:visible="false" />
+
     <item android:id="@+id/buttonAddFeed"
           android:icon="@drawable/actionbar_add"
           android:title="@string/button_add_feed"

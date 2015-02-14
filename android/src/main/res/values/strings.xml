@@ -14,6 +14,8 @@
     
     <!-- Feed -->
     <string name="label_add_feed">Add feed</string>
+    <string name="label_feeds_categories">Feed categories</string>
+    <string name="label_feeds_selection">Feeds selection</string>
     <string name="label_labels_list">Labels</string>
     <string name="label_labels_create">Create Label</string>
 
@@ -80,6 +82,7 @@
     <string name="button_sync">sync</string>
     <string name="button_mark_all">all as read</string>
     <string name="button_add_feed">add feed</string>
+    <string name="button_select_feed">select feed</string>
     <string name="sync_finished">Sync finished</string>
     <string name="button_share">Share</string>
     <string name="no_new_articles">Aren\'t new articles</string>
