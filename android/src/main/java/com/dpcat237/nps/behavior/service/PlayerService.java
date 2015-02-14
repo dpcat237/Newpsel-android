@@ -55,10 +55,8 @@ public class PlayerService extends PlayerServiceCommands {
     private boolean isPlayerPrepared;
     protected boolean onPhone;
     protected Timer updateTimer;
-    private Integer currentId;
     private Integer justStarted = 1;
     private SongsManager songGrabManager;
-    private String playType;
     private Song currentSong;
     private Boolean notificationCreated = false;
     private Boolean isPausedFocusLost = false;
@@ -307,11 +305,10 @@ public class PlayerService extends PlayerServiceCommands {
             case PlayerConstants.PLAYER_COMMAND_PLAY_SPECIFIC_SONG:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY_SPECIFIC_SONG");
                 Integer itemApiId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
-                if (itemApiId.equals(currentId) && player.isPlaying()) {
+                if (itemApiId.equals(playerStatus.getCurrentId()) && player.isPlaying()) {
                     pause();
                 } else {
-                    playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
-                    playSong(playType, itemApiId);
+                    playSong(intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE), itemApiId);
                 }
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY_LIST:
@@ -319,11 +316,10 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAYPAUSE_LIST:
                 Integer listId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
-                if (listId.equals(currentId) && player.isPlaying()) {
+                if (listId.equals(playerStatus.getCurrentId()) && player.isPlaying()) {
                     pause();
                 } else {
-                    playType = intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE);
-                    play(playType, listId);
+                    play(intent.getStringExtra(PlayerConstants.EXTRA_PLAYER_TYPE), listId);
                 }
                 if (justStarted > 1) {
                     changeNotificationPlayButton();
@@ -334,37 +330,35 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void playSong(String playType, Integer itemApiId) {
-        if (currentId == itemApiId) {
+        if (playerStatus.getCurrentId().equals(itemApiId)) {
             grabAudioFocusAndResume();
-
             return;
         }
 
         queryManager.setCursorSong(playType, itemApiId);
         if (queryManager.areError()) {
             notifyStartProblem();
-
             return;
         }
         playFirstSong();
-        currentId = itemApiId;
+        playerStatus.setCurrentItemId(itemApiId);
+        playerStatus.setPlayerType(playType);
     }
 
     private void play(String playType, Integer listId) {
-        if (currentId == listId) {
+        if (playerStatus.getCurrentId().equals(listId) && !listId.equals(0)) {
             grabAudioFocusAndResume();
-
             return;
         }
 
         queryManager.setCursorList(playType, listId);
         if (queryManager.areError()) {
             notifyStartProblem();
-
             return;
         }
         playFirstSong();
-        currentId = listId;
+        playerStatus.setCurrentListId(listId);
+        playerStatus.setPlayerType(playType);
     }
 
     private void notifyStartProblem() {
@@ -550,20 +544,31 @@ public class PlayerService extends PlayerServiceCommands {
             player.pause();
             //stopUpdateTimer();
         }
-
         markSongAsRead();
-
-        if (queryManager.isLast()) {
-            NotificationHelper.showSimpleToast(mContext, getNotificationMessage());
-            stop();
-        } else {
+        if (!queryManager.isLast()) {
             queryManager.setNextSong();
             grabAudioFocusAndResume();
+            return;
         }
+
+        if (!playerStatus.isList()) {
+            NotificationHelper.showSimpleToast(mContext, getNotificationMessage());
+            stop();
+            return;
+        }
+
+        queryManager.setCursorList(playerStatus.getPlayerType(), playerStatus.getCurrentId());
+        if (!queryManager.isLast()) {
+            grabAudioFocusAndResume();
+            return;
+        }
+
+        NotificationHelper.showSimpleToast(mContext, getNotificationMessage());
+        stop();
     }
 
     private void markSongAsRead() {
-        songGrabManager = SongsFactory.createManager(playType);
+        songGrabManager = SongsFactory.createManager(playerStatus.getPlayerType());
         songGrabManager.setup(mContext);
         songGrabManager.markAsPlayed(currentSong);
         songGrabManager.finish();
@@ -572,10 +577,10 @@ public class PlayerService extends PlayerServiceCommands {
 
     private String getNotificationMessage() {
         String message = "";
-        if (playType.equals(SongConstants.GRABBER_TYPE_TITLE)) {
+        if (playerStatus.getPlayerType().equals(SongConstants.GRABBER_TYPE_TITLE)) {
             message = mContext.getString(R.string.player_nt_finish_titles);
         }
-        if (playType.equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
+        if (playerStatus.getPlayerType().equals(SongConstants.GRABBER_TYPE_DICTATE_ITEM)) {
             message = mContext.getString(R.string.player_nt_finish_dictations);
         }
 

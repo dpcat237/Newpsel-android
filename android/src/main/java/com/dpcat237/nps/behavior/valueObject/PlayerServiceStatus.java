@@ -18,12 +18,15 @@ public class PlayerServiceStatus {
     private Context mContext;
     private volatile static PlayerServiceStatus uniqueInstance;
     private Integer currentStatus = 0;
+    private Integer currentId = 0;
     private Song currentSong = null;
     private WearConnectionManager wearConnection;
     private Integer trySend;
     private String sendPath;
     private String sendMessage;
     private Integer itemApiId = 0;
+    private String playType;
+    private Boolean isList = false;
 
 
     private PlayerServiceStatus() {
@@ -48,6 +51,32 @@ public class PlayerServiceStatus {
 
     public Song getCurrentSong() {
         return currentSong;
+    }
+
+    public void setCurrentItemId(Integer listId) {
+        this.currentId = listId;
+        this.isList = false;
+    }
+
+    public void setCurrentListId(Integer listId) {
+        this.currentId = listId;
+        this.isList = true;
+    }
+
+    public Boolean isList() {
+        return isList;
+    }
+
+    public Integer getCurrentId() {
+        return currentId;
+    }
+
+    public void setPlayerType(String playType) {
+        this.playType = playType;
+    }
+
+    public String getPlayerType() {
+        return playType;
     }
 
     public Integer getItemApiId() {
