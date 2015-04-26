@@ -1,20 +1,19 @@
 package com.dpcat237.nps.behavior.factory.apiManager;
 
+import android.util.Log;
+
 import com.dpcat237.nps.constant.ApiConstants;
 
-import org.apache.http.client.methods.HttpPost;
-
-public class ApiSignInManager extends ApiPostManager {
+public class ApiSignInManager extends ApiManager {
     private static final String TAG = "NPS:ApiSignInManager";
 
-    protected void setupExtra() {
-        post = new HttpPost(ApiConstants.URL_SIGN_IN);
+    protected String getUrl() {
+        return ApiConstants.URL_SIGN_IN;
     }
 
     protected void getRequestResult() {
-        if (!httpResponse.equals("100")) {
+        if (!response.equals("100")) {
             error = true;
-            errorMessage = httpResponse;
         }
     }
 }

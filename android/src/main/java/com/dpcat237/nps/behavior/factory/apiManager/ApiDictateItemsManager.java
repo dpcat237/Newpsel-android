@@ -5,18 +5,15 @@ import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.DictateItem;
 import com.dpcat237.nps.constant.ApiConstants;
 
-import org.apache.http.client.methods.HttpPost;
+public class ApiDictateItemsManager extends ApiManager {
+    private DictateItem[] items = null;
 
-public class ApiDictateItemsManager extends ApiPostManager {
-    private DictateItem[] items;
-
-    protected void setupExtra() {
-        post = new HttpPost(ApiConstants.URL_SYNC_DICTATE_ITEMS);
-        items = null;
+    protected String getUrl() {
+        return ApiConstants.URL_SYNC_DICTATE_ITEMS;
     }
 
     protected void getRequestResult() {
-        items = JsonHelper.getDictateItems(httpResponse);
+        items = JsonHelper.getDictateItems(response);
         result.put("items", items);
     }
 }

@@ -5,18 +5,15 @@ import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.constant.ApiConstants;
 
-import org.apache.http.client.methods.HttpPost;
-
-public class ApiLabelsManager extends ApiPostManager {
+public class ApiLabelsManager extends ApiManager {
     private Label[] labels;
 
-    protected void setupExtra() {
-        post = new HttpPost(ApiConstants.URL_SYNC_LABELS);
-        labels = null;
+    protected String getUrl() {
+        return ApiConstants.URL_SYNC_LABELS;
     }
 
     protected void getRequestResult() {
-        labels = JsonHelper.getLabels(httpResponse);
+        labels = JsonHelper.getLabels(response);
         result.put("labels", labels);
     }
 }

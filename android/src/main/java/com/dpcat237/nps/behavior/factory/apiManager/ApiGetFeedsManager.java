@@ -5,18 +5,15 @@ import com.dpcat237.nps.common.helper.JsonHelper;
 import com.dpcat237.nps.common.model.Feed;
 import com.dpcat237.nps.constant.ApiConstants;
 
-import org.apache.http.client.methods.HttpPost;
+public class ApiGetFeedsManager extends ApiManager {
+    private Feed[] feeds = null;
 
-public class ApiGetFeedsManager extends ApiPostManager {
-    private Feed[] feeds;
-
-    protected void setupExtra() {
-        post = new HttpPost(ApiConstants.URL_GET_FEEDS);
-        feeds = null;
+    protected String getUrl() {
+        return ApiConstants.URL_GET_FEEDS;
     }
 
     protected void getRequestResult() {
-        feeds = JsonHelper.getFeeds(httpResponse);
+        feeds = JsonHelper.getFeeds(response);
         result.put("feeds", feeds);
     }
 }

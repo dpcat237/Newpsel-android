@@ -1,16 +1,17 @@
 package com.dpcat237.nps.behavior.factory.apiManager;
 
+import android.util.Log;
+
 import com.dpcat237.nps.constant.ApiConstants;
 
-import org.apache.http.client.methods.HttpPost;
+public class ApiSignUpManager extends ApiManager {
+    private static final String TAG = "NPS:ApiSignUpManager";
 
-public class ApiSignUpManager extends ApiPostManager {
-
-    protected void setupExtra() {
-        post = new HttpPost(ApiConstants.URL_SIGN_UP);
+    protected String getUrl() {
+        return ApiConstants.URL_SIGN_UP;
     }
 
     protected void getRequestResult() {
-        result.put("result", httpResponse);
+        result.put("result", response);
     }
 }

@@ -2,116 +2,116 @@ package com.dpcat237.nps.behavior.factory.apiManager;
 
 import android.util.Log;
 
-import com.dpcat237.nps.behavior.manager.EasySSLSocketManager;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnManagerPNames;
-import org.apache.http.conn.params.ConnPerRouteBean;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public abstract class ApiManager {
     private static final String TAG = "NPS:ApiManager";
-    protected JSONObject jsonData;
+    protected String jsonData;
     protected Map<String, Object> result;
     protected Boolean error;
     protected String errorMessage;
-    protected HttpClient httpClient;
-    protected StringEntity jsonEntity;
-    protected String jsonString;
-    protected HttpResponse response;
-    protected String httpResponse;
+    protected String response = "";
+    protected HttpsURLConnection conn;
 
     public void setup(JSONObject jsonData) {
-        this.jsonData = jsonData;
+        this.jsonData = jsonData.toString();
         result = new HashMap<String, Object>();
         error = false;
         errorMessage = "";
-        setupHttpClient();
-        setupExtra();
+
+        setupUrl();
+        if (error) {
+            return;
+        }
+        setupConnection();
     }
 
-    private void setupHttpClient() {
-        // prepare for the https connection call this in the constructor of the
-        // class that does the connection if it's used multiple times
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
+    private void setupUrl() {
+        try {
+            URL url = new URL(getUrl());
+            Log.d(TAG, "tut: getUrl" +getUrl());
+            conn = (HttpsURLConnection) url.openConnection();
+        } catch (MalformedURLException e) {
+            Log.d(TAG, "tut: MalformedURLException: "+e.getMessage());
+            error = true;
+        } catch (IOException e) {
+            Log.d(TAG, "tut: IOException setupUrl: "+e.getMessage());
+            error = true;
+        }
+    }
 
-        // http scheme
-        schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        // https scheme
-        schemeRegistry.register(new Scheme("https", new EasySSLSocketManager(), 443));
-
-        HttpParams params = new BasicHttpParams();
-        params.setParameter(ConnManagerPNames.MAX_TOTAL_CONNECTIONS, 1);
-        params.setParameter(ConnManagerPNames.MAX_CONNECTIONS_PER_ROUTE, new ConnPerRouteBean(1));
-        params.setParameter(HttpProtocolParams.USE_EXPECT_CONTINUE, false);
-        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(params, "utf8");
-
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(new AuthScope("yourServerHere.com", AuthScope.ANY_PORT), new UsernamePasswordCredentials("YourUserNameHere", "UserPasswordHere"));
-        ClientConnectionManager clientConnectionManager = new ThreadSafeClientConnManager(params, schemeRegistry);
-
-        HttpContext context = new BasicHttpContext();
-        context.setAttribute("http.auth.credentials-provider", credentialsProvider);
-        httpClient = new DefaultHttpClient(clientConnectionManager, params);
+    private void setupConnection() {
+        try {
+            conn.setReadTimeout(10000 /*milliseconds*/);
+            conn.setConnectTimeout( 15000 /* milliseconds */ );
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setFixedLengthStreamingMode(jsonData.getBytes().length);
+            //make some HTTP header nicety
+            conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+        } catch (ProtocolException e) {
+            Log.d(TAG, "tut: ProtocolException: "+e.getMessage());
+            error = true;
+            conn.disconnect();
+        }
     }
 
     public void makeRequest() {
-        prepareData();
-        if (error) {
-            return;
-        }
-
-        execute();
-    }
-
-    private void prepareData() {
         try {
-            jsonString = jsonData.toString();
-            //Log.d(TAG, "tut: request: "+jsonString);
-            jsonEntity = new StringEntity(jsonString);
-            setRequestData(jsonEntity);
-        } catch (UnsupportedEncodingException e) {
-            Log.d(TAG, "tut: UnsupportedEncodingException: "+e.getMessage());
+            Log.d(TAG, "tut: send: "+jsonData);
+            conn.connect();
+            OutputStream os = new BufferedOutputStream(conn.getOutputStream());
+            os.write(jsonData.getBytes());
+            os.flush();
+            getResponse();
+            os.close();
+        } catch (IOException e) {
+            Log.d(TAG, "tut: IOException makeRequest: "+e.getMessage());
             error = true;
         }
+        conn.disconnect();
     }
 
-    private void execute() {
-        executeRequest();
-        //Log.d(TAG, "tut: httpResponse: "+httpResponse);
+    private void getResponse() {
+        try {
+            Log.d(TAG, "tut: getResponse: ");
+            if (conn.getResponseCode() != 200) {
+                Log.d(TAG, "tut: getResponseCode: not 200");
+                error = true;
+                return;
+            }
+
+            Log.d(TAG, "tut: getInputStream: ");
+            Scanner inStream = new Scanner(conn.getInputStream());
+            response = "";
+            while (inStream.hasNextLine()) {
+                response+= (inStream.nextLine());
+            }
+            inStream.close();
+            Log.d(TAG, "tut: response: "+response);
+        } catch (IOException e) {
+            Log.d(TAG, "tut: IOException: "+e.getMessage());
+            error = true;
+        }
+
         if (error) {
             return;
         }
-
-        if (response.getStatusLine().getStatusCode() == 200) {
-            getRequestResult();
-        } else {
-            error = true;
-            errorMessage = httpResponse;
-        }
+        getRequestResult();
     }
 
     public Map<String, Object> getResult() {
@@ -121,8 +121,6 @@ public abstract class ApiManager {
         return result;
     }
 
-    abstract void setupExtra();
-    abstract void setRequestData(StringEntity jsonEntity);
-    abstract void executeRequest();
+    abstract String getUrl();
     abstract void getRequestResult();
 }
