@@ -3,20 +3,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
     }
 }
 
 apply plugin: 'com.android.library'
 
-dependencies {
-    compile 'com.android.support:support-v4:23.1.0'
-    compile files('libs/bolts.jar')
-}
-
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    buildToolsVersion '24.0.0 rc4'
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 23
@@ -33,4 +28,9 @@ android {
             res.srcDirs = ['res']
         }
     }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:23.4.0'
+    compile files('libs/bolts.jar')
 }

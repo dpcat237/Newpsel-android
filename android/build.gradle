@@ -4,15 +4,6 @@ repositories {
     jcenter()
 }
 
-dependencies {
-    compile 'com.android.support:support-v4:23.1.0'
-    compile 'com.google.android.gms:play-services:8.4.0'
-    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    compile project(':libs:facebook') //v3.17.1
-    compile project(':common')
-    wearApp project(':wear')
-}
-
 // The sample build uses multiple directories to
 // keep boilerplate and common code separate from
 // the main sample code.
@@ -24,23 +15,28 @@ List<String> dirs = [
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    buildToolsVersion '24.0.0 rc4'
     defaultConfig {
         applicationId 'com.dpcat237.nps'
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 104023
         versionName '1.4.23'
+
+        multiDexEnabled true
+        jackOptions {
+            enabled true
+        }
     }
     signingConfigs {
         debug {
-            storeFile file('/home/denys/C.A.T./Programs/Projects/debug-npsKey')
+            storeFile file('/home/denys/dev/android/keys/debug-npsKey')
             storePassword 'debug-nps#'
             keyAlias 'debug-npsKey'
             keyPassword 'debug-nps#'
         }
         release {
-            storeFile file('/home/denys/C.A.T./Programs/Projects/npsKey')
+            storeFile file('/home/denys/dev/android/keys/npsKey')
             storePassword 'D#25c01a1987t#Pnps'
             keyAlias 'npsKey'
             keyPassword 'D#25c01a1987t#Pnps'
@@ -74,6 +70,24 @@ android {
                 res.srcDirs "src/${dir}/res"
             }
         }
-
     }
+
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.google.android.gms:play-services:9.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    compile project(':libs:facebook') //v3.17.1
+    compile project(':common')
+    wearApp project(':wear')
 }
