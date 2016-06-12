@@ -11,6 +11,11 @@ android {
         targetSdkVersion 23
         versionCode 10004
         versionName "1.0.4"
+
+        multiDexEnabled true
+        jackOptions {
+            enabled true
+        }
     }
     signingConfigs {
         debug {
@@ -42,6 +47,11 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

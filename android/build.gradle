@@ -20,8 +20,8 @@ android {
         applicationId 'com.dpcat237.nps'
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 104023
-        versionName '1.4.23'
+        versionCode 104024
+        versionName '1.4.24'
 
         multiDexEnabled true
         jackOptions {
@@ -73,7 +73,7 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "3g"
     }
 
     compileOptions {
