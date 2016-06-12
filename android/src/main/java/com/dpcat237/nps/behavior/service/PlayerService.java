@@ -224,6 +224,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void handleIntent(Intent intent) {
+        Log.d(TAG, "tut: handleIntent ");
         if (intent == null || intent.getExtras() == null) {
             return;
         }
@@ -231,8 +232,9 @@ public class PlayerService extends PlayerServiceCommands {
             return;
         }
 
+        Log.d(TAG, "tut: before setup");
         setup();
-        Log.d(TAG, "tut:  intent "+intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1));
+        Log.d(TAG, "tut: intent "+intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1));
         switch (intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND, -1)) {
             case -1:
                 return;
@@ -304,7 +306,7 @@ public class PlayerService extends PlayerServiceCommands {
                 break;
             case PlayerConstants.PLAYER_COMMAND_PLAY_SPECIFIC_SONG:
                 Log.d(TAG, "tut:  PLAYER_COMMAND_PLAY_SPECIFIC_SONG");
-                Integer itemApiId = intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1);
+                Integer itemApiId =  Integer.valueOf(intent.getIntExtra(PlayerConstants.EXTRA_PLAYER_COMMAND_ARG, -1));
                 if (itemApiId.equals(playerStatus.getCurrentId()) && player.isPlaying()) {
                     pause();
                 } else {
@@ -330,7 +332,7 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void playSong(String playType, Integer itemApiId) {
-        if (playerStatus.getCurrentId().equals(itemApiId)) {
+        if (playerStatus.getCurrentId().equals(itemApiId) && playerStatus.hasActiveSong()) {
             grabAudioFocusAndResume();
             return;
         }
@@ -430,19 +432,26 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void grabAudioFocusAndResume() {
+        Log.d(TAG, "tut: grabAudioFocusAndResume: 1");
+
+
         if (!grabAudioFocus()) {
             return;
         }
 
         isPausedFocusLost = false;
         if (playerStatus.isPaused() && isPlayerPrepared) {
+            Log.d(TAG, "tut: player.start: 1");
             player.start();
+            Log.d(TAG, "tut: player.start: 2");
             updatePlayerStatus(PlayerConstants.STATUS_PLAYING);
 
             return;
         }
 
+        Log.d(TAG, "tut: currentSong: 1");
         currentSong = queryManager.getCurrentSong();
+        Log.d(TAG, "tut: currentSong: "+currentSong.getTitle());
         prepareMediaPlayer(currentSong);
 
         lockscreenManager = new LockscreenManager();
@@ -455,12 +464,15 @@ public class PlayerService extends PlayerServiceCommands {
     }
 
     private void playFirstSong() {
+        Log.d(TAG, "tut: playFirstSong: 1");
         if (!grabAudioFocus()) {
             return;
         }
 
+        Log.d(TAG, "tut: currentSong: 1");
         currentSong = queryManager.getCurrentSong();
         prepareMediaPlayer(currentSong);
+        Log.d(TAG, "tut: currentSong: "+currentSong.getTitle());
 
         lockscreenManager = new LockscreenManager();
         lockscreenManager.setupLockscreenControls(this, currentSong);
@@ -609,9 +621,12 @@ public class PlayerService extends PlayerServiceCommands {
             playerStatus.sendWearMessage(MessageConstants.PLAYING_SONG, WearHelper.preparePlayerData(mContext, currentSong));
         }
 
+        Log.d(TAG, "tut: showNotification: start");
+        Log.d(TAG, "tut: showNotification: "+currentSong.getTitle());
         notificationView = new RemoteViews(getPackageName(), R.layout.notification_player);
         notificationView.setTextViewText(R.id.songListTitle, currentSong.getListTitle());
         notificationView.setTextViewText(R.id.songTitle, currentSong.getTitle());
+        Log.d(TAG, "tut: showNotification: done");
 
         //set up details intent
         Intent detailsIntent = SongsFactory.getActivityIntent(mContext, currentSong.getType());

@@ -1,6 +1,7 @@
 package com.dpcat237.nps.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -18,15 +19,20 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 
@@ -38,6 +44,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInOptions gso;
 
     /**
      * A flag indicating that a PendingIntent is in progress and prevents us
@@ -46,6 +53,8 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     private boolean mIntentInProgress;
     private boolean gSignInClicked = false;
     private ConnectionResult mConnectionResult;
+    /*private LoginButton loginButton;
+    protected CallbackManager callbackManager;*/
 
     // Instance of Facebook Class
     private boolean fSignInClicked = false;
@@ -65,9 +74,44 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         View view = this.findViewById(android.R.id.content).getRootView();
 		setContentView(R.layout.activity_welcome);
 
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
         setFacebookButton((LoginButton) view.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
-        setGoogleButton((SignInButton) findViewById(R.id.buttonGoogleSignIn));
+        setGoogleButton((SignInButton) view.findViewById(R.id.buttonGoogleSignIn));
 	}
+
+    private void getFacebookData(JSONObject object) {
+        Log.d(TAG, "tut: getFacebookData :");
+        try {
+            Bundle bundle = new Bundle();
+            String id = object.getString("id");
+
+            try {
+                URL profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=200&height=150");
+                Log.i("profile_pic", profile_pic + "");
+                bundle.putString("profile_pic", profile_pic.toString());
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (object.has("email")) {
+                Log.d(TAG, "tut: email: "+object.has("email"));
+
+                //bundle.putString("email", object.getString("email"));
+            } else {
+                Log.d(TAG, "tut: no email");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+    }
 
     private void signUp(String email) {
         //Log.d(TAG, "tut: signUp");
@@ -125,7 +169,6 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         uiHelper.onSaveInstanceState(outState);
     }
 
-
     /**
      * Method to resolve any signin errors
      * */
@@ -144,7 +187,6 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (!result.hasResolution()) {
-            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, 0).show();
             return;
         }
 
@@ -153,8 +195,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
             mConnectionResult = result;
 
             if (gSignInClicked) {
-                // The user has already clicked 'sign-in' so we attempt to
-                // resolve all
+                // The user has already clicked 'sign-in' so we attempt to resolve all
                 // errors until the user is signed in, or they cancel.
                 resolveSignInError();
             }
@@ -166,12 +207,15 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
         uiHelper.onActivityResult(requestCode, responseCode, intent);
-        //Log.d(TAG, "tut: onActivityResult");
+        Log.d(TAG, "tut: onActivityResult");
 
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != RESULT_OK) {
                 gSignInClicked = false;
             }
+
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
+            handleSignInResult(result);
 
             mIntentInProgress = false;
 
@@ -181,40 +225,22 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         }
     }
 
-    @Override
-    public void onConnected(Bundle arg) {
-        //Log.d(TAG, "tut: G User is connected! gSignInClicked: "+gSignInClicked);
-        if (!gSignInClicked) {
-            signOutFromGplus();
-
-            return;
-        }
-        gSignInClicked = false;
-
-        // Get user's information
-        getProfileInformation();
-    }
-
-    /**
-     * Fetching user's information name, email, profile pic
-     * */
-    private void getProfileInformation() {
-        try {
-            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-                //String personName = currentPerson.getDisplayName();
-                //String personPhotoUrl = currentPerson.getImage().getUrl();
-                //String personGooglePlusProfile = currentPerson.getUrl();
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-                signUp(email);
-            } else {
-                Toast.makeText(getApplicationContext(), "Person information is null", Toast.LENGTH_LONG).show();
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            GoogleSignInAccount account = result.getSignInAccount();
+            try {
+                signUp(account.getEmail());
+            } catch (NullPointerException e) {
+                Toast.makeText(getApplicationContext(), R.string.error_google_email_null, Toast.LENGTH_LONG).show();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.error_google_sign_in, Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public void onConnected(Bundle arg) { }
 
     @Override
     public void onConnectionSuspended(int arg) {
@@ -228,7 +254,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonGoogleSignIn:
-                signInWithGplus();
+                signInWithGoogle();
                 break;
         }
     }
@@ -238,49 +264,32 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+                .addOnConnectionFailedListener(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
     }
 
 
     /**
      * Sign-in into google
      * */
-    private void signInWithGplus() {
-        if (!mGoogleApiClient.isConnecting()) {
-            gSignInClicked = true;
-            resolveSignInError();
-        }
+    private void signInWithGoogle() {
+        Log.d(TAG, "tut: signInWithGoogle");
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     /**
      * Sign-out from google
      * */
-    private void signOutFromGplus() {
-        //Log.d(TAG, "tut: signOutFromGplus");
+    private void signOutFromGoogle() {
+        //Log.d(TAG, "tut: signOutFromGoogle");
         if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();
         }
     }
-
-    /**
-     * Revoking access from google
-     * */
-    /*private void revokeGplusAccess() {
-        if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(Status arg0) {
-                    Log.e(TAG, "User access revoked!");
-                    mGoogleApiClient.connect();
-                }
-
-            });
-        }
-    }*/
 
 
     /** Facebook login **/
@@ -316,6 +325,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
                 //Log.d(TAG, "tut: User ID " + user.getId());
                 //Log.d(TAG, "tut: User getName " + user.getName());
+                Log.d(TAG, "tut: User email " + user.asMap().get("email").toString());
                 signUp(user.asMap().get("email").toString());
             }
         });
@@ -326,11 +336,11 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        /*if (state.isOpened()) {
+        if (state.isOpened()) {
             Log.d(TAG, "tut: Logged in...");
         } else if (state.isClosed()) {
             Log.d(TAG, "tut: Logged out...");
-        }*/
+        }
 
         if (state.isOpened() && !fSignInClicked) {
             signOutFromFacebook();

@@ -76,6 +76,8 @@
     <string name="error_password_empty">Write a password</string>
     <string name="label_s">label</string>
     <string name="sent_change_password">We sent to you an email with link to create new password.</string>
+    <string name="error_google_email_null">Person information is null</string>
+    <string name="error_google_sign_in">Some problem with sign in. Try again in few minutes.</string>
 
     <!-- VIEWS -->
     <!-- Main -->

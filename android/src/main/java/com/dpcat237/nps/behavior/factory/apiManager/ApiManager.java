@@ -41,7 +41,7 @@ public abstract class ApiManager {
     private void setupUrl() {
         try {
             URL url = new URL(getUrl());
-            Log.d(TAG, "tut: getUrl" +getUrl());
+            Log.d(TAG, "tut: getUrl " +getUrl());
             conn = (HttpsURLConnection) url.openConnection();
         } catch (MalformedURLException e) {
             Log.d(TAG, "tut: MalformedURLException: "+e.getMessage());
@@ -54,8 +54,8 @@ public abstract class ApiManager {
 
     private void setupConnection() {
         try {
-            conn.setReadTimeout(10000 /*milliseconds*/);
-            conn.setConnectTimeout( 15000 /* milliseconds */ );
+            conn.setReadTimeout(45000 /*milliseconds*/);
+            conn.setConnectTimeout( 60000 /* milliseconds */ );
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
