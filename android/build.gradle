@@ -20,7 +20,7 @@ android {
         applicationId 'com.dpcat237.nps'
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 104024
+        versionCode 104025
         versionName '1.4.25'
 
         multiDexEnabled true
