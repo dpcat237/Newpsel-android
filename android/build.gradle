@@ -15,13 +15,13 @@ List<String> dirs = [
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '24.0.0 rc4'
+    buildToolsVersion '24.0.0'
     defaultConfig {
         applicationId 'com.dpcat237.nps'
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 104024
-        versionName '1.4.24'
+        versionName '1.4.25'
 
         multiDexEnabled true
         jackOptions {
