@@ -1,6 +1,7 @@
 package com.dpcat237.nps.common.model;
 
 public class LaterItem extends ListItem {
+
     protected Integer feed_id = 0;
     protected Integer later_id;
 
