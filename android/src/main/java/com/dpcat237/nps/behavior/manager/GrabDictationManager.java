@@ -175,20 +175,14 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         }
 
         currentSong = songGrabManager.getNextSong(false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!songGrabManager.areError()) {
-                    //Log.d(TAG, "tut: grabNext b1");
-                    createSongFile();
-                    grabSong();
-                } else {
-                    //Log.d(TAG, "tut: grabNext b2");
-                    grabNextSong(true);
-                }
-            }
-        }).start();
-
+        if (!songGrabManager.areError()) {
+            //Log.d(TAG, "tut: grabNext b1");
+            createSongFile();
+            grabSong();
+        } else {
+            //Log.d(TAG, "tut: grabNext b2");
+            grabNextSong(true);
+        }
     }
 
     private void grabNextSong(Boolean error) {
