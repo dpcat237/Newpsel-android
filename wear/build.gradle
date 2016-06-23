@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion '24.0.0'
 
     defaultConfig {
         applicationId "com.dpcat237.nps"
         minSdkVersion 20
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 10004
         versionName "1.0.4"
 
@@ -47,11 +47,6 @@ android {
 
     lintOptions {
         abortOnError false
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

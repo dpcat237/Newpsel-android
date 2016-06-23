@@ -1,1 +1,1 @@
-include ':android', ':libs:facebook', ':wear', ':common'
+include ':android', ':wear', ':common'
