@@ -14,11 +14,11 @@ import android.widget.Toast;
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.task.SignUpTask;
 import com.facebook.FacebookException;
-import com.facebook.Session;
+/*import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
+import com.facebook.widget.LoginButton;*/
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -58,13 +58,13 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
     // Instance of Facebook Class
     private boolean fSignInClicked = false;
-    private UiLifecycleHelper uiHelper;
+    /*private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
         }
-    };
+    };*/
 
 
 	@Override
@@ -78,7 +78,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
                 .requestEmail()
                 .build();
 
-        setFacebookButton((LoginButton) view.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
+        //setFacebookButton((LoginButton) view.findViewById(R.id.buttonFacebookSignIn), savedInstanceState);
         setGoogleButton((SignInButton) view.findViewById(R.id.buttonGoogleSignIn));
 	}
 
@@ -137,7 +137,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         mGoogleApiClient.connect();
     }
 
-    @Override
+    /*@Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
@@ -147,7 +147,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
-    }
+    }*/
 
     @Override
     protected void onStop() {
@@ -157,7 +157,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         }
     }
 
-    @Override
+    /*@Override
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
@@ -167,7 +167,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
-    }
+    }*/
 
     /**
      * Method to resolve any signin errors
@@ -206,7 +206,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
-        uiHelper.onActivityResult(requestCode, responseCode, intent);
+        //uiHelper.onActivityResult(requestCode, responseCode, intent);
         Log.d(TAG, "tut: onActivityResult");
 
         if (requestCode == RC_SIGN_IN) {
@@ -293,7 +293,7 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
 
 
     /** Facebook login **/
-    private void setFacebookButton(LoginButton facebookButton, Bundle savedInstanceState) {
+    /*private void setFacebookButton(LoginButton facebookButton, Bundle savedInstanceState) {
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -365,5 +365,5 @@ public class WelcomeActivity extends Activity implements OnClickListener, Connec
         if (!fSignInClicked) {
             signOutFromFacebook();
         }
-    }
+    }*/
 }

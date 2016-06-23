@@ -33,12 +33,12 @@
                 android:layout_weight="1"
                 />
 
-            <com.facebook.widget.LoginButton
+            <!--<com.facebook.widget.LoginButton
                 android:id="@+id/buttonFacebookSignIn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                />
+                />-->
 
         </LinearLayout>
 
