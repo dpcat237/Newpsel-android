@@ -75,19 +75,15 @@ android {
     dexOptions {
         javaMaxHeapSize "3g"
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
+    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile project(':libs:facebook') //v3.17.1
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.google.android.gms:play-services:9.0.2'
     compile 'com.android.support:multidex:1.0.1'
-    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    compile project(':libs:facebook') //v3.17.1
     compile project(':common')
     wearApp project(':wear')
 }
