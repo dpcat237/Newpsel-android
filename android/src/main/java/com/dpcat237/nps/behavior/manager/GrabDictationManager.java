@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class GrabDictationManager implements TextToSpeech.OnInitListener {
-    private static final String TAG = "NPS:GrabDictationManager";
+    private static final String TAG = "NPS:GrabDictationMan";
     private TextToSpeech mTts;
     private volatile static GrabDictationManager uniqueInstance;
     protected Context mContext;
@@ -70,10 +70,10 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     private void process() {
-        //Log.d(TAG, "tut: process ");
+        Log.d(TAG, "tut: process ");
         if (voicesFolderPath.length() < 1) {
             finishProcess();
-            //Log.d(TAG, "tut: process finishProcess ");
+            Log.d(TAG, "tut: process finishProcess ");
             return;
         }
         setSpeechSpeed();
@@ -90,7 +90,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         songGrabManager = SongsFactory.createManager(songsType);
         songGrabManager.setup(mContext);
         songGrabManager.setCursorNotGrabbedSongs();
-        //Log.d(TAG, "tut: setSongsCursor ");
+        Log.d(TAG, "tut: setSongsCursor ");
     }
 
     private void startGrabDictationTypeSongs()
@@ -176,11 +176,11 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
 
         currentSong = songGrabManager.getNextSong(false);
         if (!songGrabManager.areError()) {
-            //Log.d(TAG, "tut: grabNext b1");
+            Log.d(TAG, "tut: grabNext b1");
             createSongFile();
             grabSong();
         } else {
-            //Log.d(TAG, "tut: grabNext b2");
+            Log.d(TAG, "tut: grabNext b2");
             grabNextSong(true);
         }
     }
@@ -189,12 +189,12 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         notifyView();
         currentSong = songGrabManager.getNextSong(error);
         if (!songGrabManager.areError()) {
-            //Log.d(TAG, "tut: grabNextSong a");
+            Log.d(TAG, "tut: grabNextSong a");
             setDictationLanguage();
             createSongFile();
             grabSong();
         } else {
-            //Log.d(TAG, "tut: grabNextSong b");
+            Log.d(TAG, "tut: grabNextSong b");
             endListProcess();
         }
     }
@@ -206,7 +206,7 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
     }
 
     public void onDone() {
-        //Log.d(TAG, "tut: onDone "+currentSong.getId()+" file length: "+soundFile.length()+" file: "+soundFile.getName());
+        Log.d(TAG, "tut: onDone "+currentSong.getId()+" file length: "+soundFile.length()+" file: "+soundFile.getName());
         grabNext();
     }
 
@@ -237,8 +237,8 @@ public class GrabDictationManager implements TextToSpeech.OnInitListener {
         String utteranceID = "wpta";
         myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceID);
 
-        //Log.d(TAG, "tut:  grabSong: "+currentSong.getTitle());
-        //Log.d(TAG, "tut: length "+currentSong.getContent().length());
+        Log.d(TAG, "tut:  grabSong: "+currentSong.getTitle());
+        Log.d(TAG, "tut: length "+currentSong.getContent().length());
         //Log.d(TAG, "tut: getContent:  "+currentSong.getContent());
         mTts.synthesizeToFile(currentSong.getContent(), myHashRender, songFilename);
     }
