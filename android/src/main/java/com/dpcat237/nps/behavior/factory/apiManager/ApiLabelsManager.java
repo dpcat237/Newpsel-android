@@ -14,6 +14,6 @@ public class ApiLabelsManager extends ApiManager {
 
     protected void getRequestResult() {
         labels = JsonHelper.getLabels(response);
-        result.put("labels", labels);
+        result.put("tag", labels);
     }
 }

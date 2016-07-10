@@ -68,7 +68,7 @@ public class SharedRepository extends BaseRepository {
 				object.put("id", cursor.getInt(0));
 				object.put("title", StringHelper.convertToUTF8(cursor.getString(1)));
 				object.put("text", cursor.getString(2));
-                object.put("label_api_id", cursor.getInt(3));
+                object.put("tag_api_id", cursor.getInt(3));
 				collectionJson.put(object);
 			} catch (JSONException e) {
 				Log.e("SharedRepository - getSharedToSync","Error", e);

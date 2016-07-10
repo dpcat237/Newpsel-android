@@ -40,7 +40,7 @@ public class SyncLabelsManager extends SyncManager {
         jsonData = new JSONObject();
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
-            jsonData.put("labels", labelRepo.getLabelsToSync());
+            jsonData.put("tags", labelRepo.getLabelsToSync());
         } catch (JSONException e) {
             error = true;
         }
@@ -51,13 +51,13 @@ public class SyncLabelsManager extends SyncManager {
         error = (Boolean) result.get("error");
 
         if (!error) {
-            labels = (Label[]) result.get("labels");
+            labels = (Label[]) result.get("tags");
         }
     }
 
     protected Map<String, Object> getDownloadedItems() {
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("labels", labels);
+        result.put("tags", labels);
 
         return result;
     }

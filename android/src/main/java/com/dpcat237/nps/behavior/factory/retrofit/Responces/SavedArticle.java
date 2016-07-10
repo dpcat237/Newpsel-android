@@ -16,7 +16,7 @@ public class SavedArticle {
     @SerializedName("feed_id")
     @Expose
     private String feedId;
-    @SerializedName("later_id")
+    @SerializedName("tag_id")
     @Expose
     private String laterId;
     @SerializedName("is_unread")

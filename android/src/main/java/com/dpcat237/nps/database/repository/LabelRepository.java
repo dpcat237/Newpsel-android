@@ -155,11 +155,11 @@ public class LabelRepository extends BaseRepository {
 		while (!cursor.isAfterLast()) {
 			try {
 				JSONObject item = new JSONObject();
-				item.put("label_id", cursor.getInt(0));
+				item.put("tag_id", cursor.getInt(0));
 				item.put("item_id", cursor.getInt(1));
 				items.put(item);
 			} catch (JSONException e) {
-				Log.e("LabelRepository - getLabelsToSync","Error", e);
+				Log.e("TagRe- getLabelsToSync","Error", e);
 			}
 			cursor.moveToNext();
 		}

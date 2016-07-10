@@ -38,7 +38,7 @@ public class SyncLabelItemsManager extends SyncManager {
 
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
-            jsonData.put("laterItems", selectedItems);
+            jsonData.put("tagItems", selectedItems);
         } catch (JSONException e) {
             error = true;
         }

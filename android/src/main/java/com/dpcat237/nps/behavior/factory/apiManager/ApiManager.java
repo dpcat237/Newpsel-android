@@ -2,6 +2,9 @@ package com.dpcat237.nps.behavior.factory.apiManager;
 
 import android.util.Log;
 
+import com.dpcat237.nps.constant.ApiConstants;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -24,8 +27,15 @@ public abstract class ApiManager {
     protected String errorMessage;
     protected String response = "";
     protected HttpsURLConnection conn;
+    protected String appKey;
 
     public void setup(JSONObject jsonData) {
+        try {
+            appKey = jsonData.getString("appKey");
+        } catch (JSONException e) {
+            result.put("error", true);
+        }
+
         this.jsonData = jsonData.toString();
         result = new HashMap<String, Object>();
         error = false;
@@ -54,6 +64,7 @@ public abstract class ApiManager {
 
     private void setupConnection() {
         try {
+            conn.setRequestProperty("deviceId", appKey);
             conn.setReadTimeout(45000 /*milliseconds*/);
             conn.setConnectTimeout( 60000 /* milliseconds */ );
             conn.setRequestMethod("POST");

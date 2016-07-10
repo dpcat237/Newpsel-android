@@ -107,8 +107,8 @@ public class SyncLaterItemsManager extends SyncManager {
 
         try {
             jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
-            jsonData.put("later_items", viewedItems);
-            jsonData.put("labels", labels);
+            jsonData.put("tag_items", viewedItems);
+            jsonData.put("tags", labels);
             jsonData.put("limit", itemsSyncLimit);
         } catch (JSONException e) {
             error = true;
@@ -120,13 +120,13 @@ public class SyncLaterItemsManager extends SyncManager {
         error = (Boolean) result.get("error");
 
         if (!error) {
-            items = (LaterItem[]) result.get("later_items");
+            items = (LaterItem[]) result.get("tag_items");
         }
     }
 
     protected Map<String, Object> getDownloadedItems() {
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("later_items", items);
+        result.put("tag_items", items);
 
         return result;
     }

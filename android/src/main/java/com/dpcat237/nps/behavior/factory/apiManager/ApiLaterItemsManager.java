@@ -14,6 +14,6 @@ public class ApiLaterItemsManager extends ApiManager {
 
     protected void getRequestResult() {
         items = JsonHelper.getLaterItems(response);
-        result.put("later_items", items);
+        result.put("tag_items", items);
     }
 }
