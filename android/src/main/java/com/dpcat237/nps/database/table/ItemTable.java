@@ -9,7 +9,6 @@ public class ItemTable {
 	public static final String TABLE_ITEM = "item";
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_API_ID = "api_id";
-    public static final String COLUMN_UI_ID = "ui_id";
 	public static final String COLUMN_FEED_ID = "feed_id";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_LINK = "link";
@@ -24,7 +23,6 @@ public class ItemTable {
 			+ TABLE_ITEM
 			+ "(" + COLUMN_ID + " integer primary key autoincrement, " 
 			+ COLUMN_API_ID + " integer not null,"
-            + COLUMN_UI_ID + " integer not null,"
 			+ COLUMN_FEED_ID + " integer not null,"
 			+ COLUMN_TITLE + " text not null,"
 			+ COLUMN_LINK + " text not null,"

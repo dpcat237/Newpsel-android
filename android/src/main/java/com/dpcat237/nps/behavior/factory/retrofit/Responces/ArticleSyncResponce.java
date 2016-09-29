@@ -29,9 +29,6 @@ public class ArticleSyncResponce {
     @SerializedName("language")
     @Expose
     private String language;
-    @SerializedName("ui_id")
-    @Expose
-    private Integer uiId;
     @SerializedName("is_stared")
     @Expose
     private Boolean isStared;
@@ -163,24 +160,6 @@ public class ArticleSyncResponce {
      */
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    /**
-     *
-     * @return
-     * The uiId
-     */
-    public Integer getUiId() {
-        return uiId;
-    }
-
-    /**
-     *
-     * @param uiId
-     * The ui_id
-     */
-    public void setUiId(Integer uiId) {
-        this.uiId = uiId;
     }
 
     /**
