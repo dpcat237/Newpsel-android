@@ -37,7 +37,7 @@ public class SyncFeedsManager extends SyncManager {
     protected void prepareJSON() {
         jsonData = new JSONObject();
         try {
-            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
             jsonData.put("feeds", feedRepo.getFeedsToSync());
         } catch (JSONException e) {
             error = true;

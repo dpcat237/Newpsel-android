@@ -55,7 +55,7 @@ public class SyncItemsManager extends SyncManager {
         viewedItems = itemRepo.getItemsToSync();
 
         try {
-            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
             jsonData.put("items", viewedItems);
             jsonData.put("limit", itemsSyncLimit);
         } catch (JSONException e) {

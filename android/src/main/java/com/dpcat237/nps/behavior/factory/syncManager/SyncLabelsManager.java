@@ -1,6 +1,8 @@
 package com.dpcat237.nps.behavior.factory.syncManager;
 
 
+import android.util.Log;
+
 import com.dpcat237.nps.common.constant.EntityConstants;
 import com.dpcat237.nps.common.model.Label;
 import com.dpcat237.nps.constant.ApiConstants;
@@ -39,7 +41,7 @@ public class SyncLabelsManager extends SyncManager {
     protected void prepareJSON() {
         jsonData = new JSONObject();
         try {
-            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
             jsonData.put("tags", labelRepo.getLabelsToSync());
         } catch (JSONException e) {
             error = true;

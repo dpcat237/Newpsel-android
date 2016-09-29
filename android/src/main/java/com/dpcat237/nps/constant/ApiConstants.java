@@ -2,6 +2,7 @@ package com.dpcat237.nps.constant;
 
 public class ApiConstants {
     public static final String TYPE_SYNC_DICTATE_ITEMS = "sync_dictate_items";
+    public static final String DEVICE_ID = "deviceId";
 
     /* URLs */
     public static final String API_URL = "https://api.newpsel.com/";

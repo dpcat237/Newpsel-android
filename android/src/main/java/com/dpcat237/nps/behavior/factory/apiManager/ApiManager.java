@@ -31,7 +31,7 @@ public abstract class ApiManager {
 
     public void setup(JSONObject jsonData) {
         try {
-            appKey = jsonData.getString("appKey");
+            appKey = jsonData.getString(ApiConstants.DEVICE_ID);
         } catch (JSONException e) {
             result.put("error", true);
         }
@@ -64,7 +64,7 @@ public abstract class ApiManager {
 
     private void setupConnection() {
         try {
-            conn.setRequestProperty("deviceId", appKey);
+            conn.setRequestProperty(ApiConstants.DEVICE_ID, appKey);
             conn.setReadTimeout(45000 /*milliseconds*/);
             conn.setConnectTimeout( 60000 /* milliseconds */ );
             conn.setRequestMethod("POST");
@@ -99,7 +99,7 @@ public abstract class ApiManager {
 
     private void getResponse() {
         try {
-            Log.d(TAG, "tut: getResponse: ");
+            Log.d(TAG, "tut: getResponseCode: "+conn.getResponseCode());
             if (conn.getResponseCode() != 200) {
                 Log.d(TAG, "tut: getResponseCode: not 200");
                 error = true;

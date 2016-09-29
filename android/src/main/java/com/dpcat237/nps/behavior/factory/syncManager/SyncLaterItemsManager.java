@@ -106,7 +106,7 @@ public class SyncLaterItemsManager extends SyncManager {
         viewedItems = laterItemRepo.getItemsToSync(stringLabels);
 
         try {
-            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
             jsonData.put("tag_items", viewedItems);
             jsonData.put("tags", labels);
             jsonData.put("limit", itemsSyncLimit);

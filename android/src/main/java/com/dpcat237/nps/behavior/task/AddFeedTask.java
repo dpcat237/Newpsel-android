@@ -65,7 +65,7 @@ public class AddFeedTask extends AsyncTask<Void, Integer, Void>{
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            jsonData.put("appKey", appKey);
+            jsonData.put(ApiConstants.DEVICE_ID, appKey);
             jsonData.put("feed_url", url);
             result = apiFactoryManager.makeRequest(ApiConstants.URL_ADD_FEED, jsonData);
         } catch (JSONException e) {

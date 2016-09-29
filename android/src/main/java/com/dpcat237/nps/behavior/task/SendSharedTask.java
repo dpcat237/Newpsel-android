@@ -46,7 +46,7 @@ public class SendSharedTask extends AsyncTask<Void, Integer, Void>{
 
         if (sharedItems.length() > 0) {
             try {
-                jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+                jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
                 jsonData.put("sharedItems", sharedItems);
                 result = apiFactoryManager.makeRequest(ApiConstants.URL_SYNC_SHARED_ITEMS, jsonData);
             } catch (JSONException e) {

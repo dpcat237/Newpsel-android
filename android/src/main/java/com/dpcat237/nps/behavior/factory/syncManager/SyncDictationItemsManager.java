@@ -66,7 +66,7 @@ public class SyncDictationItemsManager extends SyncManager {
         jsonData = new JSONObject();
 
         try {
-            jsonData.put("appKey", PreferencesHelper.generateKey(mContext));
+            jsonData.put(ApiConstants.DEVICE_ID, PreferencesHelper.generateKey(mContext));
             jsonData.put("items", dictationRepo.getItemsForSync());
             jsonData.put("limit", downloadQuantity);
         } catch (JSONException e) {

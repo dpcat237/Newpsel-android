@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dpcat237.nps.R;
 import com.dpcat237.nps.behavior.factory.ApiFactoryManager;
@@ -50,7 +51,7 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void> {
         Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            jsonData.put("appKey", appKey);
+            jsonData.put(ApiConstants.DEVICE_ID, appKey);
             jsonData.put("email", email);
             jsonData.put("password", password);
             result = apiFactoryManager.makeRequest(ApiConstants.URL_SIGN_UP, jsonData);
@@ -71,7 +72,7 @@ public class SignUpTask extends AsyncTask<Void, Integer, Void> {
     protected void onPostExecute(Void result) {
         dialog.cancel();
 
-        if (checkApi.equals("100")) {
+        if (checkApi == null) {
             LoginHelper.doLogin(mContext);
             mContext.startActivity(new Intent(mContext, MainActivity.class));
             ((Activity) mContext).finish();

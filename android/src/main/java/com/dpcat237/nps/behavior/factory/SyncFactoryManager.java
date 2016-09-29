@@ -32,7 +32,7 @@ public class SyncFactoryManager {
             result = syncManager.getResult();
         } catch (Exception e) {
             result = false;
-            Log.d(TAG, "tut: Exception "+e.getMessage());
+            Log.d(TAG+' '+type, "tut: Exception "+e.getMessage());
         }
 
         return result;
